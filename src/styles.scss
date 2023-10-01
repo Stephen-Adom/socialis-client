@@ -17,6 +17,14 @@ body {
   .form-control {
     @apply py-[0.7rem] px-4 block w-full border border-gray-300 rounded-none text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none;
   }
+
+  .btn-circle {
+    @apply rounded-full;
+  }
+
+  .btn-icon {
+    @apply p-3;
+  }
 }
 
 @layer components {
@@ -28,6 +36,26 @@ body {
     &:hover {
       background: #1475bd;
     }
+  }
+
+  .navbar {
+    background-color: #fff;
+    box-shadow: 10px 10px 19px rgba(0, 0, 0, 0.1);
+  }
+
+  .search-bar-container {
+    @apply md:min-w-[400px] lg:min-w-[700px];
+
+    .main-search {
+      background: #f6f4f4;
+      padding: 10px 20px 10px 37px;
+      border-radius: 30px;
+      font-size: 14px;
+    }
+  }
+
+  .wrapper {
+    background-color: #f3f5f7;
   }
 }
 

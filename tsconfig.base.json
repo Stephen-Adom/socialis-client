@@ -15,7 +15,10 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "auth": ["src/modules/auth/src/index.ts"]
+      "auth": ["src/modules/auth/src/index.ts"],
+      "dashboard": ["src/modules/dashboard/src/index.ts"],
+      "layouts": ["src/modules/layouts/src/index.ts"],
+      "stories": ["src/lib/stories/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
