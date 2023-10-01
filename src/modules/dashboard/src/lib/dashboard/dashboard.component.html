@@ -1,8 +1,14 @@
 <section
   id="dashboard-section"
-  class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[30%_60%_30%]"
+  class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[25%_50%_25%]"
 >
   <div class="left-section"></div>
-  <div class="main-container"></div>
+  <div class="main-container pt-5">
+    <lib-stories />
+
+    <div class="posts-list-container flex flex-col gap-y-4 w-full mt-7">
+      <lib-post-card />
+    </div>
+  </div>
   <div class="right-section"></div>
 </section>

@@ -18,6 +18,7 @@
       "auth": ["src/modules/auth/src/index.ts"],
       "dashboard": ["src/modules/dashboard/src/index.ts"],
       "layouts": ["src/modules/layouts/src/index.ts"],
+      "post-card": ["src/lib/post-card/src/index.ts"],
       "stories": ["src/lib/stories/src/index.ts"]
     }
   },
