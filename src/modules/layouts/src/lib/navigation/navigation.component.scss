@@ -1,0 +1,15 @@
+.sticky {
+  position: sticky;
+  top: 0;
+  animation: navbar-show 0.25s ease-in-out;
+  z-index: 99;
+}
+
+@keyframes navbar-show {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}

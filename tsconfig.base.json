@@ -15,6 +15,7 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "activity-card": ["src/lib/activity-card/src/index.ts"],
       "auth": ["src/modules/auth/src/index.ts"],
       "dashboard": ["src/modules/dashboard/src/index.ts"],
       "layouts": ["src/modules/layouts/src/index.ts"],
