@@ -2,7 +2,7 @@
   id="dashboard-section"
   class="container grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[25%_50%_25%] gap-5 mx-auto"
 >
-  <div class="left-section flex flex-col gap-y-5 pt-5">
+  <div class="left-section flex-col gap-y-5 pt-5 hidden sm:hidden md:flex">
     <lib-create-post />
   </div>
   <div class="main-container pt-5">
@@ -12,7 +12,7 @@
       <lib-post-card />
     </div>
   </div>
-  <div class="right-section pt-5 flex flex-col gap-y-5">
+  <div class="right-section pt-5 flex-col gap-y-5 hidden sm:hidden md:flex">
     <lib-message-panel />
     <lib-activity-card />
   </div>
