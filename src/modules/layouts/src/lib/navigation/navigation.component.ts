@@ -6,6 +6,7 @@ import {
   Inject,
   ViewChild,
 } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'feature-navigation',
@@ -15,7 +16,10 @@ import {
 export class NavigationComponent {
   @ViewChild('navigation') navigation!: ElementRef<HTMLDivElement>;
 
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  constructor(
+    @Inject(DOCUMENT) private document: Document,
+    private router: Router
+  ) {}
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -24,5 +28,9 @@ export class NavigationComponent {
     } else {
       this.navigation.nativeElement.classList.remove('sticky');
     }
+  }
+
+  signOut() {
+    this.router.navigate(['/auth/login']);
   }
 }
