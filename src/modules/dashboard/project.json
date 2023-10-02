@@ -1,6 +1,6 @@
 {
   "name": "dashboard",
-  "$schema": "../../../../../../../../node_modules/nx/schemas/project-schema.json",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "src/modules/dashboard/src",
   "prefix": "feature",
   "tags": [],
