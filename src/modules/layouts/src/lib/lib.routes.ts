@@ -11,6 +11,11 @@ export const layoutsRoutes: Route[] = [
         loadComponent: () =>
           import('dashboard').then((m) => m.DashboardComponent),
       },
+      {
+        path: ':username/details/:id',
+        loadComponent: () =>
+          import('post-details').then((m) => m.PostDetailsComponent),
+      },
     ],
   },
 ];

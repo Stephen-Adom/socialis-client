@@ -1,6 +1,4 @@
-<div
-  class="card post-card rounded-lg bg-white p-3 w-full border border-white cursor-pointer"
->
+<div class="comment-card bg-white p-3 w-full cursor-pointer">
   <div class="card-header flex items-center justify-between pb-3">
     <div class="hs-tooltip inline-block [--trigger:hover]">
       <a class="hs-tooltip-toggle block text-center" href="javascript:;">
@@ -12,8 +10,14 @@
               alt="Image Description"
             />
             <div class="ml-3 text-left">
-              <h3 class="font-semibold text-gray-800">Maria Wanner</h3>
-              <p class="text-sm font-medium text-gray-400">maria.wanner</p>
+              <div class="flex items-center gap-x-2">
+                <h3 class="font-semibold text-gray-800">Maria Wanner</h3>
+                <p class="text-sm font-medium text-gray-400">maria.wanner</p>
+              </div>
+              <p class="text-xs font-medium text-gray-400">
+                <span class="font-bold">Oct 3rd, 2023</span> at
+                <span class="font-bold">7:30pm</span>
+              </p>
             </div>
           </div>
         </div>
@@ -206,11 +210,17 @@
       </div>
     </div>
   </div>
-  <div class="card-body min-h-[4.5rem] rounded-lg overflow-hidden">
-    <img src="assets/images/post-image.jpg" alt="post image" class="w-full" />
+  <div class="card-body min-h-[4.5rem] rounded-lg overflow-hidden ml-[4.25rem]">
+    <p>
+      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore, quidem
+      excepturi? Maiores, voluptas maxime, explicabo sint animi magni facere
+      optio quod quaerat cum ipsum? Minus a sequi repudiandae aliquid
+      aspernatur!
+    </p>
+    <!-- <img src="assets/images/post-image.jpg" alt="post image" class="w-full" /> -->
   </div>
-  <div class="card-footer">
-    <div class="post-tools flex items-center justify-between px-2">
+  <div class="card-footer ml-[4.25rem]">
+    <div class="post-tools flex items-center justify-between">
       <div class="flex items-center gap-x-2">
         <button
           type="button"
@@ -275,71 +285,6 @@
           </svg>
         </button>
       </div>
-
-      <button type="button" class="btn btn-icon btn-circle" title="bookmark">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-5 h-5"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
-          />
-        </svg>
-      </button>
     </div>
-    <div class="like-info flex items-center gap-x-2 px-2 text-sm flex-wrap">
-      <div class="flex -space-x-2">
-        <img
-          class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-          src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-          alt="Image Description"
-        />
-        <img
-          class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-          src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-          alt="Image Description"
-        />
-        <img
-          class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-          src="https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&&auto=format&fit=facearea&facepad=3&w=300&h=300&q=80"
-          alt="Image Description"
-        />
-        <img
-          class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-          src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-          alt="Image Description"
-        />
-        <div class="hs-dropdown relative inline-flex [--placement:top-left]">
-          <button
-            class="inline-flex items-center justify-center h-[1.8rem] w-[1.8rem] rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:bg-blue-100 focus:text-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs"
-          >
-            <span class="font-xs leading-none">9+</span>
-          </button>
-        </div>
-      </div>
-
-      Liked by <a href="#" class="font-bold">Maria Wanner</a> and
-      <a href="#" class="font-bold">9 others</a>
-    </div>
-
-    <div class="post-content flex items-start gap-x-1 text-sm px-2 py-2">
-      <p>
-        <span class="inline-block font-bold"> ahmed.Col</span>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, ipsum
-        laborum. Numquam veniam a nam, obcaecati blanditiis atque incidunt
-        necessitatibus quo dolores, dolore dolorum voluptates vitae quasi,
-        officia temporibus beatae.
-      </p>
-    </div>
-
-    <a href="" class="font-semibold text-gray-600 inline-block px-2 text-xs"
-      >View all 10 comments</a
-    >
   </div>
 </div>

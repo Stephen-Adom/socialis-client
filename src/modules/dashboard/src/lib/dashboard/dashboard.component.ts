@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { StoriesComponent } from 'stories';
 import { PostCardComponent } from 'post-card';
 import { ActivityCardComponent } from 'activity-card';
-import { CreatePostComponent } from 'create-post';
 import { MessagePanelComponent } from 'message-panel';
 
 @Component({
@@ -14,7 +13,6 @@ import { MessagePanelComponent } from 'message-panel';
     StoriesComponent,
     PostCardComponent,
     ActivityCardComponent,
-    CreatePostComponent,
     MessagePanelComponent,
   ],
   templateUrl: './dashboard.component.html',

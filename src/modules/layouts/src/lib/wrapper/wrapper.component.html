@@ -1,4 +1,13 @@
 <feature-navigation />
 <div class="wrapper min-h-screen p-3 w-full">
-  <router-outlet />
+  <div
+    class="container grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[25%_75%] space-x-0 sm:space-x-0 md:space-x-5 mx-auto"
+  >
+    <div class="left-section flex-col gap-y-5 pt-5 hidden sm:hidden md:flex">
+      <lib-create-post />
+    </div>
+    <main class="">
+      <router-outlet />
+    </main>
+  </div>
 </div>
