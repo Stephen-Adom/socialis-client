@@ -5,12 +5,14 @@ import { layoutsRoutes } from './lib.routes';
 import { NavigationComponent } from './navigation/navigation.component';
 import { WrapperComponent } from './wrapper/wrapper.component';
 import { CreatePostComponent } from 'create-post';
+import { FollowersComponent } from 'followers';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(layoutsRoutes),
     CreatePostComponent,
+    FollowersComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
 })
