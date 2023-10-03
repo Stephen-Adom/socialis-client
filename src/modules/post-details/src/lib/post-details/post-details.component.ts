@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { CommentListComponent } from 'comment-list';
 
 @Component({
@@ -9,4 +9,10 @@ import { CommentListComponent } from 'comment-list';
   templateUrl: './post-details.component.html',
   styleUrls: ['./post-details.component.css'],
 })
-export class PostDetailsComponent {}
+export class PostDetailsComponent {
+  constructor(private location: Location) {}
+
+  back() {
+    this.location.back();
+  }
+}

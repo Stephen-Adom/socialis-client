@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'lib-post-card',
@@ -8,4 +9,10 @@ import { CommonModule } from '@angular/common';
   templateUrl: './post-card.component.html',
   styleUrls: ['./post-card.component.css'],
 })
-export class PostCardComponent {}
+export class PostCardComponent {
+  constructor(private router: Router) {}
+
+  viewPostDetails() {
+    this.router.navigate(['/maria.wanner/details/221232323']);
+  }
+}
