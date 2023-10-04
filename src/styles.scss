@@ -15,7 +15,7 @@ body {
   }
 
   .form-control {
-    @apply py-[0.7rem] px-4 block w-full border border-gray-300 rounded-none text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none;
+    @apply py-[0.7rem] px-4 block w-full border border-gray-300 rounded-md text-sm focus:border-blue-500 focus:ring-blue-500 focus:outline-none;
   }
 
   .btn-circle {
@@ -32,6 +32,7 @@ body {
     background: #1475bd;
     background: -webkit-linear-gradient(80deg, #1475bd 0%, #1eade9 100%);
     background: linear-gradient(80deg, #1475bd 0%, #1eade9 100%);
+    border-radius: 7px;
 
     &:hover {
       background: #1475bd;

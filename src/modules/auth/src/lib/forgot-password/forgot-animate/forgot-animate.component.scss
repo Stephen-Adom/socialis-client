@@ -1,0 +1,102 @@
+svg#freepik_stories-forgot-password {
+  width: 70%;
+  margin: auto;
+}
+
+svg#freepik_stories-forgot-password:not(.animated) .animable {
+  opacity: 0;
+}
+svg#freepik_stories-forgot-password.animated #freepik--Floor--inject-43 {
+  animation: 1s 1 forwards cubic-bezier(0.36, -0.01, 0.5, 1.38) zoomIn;
+  animation-delay: 0s;
+}
+svg#freepik_stories-forgot-password.animated #freepik--Shadow--inject-43 {
+  animation: 1s 1 forwards cubic-bezier(0.36, -0.01, 0.5, 1.38) fadeIn;
+  animation-delay: 0s;
+}
+svg#freepik_stories-forgot-password.animated #freepik--Plants--inject-43 {
+  animation: 1s 1 forwards cubic-bezier(0.36, -0.01, 0.5, 1.38) slideUp;
+  animation-delay: 0s;
+}
+svg#freepik_stories-forgot-password.animated
+  #freepik--speech-bubble--inject-43 {
+  animation: 1.5s Infinite linear shake;
+  animation-delay: 0s;
+}
+svg#freepik_stories-forgot-password.animated
+  #freepik--question-marks--inject-43 {
+  animation: 1.5s Infinite linear wind;
+  animation-delay: 0s;
+}
+svg#freepik_stories-forgot-password.animated #freepik--Character--inject-43 {
+  animation: 1s 1 forwards linear slideDown;
+  animation-delay: 0s;
+}
+@keyframes zoomIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: inherit;
+  }
+}
+@keyframes shake {
+  10%,
+  90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+  20%,
+  80% {
+    transform: translate3d(2px, 0, 0);
+  }
+  30%,
+  50%,
+  70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+  40%,
+  60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+@keyframes wind {
+  0% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(1deg);
+  }
+  75% {
+    transform: rotate(-1deg);
+  }
+}
+@keyframes slideDown {
+  0% {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
