@@ -6,6 +6,6 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './new-post-modal.component.html',
-  styleUrls: ['./new-post-modal.component.scss'],
+  styleUrls: ['./new-post-modal.component.css'],
 })
 export class NewPostModalComponent {}

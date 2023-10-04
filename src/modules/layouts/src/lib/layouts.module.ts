@@ -7,6 +7,7 @@ import { WrapperComponent } from './wrapper/wrapper.component';
 import { CreatePostComponent } from 'create-post';
 import { FollowersComponent } from 'followers';
 import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation.component';
+import { NewPostModalComponent } from 'new-post-modal';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation
     CreatePostComponent,
     FollowersComponent,
     MobileNavigationComponent,
+    NewPostModalComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
 })

@@ -23,6 +23,7 @@
       "followers": ["src/lib/followers/src/index.ts"],
       "layouts": ["src/modules/layouts/src/index.ts"],
       "message-panel": ["src/lib/message-panel/src/index.ts"],
+      "new-post-modal": ["src/lib/new-post-modal/src/index.ts"],
       "post-card": ["src/lib/post-card/src/index.ts"],
       "post-details": ["src/modules/post-details/src/index.ts"],
       "stories": ["src/lib/stories/src/index.ts"]
