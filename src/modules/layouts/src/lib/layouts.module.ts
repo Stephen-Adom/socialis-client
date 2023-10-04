@@ -8,6 +8,7 @@ import { CreatePostComponent } from 'create-post';
 import { FollowersComponent } from 'followers';
 import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation.component';
 import { NewPostModalComponent } from 'new-post-modal';
+import { SearchModalComponent } from 'search-modal';
 
 @NgModule({
   imports: [
@@ -17,6 +18,7 @@ import { NewPostModalComponent } from 'new-post-modal';
     FollowersComponent,
     MobileNavigationComponent,
     NewPostModalComponent,
+    SearchModalComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
 })

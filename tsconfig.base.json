@@ -26,6 +26,7 @@
       "new-post-modal": ["src/lib/new-post-modal/src/index.ts"],
       "post-card": ["src/lib/post-card/src/index.ts"],
       "post-details": ["src/modules/post-details/src/index.ts"],
+      "search-modal": ["src/lib/search-modal/src/index.ts"],
       "stories": ["src/lib/stories/src/index.ts"]
     }
   },
