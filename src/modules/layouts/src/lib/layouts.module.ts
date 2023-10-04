@@ -6,6 +6,7 @@ import { NavigationComponent } from './navigation/navigation.component';
 import { WrapperComponent } from './wrapper/wrapper.component';
 import { CreatePostComponent } from 'create-post';
 import { FollowersComponent } from 'followers';
+import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation.component';
 
 @NgModule({
   imports: [
@@ -13,6 +14,7 @@ import { FollowersComponent } from 'followers';
     RouterModule.forChild(layoutsRoutes),
     CreatePostComponent,
     FollowersComponent,
+    MobileNavigationComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
 })

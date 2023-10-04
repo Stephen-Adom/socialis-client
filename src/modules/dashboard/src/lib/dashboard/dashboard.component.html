@@ -2,14 +2,16 @@
   id="dashboard-section"
   class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[70%_30%] gap-5 w-full"
 >
-  <div class="main-container pt-5">
+  <div class="main-container pt-2 md:pt-5">
     <lib-stories />
 
-    <div class="posts-list-container flex flex-col gap-y-4 w-full mt-7">
+    <div class="posts-list-container flex flex-col gap-y-4 w-full mt-4 md:mt-7">
       <lib-post-card />
     </div>
   </div>
-  <div class="right-section pt-5 flex-col gap-y-5 hidden sm:hidden md:flex">
+  <div
+    class="right-section pt-5 flex-col gap-y-5 hidden sm:hidden md:hidden lg:flex"
+  >
     <lib-message-panel />
     <lib-activity-card />
   </div>
