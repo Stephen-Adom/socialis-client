@@ -51,7 +51,7 @@ export class RegisterComponent implements OnInit {
         console.log(value);
       });
 
-    this.checkIfEmailAlreadyExist('');
+    // this.checkIfEmailAlreadyExist('');
   }
 
   checkIfEmailAlreadyExist(email: string) {

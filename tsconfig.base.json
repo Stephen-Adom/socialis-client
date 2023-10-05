@@ -20,7 +20,7 @@
       "comment-list": ["src/lib/comment-list/src/index.ts"],
       "create-post": ["src/lib/create-post/src/index.ts"],
       "dashboard": ["src/modules/dashboard/src/index.ts"],
-      "error-toaster": ["src/shared/toasters/src/index.ts"],
+      "notification": ["src/shared/toasters/src/index.ts"],
       "followers": ["src/lib/followers/src/index.ts"],
       "layouts": ["src/modules/layouts/src/index.ts"],
       "message-panel": ["src/lib/message-panel/src/index.ts"],
