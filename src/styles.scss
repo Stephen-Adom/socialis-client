@@ -91,6 +91,10 @@ body {
     background: linear-gradient(29deg, #1475bd 0%, #1eade9 100%);
     box-shadow: 10px 10px 19px rgba(0, 0, 0, 0.1);
   }
+
+  .is-invalid {
+    @apply border-2 border-red-600 text-red-600;
+  }
 }
 
 swiper-slide {

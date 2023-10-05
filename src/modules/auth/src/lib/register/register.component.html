@@ -23,60 +23,134 @@
     <h2 class="text-center font-bold text-lg">Create an account to connect!</h2>
 
     <form
-      action=""
+      [formGroup]="Form"
+      novalidate
       class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 w-[95%] md:w-[50%] lg:w-[80%] mx-auto gap-4"
     >
       <div class="form-group">
         <input
+          [class.is-invalid]="
+            Form.get('firstname')?.invalid && Form.get('firstname')?.touched
+          "
           type="text"
           class="form-control"
           aria-label="first name"
           placeholder="Enter first name"
+          formControlName="firstname"
+        />
+
+        <feature-error-message
+          [control]="'firstname'"
+          [Form]="Form"
+          [errorMessage]="'Firstname is required'"
         />
       </div>
 
       <div class="form-group">
         <input
+          [class.is-invalid]="
+            Form.get('lastname')?.invalid && Form.get('lastname')?.touched
+          "
           type="text"
           class="form-control"
           aria-label="last name"
           placeholder="Enter last name"
+          formControlName="lastname"
+        />
+        <feature-error-message
+          [control]="'lastname'"
+          [Form]="Form"
+          [errorMessage]="'Lastname is required'"
         />
       </div>
 
-      <div class="form-group">
+      <div class="form-group relative">
+        <div
+          *ngIf="validatingEmail"
+          class="absolute top-[31%] right-2 animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+          role="status"
+          aria-label="loading"
+        >
+          <span class="sr-only">Loading...</span>
+        </div>
+
         <input
+          [class.is-invalid]="
+            Form.get('email')?.invalid && Form.get('email')?.touched
+          "
           type="email"
           class="form-control"
           aria-label="email"
           placeholder="Enter email address"
+          formControlName="email"
+        />
+        <feature-error-message
+          [control]="'email'"
+          [Form]="Form"
+          [errorMessage]="
+            Form.get('email')?.hasError('email')
+              ? 'Email is invalid'
+              : 'Email is required'
+          "
         />
       </div>
 
       <div class="form-group">
         <input
+          [class.is-invalid]="
+            Form.get('username')?.invalid && Form.get('username')?.touched
+          "
           type="text"
           class="form-control"
           aria-label="username"
           placeholder="Enter username"
+          formControlName="username"
+        />
+        <feature-error-message
+          [control]="'username'"
+          [Form]="Form"
+          [errorMessage]="'Username is required'"
         />
       </div>
 
       <div class="form-group col-span-2">
         <input
+          [class.is-invalid]="
+            Form.get('password')?.invalid && Form.get('password')?.touched
+          "
           type="password"
           class="form-control"
           aria-label="password"
           placeholder="Enter password"
+          formControlName="password"
+        />
+        <feature-error-message
+          [control]="'password'"
+          [Form]="Form"
+          [errorMessage]="'Password is required'"
         />
       </div>
 
       <div class="form-group col-span-2">
         <input
+          [class.is-invalid]="
+            Form.get('confirmPassword')?.invalid &&
+            Form.get('confirmPassword')?.touched
+          "
           type="password"
           class="form-control"
           aria-label="confirm_password"
           placeholder="Confirm Password"
+          formControlName="confirmPassword"
+        />
+        <feature-error-message
+          [control]="'confirmPassword'"
+          [Form]="Form"
+          [errorMessage]="
+            Form.get('confirmPassword')?.hasError('confirmedValidator')
+              ? 'Password does not match'
+              : 'Confirm your password'
+          "
         />
       </div>
 
@@ -84,6 +158,7 @@
         <button
           type="button"
           class="btn-custom btn w-full py-4 text-white font-semibold"
+          (click)="register()"
         >
           Create Account
         </button>
