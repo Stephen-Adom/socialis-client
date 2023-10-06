@@ -61,5 +61,14 @@ export const AppReducer = createReducer<AppState>(
       refreshToken: action.refreshToken,
       error: null,
     };
+  }),
+  on(AppApiActions.clearUserAuthInfo, (state: AppState) => {
+    return {
+      ...state,
+      userInfo: null,
+      accessToken: null,
+      refreshToken: null,
+      error: null,
+    };
   })
 );

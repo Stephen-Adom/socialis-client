@@ -1,4 +1,4 @@
-import { createActionGroup, props } from '@ngrx/store';
+import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { ErrorMessageType, UserInfoType } from 'utils';
 
 export const AppApiActions = createActionGroup({
@@ -10,5 +10,6 @@ export const AppApiActions = createActionGroup({
       accessToken: string;
       refreshToken: string;
     }>(),
+    clearUserAuthInfo: emptyProps(),
   },
 });

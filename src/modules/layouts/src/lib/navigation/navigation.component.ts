@@ -7,6 +7,9 @@ import {
   ViewChild,
 } from '@angular/core';
 import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import * as localforage from 'localforage';
+import { AppApiActions, AppState } from 'state';
 
 @Component({
   selector: 'feature-navigation',
@@ -18,6 +21,7 @@ export class NavigationComponent {
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
+    private store: Store<AppState>,
     private router: Router
   ) {}
 
@@ -30,7 +34,15 @@ export class NavigationComponent {
     }
   }
 
-  signOut() {
-    this.router.navigate(['/auth/login']);
+  async signOut() {
+    try {
+      this.store.dispatch(AppApiActions.clearUserAuthInfo());
+      await localforage.removeItem('accessToken');
+      await localforage.removeItem('refreshToken');
+      await localforage.removeItem('userInfo');
+      this.router.navigate(['/auth/login']);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
