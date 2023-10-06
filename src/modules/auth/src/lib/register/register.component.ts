@@ -8,14 +8,9 @@ import {
 } from '@angular/forms';
 import { Subscription, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AuthenticationService } from 'services';
-import {
-  AuthResponseType,
-  ConfirmedValidator,
-  UserRegistrationDetailsType,
-} from 'utils';
+import { ConfirmedValidator, UserRegistrationDetailsType } from 'utils';
 import { AppApiActions, AppState } from 'state';
 import { Store } from '@ngrx/store';
-import * as localforage from 'localforage';
 import { Router } from '@angular/router';
 
 @Component({

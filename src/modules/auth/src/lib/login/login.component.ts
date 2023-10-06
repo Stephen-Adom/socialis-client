@@ -1,6 +1,5 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { AuthenticationService } from 'services';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -20,8 +19,7 @@ export class LoginComponent implements OnDestroy {
   constructor(
     private authservice: AuthenticationService,
     private store: Store<AppState>,
-    private formBuilder: FormBuilder,
-    private router: Router
+    private formBuilder: FormBuilder
   ) {
     this.Form = this.formBuilder.group({
       username: ['', Validators.required],
