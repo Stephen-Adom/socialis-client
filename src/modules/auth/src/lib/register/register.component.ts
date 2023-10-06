@@ -3,15 +3,20 @@ import { Component, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
-  FormControl,
   FormGroup,
   Validators,
 } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AuthenticationService } from 'services';
-import { ConfirmedValidator, UserRegistrationDetailsType } from 'utils';
+import {
+  AuthResponseType,
+  ConfirmedValidator,
+  UserRegistrationDetailsType,
+} from 'utils';
 import { AppApiActions, AppState } from 'state';
 import { Store } from '@ngrx/store';
+import * as localforage from 'localforage';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'feature-register',
@@ -27,7 +32,8 @@ export class RegisterComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authservice: AuthenticationService,
-    private store: Store<AppState>
+    private store: Store<AppState>,
+    private router: Router
   ) {
     this.Form = this.formBuilder.group(
       {
@@ -148,6 +154,7 @@ export class RegisterComponent implements OnInit {
     this.authservice.registerUser(details).subscribe({
       next: (response) => {
         this.submittingForm = false;
+        this.saveAndRedirectUser(response);
         console.log(response);
       },
 
@@ -159,5 +166,23 @@ export class RegisterComponent implements OnInit {
         console.log(error);
       },
     });
+  }
+
+  async saveAndRedirectUser(response: AuthResponseType) {
+    try {
+      await localforage.setItem('accessToken', response.accessToken);
+      await localforage.setItem('refreshToken', response.refreshToken);
+      await localforage.setItem('userInfo', response.data);
+      this.store.dispatch(
+        AppApiActions.storeUserAuthInfo({
+          userInfo: response.data,
+          accessToken: response.accessToken,
+          refreshToken: response.refreshToken,
+        })
+      );
+      this.router.navigate(['/dashboard']);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

@@ -5,16 +5,22 @@ import {
   on,
 } from '@ngrx/store';
 import { AppApiActions } from './app.actions';
-import { ErrorMessageType } from 'utils';
+import { ErrorMessageType, UserInfoType } from 'utils';
 
 export const featureAppKey = 'app';
 
 export interface AppState {
   error: ErrorMessageType | null;
+  userInfo: UserInfoType | null;
+  accessToken: string | null;
+  refreshToken: string | null;
 }
 
 const initialState: AppState = {
   error: null,
+  userInfo: null,
+  accessToken: null,
+  refreshToken: null,
 };
 
 export const selectAppFeature = createFeatureSelector<AppState>(featureAppKey);
@@ -24,12 +30,36 @@ export const getErrorMessage = createSelector(
   (state: AppState) => state.error
 );
 
+export const getUserInformation = createSelector(
+  selectAppFeature,
+  (state: AppState) => state.userInfo
+);
+
+export const getAccessToken = createSelector(
+  selectAppFeature,
+  (state: AppState) => state.accessToken
+);
+
+export const getRefreshToken = createSelector(
+  selectAppFeature,
+  (state: AppState) => state.refreshToken
+);
+
 export const AppReducer = createReducer<AppState>(
   initialState,
   on(AppApiActions.displayErrorMessage, (state: AppState, action) => {
     return {
       ...state,
       error: action.error,
+    };
+  }),
+  on(AppApiActions.storeUserAuthInfo, (state: AppState, action) => {
+    return {
+      ...state,
+      userInfo: action.userInfo,
+      accessToken: action.accessToken,
+      refreshToken: action.refreshToken,
+      error: null,
     };
   })
 );
