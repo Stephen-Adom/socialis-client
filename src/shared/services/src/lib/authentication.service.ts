@@ -16,4 +16,12 @@ export class AuthenticationService {
       getAuthHttpOptions()
     );
   }
+
+  validate_username_exist(username: string) {
+    return this.Http.post(
+      BASE_URL + '/auth/validate_username',
+      { username },
+      getAuthHttpOptions()
+    );
+  }
 }

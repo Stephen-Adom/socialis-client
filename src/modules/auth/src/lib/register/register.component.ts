@@ -1,6 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AuthenticationService } from 'services';
 import { ConfirmedValidator } from 'utils';
@@ -15,6 +21,7 @@ import { Store } from '@ngrx/store';
 export class RegisterComponent implements OnInit {
   Form: FormGroup;
   validatingEmail = false;
+  validatingUsername = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -51,10 +58,8 @@ export class RegisterComponent implements OnInit {
     this.Form.get('username')
       ?.valueChanges.pipe(debounceTime(800), distinctUntilChanged())
       .subscribe((value) => {
-        console.log(value);
+        this.checkIfUsernameAlreadyExist(value);
       });
-
-    this.checkIfEmailAlreadyExist('');
   }
 
   checkIfEmailAlreadyExist(email: string) {
@@ -63,16 +68,61 @@ export class RegisterComponent implements OnInit {
     this.authservice.validate_email_exist(email).subscribe({
       next: (response: any) => {
         this.validatingEmail = false;
-        console.log(response);
+
+        if (response['email_exist']) {
+          this.Form.get('email')?.setErrors({ emailExist: true });
+        } else {
+          this.Form.get('email')?.setErrors(null);
+        }
       },
       error: (error: HttpErrorResponse) => {
         this.validatingEmail = false;
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
+      },
+    });
+  }
+
+  checkIfUsernameAlreadyExist(username: string) {
+    this.validatingUsername = true;
+
+    this.authservice.validate_username_exist(username).subscribe({
+      next: (response: any) => {
+        this.validatingUsername = false;
+
+        if (response['username_exist']) {
+          this.Form.get('username')?.setErrors({ usernameExist: true });
+        } else {
+          this.Form.get('username')?.setErrors(null);
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        this.validatingUsername = false;
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
         console.log(error);
       },
     });
+  }
+
+  getEmailErrorMessage(control: AbstractControl<any, any> | null) {
+    if (control?.hasError('email')) {
+      return 'Email is invalid';
+    } else if (control?.hasError('emailExist')) {
+      return 'Email entered already exist';
+    } else {
+      return 'Email is required';
+    }
+  }
+
+  getUsernameErrorMessage(control: AbstractControl<any, any> | null) {
+    if (control?.hasError('usernameExist')) {
+      return 'Username entered already exist';
+    } else {
+      return 'Email is required';
+    }
   }
 
   register() {
