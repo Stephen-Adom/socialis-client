@@ -3,12 +3,20 @@ import { HttpClient } from '@angular/common/http';
 import BASE_URL from './base_url';
 import { getAuthHttpOptions } from './httpHeaders';
 import { AuthResponseType, UserRegistrationDetailsType } from 'utils';
+import * as localforage from 'localforage';
+import { AppApiActions, AppState } from 'state';
+import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
-  constructor(private Http: HttpClient) {}
+  constructor(
+    private store: Store<AppState>,
+    private Http: HttpClient,
+    private router: Router
+  ) {}
 
   validate_email_exist(email: string) {
     return this.Http.post<{
@@ -34,5 +42,31 @@ export class AuthenticationService {
       userDetails,
       getAuthHttpOptions()
     );
+  }
+
+  loginUser(userDetails: { username: string; password: string }) {
+    return this.Http.post<AuthResponseType>(
+      BASE_URL + '/auth/login',
+      userDetails,
+      getAuthHttpOptions()
+    );
+  }
+
+  async saveAndRedirectUser(response: AuthResponseType) {
+    try {
+      await localforage.setItem('accessToken', response.accessToken);
+      await localforage.setItem('refreshToken', response.refreshToken);
+      await localforage.setItem('userInfo', response.data);
+      this.store.dispatch(
+        AppApiActions.storeUserAuthInfo({
+          userInfo: response.data,
+          accessToken: response.accessToken,
+          refreshToken: response.refreshToken,
+        })
+      );
+      this.router.navigate(['/dashboard']);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

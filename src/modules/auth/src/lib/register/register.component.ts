@@ -1,12 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
   FormGroup,
   Validators,
 } from '@angular/forms';
-import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
+import { Subscription, debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AuthenticationService } from 'services';
 import {
   AuthResponseType,
@@ -23,11 +23,12 @@ import { Router } from '@angular/router';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss'],
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
   Form: FormGroup;
   validatingEmail = false;
   validatingUsername = false;
   submittingForm = false;
+  registrationSubscription = new Subscription();
 
   constructor(
     private formBuilder: FormBuilder,
@@ -94,24 +95,26 @@ export class RegisterComponent implements OnInit {
   checkIfUsernameAlreadyExist(username: string) {
     this.validatingUsername = true;
 
-    this.authservice.validate_username_exist(username).subscribe({
-      next: (response: any) => {
-        this.validatingUsername = false;
+    this.registrationSubscription = this.authservice
+      .validate_username_exist(username)
+      .subscribe({
+        next: (response: any) => {
+          this.validatingUsername = false;
 
-        if (response['username_exist']) {
-          this.Form.get('username')?.setErrors({ usernameExist: true });
-        } else {
-          this.Form.get('username')?.setErrors(null);
-        }
-      },
-      error: (error: HttpErrorResponse) => {
-        this.validatingUsername = false;
-        this.store.dispatch(
-          AppApiActions.displayErrorMessage({ error: error.error })
-        );
-        console.log(error);
-      },
-    });
+          if (response['username_exist']) {
+            this.Form.get('username')?.setErrors({ usernameExist: true });
+          } else {
+            this.Form.get('username')?.setErrors(null);
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.validatingUsername = false;
+          this.store.dispatch(
+            AppApiActions.displayErrorMessage({ error: error.error })
+          );
+          console.log(error);
+        },
+      });
   }
 
   getEmailErrorMessage(control: AbstractControl<any, any> | null) {
@@ -154,8 +157,7 @@ export class RegisterComponent implements OnInit {
     this.authservice.registerUser(details).subscribe({
       next: (response) => {
         this.submittingForm = false;
-        this.saveAndRedirectUser(response);
-        console.log(response);
+        this.authservice.saveAndRedirectUser(response);
       },
 
       error: (error: HttpErrorResponse) => {
@@ -163,26 +165,11 @@ export class RegisterComponent implements OnInit {
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
-        console.log(error);
       },
     });
   }
 
-  async saveAndRedirectUser(response: AuthResponseType) {
-    try {
-      await localforage.setItem('accessToken', response.accessToken);
-      await localforage.setItem('refreshToken', response.refreshToken);
-      await localforage.setItem('userInfo', response.data);
-      this.store.dispatch(
-        AppApiActions.storeUserAuthInfo({
-          userInfo: response.data,
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
-        })
-      );
-      this.router.navigate(['/dashboard']);
-    } catch (error) {
-      console.log(error);
-    }
+  ngOnDestroy(): void {
+    this.registrationSubscription.unsubscribe();
   }
 }
