@@ -161,11 +161,21 @@
 
       <div class="form-group col-span-2">
         <button
+          [disabled]="submittingForm"
           type="button"
-          class="btn-custom btn w-full py-4 text-white font-semibold"
+          class="btn-custom btn w-full py-4 text-white font-semibold flex items-center justify-center gap-x-3 disabled:cursor-wait"
           (click)="register()"
         >
-          Create Account
+          {{ submittingForm ? 'Registering...' : 'Create Account' }}
+
+          <div
+            *ngIf="submittingForm"
+            class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+            role="status"
+            aria-label="loading"
+          >
+            <span class="sr-only">Loading...</span>
+          </div>
         </button>
       </div>
     </form>

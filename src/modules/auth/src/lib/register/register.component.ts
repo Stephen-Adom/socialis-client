@@ -9,7 +9,7 @@ import {
 } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AuthenticationService } from 'services';
-import { ConfirmedValidator } from 'utils';
+import { ConfirmedValidator, UserRegistrationDetailsType } from 'utils';
 import { AppApiActions, AppState } from 'state';
 import { Store } from '@ngrx/store';
 
@@ -22,6 +22,7 @@ export class RegisterComponent implements OnInit {
   Form: FormGroup;
   validatingEmail = false;
   validatingUsername = false;
+  submittingForm = false;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -127,10 +128,36 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (this.Form.valid) {
-      console.log(this.Form.value);
+      this.submitUserDetails();
     } else {
       this.Form.markAllAsTouched();
     }
-    console.log(this.Form);
+  }
+
+  submitUserDetails() {
+    const details: UserRegistrationDetailsType = {
+      firstname: this.Form.get('firstname')?.value,
+      lastname: this.Form.get('lastname')?.value,
+      username: this.Form.get('username')?.value,
+      email: this.Form.get('email')?.value,
+      password: this.Form.get('password')?.value,
+    };
+
+    this.submittingForm = true;
+
+    this.authservice.registerUser(details).subscribe({
+      next: (response) => {
+        this.submittingForm = false;
+        console.log(response);
+      },
+
+      error: (error: HttpErrorResponse) => {
+        this.submittingForm = false;
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
+        console.log(error);
+      },
+    });
   }
 }
