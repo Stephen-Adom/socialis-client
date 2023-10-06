@@ -4,6 +4,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { debounceTime, distinctUntilChanged, filter } from 'rxjs';
 import { AuthenticationService } from 'services';
 import { ConfirmedValidator } from 'utils';
+import { AppApiActions, AppState } from 'state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'feature-register',
@@ -16,7 +18,8 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private formBuilder: FormBuilder,
-    private authservice: AuthenticationService
+    private authservice: AuthenticationService,
+    private store: Store<AppState>
   ) {
     this.Form = this.formBuilder.group(
       {
@@ -51,7 +54,7 @@ export class RegisterComponent implements OnInit {
         console.log(value);
       });
 
-    // this.checkIfEmailAlreadyExist('');
+    this.checkIfEmailAlreadyExist('');
   }
 
   checkIfEmailAlreadyExist(email: string) {
@@ -64,6 +67,9 @@ export class RegisterComponent implements OnInit {
       },
       error: (error: HttpErrorResponse) => {
         this.validatingEmail = false;
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
         console.log(error);
       },
     });
