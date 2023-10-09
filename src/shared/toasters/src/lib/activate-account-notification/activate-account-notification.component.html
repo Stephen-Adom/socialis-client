@@ -38,11 +38,24 @@
       </div>
       <div class="grid grid-cols-2 gap-2">
         <div>
-          <a
-            href="#"
+          <button
+            type="button"
+            (click)="resendEmail()"
             class="inline-flex justify-center w-full px-2 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
-            >Resend email</a
           >
+            <ng-container *ngIf="sendingLink; else elseTemplate">
+              <div
+                class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-white rounded-full"
+                role="status"
+                aria-label="loading"
+              >
+                <span class="sr-only">Loading...</span>
+              </div>
+
+              <span class="ml-2">Sending Request...</span>
+            </ng-container>
+            <ng-template #elseTemplate> Resend email </ng-template>
+          </button>
         </div>
         <div>
           <a

@@ -68,9 +68,17 @@ export class AuthenticationService {
     }>(BASE_URL + '/auth/resend_verification_token?token=' + token);
   }
 
+  sendEmailLink(email: string) {
+    return this.Http.get<{
+      message: string;
+      status: string;
+    }>(BASE_URL + '/auth/resend_verification_link?email=' + email);
+  }
+
   async saveAndRedirectUser(response: AuthResponseType) {
     if (response.data.enabled) {
       try {
+        await localforage.removeItem('userEmail');
         await localforage.setItem('accessToken', response.accessToken);
         await localforage.setItem('refreshToken', response.refreshToken);
         await localforage.setItem('userInfo', response.data);
@@ -81,11 +89,12 @@ export class AuthenticationService {
             refreshToken: response.refreshToken,
           })
         );
-        this.router.navigate(['/dashboard']);
+        window.location.href = '/dashboard';
       } catch (error) {
         console.log(error);
       }
     } else {
+      localforage.setItem('userEmail', response.data.email);
       this.innactiveAccountService.accountIsNotActive(true);
     }
   }

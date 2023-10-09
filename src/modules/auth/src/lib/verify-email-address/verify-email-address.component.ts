@@ -2,6 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
+import * as localforage from 'localforage';
 import {
   AuthenticationService,
   InnactiveAccountService,
@@ -44,14 +45,15 @@ export class VerifyEmailAddressComponent implements OnInit {
   verifyEmailToken(token: string) {
     this.validatingEmailToken = true;
     this.authservice.verifyEmailToken(token).subscribe({
-      next: (data) => {
+      next: async (data) => {
         this.validatingEmailToken = false;
         if (data.token_valid) {
           this.innactiveAccountService.accountIsNotActive(false);
           this.successMessageService.sendSuccessMessage(
             'Email verified successfully and account is now active'
           );
-          this.router.navigate(['auth/login']);
+          await localforage.removeItem('userEmail');
+          window.location.href = 'auth/login';
         } else {
           this.tokenInvalid = true;
         }
