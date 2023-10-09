@@ -16,6 +16,7 @@ export class VerifyEmailAddressComponent implements OnInit {
   emailToken!: string;
   emailVerificationSuccess = false;
   sendingRequest = false;
+  errorMessage!: string;
   constructor(
     private innactiveAccountService: InnactiveAccountService,
     private authservice: AuthenticationService,
@@ -71,9 +72,7 @@ export class VerifyEmailAddressComponent implements OnInit {
       error: (error: HttpErrorResponse) => {
         this.sendingRequest = false;
 
-        this.store.dispatch(
-          AppApiActions.displayErrorMessage({ error: error.error })
-        );
+        this.errorMessage = error.error.message;
       },
     });
   }
