@@ -16,7 +16,6 @@
     "baseUrl": ".",
     "paths": {
       "activity-card": ["src/lib/activity-card/src/index.ts"],
-      "state": ["src/shared/store/src/index.ts"],
       "auth": ["src/modules/auth/src/index.ts"],
       "comment-list": ["src/lib/comment-list/src/index.ts"],
       "create-post": ["src/lib/create-post/src/index.ts"],
@@ -30,6 +29,7 @@
       "post-details": ["src/modules/post-details/src/index.ts"],
       "search-modal": ["src/lib/search-modal/src/index.ts"],
       "services": ["src/shared/services/src/index.ts"],
+      "state": ["src/shared/store/src/index.ts"],
       "stories": ["src/lib/stories/src/index.ts"],
       "utils": ["src/shared/utils/src/index.ts"]
     }

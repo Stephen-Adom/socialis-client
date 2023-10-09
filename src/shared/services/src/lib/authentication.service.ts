@@ -64,7 +64,9 @@ export class AuthenticationService {
           refreshToken: response.refreshToken,
         })
       );
-      this.router.navigate(['/dashboard']);
+      if (response.data.enabled) {
+        this.router.navigate(['/dashboard']);
+      }
     } catch (error) {
       console.log(error);
     }

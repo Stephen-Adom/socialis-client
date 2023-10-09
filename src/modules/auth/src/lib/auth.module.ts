@@ -4,6 +4,7 @@ import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationService } from 'services';
+import { ActivateAccountNotificationComponent } from 'notification';
 
 import { authRoutes } from './lib.routes';
 import { RegisterComponent } from './register/register.component';
@@ -12,6 +13,8 @@ import { AnimateSvgComponent } from './login/animate-svg/animate-svg.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { ForgotAnimateComponent } from './forgot-password/forgot-animate/forgot-animate.component';
 import { ErrorMessageComponent } from './errorMessage/error-message.component';
+import { AuthComponent } from './auth/auth.component';
+import { VerifyEmailAddressComponent } from './verify-email-address/verify-email-address.component';
 
 @NgModule({
   imports: [
@@ -19,6 +22,7 @@ import { ErrorMessageComponent } from './errorMessage/error-message.component';
     RouterModule.forChild(authRoutes),
     ReactiveFormsModule,
     HttpClientModule,
+    ActivateAccountNotificationComponent,
   ],
   declarations: [
     RegisterComponent,
@@ -27,6 +31,8 @@ import { ErrorMessageComponent } from './errorMessage/error-message.component';
     ForgotPasswordComponent,
     ForgotAnimateComponent,
     ErrorMessageComponent,
+    AuthComponent,
+    VerifyEmailAddressComponent,
   ],
   providers: [AuthenticationService],
 })

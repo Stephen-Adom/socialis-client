@@ -126,7 +126,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     if (control?.hasError('usernameExist')) {
       return 'Username entered already exist';
     } else {
-      return 'Email is required';
+      return 'Username is required';
     }
   }
 

@@ -1,14 +1,17 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
+import * as localforage from 'localforage';
 import { ErrorToasterComponent } from 'notification';
 import { Subscription } from 'rxjs';
+import { ValidateAuthUserService } from 'services';
 import { AppState, getErrorMessage } from 'state';
-import { ErrorMessageType } from 'utils';
+import { ErrorMessageType, UserInfoType } from 'utils';
 
 @Component({
   standalone: true,
   imports: [RouterModule, ErrorToasterComponent],
+  providers: [ValidateAuthUserService],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
@@ -17,7 +20,27 @@ export class AppComponent implements OnInit, OnDestroy {
   errorMessageSubscription = new Subscription();
   errorMessage: ErrorMessageType | null = null;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private validateUser: ValidateAuthUserService,
+    private store: Store<AppState>
+  ) {
+    this.fetchDataFromStorage();
+  }
+
+  async fetchDataFromStorage() {
+    try {
+      const token: string | null = await localforage.getItem('accessToken');
+      const userInfo: UserInfoType | null = await localforage.getItem(
+        'userInfo'
+      );
+      const refreshToken: string | null = await localforage.getItem(
+        'refreshToken'
+      );
+      this.validateUser.validateAuthUser(token, refreshToken, userInfo);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   ngOnInit(): void {
     this.errorMessageSubscription = this.store
