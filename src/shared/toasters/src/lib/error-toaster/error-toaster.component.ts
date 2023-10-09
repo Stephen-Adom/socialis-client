@@ -37,13 +37,12 @@ export class ErrorToasterComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(changes, 'changes');
     if (changes['errorMessage']['currentValue']) {
-      this.dismissAlertAfterEightSeconds();
+      this.dismissAlertAfterSixSeconds();
     }
   }
 
-  dismissAlertAfterEightSeconds() {
+  dismissAlertAfterSixSeconds() {
     this.setTimoutSub = setTimeout(() => {
       const errorElements =
         this.document.documentElement.querySelectorAll('.toast-danger');

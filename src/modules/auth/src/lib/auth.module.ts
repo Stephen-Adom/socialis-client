@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
-import { AuthenticationService } from 'services';
+import { AuthenticationService, InnactiveAccountService } from 'services';
 import { ActivateAccountNotificationComponent } from 'notification';
 
 import { authRoutes } from './lib.routes';
@@ -34,6 +34,6 @@ import { VerifyEmailAddressComponent } from './verify-email-address/verify-email
     AuthComponent,
     VerifyEmailAddressComponent,
   ],
-  providers: [AuthenticationService],
+  providers: [AuthenticationService, InnactiveAccountService],
 })
 export class AuthModule {}

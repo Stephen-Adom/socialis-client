@@ -1,9 +1,14 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { AuthenticationService, InnactiveAccountService } from 'services';
+import {
+  AuthenticationService,
+  InnactiveAccountService,
+  SuccessMessageService,
+} from 'services';
 import { AppApiActions, AppState } from 'state';
+import { SUCCESS_MESSAGE_TOKEN } from 'utils';
 
 @Component({
   selector: 'feature-verify-email-address',
@@ -18,6 +23,8 @@ export class VerifyEmailAddressComponent implements OnInit {
   sendingRequest = false;
   errorMessage!: string;
   constructor(
+    @Inject(SUCCESS_MESSAGE_TOKEN)
+    private successMessageService: SuccessMessageService,
     private innactiveAccountService: InnactiveAccountService,
     private authservice: AuthenticationService,
     private store: Store<AppState>,
@@ -28,13 +35,10 @@ export class VerifyEmailAddressComponent implements OnInit {
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
       if (params['token']) {
-        console.log(params['token']);
         this.emailToken = params['token'];
         this.verifyEmailToken(params['token']);
       }
     });
-
-    console.log('object');
   }
 
   verifyEmailToken(token: string) {
@@ -44,13 +48,15 @@ export class VerifyEmailAddressComponent implements OnInit {
         this.validatingEmailToken = false;
         if (data.token_valid) {
           this.innactiveAccountService.accountIsNotActive(false);
+          this.successMessageService.sendSuccessMessage(
+            'Email verified successfully and account is now active'
+          );
           this.router.navigate(['auth/login']);
         } else {
           this.tokenInvalid = true;
         }
       },
       error: (error: HttpErrorResponse) => {
-        console.log(error, 'error');
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
@@ -67,7 +73,6 @@ export class VerifyEmailAddressComponent implements OnInit {
         this.emailVerificationSuccess = true;
         this.tokenInvalid = false;
         this.sendingRequest = false;
-        console.log(data);
       },
       error: (error: HttpErrorResponse) => {
         this.sendingRequest = false;

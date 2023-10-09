@@ -2,16 +2,25 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as localforage from 'localforage';
-import { ErrorToasterComponent } from 'notification';
+import {
+  ErrorToasterComponent,
+  SuccessNotificationComponent,
+} from 'notification';
 import { Subscription } from 'rxjs';
-import { InnactiveAccountService, ValidateAuthUserService } from 'services';
+import { SuccessMessageService, ValidateAuthUserService } from 'services';
 import { AppState, getErrorMessage } from 'state';
-import { ErrorMessageType, UserInfoType } from 'utils';
+import { ErrorMessageType, SUCCESS_MESSAGE_TOKEN, UserInfoType } from 'utils';
 
 @Component({
   standalone: true,
-  imports: [RouterModule, ErrorToasterComponent],
-  providers: [ValidateAuthUserService, InnactiveAccountService],
+  imports: [RouterModule, ErrorToasterComponent, SuccessNotificationComponent],
+  providers: [
+    ValidateAuthUserService,
+    {
+      provide: SUCCESS_MESSAGE_TOKEN,
+      useClass: SuccessMessageService,
+    },
+  ],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

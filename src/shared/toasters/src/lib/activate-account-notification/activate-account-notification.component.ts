@@ -36,6 +36,7 @@ export class ActivateAccountNotificationComponent implements OnInit, OnDestroy {
       this.innactiveAccountService.innactiveAccountObservable.subscribe(
         (data) => {
           this.innactiveAccount = data;
+          console.log(this.innactiveAccount, data);
         }
       );
   }
