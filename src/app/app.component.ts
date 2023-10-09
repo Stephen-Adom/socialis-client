@@ -4,14 +4,14 @@ import { Store } from '@ngrx/store';
 import * as localforage from 'localforage';
 import { ErrorToasterComponent } from 'notification';
 import { Subscription } from 'rxjs';
-import { ValidateAuthUserService } from 'services';
+import { InnactiveAccountService, ValidateAuthUserService } from 'services';
 import { AppState, getErrorMessage } from 'state';
 import { ErrorMessageType, UserInfoType } from 'utils';
 
 @Component({
   standalone: true,
   imports: [RouterModule, ErrorToasterComponent],
-  providers: [ValidateAuthUserService],
+  providers: [ValidateAuthUserService, InnactiveAccountService],
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],

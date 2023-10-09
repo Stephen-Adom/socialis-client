@@ -7,12 +7,14 @@ import * as localforage from 'localforage';
 import { AppApiActions, AppState } from 'state';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
+import { InnactiveAccountService } from './innactiveAccount.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
   constructor(
+    private innactiveAccountService: InnactiveAccountService,
     private store: Store<AppState>,
     private Http: HttpClient,
     private router: Router
@@ -52,23 +54,39 @@ export class AuthenticationService {
     );
   }
 
+  verifyEmailToken(token: string) {
+    return this.Http.post<{
+      token_valid: boolean;
+      status: string;
+    }>(BASE_URL + '/auth/verify_email_token', { token }, getAuthHttpOptions());
+  }
+
+  sendEmailVerificationToken(token: string) {
+    return this.Http.get<{
+      message: string;
+      status: string;
+    }>(BASE_URL + '/auth/resend_verification_token?token=' + token);
+  }
+
   async saveAndRedirectUser(response: AuthResponseType) {
-    try {
-      await localforage.setItem('accessToken', response.accessToken);
-      await localforage.setItem('refreshToken', response.refreshToken);
-      await localforage.setItem('userInfo', response.data);
-      this.store.dispatch(
-        AppApiActions.storeUserAuthInfo({
-          userInfo: response.data,
-          accessToken: response.accessToken,
-          refreshToken: response.refreshToken,
-        })
-      );
-      if (response.data.enabled) {
+    if (response.data.enabled) {
+      try {
+        await localforage.setItem('accessToken', response.accessToken);
+        await localforage.setItem('refreshToken', response.refreshToken);
+        await localforage.setItem('userInfo', response.data);
+        this.store.dispatch(
+          AppApiActions.storeUserAuthInfo({
+            userInfo: response.data,
+            accessToken: response.accessToken,
+            refreshToken: response.refreshToken,
+          })
+        );
         this.router.navigate(['/dashboard']);
+      } catch (error) {
+        console.log(error);
       }
-    } catch (error) {
-      console.log(error);
+    } else {
+      this.innactiveAccountService.accountIsNotActive(true);
     }
   }
 }

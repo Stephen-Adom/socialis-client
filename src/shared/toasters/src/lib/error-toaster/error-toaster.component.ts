@@ -37,6 +37,7 @@ export class ErrorToasterComponent implements OnChanges, OnDestroy {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes, 'changes');
     if (changes['errorMessage']['currentValue']) {
       this.dismissAlertAfterEightSeconds();
     }

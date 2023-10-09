@@ -1,6 +1,7 @@
 export type ErrorMessageType = {
   error: string;
   messages: string[];
+  message?: string;
 };
 
 export type UserRegistrationDetailsType = {

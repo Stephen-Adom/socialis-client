@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { InnactiveAccountService } from 'services';
 
 @Component({
   selector: 'lib-activate-account-notification',
@@ -21,21 +22,22 @@ import { Subscription } from 'rxjs';
 export class ActivateAccountNotificationComponent implements OnInit, OnDestroy {
   @ViewChild('activateAccountNotification')
   activateAccountNotification!: ElementRef<HTMLDivElement>;
-
-  @Input({ required: true }) innactiveAccount!: boolean;
+  innactiveAccount!: boolean;
 
   accountSubscription = new Subscription();
 
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private innactiveAccountService: InnactiveAccountService,
+    private store: Store<AppState>
+  ) {}
 
   ngOnInit(): void {
-    this.accountSubscription = this.store
-      .select(getUserInformation)
-      .subscribe((userInfo) => {
-        if (userInfo && !userInfo.enabled) {
-          this.innactiveAccount = true;
+    this.accountSubscription =
+      this.innactiveAccountService.innactiveAccountObservable.subscribe(
+        (data) => {
+          this.innactiveAccount = data;
         }
-      });
+      );
   }
 
   close() {
