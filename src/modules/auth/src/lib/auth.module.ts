@@ -15,6 +15,7 @@ import { ForgotAnimateComponent } from './forgot-password/forgot-animate/forgot-
 import { ErrorMessageComponent } from './errorMessage/error-message.component';
 import { AuthComponent } from './auth/auth.component';
 import { VerifyEmailAddressComponent } from './verify-email-address/verify-email-address.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 @NgModule({
   imports: [
@@ -33,6 +34,7 @@ import { VerifyEmailAddressComponent } from './verify-email-address/verify-email
     ErrorMessageComponent,
     AuthComponent,
     VerifyEmailAddressComponent,
+    ResetPasswordComponent,
   ],
   providers: [AuthenticationService, InnactiveAccountService],
 })

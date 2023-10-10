@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { HttpErrorResponse } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
@@ -152,6 +153,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
     this.authservice.registerUser(details).subscribe({
       next: (response) => {
         this.submittingForm = false;
+        this.Form.reset();
         this.authservice.saveAndRedirectUser(response);
       },
 

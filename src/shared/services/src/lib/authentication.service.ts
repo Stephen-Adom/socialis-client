@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import BASE_URL from './base_url';
@@ -73,6 +74,24 @@ export class AuthenticationService {
       message: string;
       status: string;
     }>(BASE_URL + '/auth/resend_verification_link?email=' + email);
+  }
+
+  resetPassword(email: string) {
+    return this.Http.post<{
+      message: string;
+      status: string;
+    }>(BASE_URL + '/auth/reset_password', { email }, getAuthHttpOptions());
+  }
+
+  changePassword(newpassword: { password: string }, token: string) {
+    return this.Http.post<{
+      message: string;
+      status: string;
+    }>(
+      BASE_URL + '/auth/change_password?token=' + token,
+      { password: newpassword.password },
+      getAuthHttpOptions()
+    );
   }
 
   async saveAndRedirectUser(response: AuthResponseType) {

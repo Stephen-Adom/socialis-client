@@ -4,6 +4,7 @@ import { LoginComponent } from './login/login.component';
 import { ForgotPasswordComponent } from './forgot-password/forgot-password.component';
 import { AuthComponent } from './auth/auth.component';
 import { VerifyEmailAddressComponent } from './verify-email-address/verify-email-address.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 export const authRoutes: Route[] = [
   {
@@ -21,6 +22,11 @@ export const authRoutes: Route[] = [
         path: 'verifyEmailAddress',
         pathMatch: 'full',
         component: VerifyEmailAddressComponent,
+      },
+      {
+        path: 'reset-password',
+        pathMatch: 'full',
+        component: ResetPasswordComponent,
       },
     ],
   },
