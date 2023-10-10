@@ -9,6 +9,8 @@ import { FollowersComponent } from 'followers';
 import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation.component';
 import { NewPostModalComponent } from 'new-post-modal';
 import { SearchModalComponent } from 'search-modal';
+import { HttpClientModule } from '@angular/common/http';
+import { AuthenticationService } from 'services';
 
 @NgModule({
   imports: [
@@ -19,7 +21,9 @@ import { SearchModalComponent } from 'search-modal';
     MobileNavigationComponent,
     NewPostModalComponent,
     SearchModalComponent,
+    HttpClientModule,
   ],
   declarations: [NavigationComponent, WrapperComponent],
+  providers: [AuthenticationService],
 })
 export class LayoutsModule {}

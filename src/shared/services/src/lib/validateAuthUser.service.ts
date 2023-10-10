@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { Injectable } from '@angular/core';
 import { UserInfoType } from 'utils';
 import { JwtHelperService } from '@auth0/angular-jwt';

@@ -20,6 +20,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 @NgModule({
   imports: [
     CommonModule,
+    HttpClientModule,
     RouterModule.forChild(authRoutes),
     ReactiveFormsModule,
     HttpClientModule,

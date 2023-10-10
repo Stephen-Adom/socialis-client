@@ -1,9 +1,11 @@
 import { Route } from '@angular/router';
 import { WrapperComponent } from './wrapper/wrapper.component';
+import { authGuard } from 'guards';
 
 export const layoutsRoutes: Route[] = [
   {
     path: '',
+    canActivate: [authGuard],
     component: WrapperComponent,
     children: [
       {

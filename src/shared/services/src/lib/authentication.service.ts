@@ -9,11 +9,14 @@ import { AppApiActions, AppState } from 'state';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
 import { InnactiveAccountService } from './innactiveAccount.service';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthenticationService {
+  helper = new JwtHelperService();
+
   constructor(
     private innactiveAccountService: InnactiveAccountService,
     private store: Store<AppState>,
@@ -92,6 +95,14 @@ export class AuthenticationService {
       { password: newpassword.password },
       getAuthHttpOptions()
     );
+  }
+
+  async tokenExist(): Promise<string | null> {
+    return await localforage.getItem('accessToken');
+  }
+
+  tokenIsExpired(accessToken: string) {
+    return this.helper.isTokenExpired(accessToken);
   }
 
   async saveAndRedirectUser(response: AuthResponseType) {

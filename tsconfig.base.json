@@ -21,6 +21,7 @@
       "create-post": ["src/lib/create-post/src/index.ts"],
       "dashboard": ["src/modules/dashboard/src/index.ts"],
       "followers": ["src/lib/followers/src/index.ts"],
+      "guards": ["src/shared/guards/src/index.ts"],
       "layouts": ["src/modules/layouts/src/index.ts"],
       "message-panel": ["src/lib/message-panel/src/index.ts"],
       "new-post-modal": ["src/lib/new-post-modal/src/index.ts"],
