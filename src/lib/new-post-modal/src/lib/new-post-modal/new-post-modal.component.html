@@ -18,20 +18,122 @@
         </button>
       </div>
       <div class="p-4 overflow-y-auto">
-        <p class="mt-1 text-gray-800">
+        <form [formGroup]="Form" class="mt-1 text-gray-800">
           <textarea
-            rows="1"
+            [class.is-invalid]="
+              Form.get('content')?.touched && Form.get('content')?.invalid
+            "
+            rows="3"
             class="border-none focus:border-none w-full focus:outline-none"
             placeholder="What's happening?"
+            formControlName="content"
           ></textarea>
-        </p>
+        </form>
+
+        <!-- START:: UPLOADED POST IMAGES-->
+        <div class="flex flex-wrap gap-3">
+          <div
+            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
+          >
+            <button
+              type="button"
+              class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
+              title="close"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
+              title="edit"
+            >
+              Edit
+            </button>
+            <img src="assets/images/post-image.jpg" class="w-full" alt="" />
+          </div>
+
+          <div
+            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
+          >
+            <button
+              type="button"
+              class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
+              title="close"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
+              title="edit"
+            >
+              Edit
+            </button>
+            <img src="assets/images/post-image.jpg" class="w-full" alt="" />
+          </div>
+
+          <!-- <img
+            src="assets/images/post-image.jpg"
+            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px]"
+            alt=""
+          />
+          <img
+            src="assets/images/post-image.jpg"
+            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px]"
+            alt=""
+          />
+          <img
+            src="assets/images/post-image.jpg"
+            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px]"
+            alt=""
+          /> -->
+        </div>
+        <!-- END:: UPLOADED POST IMAGES-->
       </div>
       <div class="flex justify-between items-center gap-x-2 py-3 px-4 border-t">
         <div class="post-tools">
+          <input
+            type="file"
+            hidden
+            title=""
+            (change)="uploadImage($event)"
+            aria-label="post image"
+            accept="image/*"
+            #fileInput
+          />
           <button
             type="button"
             class="btn btn-circle btn-icon p-2"
             title="image"
+            (click)="fileInput.click()"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -101,8 +203,9 @@
             Close
           </button>
           <a
+            (click)="submitPost()"
             class="py-2 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm"
-            href="#"
+            href="javascript:;"
           >
             Post
           </a>
