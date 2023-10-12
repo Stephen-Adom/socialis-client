@@ -39,7 +39,7 @@ export type PostImage = {
   updatedAt: string;
 };
 
-export type Post = {
+export type PostType = {
   id: number;
   content: string;
   numberOfLikes: number;
@@ -52,5 +52,10 @@ export type Post = {
 
 export type NewPostResponseType = {
   status: string;
-  data: Post;
+  data: PostType;
+};
+
+export type AllPostResponseType = {
+  status: string;
+  data: PostType[];
 };

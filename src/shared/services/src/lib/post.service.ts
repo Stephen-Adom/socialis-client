@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import BASE_URL from './base_url';
 import { getPostHttpOptions } from './httpHeaders';
-import { NewPostResponseType } from 'utils';
+import { AllPostResponseType, NewPostResponseType } from 'utils';
 
 @Injectable({
   providedIn: 'root',
@@ -20,6 +20,13 @@ export class PostService {
     return this.http.post<NewPostResponseType>(
       BASE_URL + '/post',
       formData,
+      this.authHeaders
+    );
+  }
+
+  fetchAllPost() {
+    return this.http.get<AllPostResponseType>(
+      BASE_URL + '/post',
       this.authHeaders
     );
   }

@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import { ErrorMessageType, UserInfoType } from 'utils';
 
