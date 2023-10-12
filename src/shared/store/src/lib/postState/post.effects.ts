@@ -14,8 +14,8 @@ export class PostEffects {
   FetchAllPosts$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PostApiActions.fetchAllPost),
-      mergeMap(() =>
-        this.postservice.fetchAllPost().pipe(
+      mergeMap((action: { userId: number }) =>
+        this.postservice.fetchAllPost(action.userId).pipe(
           map((response: any) => {
             return PostApiActions.fetchAllPostSuccess({ allPosts: response });
           }),

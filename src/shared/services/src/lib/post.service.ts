@@ -24,9 +24,9 @@ export class PostService {
     );
   }
 
-  fetchAllPost() {
+  fetchAllPost(userId: number) {
     return this.http.get<AllPostResponseType>(
-      BASE_URL + '/post',
+      BASE_URL + '/' + userId + '/posts',
       this.authHeaders
     );
   }
