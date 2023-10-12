@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, OnInit } from '@angular/core';
 import BASE_URL from './base_url';
-import { getPostHttpOptions } from './httpHeaders';
+import { getAuthHttpOptions } from './httpHeaders';
 import { AllPostResponseType, NewPostResponseType } from 'utils';
 
 @Injectable({
@@ -11,7 +11,7 @@ import { AllPostResponseType, NewPostResponseType } from 'utils';
 export class PostService {
   authHeaders: any;
   constructor(private http: HttpClient) {
-    getPostHttpOptions().then((options) => {
+    getAuthHttpOptions().then((options) => {
       this.authHeaders = options;
     });
   }

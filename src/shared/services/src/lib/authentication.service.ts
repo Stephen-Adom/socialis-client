@@ -2,7 +2,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import BASE_URL from './base_url';
-import { getAuthHttpOptions } from './httpHeaders';
+import { getNonAuthHttpOptions } from './httpHeaders';
 import { AuthResponseType, UserRegistrationDetailsType } from 'utils';
 import * as localforage from 'localforage';
 import { AppApiActions, AppState } from 'state';
@@ -28,7 +28,7 @@ export class AuthenticationService {
     return this.Http.post<{
       email_exist: boolean;
       status: string;
-    }>(BASE_URL + '/auth/validate_email', { email }, getAuthHttpOptions());
+    }>(BASE_URL + '/auth/validate_email', { email }, getNonAuthHttpOptions());
   }
 
   validate_username_exist(username: string) {
@@ -38,7 +38,7 @@ export class AuthenticationService {
     }>(
       BASE_URL + '/auth/validate_username',
       { username },
-      getAuthHttpOptions()
+      getNonAuthHttpOptions()
     );
   }
 
@@ -46,7 +46,7 @@ export class AuthenticationService {
     return this.Http.post<AuthResponseType>(
       BASE_URL + '/auth/register',
       userDetails,
-      getAuthHttpOptions()
+      getNonAuthHttpOptions()
     );
   }
 
@@ -54,7 +54,7 @@ export class AuthenticationService {
     return this.Http.post<AuthResponseType>(
       BASE_URL + '/auth/login',
       userDetails,
-      getAuthHttpOptions()
+      getNonAuthHttpOptions()
     );
   }
 
@@ -62,7 +62,11 @@ export class AuthenticationService {
     return this.Http.post<{
       token_valid: boolean;
       status: string;
-    }>(BASE_URL + '/auth/verify_email_token', { token }, getAuthHttpOptions());
+    }>(
+      BASE_URL + '/auth/verify_email_token',
+      { token },
+      getNonAuthHttpOptions()
+    );
   }
 
   sendEmailVerificationToken(token: string) {
@@ -83,7 +87,7 @@ export class AuthenticationService {
     return this.Http.post<{
       message: string;
       status: string;
-    }>(BASE_URL + '/auth/reset_password', { email }, getAuthHttpOptions());
+    }>(BASE_URL + '/auth/reset_password', { email }, getNonAuthHttpOptions());
   }
 
   changePassword(newpassword: { password: string }, token: string) {
@@ -93,7 +97,7 @@ export class AuthenticationService {
     }>(
       BASE_URL + '/auth/change_password?token=' + token,
       { password: newpassword.password },
-      getAuthHttpOptions()
+      getNonAuthHttpOptions()
     );
   }
 
