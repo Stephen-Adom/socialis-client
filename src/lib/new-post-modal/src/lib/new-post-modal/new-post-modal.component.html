@@ -31,14 +31,16 @@
         </form>
 
         <!-- START:: UPLOADED POST IMAGES-->
-        <div class="flex flex-wrap gap-3">
+        <div class="flex flex-wrap gap-3" *ngIf="postImages.length">
           <div
             class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
+            *ngFor="let image of postImages"
           >
             <button
               type="button"
               class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
               title="close"
+              (click)="removeImage(image.id)"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -63,58 +65,8 @@
             >
               Edit
             </button>
-            <img src="assets/images/post-image.jpg" class="w-full" alt="" />
+            <img [src]="image.base64" class="w-full" alt="" />
           </div>
-
-          <div
-            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
-          >
-            <button
-              type="button"
-              class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
-              title="close"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-5 h-5"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M6 18L18 6M6 6l12 12"
-                />
-              </svg>
-            </button>
-
-            <button
-              type="button"
-              class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
-              title="edit"
-            >
-              Edit
-            </button>
-            <img src="assets/images/post-image.jpg" class="w-full" alt="" />
-          </div>
-
-          <!-- <img
-            src="assets/images/post-image.jpg"
-            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px]"
-            alt=""
-          />
-          <img
-            src="assets/images/post-image.jpg"
-            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px]"
-            alt=""
-          />
-          <img
-            src="assets/images/post-image.jpg"
-            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px]"
-            alt=""
-          /> -->
         </div>
         <!-- END:: UPLOADED POST IMAGES-->
       </div>
@@ -131,9 +83,10 @@
           />
           <button
             type="button"
-            class="btn btn-circle btn-icon p-2"
+            class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2 disabled:cursor-not-allowed"
             title="image"
             (click)="fileInput.click()"
+            [disabled]="postImages.length === 4"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -149,11 +102,18 @@
                 d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
               />
             </svg>
+
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"
+              role="tooltip"
+            >
+              Image
+            </span>
           </button>
 
           <button
             type="button"
-            class="btn btn-circle btn-icon p-2"
+            class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2"
             title="emoji"
           >
             <svg
@@ -170,11 +130,17 @@
                 d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
               />
             </svg>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"
+              role="tooltip"
+            >
+              Emoji
+            </span>
           </button>
 
           <button
             type="button"
-            class="btn btn-circle btn-icon p-2"
+            class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2"
             title="schedule post"
           >
             <svg
@@ -191,6 +157,12 @@
                 d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
               />
             </svg>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"
+              role="tooltip"
+            >
+              schedule post
+            </span>
           </button>
         </div>
 
@@ -202,13 +174,24 @@
           >
             Close
           </button>
-          <a
+          <button
+            type="button"
+            [disabled]="submittingForm"
             (click)="submitPost()"
-            class="py-2 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm"
+            class="py-2 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm disabled:cursor-wait disabled:bg-blue-300"
             href="javascript:;"
           >
-            Post
-          </a>
+            {{ submittingForm ? 'Submitting post...' : 'Post' }}
+
+            <div
+              *ngIf="submittingForm"
+              class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+              role="status"
+              aria-label="loading"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          </button>
         </div>
       </div>
     </div>

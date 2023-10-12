@@ -10,7 +10,7 @@ import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation
 import { NewPostModalComponent } from 'new-post-modal';
 import { SearchModalComponent } from 'search-modal';
 import { HttpClientModule } from '@angular/common/http';
-import { AuthenticationService } from 'services';
+import { AuthenticationService, PostService } from 'services';
 
 @NgModule({
   imports: [
@@ -24,6 +24,6 @@ import { AuthenticationService } from 'services';
     HttpClientModule,
   ],
   declarations: [NavigationComponent, WrapperComponent],
-  providers: [AuthenticationService],
+  providers: [AuthenticationService, PostService],
 })
 export class LayoutsModule {}

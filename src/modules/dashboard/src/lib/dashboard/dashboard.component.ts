@@ -4,7 +4,6 @@ import { StoriesComponent } from 'stories';
 import { PostCardComponent } from 'post-card';
 import { ActivityCardComponent } from 'activity-card';
 import { MessagePanelComponent } from 'message-panel';
-import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationService } from 'services';
 
 @Component({
