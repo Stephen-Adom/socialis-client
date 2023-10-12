@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import {
   Component,
   ElementRef,
@@ -34,6 +35,7 @@ export class SuccessNotificationComponent implements OnInit, OnDestroy {
     this.messageSubscription =
       this.successMessageService.successMessageObservable.subscribe(
         (data: string) => {
+          console.log(data);
           if (data) {
             this.successMessage = data;
             this.dismissAlertAfterSixSeconds();
@@ -44,6 +46,7 @@ export class SuccessNotificationComponent implements OnInit, OnDestroy {
 
   dismissAlertAfterSixSeconds() {
     this.setTimoutSub = setTimeout(() => {
+      this.successMessage = '';
       this.successMessageNotification.nativeElement.classList.replace(
         'animate-normal',
         'animate-reverse'

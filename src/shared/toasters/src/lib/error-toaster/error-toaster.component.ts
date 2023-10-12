@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import {
   Component,
   ElementRef,
@@ -44,6 +45,7 @@ export class ErrorToasterComponent implements OnChanges, OnDestroy {
 
   dismissAlertAfterSixSeconds() {
     this.setTimoutSub = setTimeout(() => {
+      this.errorMessage = null;
       const errorElements =
         this.document.documentElement.querySelectorAll('.toast-danger');
       if (errorElements.length) {
