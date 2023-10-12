@@ -31,7 +31,7 @@ export const PostReducer = createReducer<PostState>(
   on(PostApiActions.fetchAllPostSuccess, (state: PostState, action) => {
     return {
       ...state,
-      allPosts: action.allPosts,
+      allPosts: action.allPosts.data,
     };
   })
 );

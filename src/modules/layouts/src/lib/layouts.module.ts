@@ -11,6 +11,9 @@ import { NewPostModalComponent } from 'new-post-modal';
 import { SearchModalComponent } from 'search-modal';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationService, PostService } from 'services';
+import { StoreModule } from '@ngrx/store';
+import { PostEffects, PostReducer, featurePostKey } from 'state';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   imports: [
@@ -22,6 +25,8 @@ import { AuthenticationService, PostService } from 'services';
     NewPostModalComponent,
     SearchModalComponent,
     HttpClientModule,
+    StoreModule.forFeature(featurePostKey, PostReducer),
+    EffectsModule.forFeature([PostEffects]),
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [AuthenticationService, PostService],
