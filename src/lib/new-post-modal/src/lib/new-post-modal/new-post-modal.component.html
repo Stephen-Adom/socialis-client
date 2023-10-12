@@ -115,6 +115,7 @@
             type="button"
             class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2"
             title="emoji"
+            (click)="toggleEmoji = !toggleEmoji"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -196,4 +197,10 @@
       </div>
     </div>
   </div>
+
+  <emoji-mart
+    [darkMode]="false"
+    (emojiSelect)="addEmoji($event)"
+    *ngIf="toggleEmoji"
+  ></emoji-mart>
 </div>

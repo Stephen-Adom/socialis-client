@@ -13,6 +13,7 @@ import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import { PostService, SuccessMessageService } from 'services';
 import { HttpErrorResponse } from '@angular/common/http';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 type postImageType = {
   base64: string;
@@ -23,7 +24,7 @@ type postImageType = {
 @Component({
   selector: 'lib-new-post-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, PickerComponent],
   templateUrl: './new-post-modal.component.html',
   styleUrls: ['./new-post-modal.component.css'],
 })
@@ -33,6 +34,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   submittingForm = false;
   userInfo!: UserInfoType;
   userInfoSubscription = new Subscription();
+  toggleEmoji = false;
 
   constructor(
     @Inject(SUCCESS_MESSAGE_TOKEN)
@@ -54,6 +56,12 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
           this.userInfo = userInfo;
         }
       });
+  }
+
+  addEmoji(event: any) {
+    this.Form.get('content')?.setValue(
+      this.Form.get('content')?.value + event.emoji.native
+    );
   }
 
   async uploadImage(event: any) {
