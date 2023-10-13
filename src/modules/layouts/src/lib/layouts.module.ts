@@ -14,6 +14,7 @@ import { AuthenticationService, PostService } from 'services';
 import { StoreModule } from '@ngrx/store';
 import { PostEffects, PostReducer, featurePostKey } from 'state';
 import { EffectsModule } from '@ngrx/effects';
+import { CommentOffcanvasComponent } from 'comment-offcanvas';
 
 @NgModule({
   imports: [
@@ -27,6 +28,7 @@ import { EffectsModule } from '@ngrx/effects';
     HttpClientModule,
     StoreModule.forFeature(featurePostKey, PostReducer),
     EffectsModule.forFeature([PostEffects]),
+    CommentOffcanvasComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [AuthenticationService, PostService],

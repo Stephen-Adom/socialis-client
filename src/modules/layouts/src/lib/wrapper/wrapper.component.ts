@@ -14,13 +14,14 @@ export class WrapperComponent implements OnInit, OnDestroy {
   constructor(private store: Store<PostState>) {}
 
   ngOnInit(): void {
-    this.store.select(getUserInformation).subscribe((userInfo) => {
-      if (userInfo) {
-        this.store.dispatch(
-          PostApiActions.fetchAllPost({ userId: userInfo.id })
-        );
-      }
-    });
+    // this.store.select(getUserInformation).subscribe((userInfo) => {
+    //   if (userInfo) {
+    //     this.store.dispatch(
+    //       PostApiActions.fetchAllPost({ userId: userInfo.id })
+    //     );
+    //   }
+    // });
+    console.log('object');
   }
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();
