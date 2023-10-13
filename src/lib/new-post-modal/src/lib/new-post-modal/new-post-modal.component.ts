@@ -114,8 +114,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
       next: (response) => {
         this.submittingForm = false;
         this.successMessage.sendSuccessMessage('New Post Created!');
-        this.Form.reset();
-        this.postImages = [];
+        this.clearPostForm();
         console.log(response);
       },
       error: (error: HttpErrorResponse) => {
@@ -125,6 +124,11 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         );
       },
     });
+  }
+
+  clearPostForm() {
+    this.Form.reset();
+    this.postImages = [];
   }
 
   ngOnDestroy(): void {

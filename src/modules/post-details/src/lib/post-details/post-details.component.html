@@ -3,7 +3,7 @@
   class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[70%_30%] gap-5 w-full mt-5"
 >
   <div
-    class="rounded-lg bg-white w-full border border-white cursor-pointer post-card p-3"
+    class="rounded-lg bg-white dark:bg-main-dark w-full border border-white dark:border-main-dark cursor-pointer post-card p-3"
   >
     <div class="card-header flex items-center justify-between pb-3">
       <div class="hs-tooltip inline-block [--trigger:hover]">
@@ -16,17 +16,19 @@
                 alt="Image Description"
               />
               <div class="ml-3 text-left">
-                <h3 class="font-semibold text-gray-800">Maria Wanner</h3>
+                <h3 class="font-semibold text-gray-800 dark:text-dark-text">
+                  Maria Wanner
+                </h3>
                 <p class="text-sm font-medium text-gray-400">maria.wanner</p>
               </div>
             </div>
           </div>
           <div
-            class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible hidden opacity-0 transition-opacity inline-block absolute invisible z-10 max-w-xs bg-white border border-gray-100 text-left rounded-lg shadow-md"
+            class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible hidden opacity-0 transition-opacity inline-block absolute invisible z-10 max-w-xs bg-white dark:bg-main-dark border border-gray-100 dark:border-gray-700 text-left rounded-lg shadow-md"
             role="tooltip"
           >
             <section
-              class="tooltip-header flex items-center justify-between border-b border-b-gray-300 px-3 py-[0.65rem]"
+              class="tooltip-header flex items-center justify-between border-b border-b-gray-300 dark:border-b-gray-600 px-3 py-[0.65rem]"
             >
               <div class="flex-shrink-0 group block">
                 <div class="flex items-center">
@@ -37,11 +39,11 @@
                   />
                   <div class="ml-3">
                     <h3
-                      class="font-semibold text-gray-800 leading-none text-sm"
+                      class="font-semibold text-gray-800 dark:text-dark-text leading-none text-sm"
                     >
                       Maria Wanner
                     </h3>
-                    <p class="text-sm font-medium text-gray-400 text-xs">
+                    <p class="font-medium text-gray-400 text-xs">
                       maria.wanner
                     </p>
                   </div>
@@ -50,7 +52,7 @@
 
               <button
                 type="button"
-                class="rounded-md bg-secondaryColor text-white text-xs px-3 py-[0.45rem] flex items-center gap-x-1 hover:bg-primaryColor focus:ring-2 focus:ring-primaryColor focus:ring-offset-2"
+                class="rounded-md bg-secondaryColor dark:bg-blue-700 text-white text-xs px-3 py-[0.45rem] flex items-center gap-x-1 hover:bg-primaryColor focus:ring-2 focus:ring-primaryColor focus:ring-offset-2"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -71,7 +73,7 @@
               </button>
             </section>
 
-            <div class="py-2 px-4 text-sm text-gray-600">
+            <div class="py-2 px-4 text-sm text-gray-600 dark:text-dark-text">
               <p>
                 This is a popover body with supporting text below as a natural
                 lead-in to additional content.
@@ -97,7 +99,7 @@
         <button
           (click)="back()"
           type="button"
-          class="rounded-md p-2 flex items-center gap-x-1"
+          class="rounded-md p-2 flex items-center gap-x-1 dark:text-dark-text"
           title="back"
         >
           <svg
@@ -118,7 +120,7 @@
           <span class="font-medium text-sm">Back</span>
         </button>
 
-        <div class="hs-dropdown relative inline-flex">
+        <div class="hs-dropdown relative inline-flex dark:text-dark-text">
           <button
             id="hs-dropdown-with-icons"
             type="button"
@@ -142,12 +144,12 @@
           </button>
 
           <div
-            class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[10rem] bg-white shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200"
+            class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[10rem] bg-white dark:bg-main-dark shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200 dark:divide-gray-600"
             aria-labelledby="hs-dropdown-with-icons"
           >
             <div class="py-2 first:pt-0 last:pb-0">
               <a
-                class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+                class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
                 href="#"
               >
                 <svg
@@ -169,7 +171,7 @@
               </a>
 
               <a
-                class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+                class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
                 href="#"
               >
                 <svg
@@ -191,7 +193,7 @@
               </a>
 
               <a
-                class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+                class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
                 href="#"
               >
                 <svg
@@ -213,7 +215,7 @@
               </a>
 
               <a
-                class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 hover:bg-gray-100"
+                class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 dark:text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
                 href="#"
               >
                 <svg
@@ -246,7 +248,7 @@
         <div class="flex items-center gap-x-2">
           <button
             type="button"
-            class="btn btn-icon p-1 flex items-center text-sm gap-x-1"
+            class="btn btn-icon p-1 flex items-center text-sm gap-x-1 dark:text-dark-text"
             title="like"
           >
             <svg
@@ -269,7 +271,7 @@
 
           <button
             type="button"
-            class="btn btn-icon flex items-center text-sm gap-x-1 p-1"
+            class="btn btn-icon flex items-center text-sm gap-x-1 p-1 dark:text-dark-text"
             title="comment"
           >
             <svg
@@ -292,7 +294,7 @@
 
           <button
             type="button"
-            class="btn btn-icon btn-circle p-1"
+            class="btn btn-icon btn-circle p-1 dark:text-dark-text"
             title="share"
           >
             <svg
@@ -312,7 +314,11 @@
           </button>
         </div>
 
-        <button type="button" class="btn btn-icon btn-circle" title="bookmark">
+        <button
+          type="button"
+          class="btn btn-icon btn-circle dark:text-dark-text"
+          title="bookmark"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -329,7 +335,9 @@
           </svg>
         </button>
       </div>
-      <div class="like-info flex items-center gap-x-2 px-2 text-sm flex-wrap">
+      <div
+        class="like-info flex items-center gap-x-2 px-2 text-sm flex-wrap dark:text-dark-text"
+      >
         <div class="flex -space-x-2">
           <img
             class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
@@ -364,7 +372,7 @@
         <a href="#" class="font-bold">9 others</a>
       </div>
 
-      <p class="text-xs mt-3 px-3">
+      <p class="text-xs mt-3 px-3 dark:text-dark-text">
         Posted on: <span class="font-bold">Oct 3rd, 2023</span> at
         <span class="font-bold">09:30 am</span>
       </p>

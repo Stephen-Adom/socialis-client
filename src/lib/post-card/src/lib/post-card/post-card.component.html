@@ -1,5 +1,5 @@
 <div
-  class="card post-card rounded-lg bg-white p-3 w-full border border-white cursor-pointer"
+  class="card post-card rounded-lg bg-white dark:bg-main-dark p-3 w-full border border-white dark:border-main-dark cursor-pointer"
 >
   <div class="card-header flex items-center justify-between pb-3">
     <div class="hs-tooltip inline-block [--trigger:hover]">
@@ -12,7 +12,9 @@
               alt="Image Description"
             />
             <div class="ml-3 text-left">
-              <h3 class="font-semibold text-gray-800">Maria Wanner</h3>
+              <h3 class="font-semibold text-gray-800 dark:text-dark-text">
+                Maria Wanner
+              </h3>
               <div class="flex items-center gap-x-1">
                 <p class="font-medium text-gray-400 text-xs">maria.wanner</p>
                 <span class="inline-block">
@@ -39,11 +41,11 @@
           </div>
         </div>
         <div
-          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible hidden opacity-0 transition-opacity inline-block absolute invisible z-10 max-w-xs bg-white border border-gray-100 text-left rounded-lg shadow-md"
+          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible hidden opacity-0 transition-opacity inline-block absolute invisible z-10 max-w-xs bg-white dark:bg-main-dark border border-gray-100 dark:border-gray-700 text-left rounded-lg shadow-md"
           role="tooltip"
         >
           <section
-            class="tooltip-header flex items-center justify-between border-b border-b-gray-300 px-3 py-[0.65rem]"
+            class="tooltip-header flex items-center justify-between border-b border-b-gray-300 dark:border-b-gray-600 px-3 py-[0.65rem]"
           >
             <div class="flex-shrink-0 group block">
               <div class="flex items-center">
@@ -53,19 +55,19 @@
                   alt="Image Description"
                 />
                 <div class="ml-3">
-                  <h3 class="font-semibold text-gray-800 leading-none text-sm">
+                  <h3
+                    class="font-semibold text-gray-800 dark:text-dark-text leading-none text-sm"
+                  >
                     Maria Wanner
                   </h3>
-                  <p class="text-sm font-medium text-gray-400 text-xs">
-                    maria.wanner
-                  </p>
+                  <p class="font-medium text-gray-400 text-xs">maria.wanner</p>
                 </div>
               </div>
             </div>
 
             <button
               type="button"
-              class="rounded-md bg-secondaryColor text-white text-xs px-3 py-[0.45rem] flex items-center gap-x-1 hover:bg-primaryColor focus:ring-2 focus:ring-primaryColor focus:ring-offset-2"
+              class="rounded-md bg-secondaryColor dark:bg-blue-700 text-white text-xs px-3 py-[0.45rem] flex items-center gap-x-1 hover:bg-primaryColor focus:ring-2 focus:ring-primaryColor focus:ring-offset-2"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -86,7 +88,7 @@
             </button>
           </section>
 
-          <div class="py-2 px-4 text-sm text-gray-600">
+          <div class="py-2 px-4 text-sm text-gray-600 dark:text-dark-text">
             <p>
               This is a popover body with supporting text below as a natural
               lead-in to additional content.
@@ -121,7 +123,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-6 h-6"
+          class="w-6 h-6 dark:text-dark-text"
         >
           <path
             stroke-linecap="round"
@@ -132,12 +134,12 @@
       </button>
 
       <div
-        class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[10rem] bg-white shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200"
+        class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[10rem] bg-white dark:bg-main-dark shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200 dark:divide-gray-600"
         aria-labelledby="hs-dropdown-with-icons"
       >
         <div class="py-2 first:pt-0 last:pb-0">
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -159,7 +161,7 @@
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -181,7 +183,7 @@
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -203,7 +205,7 @@
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 dark:text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -227,7 +229,7 @@
       </div>
     </div>
   </div>
-  <div class="card-body" (click)="viewPostDetails()">
+  <div class="card-body dark:text-dark-text" (click)="viewPostDetails()">
     <p class="text-sm mb-2">
       Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas magni
       harum dolor adipisci dignissimos esse consequuntur eveniet laborum, ullam
@@ -244,7 +246,7 @@
       <div class="flex items-center gap-x-2">
         <button
           type="button"
-          class="btn btn-icon p-1 flex items-center text-sm gap-x-1"
+          class="btn btn-icon p-1 flex items-center text-sm gap-x-1 dark:text-dark-text"
           title="like"
         >
           <svg
@@ -267,7 +269,7 @@
 
         <button
           type="button"
-          class="btn btn-icon flex items-center text-sm gap-x-1 p-1"
+          class="btn btn-icon flex items-center text-sm gap-x-1 p-1 dark:text-dark-text"
           title="comment"
         >
           <svg
@@ -288,7 +290,11 @@
           <span class="font-bold">12</span>
         </button>
 
-        <button type="button" class="btn btn-icon btn-circle p-1" title="share">
+        <button
+          type="button"
+          class="btn btn-icon btn-circle p-1 dark:text-dark-text"
+          title="share"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
@@ -306,7 +312,11 @@
         </button>
       </div>
 
-      <button type="button" class="btn btn-icon btn-circle" title="bookmark">
+      <button
+        type="button"
+        class="btn btn-icon btn-circle dark:text-dark-text"
+        title="bookmark"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -323,7 +333,9 @@
         </svg>
       </button>
     </div>
-    <div class="like-info flex items-center gap-x-2 px-2 text-sm flex-wrap">
+    <div
+      class="like-info flex items-center gap-x-2 px-2 text-sm flex-wrap dark:text-dark-text"
+    >
       <div class="flex -space-x-2">
         <img
           class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
@@ -358,7 +370,9 @@
       <a href="#" class="font-bold">9 others</a>
     </div>
 
-    <div class="post-content flex items-start gap-x-1 text-sm px-2 py-2">
+    <div
+      class="post-content flex items-start gap-x-1 text-sm px-2 py-2 dark:text-dark-text"
+    >
       <p>
         <span class="inline-block font-bold"> ahmed.Col</span>
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, ipsum
@@ -370,7 +384,7 @@
 
     <a
       href="javascript:;"
-      class="font-semibold text-gray-600 inline-block px-2 text-xs"
+      class="font-semibold text-gray-600 inline-block px-2 text-xs dark:text-dark-text"
       data-hs-overlay="#hs-overlay-body-scrolling"
       >View all 10 comments</a
     >
