@@ -10,7 +10,7 @@ import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation
 import { NewPostModalComponent } from 'new-post-modal';
 import { SearchModalComponent } from 'search-modal';
 import { HttpClientModule } from '@angular/common/http';
-import { AuthenticationService, PostService } from 'services';
+import { AuthenticationService, MessageService, PostService } from 'services';
 import { StoreModule } from '@ngrx/store';
 import { PostEffects, PostReducer, featurePostKey } from 'state';
 import { EffectsModule } from '@ngrx/effects';
@@ -31,6 +31,6 @@ import { CommentOffcanvasComponent } from 'comment-offcanvas';
     CommentOffcanvasComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
-  providers: [AuthenticationService, PostService],
+  providers: [AuthenticationService, PostService, MessageService],
 })
 export class LayoutsModule {}

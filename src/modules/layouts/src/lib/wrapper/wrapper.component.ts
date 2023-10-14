@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
+import { MessageService } from 'services';
 import { PostApiActions, PostState, getUserInformation } from 'state';
 
 @Component({
@@ -11,7 +12,10 @@ import { PostApiActions, PostState, getUserInformation } from 'state';
 export class WrapperComponent implements OnInit, OnDestroy {
   userInfoSubscription = new Subscription();
 
-  constructor(private store: Store<PostState>) {}
+  constructor(
+    private messageservice: MessageService,
+    private store: Store<PostState>
+  ) {}
 
   ngOnInit(): void {
     // this.store.select(getUserInformation).subscribe((userInfo) => {
@@ -21,7 +25,13 @@ export class WrapperComponent implements OnInit, OnDestroy {
     //     );
     //   }
     // });
-    console.log('object');
+    this.messageservice.connect().subscribe(() => {
+      this.messageservice.send('/app/chat', { content: 'testing message' });
+    });
+
+    this.messageservice.onMessage('/topic/messages').subscribe((data) => {
+      console.log(data, 'data');
+    });
   }
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();
