@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+/* eslint-disable @nx/enforce-module-boundaries */
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { PostType } from 'utils';
 
 @Component({
   selector: 'lib-post-card',
@@ -10,6 +12,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./post-card.component.css'],
 })
 export class PostCardComponent {
+  @Input({ required: true }) post!: PostType;
+
   constructor(private router: Router) {}
 
   viewPostDetails() {

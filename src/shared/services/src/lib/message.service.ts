@@ -4,6 +4,7 @@ import { Client, IFrame, StompSubscription } from '@stomp/stompjs';
 import { BehaviorSubject, Observable, filter, first, switchMap } from 'rxjs';
 import * as SockJS from 'sockjs-client';
 import * as StompJs from '@stomp/stompjs';
+import * as localforage from 'localforage';
 
 export enum SocketClientState {
   ATTEMPTING,
@@ -12,7 +13,7 @@ export enum SocketClientState {
 
 export const environment = {
   production: false,
-  api: 'http://localhost:8080/ws',
+  api: 'http://localhost:8080/live',
 };
 
 @Injectable({
@@ -21,14 +22,25 @@ export const environment = {
 export class MessageService implements OnDestroy {
   private client!: Client;
   private iFrame!: IFrame;
-  private state: BehaviorSubject<SocketClientState>;
+  private state!: BehaviorSubject<SocketClientState>;
 
   constructor() {
+    this.initializeConnection();
+  }
+
+  async initializeConnection() {
     this.state = new BehaviorSubject<SocketClientState>(
       SocketClientState.ATTEMPTING
     );
+
+    const token = await localforage.getItem('accessToken');
+
     this.client = new StompJs.Client();
     this.client = StompJs.Stomp.over(new SockJS(environment.api));
+
+    this.client.connectHeaders = {
+      Authorization: 'Bearer ' + token,
+    };
 
     this.client.onConnect = (frame) => {
       this.iFrame = frame;

@@ -6,7 +6,11 @@
     <lib-stories />
 
     <div class="posts-list-container flex flex-col gap-y-4 w-full mt-4 md:mt-7">
-      <lib-post-card />
+      <ng-container *ngIf="allPosts$ | async as allPosts">
+        <ng-container *ngFor="let post of allPosts">
+          <lib-post-card [post]="post" />
+        </ng-container>
+      </ng-container>
     </div>
   </div>
   <div

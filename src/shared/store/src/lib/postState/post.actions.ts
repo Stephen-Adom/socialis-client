@@ -5,7 +5,7 @@ import { AllPostResponseType } from 'utils';
 export const PostApiActions = createActionGroup({
   source: 'Post API',
   events: {
-    fetchAllPost: props<{ userId: number }>(),
+    fetchAllPost: emptyProps(),
     fetchAllPostSuccess: props<{ allPosts: AllPostResponseType }>(),
   },
 });

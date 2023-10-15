@@ -24,6 +24,15 @@ export type UserInfoType = {
   loginCount: number;
 };
 
+export type SimpleUserInfoType = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  username: string;
+  imageUrl: string | null;
+  bio: string | null;
+};
+
 export type AuthResponseType = {
   status: string;
   data: UserInfoType;
@@ -47,7 +56,7 @@ export type PostType = {
   createdAt: string;
   updatedAt: string;
   postImages: PostImage[];
-  comments: any[];
+  user: SimpleUserInfoType;
 };
 
 export type NewPostResponseType = {

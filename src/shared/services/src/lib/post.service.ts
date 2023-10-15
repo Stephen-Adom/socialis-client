@@ -1,16 +1,20 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { HttpClient } from '@angular/common/http';
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import BASE_URL from './base_url';
 import { getAuthHttpOptions } from './httpHeaders';
 import { AllPostResponseType, NewPostResponseType } from 'utils';
+import { MessageService } from './message.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostService {
   authHeaders: any;
-  constructor(private http: HttpClient) {
+  constructor(
+    private messageservice: MessageService,
+    private http: HttpClient
+  ) {
     getAuthHttpOptions().then((options) => {
       this.authHeaders = options;
     });
@@ -24,9 +28,9 @@ export class PostService {
     );
   }
 
-  fetchAllPost(userId: number) {
+  fetchAllPost() {
     return this.http.get<AllPostResponseType>(
-      BASE_URL + '/' + userId + '/posts',
+      BASE_URL + '/all_posts',
       this.authHeaders
     );
   }
