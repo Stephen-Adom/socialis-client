@@ -33,5 +33,12 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       allPosts: action.allPosts.data,
     };
+  }),
+  on(PostApiActions.addNewPost, (state: PostState, action) => {
+    const currentPost = [action.newPost, ...state.allPosts];
+    return {
+      ...state,
+      allPosts: currentPost,
+    };
   })
 );

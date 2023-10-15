@@ -1,5 +1,12 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -29,6 +36,8 @@ type postImageType = {
   styleUrls: ['./new-post-modal.component.css'],
 })
 export class NewPostModalComponent implements OnInit, OnDestroy {
+  @ViewChild('closeBtn') closeBtn!: ElementRef<HTMLButtonElement>;
+
   Form: FormGroup;
   postImages: postImageType[] = [];
   submittingForm = false;
@@ -115,7 +124,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         this.submittingForm = false;
         this.successMessage.sendSuccessMessage('New Post Created!');
         this.clearPostForm();
-        console.log(response);
+        this.closeBtn.nativeElement.click();
       },
       error: (error: HttpErrorResponse) => {
         this.submittingForm = false;

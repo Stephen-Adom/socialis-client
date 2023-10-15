@@ -28,6 +28,14 @@ export class PostService {
     );
   }
 
+  createLivePost(formData: {
+    content: string;
+    user_id: string;
+    postImages: File[];
+  }) {
+    return this.messageservice.send('/feed/post', formData);
+  }
+
   fetchAllPost() {
     return this.http.get<AllPostResponseType>(
       BASE_URL + '/all_posts',
