@@ -82,14 +82,11 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         file: file,
         id: Math.ceil(Math.random() * 1000),
       });
-
-      console.log(this.postImages);
     }
   }
 
   removeImage(imageId: number) {
     this.postImages = this.postImages.filter((image) => image.id !== imageId);
-    console.log(this.postImages, 'deleted');
   }
 
   submitPost() {

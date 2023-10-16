@@ -12,10 +12,12 @@ export const featurePostKey = 'post';
 
 export interface PostState {
   allPosts: PostType[];
+  postDetails: PostType | null;
 }
 
 const initialState: PostState = {
   allPosts: [],
+  postDetails: null,
 };
 
 export const selectPostFeature =
@@ -24,6 +26,11 @@ export const selectPostFeature =
 export const getAllPosts = createSelector(
   selectPostFeature,
   (state: PostState) => state.allPosts
+);
+
+export const getPostDetails = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.postDetails
 );
 
 export const PostReducer = createReducer<PostState>(
@@ -39,6 +46,18 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       allPosts: currentPost,
+    };
+  }),
+  on(PostApiActions.getPostDetails, (state: PostState, action) => {
+    return {
+      ...state,
+      postDetails: action.post,
+    };
+  }),
+  on(PostApiActions.clearPostDetails, (state: PostState) => {
+    return {
+      ...state,
+      postDetails: null,
     };
   })
 );

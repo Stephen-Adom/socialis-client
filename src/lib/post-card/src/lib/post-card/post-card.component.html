@@ -8,7 +8,11 @@
           <div class="flex items-center">
             <img
               class="inline-block flex-shrink-0 h-[3.5rem] w-[3.5rem] rounded-full"
-              src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
+              [src]="
+                post.user.imageUrl
+                  ? post.user.imageUrl
+                  : 'assets/images/users/default.jpg'
+              "
               alt="Image Description"
             />
             <div class="ml-3 text-left">
@@ -35,14 +39,16 @@
                     <circle cx="12" cy="12" r="4" />
                   </svg>
                 </span>
-                <span class="inline-block text-xs text-gray-400 italic"
-                  >8h</span
+                <span
+                  class="inline-block text-xs text-gray-400 italic"
+                  *ngIf="formattedDate"
+                  >{{ formattedDate }}</span
                 >
               </div>
             </div>
           </div>
         </div>
-        <div
+        <!-- <div
           class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible hidden opacity-0 transition-opacity inline-block absolute invisible z-10 max-w-xs bg-white dark:bg-main-dark border border-gray-100 dark:border-gray-700 text-left rounded-lg shadow-md"
           role="tooltip"
         >
@@ -108,7 +114,7 @@
               >
             </p>
           </div>
-        </div>
+        </div> -->
       </a>
     </div>
 
@@ -231,7 +237,10 @@
       </div>
     </div>
   </div>
-  <div class="card-body dark:text-dark-text" (click)="viewPostDetails()">
+  <div
+    class="card-body dark:text-dark-text ml-[68px]"
+    (click)="viewPostDetails()"
+  >
     <p class="text-sm mb-2" *ngIf="post.content">
       {{ post.content }}
     </p>
@@ -244,11 +253,15 @@
         class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
         *ngFor="let image of post.postImages"
       >
-        <img [src]="image.mediaUrl" class="w-full" [alt]="image.mediaType" />
+        <img
+          [src]="image.mediaUrl"
+          class="w-full"
+          [attr.alt]="image.mediaType"
+        />
       </div>
     </div>
   </div>
-  <div class="card-footer">
+  <div class="card-footer ml-[68px]">
     <div class="post-tools flex items-center justify-between px-2">
       <div class="flex items-center gap-x-2">
         <button
@@ -393,6 +406,7 @@
       href="javascript:;"
       class="font-semibold text-gray-600 inline-block px-2 text-xs dark:text-dark-text"
       data-hs-overlay="#hs-overlay-body-scrolling"
+      (click)="getPostDetails()"
       >View all {{ post.numberOfComments }} comments</a
     >
   </div>

@@ -4,6 +4,11 @@ export type ErrorMessageType = {
   message?: string;
 };
 
+export type SuccessMessageType = {
+  error: string;
+  message: string;
+};
+
 export type UserRegistrationDetailsType = {
   firstname: string;
   lastname: string;
@@ -22,6 +27,7 @@ export type UserInfoType = {
   createdAt: string;
   updatedAt: string;
   loginCount: number;
+  imageUrl: string;
 };
 
 export type SimpleUserInfoType = {

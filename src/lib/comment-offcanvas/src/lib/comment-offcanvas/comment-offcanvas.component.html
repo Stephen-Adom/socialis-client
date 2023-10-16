@@ -1,7 +1,8 @@
 <div
   id="hs-overlay-body-scrolling"
-  class="hs-overlay hs-overlay-open:translate-x-0 hidden shadow-lg translate-x-full fixed top-0 right-0 transition-all duration-300 transform h-full max-w-xs w-full z-[60] bg-white border-r dark:bg-main-dark dark:border-gray-200 [--body-scroll:true] [--overlay-backdrop:false]"
+  class="hs-overlay hs-overlay-open:translate-x-0 hidden shadow-lg translate-x-full fixed top-0 right-0 transition-all duration-300 transform h-full max-w-sm w-full z-[60] bg-white border-l dark:bg-main-dark dark:border-gray-700 [--body-scroll:true] [--overlay-backdrop:false]"
   tabindex="-1"
+  *ngIf="post$ | async as post"
 >
   <div
     class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700"
@@ -10,15 +11,21 @@
       <div class="flex items-center">
         <img
           class="inline-block flex-shrink-0 h-[2.5rem] w-[2.5rem] rounded-full"
-          src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-          alt="Image Description"
+          [src]="
+            post.user.imageUrl
+              ? post.user.imageUrl
+              : 'assets/images/users/default.jpg'
+          "
+          [attr.alt]="post.user.firstname"
         />
         <div class="ml-3 text-left">
           <h3 class="font-semibold text-gray-800 dark:text-dark-text">
-            Maria Wanner
+            {{ post.user.firstname }} {{ post.user.lastname }}
           </h3>
           <div class="flex items-center gap-x-1">
-            <p class="font-medium text-gray-400 text-xs">maria.wanner</p>
+            <p class="font-medium text-gray-400 text-xs">
+              {{ post.user.username }}
+            </p>
             <span class="inline-block">
               <svg
                 class="h-3 w-3 text-gray-400"
@@ -35,13 +42,16 @@
                 <circle cx="12" cy="12" r="4" />
               </svg>
             </span>
-            <span class="inline-block text-xs text-gray-400 italic">8h</span>
+            <span class="inline-block text-xs text-gray-400 italic">{{
+              formatPostDate(post)
+            }}</span>
           </div>
         </div>
       </div>
     </div>
 
     <button
+      (click)="closeCommentPanel()"
       type="button"
       class="inline-flex flex-shrink-0 justify-center items-center h-8 w-8 rounded-md text-gray-500 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-white text-sm dark:text-gray-500 dark:hover:text-gray-400 dark:focus:ring-gray-700 dark:focus:ring-offset-gray-800"
       data-hs-overlay="#hs-overlay-body-scrolling"
@@ -63,8 +73,8 @@
     </button>
   </div>
   <div class="p-4">
-    <p class="text-gray-800 dark:text-gray-400 text-sm mb-3">
-      Try scrolling the rest of the page to see this option in action.
+    <p class="dark:text-gray-400 text-sm mb-4" *ngIf="post.content">
+      {{ post.content }}
     </p>
 
     <lib-create-comment-form />

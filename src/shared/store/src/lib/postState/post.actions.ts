@@ -8,5 +8,7 @@ export const PostApiActions = createActionGroup({
     fetchAllPost: emptyProps(),
     fetchAllPostSuccess: props<{ allPosts: AllPostResponseType }>(),
     addNewPost: props<{ newPost: PostType }>(),
+    getPostDetails: props<{ post: PostType }>(),
+    clearPostDetails: emptyProps(),
   },
 });
