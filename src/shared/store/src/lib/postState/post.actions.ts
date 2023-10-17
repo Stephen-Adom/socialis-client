@@ -3,6 +3,7 @@ import { createActionGroup, emptyProps, props } from '@ngrx/store';
 import {
   AllCommentResponseType,
   AllPostResponseType,
+  AllRepliesResponseType,
   CommentType,
   PostType,
 } from 'utils';
@@ -19,5 +20,8 @@ export const PostApiActions = createActionGroup({
     fetchPostCommentsSuccess: props<{ comments: AllCommentResponseType }>(),
     addNewComment: props<{ newComment: CommentType }>(),
     updateAPost: props<{ post: PostType }>(),
+    getCommentDetails: props<{ comment: CommentType }>(),
+    fetchReplies: props<{ commentId: number }>(),
+    fetchRepliesSuccess: props<{ replies: AllRepliesResponseType }>(),
   },
 });

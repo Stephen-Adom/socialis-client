@@ -76,6 +76,16 @@ export type CommentType = {
   user: SimpleUserInfoType;
 };
 
+export type ReplyType = {
+  id: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  numberOfLikes: 0;
+  replyImages: ImageType[];
+  user: SimpleUserInfoType;
+};
+
 export type NewPostResponseType = {
   status: string;
   data: PostType;
@@ -89,4 +99,9 @@ export type AllPostResponseType = {
 export type AllCommentResponseType = {
   status: string;
   data: CommentType[];
+};
+
+export type AllRepliesResponseType = {
+  status: string;
+  data: ReplyType[];
 };

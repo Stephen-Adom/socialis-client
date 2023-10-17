@@ -48,4 +48,22 @@ export class PostEffects {
       )
     );
   });
+
+  FetchAllReplies$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.fetchReplies),
+      mergeMap((action: { commentId: number }) =>
+        this.commentservice.fetchAllPost(action.postId).pipe(
+          map((response: any) => {
+            return PostApiActions.fetchPostCommentsSuccess({
+              comments: response,
+            });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
 }

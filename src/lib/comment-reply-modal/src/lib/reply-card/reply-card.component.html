@@ -1,6 +1,6 @@
 <div
   class="comment-card bg-white dark:bg-main-dark p-3 w-full cursor-pointer"
-  *ngIf="comment"
+  *ngIf="reply"
 >
   <div class="card-header flex items-center justify-between pb-1">
     <div class="flex-shrink-0 group block">
@@ -8,25 +8,25 @@
         <img
           class="inline-block flex-shrink-0 h-[2.5rem] w-[2.5rem] rounded-full"
           [src]="
-            comment.user.imageUrl
-              ? comment.user.imageUrl
+            reply.user.imageUrl
+              ? reply.user.imageUrl
               : 'assets/images/users/default.jpg'
           "
-          [attr.alt]="comment.user.firstname"
+          [attr.alt]="reply.user.firstname"
         />
         <div class="ml-3 text-left">
           <div class="flex items-center gap-x-2">
             <h3 class="font-semibold text-gray-800 text-sm dark:text-dark-text">
-              {{ comment.user.firstname }} {{ comment.user.lastname }}
+              {{ reply.user.firstname }} {{ reply.user.lastname }}
             </h3>
             <p class="font-medium text-gray-400 text-xs">
-              {{ comment.user.username }}
+              {{ reply.user.username }}
             </p>
           </div>
           <p class="text-xs font-medium text-gray-400">
-            <span class="font-bold">{{ formateDate(comment.createdAt) }}</span>
+            <span class="font-bold">{{ formateDate(reply.createdAt) }}</span>
             at
-            <span class="font-bold">{{ formateTime(comment.createdAt) }}</span>
+            <span class="font-bold">{{ formateTime(reply.createdAt) }}</span>
           </p>
         </div>
       </div>
@@ -154,17 +154,17 @@
   <div
     class="card-body rounded-lg overflow-hidden ml-[3.5rem] text-sm dark:text-dark-text"
   >
-    <p *ngIf="comment.content">
-      {{ comment.content }}
+    <p *ngIf="reply.content">
+      {{ reply.content }}
     </p>
 
     <div
       class="image-container min-h-[4.5rem] rounded-lg overflow-hidden flex flex-wrap gap-3 mt-3"
-      *ngIf="comment.commentImages.length"
+      *ngIf="reply.replyImages.length"
     >
       <div
         class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
-        *ngFor="let image of comment.commentImages"
+        *ngFor="let image of reply.replyImages"
       >
         <img
           [src]="image.mediaUrl"
@@ -197,32 +197,7 @@
             />
           </svg>
 
-          <span class="font-bold">{{ comment.numberOfLikes }}</span>
-        </button>
-
-        <button
-          type="button"
-          class="btn btn-icon flex items-center text-sm gap-x-1 p-1 dark:text-dark-text"
-          title="reply"
-          data-hs-overlay="#reply-scrollable-modal"
-          (click)="setCommentActive(comment)"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-4 h-4"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 20.25c4.97 0 9-3.694 9-8.25s-4.03-8.25-9-8.25S3 7.444 3 12c0 2.104.859 4.023 2.273 5.48.432.447.74 1.04.586 1.641a4.483 4.483 0 01-.923 1.785A5.969 5.969 0 006 21c1.282 0 2.47-.402 3.445-1.087.81.22 1.668.337 2.555.337z"
-            />
-          </svg>
-
-          <span class="font-bold">{{ comment.numberOfReplies }}</span>
+          <span class="font-bold">{{ reply.numberOfLikes }}</span>
         </button>
 
         <button
