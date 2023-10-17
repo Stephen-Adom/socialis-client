@@ -1,0 +1,6 @@
+:host ::ng-deep .emoji-mart {
+  position: absolute;
+  top: 28px;
+  left: 50%;
+  transform: translateX(75%);
+}
