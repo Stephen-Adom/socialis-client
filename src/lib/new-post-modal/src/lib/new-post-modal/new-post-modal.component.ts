@@ -14,11 +14,20 @@ import {
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import { SUCCESS_MESSAGE_TOKEN, UserInfoType, getBase64 } from 'utils';
+import {
+  ERROR_MESSAGE_TOKEN,
+  SUCCESS_MESSAGE_TOKEN,
+  UserInfoType,
+  getBase64,
+} from 'utils';
 import { AppApiActions, AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-import { PostService, SuccessMessageService } from 'services';
+import {
+  ErrorMessageService,
+  PostService,
+  SuccessMessageService,
+} from 'services';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
@@ -46,13 +55,14 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   toggleEmoji = false;
 
   constructor(
+    @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
     @Inject(SUCCESS_MESSAGE_TOKEN)
     private successMessage: SuccessMessageService,
     private postservice: PostService,
     private formBuilder: FormBuilder,
     private store: Store<AppState>
   ) {
-    this.Form = this.formBuilder.group({
+    this.Form = this.formBuilder.nonNullable.group({
       content: ['', Validators.required],
     });
   }
@@ -90,10 +100,14 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   }
 
   submitPost() {
-    if (this.Form.valid) {
+    if (this.Form.valid || this.postImages.length > 0) {
       this.submitPostToDb();
     } else {
       this.Form.markAllAsTouched();
+      this.errorMessage.sendErrorMessage({
+        message: 'Enter Post or upload images',
+        error: 'BAD_REQUEST',
+      });
     }
   }
 

@@ -1,6 +1,6 @@
 export type ErrorMessageType = {
   error: string;
-  messages: string[];
+  messages?: string[];
   message?: string;
 };
 
@@ -46,7 +46,7 @@ export type AuthResponseType = {
   refreshToken: string;
 };
 
-export type PostImage = {
+export type ImageType = {
   id: number;
   mediaUrl: string;
   mediaType: string;
@@ -61,7 +61,18 @@ export type PostType = {
   numberOfComments: number;
   createdAt: string;
   updatedAt: string;
-  postImages: PostImage[];
+  postImages: ImageType[];
+  user: SimpleUserInfoType;
+};
+
+export type CommentType = {
+  id: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+  numberOfLikes: 0;
+  numberOfReplies: 0;
+  commentImages: ImageType[];
   user: SimpleUserInfoType;
 };
 
@@ -73,4 +84,9 @@ export type NewPostResponseType = {
 export type AllPostResponseType = {
   status: string;
   data: PostType[];
+};
+
+export type AllCommentResponseType = {
+  status: string;
+  data: CommentType[];
 };

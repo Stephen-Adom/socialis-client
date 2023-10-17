@@ -2,7 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import { Subscription, first, map } from 'rxjs';
 import { MessageService, PostService } from 'services';
-import { PostApiActions, PostState, getUserInformation } from 'state';
+import {
+  PostApiActions,
+  PostState,
+  getPostDetails,
+  getUserInformation,
+} from 'state';
 
 @Component({
   selector: 'feature-wrapper',
@@ -20,7 +25,14 @@ export class WrapperComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(PostApiActions.fetchAllPost());
-    // this.messageservice.send('/feed/chat', { content: 'message content' });
+
+    this.store.select(getPostDetails).subscribe((post) => {
+      if (post) {
+        this.store.dispatch(
+          PostApiActions.fetchPostComments({ postId: post.id })
+        );
+      }
+    });
 
     this.messageservice.onMessage('/feed/chat').subscribe((data) => {
       console.log(data, 'data');
@@ -28,6 +40,20 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.messageservice.onMessage('/feed/post/new').subscribe((data) => {
       if (data) {
         this.store.dispatch(PostApiActions.addNewPost({ newPost: data }));
+      }
+    });
+
+    this.messageservice.onMessage('/feed/comment/new').subscribe((data) => {
+      if (data) {
+        console.log(data, 'comment new');
+        this.store.dispatch(PostApiActions.addNewComment({ newComment: data }));
+      }
+    });
+
+    this.messageservice.onMessage('/feed/post/update').subscribe((data) => {
+      if (data) {
+        console.log(data, 'post update');
+        this.store.dispatch(PostApiActions.updateAPost({ post: data }));
       }
     });
 

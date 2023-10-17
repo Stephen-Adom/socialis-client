@@ -8,9 +8,12 @@ import {
   OnChanges,
   Inject,
   OnDestroy,
+  OnInit,
 } from '@angular/core';
 import { CommonModule, DOCUMENT } from '@angular/common';
-import { ErrorMessageType } from 'utils';
+import { ERROR_MESSAGE_TOKEN, ErrorMessageType } from 'utils';
+import { ErrorMessageService } from 'services';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'lib-error-toaster',
@@ -19,14 +22,31 @@ import { ErrorMessageType } from 'utils';
   templateUrl: './error-toaster.component.html',
   styleUrls: ['./error-toaster.component.css'],
 })
-export class ErrorToasterComponent implements OnChanges, OnDestroy {
+export class ErrorToasterComponent implements OnChanges, OnDestroy, OnInit {
   @Input({ required: true }) errorMessage: ErrorMessageType | null = null;
 
   @ViewChild('toastDanger') toastDanger!: ElementRef<HTMLDivElement>;
 
   setTimoutSub: any;
 
-  constructor(@Inject(DOCUMENT) private document: Document) {}
+  errorMessageSubscription = new Subscription();
+
+  constructor(
+    @Inject(ERROR_MESSAGE_TOKEN)
+    private errorMessageService: ErrorMessageService,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
+
+  ngOnInit(): void {
+    this.errorMessageSubscription =
+      this.errorMessageService.errorMessageObservable.subscribe((error) => {
+        console.log(error, 'error message');
+        if (error) {
+          this.errorMessage = error;
+          // this.dismissAlertAfterSixSeconds();
+        }
+      });
+  }
 
   closeNotification() {
     if (this.toastDanger.nativeElement.classList.contains('animate-normal')) {
@@ -58,5 +78,6 @@ export class ErrorToasterComponent implements OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     clearTimeout(this.setTimoutSub);
+    this.errorMessageSubscription.unsubscribe();
   }
 }

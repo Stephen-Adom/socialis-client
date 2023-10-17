@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import BASE_URL from './base_url';
 import { getAuthHttpOptions } from './httpHeaders';
-import { SuccessMessageType } from 'utils';
+import { AllCommentResponseType, SuccessMessageType } from 'utils';
 
 @Injectable({
   providedIn: 'root',
@@ -25,10 +25,10 @@ export class CommentService {
     );
   }
 
-  // fetchAllPost() {
-  //   return this.http.get<AllPostResponseType>(
-  //     BASE_URL + '/all_posts',
-  //     this.authHeaders
-  //   );
-  // }
+  fetchAllPost(postId: number) {
+    return this.http.get<AllCommentResponseType>(
+      BASE_URL + `/${postId}/comments`,
+      this.authHeaders
+    );
+  }
 }

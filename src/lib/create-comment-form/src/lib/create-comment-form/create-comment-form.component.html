@@ -141,9 +141,9 @@
         type="submit"
         [disabled]="submittingForm"
         (click)="submitComment()"
-        class="py-2 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 dark:bg-blue-800 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm"
+        class="py-2 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold disabled:bg-blue-300 bg-blue-500 dark:bg-blue-800 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm"
       >
-        {{ submittingForm ? 'Submitting comment...' : 'Comment' }}
+        {{ submittingForm ? 'Submitting...' : 'Comment' }}
 
         <div
           *ngIf="submittingForm"

@@ -6,3 +6,4 @@ export * from './lib/comment.service';
 export * from './lib/validateAuthUser.service';
 export * from './lib/innactiveAccount.service';
 export * from './lib/successMessage.service';
+export * from './lib/errorMessage.service';

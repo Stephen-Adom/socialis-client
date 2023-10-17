@@ -2,12 +2,17 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  ERROR_MESSAGE_TOKEN,
   PostType,
   SUCCESS_MESSAGE_TOKEN,
   UserInfoType,
   getBase64,
 } from 'utils';
-import { CommentService, SuccessMessageService } from 'services';
+import {
+  CommentService,
+  ErrorMessageService,
+  SuccessMessageService,
+} from 'services';
 import {
   FormBuilder,
   FormGroup,
@@ -21,8 +26,8 @@ import {
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
-import { HttpErrorResponse } from '@angular/common/http';
+import { Observable, Subscription, debounceTime } from 'rxjs';
+import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 
 type commentImageType = {
   base64: string;
@@ -34,7 +39,6 @@ type commentImageType = {
   selector: 'lib-create-comment-form',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule],
-  providers: [CommentService],
   templateUrl: './create-comment-form.component.html',
   styleUrls: ['./create-comment-form.component.css'],
 })
@@ -46,15 +50,17 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
   submittingForm = false;
   authUserSubscription = new Subscription();
   postDetailsSubscription = new Subscription();
+  formInvalid = false;
 
   constructor(
+    @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
     @Inject(SUCCESS_MESSAGE_TOKEN)
     private successMessage: SuccessMessageService,
     private commentservice: CommentService,
     private formBuilder: FormBuilder,
     private store: Store<AppState>
   ) {
-    this.Form = this.formBuilder.group({
+    this.Form = this.formBuilder.nonNullable.group({
       content: ['', Validators.required],
     });
   }
@@ -75,6 +81,11 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
           this.postDetails = data;
         }
       });
+
+    this.Form.valueChanges.pipe(debounceTime(300)).subscribe(() => {
+      this.formInvalid = this.Form.invalid;
+      console.log(this.Form.valid);
+    });
   }
 
   async uploadImage(event: any) {
@@ -96,10 +107,14 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
   }
 
   submitComment() {
-    if (this.Form.valid) {
+    if (this.Form.valid || this.commentImages.length > 0) {
       this.submitCommentToDb();
     } else {
       this.Form.markAllAsTouched();
+      this.errorMessage.sendErrorMessage({
+        message: 'Enter comment or upload images',
+        error: 'BAD_REQUEST',
+      });
     }
   }
 

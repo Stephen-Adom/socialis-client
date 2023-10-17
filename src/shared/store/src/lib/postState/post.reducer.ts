@@ -6,18 +6,20 @@ import {
   on,
 } from '@ngrx/store';
 import { PostApiActions } from './post.actions';
-import { PostType } from 'utils';
+import { CommentType, PostType } from 'utils';
 
 export const featurePostKey = 'post';
 
 export interface PostState {
   allPosts: PostType[];
   postDetails: PostType | null;
+  postComments: CommentType[];
 }
 
 const initialState: PostState = {
   allPosts: [],
   postDetails: null,
+  postComments: [],
 };
 
 export const selectPostFeature =
@@ -31,6 +33,11 @@ export const getAllPosts = createSelector(
 export const getPostDetails = createSelector(
   selectPostFeature,
   (state: PostState) => state.postDetails
+);
+
+export const getAllCommentForAPost = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.postComments
 );
 
 export const PostReducer = createReducer<PostState>(
@@ -59,5 +66,30 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       postDetails: null,
     };
+  }),
+  on(PostApiActions.fetchPostCommentsSuccess, (state: PostState, action) => {
+    return {
+      ...state,
+      postComments: action.comments.data,
+    };
+  }),
+  on(PostApiActions.addNewComment, (state: PostState, action) => {
+    const currentComments = [action.newComment, ...state.postComments];
+    return {
+      ...state,
+      postComments: currentComments,
+    };
+  }),
+  on(PostApiActions.updateAPost, (state: PostState, action) => {
+    return {
+      ...state,
+      allPosts: updatePost(action.post, state.allPosts),
+    };
   })
 );
+
+const updatePost = (updatedPost: PostType, allPost: PostType[]) => {
+  return allPost.map((post) =>
+    post.id === updatedPost.id ? updatedPost : post
+  );
+};

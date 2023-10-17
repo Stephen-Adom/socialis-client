@@ -1,5 +1,4 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { HttpClientModule } from '@angular/common/http';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -9,9 +8,18 @@ import {
   SuccessNotificationComponent,
 } from 'notification';
 import { Subscription } from 'rxjs';
-import { SuccessMessageService, ValidateAuthUserService } from 'services';
+import {
+  ErrorMessageService,
+  SuccessMessageService,
+  ValidateAuthUserService,
+} from 'services';
 import { AppState, getErrorMessage } from 'state';
-import { ErrorMessageType, SUCCESS_MESSAGE_TOKEN, UserInfoType } from 'utils';
+import {
+  ERROR_MESSAGE_TOKEN,
+  ErrorMessageType,
+  SUCCESS_MESSAGE_TOKEN,
+  UserInfoType,
+} from 'utils';
 
 @Component({
   standalone: true,
@@ -21,6 +29,10 @@ import { ErrorMessageType, SUCCESS_MESSAGE_TOKEN, UserInfoType } from 'utils';
     {
       provide: SUCCESS_MESSAGE_TOKEN,
       useClass: SuccessMessageService,
+    },
+    {
+      provide: ERROR_MESSAGE_TOKEN,
+      useClass: ErrorMessageService,
     },
   ],
   selector: 'app-root',

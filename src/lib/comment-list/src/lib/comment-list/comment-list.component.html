@@ -1,5 +1,9 @@
-<div class="comment-list flex flex-col w-full">
-  <lib-comment-card />
-  <lib-comment-card />
-  <lib-comment-card />
+<div
+  class="comment-list flex flex-col w-full"
+  *ngIf="(allComments$ | async)?.length"
+>
+  <lib-comment-card
+    *ngFor="let comment of allComments$ | async"
+    [comment]="comment"
+  />
 </div>

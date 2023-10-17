@@ -1,22 +1,32 @@
-<div class="comment-card bg-white dark:bg-main-dark p-3 w-full cursor-pointer">
+<div
+  class="comment-card bg-white dark:bg-main-dark p-3 w-full cursor-pointer"
+  *ngIf="comment"
+>
   <div class="card-header flex items-center justify-between pb-1">
     <div class="flex-shrink-0 group block">
       <div class="flex items-center">
         <img
-          class="inline-block flex-shrink-0 h-[3rem] w-[3rem] rounded-full"
-          src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-          alt="Image Description"
+          class="inline-block flex-shrink-0 h-[2.5rem] w-[2.5rem] rounded-full"
+          [src]="
+            comment.user.imageUrl
+              ? comment.user.imageUrl
+              : 'assets/images/users/default.jpg'
+          "
+          [attr.alt]="comment.user.firstname"
         />
         <div class="ml-3 text-left">
           <div class="flex items-center gap-x-2">
             <h3 class="font-semibold text-gray-800 text-sm dark:text-dark-text">
-              Maria Wanner
+              {{ comment.user.firstname }} {{ comment.user.lastname }}
             </h3>
-            <p class="font-medium text-gray-400 text-xs">maria.wanner</p>
+            <p class="font-medium text-gray-400 text-xs">
+              {{ comment.user.username }}
+            </p>
           </div>
           <p class="text-xs font-medium text-gray-400">
-            <span class="font-bold">Oct 3rd, 2023</span> at
-            <span class="font-bold">7:30pm</span>
+            <span class="font-bold">{{ formateDate(comment.createdAt) }}</span>
+            at
+            <span class="font-bold">{{ formateTime(comment.createdAt) }}</span>
           </p>
         </div>
       </div>
@@ -142,17 +152,29 @@
     </div>
   </div>
   <div
-    class="card-body rounded-lg overflow-hidden ml-[4rem] text-sm dark:text-dark-text"
+    class="card-body rounded-lg overflow-hidden ml-[3.5rem] text-sm dark:text-dark-text"
   >
-    <p>
-      Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore, quidem
-      excepturi? Maiores, voluptas maxime, explicabo sint animi magni facere
-      optio quod quaerat cum ipsum? Minus a sequi repudiandae aliquid
-      aspernatur!
+    <p *ngIf="comment.content">
+      {{ comment.content }}
     </p>
-    <!-- <img src="assets/images/post-image.jpg" alt="post image" class="w-full" /> -->
+
+    <div
+      class="image-container min-h-[4.5rem] rounded-lg overflow-hidden flex flex-wrap gap-3 mt-3"
+      *ngIf="comment.commentImages.length"
+    >
+      <div
+        class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
+        *ngFor="let image of comment.commentImages"
+      >
+        <img
+          [src]="image.mediaUrl"
+          class="w-full"
+          [attr.alt]="image.mediaType"
+        />
+      </div>
+    </div>
   </div>
-  <div class="card-footer ml-[4rem]">
+  <div class="card-footer ml-[3.5rem]">
     <div class="post-tools flex items-center justify-between mt-3">
       <div class="flex items-center gap-x-2">
         <button
@@ -175,13 +197,13 @@
             />
           </svg>
 
-          <span class="font-bold">12</span>
+          <span class="font-bold">{{ comment.numberOfLikes }}</span>
         </button>
 
         <button
           type="button"
           class="btn btn-icon flex items-center text-sm gap-x-1 p-1 dark:text-dark-text"
-          title="comment"
+          title="reply"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -198,7 +220,7 @@
             />
           </svg>
 
-          <span class="font-bold">12</span>
+          <span class="font-bold">{{ comment.numberOfReplies }}</span>
         </button>
 
         <button
