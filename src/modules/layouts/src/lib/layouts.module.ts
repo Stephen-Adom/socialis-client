@@ -20,6 +20,7 @@ import { StoreModule } from '@ngrx/store';
 import { PostEffects, PostReducer, featurePostKey } from 'state';
 import { EffectsModule } from '@ngrx/effects';
 import { CommentOffcanvasComponent } from 'comment-offcanvas';
+import { CommentReplyModalComponent } from 'comment-reply-modal';
 
 @NgModule({
   imports: [
@@ -34,6 +35,7 @@ import { CommentOffcanvasComponent } from 'comment-offcanvas';
     StoreModule.forFeature(featurePostKey, PostReducer),
     EffectsModule.forFeature([PostEffects]),
     CommentOffcanvasComponent,
+    CommentReplyModalComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
