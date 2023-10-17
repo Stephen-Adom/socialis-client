@@ -11,45 +11,276 @@
       <div
         class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700"
       >
-        <h3 class="font-bold text-gray-800 dark:text-white">Modal 1</h3>
+        <div
+          class="flex-shrink-0 group block"
+          *ngIf="comment$ | async as comment"
+        >
+          <div class="flex items-center">
+            <img
+              class="inline-block flex-shrink-0 h-[2.5rem] w-[2.5rem] rounded-full"
+              [src]="
+                comment.user.imageUrl
+                  ? comment.user.imageUrl
+                  : 'assets/images/users/default.jpg'
+              "
+              [attr.alt]="comment.user.firstname"
+            />
+            <div class="ml-3 text-left">
+              <h3 class="font-semibold text-gray-800 dark:text-dark-text">
+                {{ comment.user.firstname }} {{ comment.user.lastname }}
+              </h3>
+              <div class="flex items-center gap-x-1">
+                <p class="font-medium text-gray-400 text-xs">
+                  {{ comment.user.username }}
+                </p>
+                <span class="inline-block">
+                  <svg
+                    class="h-3 w-3 text-gray-400"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    stroke-width="2"
+                    stroke="currentColor"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" />
+                    <circle cx="12" cy="12" r="4" />
+                  </svg>
+                </span>
+                <span class="inline-block text-xs text-gray-400 italic">{{
+                  formatPostDate(comment)
+                }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <button
           type="button"
-          class="hs-dropdown-toggle inline-flex flex-shrink-0 justify-center items-center h-8 w-8 rounded-md text-gray-500 hover:text-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2 focus:ring-offset-white transition-all text-sm dark:focus:ring-gray-700 dark:focus:ring-offset-gray-800"
-          data-hs-overlay="#hs-toggle-between-modals-first-modal"
-          data-hs-overlay-close
+          class="rounded-md px-4 text-sm py-1 border border-secondaryColor bg-transparent text-secondaryColor hover:bg-secondaryColor hover:text-white font-semibold"
         >
-          <span class="sr-only">Close</span>
-          <svg
-            class="w-3.5 h-3.5"
-            width="8"
-            height="8"
-            viewBox="0 0 8 8"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M0.258206 1.00652C0.351976 0.912791 0.479126 0.860131 0.611706 0.860131C0.744296 0.860131 0.871447 0.912791 0.965207 1.00652L3.61171 3.65302L6.25822 1.00652C6.30432 0.958771 6.35952 0.920671 6.42052 0.894471C6.48152 0.868271 6.54712 0.854471 6.61352 0.853901C6.67992 0.853321 6.74572 0.865971 6.80722 0.891111C6.86862 0.916251 6.92442 0.953381 6.97142 1.00032C7.01832 1.04727 7.05552 1.1031 7.08062 1.16454C7.10572 1.22599 7.11842 1.29183 7.11782 1.35822C7.11722 1.42461 7.10342 1.49022 7.07722 1.55122C7.05102 1.61222 7.01292 1.6674 6.96522 1.71352L4.31871 4.36002L6.96522 7.00648C7.05632 7.10078 7.10672 7.22708 7.10552 7.35818C7.10442 7.48928 7.05182 7.61468 6.95912 7.70738C6.86642 7.80018 6.74102 7.85268 6.60992 7.85388C6.47882 7.85498 6.35252 7.80458 6.25822 7.71348L3.61171 5.06702L0.965207 7.71348C0.870907 7.80458 0.744606 7.85498 0.613506 7.85388C0.482406 7.85268 0.357007 7.80018 0.264297 7.70738C0.171597 7.61468 0.119017 7.48928 0.117877 7.35818C0.116737 7.22708 0.167126 7.10078 0.258206 7.00648L2.90471 4.36002L0.258206 1.71352C0.164476 1.61976 0.111816 1.4926 0.111816 1.36002C0.111816 1.22744 0.164476 1.10028 0.258206 1.00652Z"
-              fill="currentColor"
-            />
-          </svg>
+          Drafts
         </button>
       </div>
       <div class="p-4 overflow-y-auto">
-        <p class="mt-1 text-gray-800 dark:text-gray-400">
-          Show a second modal and hide this one with the button below.
-        </p>
+        <span
+          *ngIf="comment$ | async as comment"
+          class="inline-block dark:text-gray-400 ml-7 italic font-normal mb-3 text-sm"
+          >Replying to
+          <span class="text-primaryColor font-bold">{{
+            comment.user.username
+          }}</span>
+          and
+          <span class="text-primaryColor font-bold">{{
+            postDetails.user.username
+          }}</span>
+        </span>
+
+        <div class="flex items-start gap-x-4">
+          <img
+            *ngIf="authUser"
+            class="inline-block flex-shrink-0 h-[3rem] w-[3rem] rounded-full"
+            [src]="
+              authUser.imageUrl
+                ? authUser.imageUrl
+                : 'assets/images/users/default.jpg'
+            "
+            [attr.alt]="authUser.firstname"
+          />
+
+          <form
+            [formGroup]="Form"
+            class="mt-1 text-gray-800 dark:text-dark-text w-full"
+          >
+            <textarea
+              [class.is-invalid]="
+                Form.get('content')?.touched && Form.get('content')?.invalid
+              "
+              rows="3"
+              class="border-none focus:border-none w-full focus:outline-none bg-transparent w-full"
+              placeholder="What's happening?"
+              formControlName="content"
+            ></textarea>
+          </form>
+        </div>
+
+        <!-- START:: UPLOADED POST IMAGES-->
+        <div class="flex flex-wrap gap-3" *ngIf="replyImages.length">
+          <div
+            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
+            *ngFor="let image of replyImages"
+          >
+            <button
+              type="button"
+              class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
+              title="close"
+              (click)="removeImage(image.id)"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
+
+            <button
+              type="button"
+              class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
+              title="edit"
+            >
+              Edit
+            </button>
+            <img [src]="image.base64" class="w-full" alt="" />
+          </div>
+        </div>
+        <!-- END:: UPLOADED POST IMAGES-->
       </div>
       <div
-        class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-gray-700"
+        class="flex justify-between items-center gap-x-2 py-3 px-4 border-t dark:border-t-gray-700"
       >
-        <button
-          type="button"
-          class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
-          data-hs-overlay="#reply-scrollable-modal"
-        >
-          Submit
-        </button>
+        <div class="post-tools">
+          <input
+            type="file"
+            hidden
+            title=""
+            (change)="uploadImage($event)"
+            aria-label="post image"
+            accept="image/*"
+            #fileInput
+          />
+          <button
+            type="button"
+            class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2 disabled:cursor-not-allowed"
+            title="image"
+            (click)="fileInput.click()"
+            [disabled]="replyImages.length === 4"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 dark:text-dark-text"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+              />
+            </svg>
+
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"
+              role="tooltip"
+            >
+              Image
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2"
+            title="emoji"
+            (click)="toggleEmoji = !toggleEmoji"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 dark:text-dark-text"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+              />
+            </svg>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"
+              role="tooltip"
+            >
+              Emoji
+            </span>
+          </button>
+
+          <button
+            type="button"
+            class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2"
+            title="schedule post"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5 dark:text-dark-text"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+              />
+            </svg>
+            <span
+              class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"
+              role="tooltip"
+            >
+              schedule post
+            </span>
+          </button>
+        </div>
+
+        <div class="flex gap-x-3">
+          <button
+            #closeBtn
+            type="button"
+            class="hs-dropdown-toggle py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border dark:border-gray-500 font-medium bg-transparent text-gray-700 dark:text-dark-text shadow-sm align-middle hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm"
+            data-hs-overlay="#hs-slide-down-animation-modal"
+            (click)="clearPostForm()"
+          >
+            Close
+          </button>
+          <button
+            type="button"
+            [disabled]="submittingForm"
+            (click)="submitPost()"
+            class="py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold btn-custom text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm disabled:cursor-wait disabled:bg-blue-300"
+            href="javascript:;"
+          >
+            {{ submittingForm ? 'Submitting reply...' : 'Reply' }}
+
+            <div
+              *ngIf="submittingForm"
+              class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+              role="status"
+              aria-label="loading"
+            >
+              <span class="sr-only">Loading...</span>
+            </div>
+          </button>
+        </div>
       </div>
     </div>
   </div>
+
+  <emoji-mart
+    [darkMode]="false"
+    (emojiSelect)="addEmoji($event)"
+    *ngIf="toggleEmoji"
+  ></emoji-mart>
 </div>

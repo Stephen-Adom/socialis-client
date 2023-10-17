@@ -50,7 +50,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   Form: FormGroup;
   postImages: postImageType[] = [];
   submittingForm = false;
-  userInfo!: UserInfoType;
+  authUser!: UserInfoType;
   userInfoSubscription = new Subscription();
   toggleEmoji = false;
 
@@ -72,7 +72,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
       .select(getUserInformation)
       .subscribe((userInfo) => {
         if (userInfo) {
-          this.userInfo = userInfo;
+          this.authUser = userInfo;
         }
       });
   }
@@ -120,7 +120,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
     formData.append('content', this.Form.get('content')?.value);
-    formData.append('user_id', this.userInfo.id.toString());
+    formData.append('user_id', this.authUser.id.toString());
 
     if (imageForms) {
       imageForms.forEach((image: any) => {
