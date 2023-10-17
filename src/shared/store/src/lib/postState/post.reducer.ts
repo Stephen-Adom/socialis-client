@@ -7,6 +7,7 @@ import {
 } from '@ngrx/store';
 import { PostApiActions } from './post.actions';
 import { CommentType, PostType } from 'utils';
+import { ReplyType } from 'utils';
 
 export const featurePostKey = 'post';
 
@@ -15,6 +16,7 @@ export interface PostState {
   postDetails: PostType | null;
   postComments: CommentType[];
   commentDetails: CommentType | null;
+  allReplies: ReplyType[];
 }
 
 const initialState: PostState = {
@@ -22,6 +24,7 @@ const initialState: PostState = {
   postDetails: null,
   postComments: [],
   commentDetails: null,
+  allReplies: [],
 };
 
 export const selectPostFeature =
@@ -45,6 +48,11 @@ export const getAllCommentForAPost = createSelector(
 export const getCommentDetails = createSelector(
   selectPostFeature,
   (state: PostState) => state.commentDetails
+);
+
+export const getAllReplies = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.allReplies
 );
 
 export const PostReducer = createReducer<PostState>(
@@ -97,6 +105,12 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       commentDetails: action.comment,
+    };
+  }),
+  on(PostApiActions.fetchRepliesSuccess, (state: PostState, action) => {
+    return {
+      ...state,
+      allReplies: action.replies.data,
     };
   })
 );

@@ -15,6 +15,7 @@ import {
   CommentService,
   MessageService,
   PostService,
+  ReplyService,
 } from 'services';
 import { StoreModule } from '@ngrx/store';
 import { PostEffects, PostReducer, featurePostKey } from 'state';
@@ -45,6 +46,7 @@ import { ReplyModalFormComponent } from 'reply-modal-form';
     PostService,
     MessageService,
     CommentService,
+    ReplyService,
   ],
 })
 export class LayoutsModule {}

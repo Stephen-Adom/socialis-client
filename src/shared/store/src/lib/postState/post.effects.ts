@@ -1,7 +1,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { CommentService, PostService } from 'services';
+import { CommentService, PostService, ReplyService } from 'services';
 import { PostApiActions } from './post.actions';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
@@ -12,6 +12,7 @@ export class PostEffects {
   constructor(
     private actions$: Actions,
     private postservice: PostService,
+    private replyService: ReplyService,
     private commentservice: CommentService
   ) {}
 
@@ -53,10 +54,10 @@ export class PostEffects {
     return this.actions$.pipe(
       ofType(PostApiActions.fetchReplies),
       mergeMap((action: { commentId: number }) =>
-        this.commentservice.fetchAllPost(action.postId).pipe(
+        this.replyService.fetchAllReplies(action.commentId).pipe(
           map((response: any) => {
-            return PostApiActions.fetchPostCommentsSuccess({
-              comments: response,
+            return PostApiActions.fetchRepliesSuccess({
+              replies: response,
             });
           }),
           catchError((error: HttpErrorResponse) =>
