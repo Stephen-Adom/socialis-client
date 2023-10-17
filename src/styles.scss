@@ -25,6 +25,10 @@ body {
   .btn-icon {
     @apply p-3;
   }
+
+  .btn-custom {
+    @apply bg-gradient-to-r from-primaryColor to-secondaryColor hover:from-blue-700 hover:to-blue-500 transition-all ease-in-out;
+  }
 }
 
 @layer components {
