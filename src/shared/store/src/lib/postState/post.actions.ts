@@ -6,6 +6,7 @@ import {
   AllRepliesResponseType,
   CommentType,
   PostType,
+  ReplyType,
 } from 'utils';
 
 export const PostApiActions = createActionGroup({
@@ -23,5 +24,7 @@ export const PostApiActions = createActionGroup({
     getCommentDetails: props<{ comment: CommentType }>(),
     fetchReplies: props<{ commentId: number }>(),
     fetchRepliesSuccess: props<{ replies: AllRepliesResponseType }>(),
+    addNewReply: props<{ newReply: ReplyType }>(),
+    updateAComment: props<{ comment: CommentType }>(),
   },
 });

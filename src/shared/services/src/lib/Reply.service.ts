@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getAuthHttpOptions } from './httpHeaders';
-import { AllRepliesResponseType } from 'utils';
+import { AllRepliesResponseType, SuccessMessageType } from 'utils';
 import BASE_URL from './base_url';
 
 @Injectable({
@@ -20,6 +20,14 @@ export class ReplyService {
   fetchAllReplies(commentId: number) {
     return this.http.get<AllRepliesResponseType>(
       BASE_URL + '/' + commentId + '/all_replies'
+    );
+  }
+
+  createReply(formData: FormData) {
+    return this.http.post<SuccessMessageType>(
+      BASE_URL + '/reply',
+      formData,
+      this.authHeaders
     );
   }
 }

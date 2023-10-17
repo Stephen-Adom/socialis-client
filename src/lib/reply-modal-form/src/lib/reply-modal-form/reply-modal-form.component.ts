@@ -1,7 +1,15 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  AppApiActions,
   AppState,
   PostState,
   getCommentDetails,
@@ -28,9 +36,10 @@ import {
 import {
   ErrorMessageService,
   SuccessMessageService,
-  PostService,
+  ReplyService,
 } from 'services';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { HttpErrorResponse } from '@angular/common/http';
 
 type postImageType = {
   base64: string;
@@ -46,6 +55,7 @@ type postImageType = {
   styleUrls: ['./reply-modal-form.component.css'],
 })
 export class ReplyModalFormComponent implements OnInit, OnDestroy {
+  @ViewChild('closeBtn') closeBtn!: ElementRef<HTMLButtonElement>;
   comment$!: Observable<CommentType | null>;
   Form: FormGroup;
   replyImages: postImageType[] = [];
@@ -60,7 +70,7 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
     @Inject(SUCCESS_MESSAGE_TOKEN)
     private successMessage: SuccessMessageService,
-    private postservice: PostService,
+    private replyservice: ReplyService,
     private formBuilder: FormBuilder,
     private store: Store<PostState>
   ) {
@@ -135,10 +145,11 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
 
   submitPostToDb() {
     this.submittingForm = true;
+    let comment!: CommentType;
 
-    this.comment$.subscribe((comment) => {
-      if (comment) {
-        this.Form.get('content')?.setValue(comment.content);
+    this.comment$.subscribe((data) => {
+      if (data) {
+        comment = data;
       }
     });
 
@@ -149,7 +160,7 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
     const formData = new FormData();
     formData.append('content', this.Form.get('content')?.value);
     formData.append('user_id', this.authUser.id.toString());
-    formData.append('comment_id', this.authUser.id.toString());
+    formData.append('comment_id', comment.id.toString());
 
     if (imageForms) {
       imageForms.forEach((image: any) => {
@@ -159,20 +170,20 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
       formData.append('images', '');
     }
 
-    // this.postservice.createPost(formData).subscribe({
-    //   next: (response) => {
-    //     this.submittingForm = false;
-    //     this.successMessage.sendSuccessMessage('New Post Created!');
-    //     this.clearPostForm();
-    //     this.closeBtn.nativeElement.click();
-    //   },
-    //   error: (error: HttpErrorResponse) => {
-    //     this.submittingForm = false;
-    //     this.store.dispatch(
-    //       AppApiActions.displayErrorMessage({ error: error.error })
-    //     );
-    //   },
-    // });
+    this.replyservice.createReply(formData).subscribe({
+      next: (response) => {
+        this.submittingForm = false;
+        this.successMessage.sendSuccessMessage('New Post Created!');
+        this.clearPostForm();
+        this.closeBtn.nativeElement.click();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.submittingForm = false;
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
+      },
+    });
   }
 
   ngOnDestroy(): void {

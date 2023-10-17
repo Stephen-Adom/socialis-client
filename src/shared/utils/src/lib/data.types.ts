@@ -5,7 +5,7 @@ export type ErrorMessageType = {
 };
 
 export type SuccessMessageType = {
-  error: string;
+  status: string;
   message: string;
 };
 

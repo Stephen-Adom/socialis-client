@@ -112,11 +112,33 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       allReplies: action.replies.data,
     };
+  }),
+  on(PostApiActions.addNewReply, (state: PostState, action) => {
+    const currentReplies = [action.newReply, ...state.allReplies];
+    return {
+      ...state,
+      allReplies: currentReplies,
+    };
+  }),
+  on(PostApiActions.updateAComment, (state: PostState, action) => {
+    return {
+      ...state,
+      postComments: updateComment(action.comment, state.postComments),
+    };
   })
 );
 
 const updatePost = (updatedPost: PostType, allPost: PostType[]) => {
   return allPost.map((post) =>
     post.id === updatedPost.id ? updatedPost : post
+  );
+};
+
+const updateComment = (
+  updatedComment: CommentType,
+  allComments: CommentType[]
+) => {
+  return allComments.map((comment) =>
+    comment.id === updatedComment.id ? updatedComment : comment
   );
 };
