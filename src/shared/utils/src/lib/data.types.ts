@@ -63,6 +63,12 @@ export type PostType = {
   updatedAt: string;
   postImages: ImageType[];
   user: SimpleUserInfoType;
+  likes: LikeType[];
+};
+
+export type LikeType = {
+  username: string;
+  imageUrl: string;
 };
 
 export type CommentType = {
