@@ -237,28 +237,29 @@
       </div>
     </div>
   </div>
-  <div
-    class="card-body dark:text-dark-text ml-[68px]"
-    (click)="viewPostDetails()"
-  >
+  <div class="card-body dark:text-dark-text ml-[68px]">
     <p class="text-sm mb-2" *ngIf="post.content">
       {{ post.content }}
     </p>
 
     <div
-      class="image-container min-h-[4.5rem] rounded-lg overflow-hidden flex flex-wrap gap-3"
+      class="image-container min-h-[4.5rem] rounded-lg overflow-hidden"
       *ngIf="post.postImages.length"
     >
-      <div
-        class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
-        *ngFor="let image of post.postImages"
-      >
-        <img
-          [src]="image.mediaUrl"
-          class="w-full"
-          [attr.alt]="image.mediaType"
-        />
-      </div>
+      <lightgallery [settings]="settings" class="flex flex-wrap gap-3">
+        <a
+          class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
+          [href]="image.mediaUrl"
+          [attr.data-sub-html]="getSubHtml(post.user)"
+          *ngFor="let image of post.postImages"
+        >
+          <img
+            [src]="image.mediaUrl"
+            class="w-full"
+            [attr.alt]="image.mediaType"
+          />
+        </a>
+      </lightgallery>
     </div>
   </div>
   <div class="card-footer ml-[68px]">

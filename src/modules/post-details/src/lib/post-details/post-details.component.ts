@@ -6,14 +6,21 @@ import { CreateCommentFormComponent } from 'create-comment-form';
 import { ActivatedRoute } from '@angular/router';
 import { PostApiActions, PostState, getPostDetails } from 'state';
 import { Store } from '@ngrx/store';
-import { PostType } from 'utils';
+import { PostType, SimpleUserInfoType } from 'utils';
 import { Observable, Subscription } from 'rxjs';
 import { format } from 'date-fns';
+import { LightgalleryModule } from 'lightgallery/angular';
+import lgZoom from 'lightgallery/plugins/zoom';
 
 @Component({
   selector: 'lib-post-details',
   standalone: true,
-  imports: [CommonModule, CommentListComponent, CreateCommentFormComponent],
+  imports: [
+    CommonModule,
+    CommentListComponent,
+    CreateCommentFormComponent,
+    LightgalleryModule,
+  ],
   templateUrl: './post-details.component.html',
   styleUrls: ['./post-details.component.css'],
 })
@@ -22,6 +29,10 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   postId!: number;
   postSubscription = new Subscription();
   routeSubscription = new Subscription();
+  settings = {
+    counter: false,
+    plugins: [lgZoom],
+  };
 
   constructor(
     private location: Location,
@@ -55,6 +66,14 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
 
   back() {
     this.location.back();
+  }
+
+  getSubHtml(user: SimpleUserInfoType) {
+    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
+      user.lastname
+    }(${user.username}) </a></h4> <p> About - ${
+      user.bio ? user.bio : 'Not Available!'
+    }</p>`;
   }
 
   ngOnDestroy(): void {

@@ -18,7 +18,8 @@
         "assets": ["./src/favicon.ico", "./src/assets"],
         "styles": [
           "./src/styles.scss",
-          "node_modules/@ctrl/ngx-emoji-mart/picker.css"
+          "node_modules/@ctrl/ngx-emoji-mart/picker.css",
+          "node_modules/lightgallery/scss/lightgallery.scss"
         ],
         "scripts": ["./node_modules/preline/dist/preline.js"]
       },

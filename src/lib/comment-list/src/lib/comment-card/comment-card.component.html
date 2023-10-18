@@ -159,19 +159,23 @@
     </p>
 
     <div
-      class="image-container min-h-[4.5rem] rounded-lg overflow-hidden flex flex-wrap gap-3 mt-3"
+      class="image-container min-h-[4.5rem] rounded-lg overflow-hidden mt-3"
       *ngIf="comment.commentImages.length"
     >
-      <div
-        class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
-        *ngFor="let image of comment.commentImages"
-      >
-        <img
-          [src]="image.mediaUrl"
-          class="w-full"
-          [attr.alt]="image.mediaType"
-        />
-      </div>
+      <lightgallery [settings]="settings" class="flex flex-wrap gap-3">
+        <a
+          [href]="image.mediaUrl"
+          [attr.data-sub-html]="getSubHtml(comment.user)"
+          class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
+          *ngFor="let image of comment.commentImages"
+        >
+          <img
+            [src]="image.mediaUrl"
+            class="w-full"
+            [attr.alt]="image.mediaType"
+          />
+        </a>
+      </lightgallery>
     </div>
   </div>
   <div class="card-footer ml-[3.5rem]">

@@ -253,19 +253,23 @@
       </p>
 
       <div
-        class="image-container min-h-[4.5rem] rounded-lg overflow-hidden flex flex-wrap gap-3 mt-2"
+        class="image-container min-h-[4.5rem] rounded-lg overflow-hidden mt-2"
         *ngIf="post.postImages.length"
       >
-        <div
-          class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
-          *ngFor="let image of post.postImages"
-        >
-          <img
-            [src]="image.mediaUrl"
-            class="w-full"
-            [attr.alt]="image.mediaType"
-          />
-        </div>
+        <lightgallery [settings]="settings" class="flex flex-wrap gap-3">
+          <a
+            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
+            *ngFor="let image of post.postImages"
+            [href]="image.mediaUrl"
+            [attr.data-sub-html]="getSubHtml(post.user)"
+          >
+            <img
+              [src]="image.mediaUrl"
+              class="w-full"
+              [attr.alt]="image.mediaType"
+            />
+          </a>
+        </lightgallery>
       </div>
     </div>
     <div class="card-footer">
