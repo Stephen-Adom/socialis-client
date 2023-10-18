@@ -35,5 +35,6 @@ export const PostApiActions = createActionGroup({
       authuser: UserInfoType;
       isLiked: boolean;
     }>(),
+    togglePostLikeSuccess: emptyProps(),
   },
 });

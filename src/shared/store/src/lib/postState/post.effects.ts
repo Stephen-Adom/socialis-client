@@ -6,6 +6,7 @@ import { PostApiActions } from './post.actions';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppApiActions } from '../appState/app.actions';
+import { PostType, UserInfoType } from 'utils';
 
 @Injectable()
 export class PostEffects {
@@ -62,6 +63,29 @@ export class PostEffects {
             of(AppApiActions.displayErrorMessage({ error: error.error }))
           )
         )
+      )
+    );
+  });
+
+  TogglePostLike$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.togglePostLike),
+      mergeMap(
+        (action: {
+          post: PostType;
+          authuser: UserInfoType;
+          isLiked: boolean;
+        }) =>
+          this.postservice
+            .togglePostLike(action.post.id, action.authuser.id)
+            .pipe(
+              map(() => {
+                return PostApiActions.togglePostLikeSuccess();
+              }),
+              catchError((error: HttpErrorResponse) =>
+                of(AppApiActions.displayErrorMessage({ error: error.error }))
+              )
+            )
       )
     );
   });

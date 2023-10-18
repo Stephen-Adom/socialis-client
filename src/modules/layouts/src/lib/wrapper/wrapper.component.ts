@@ -57,14 +57,12 @@ export class WrapperComponent implements OnInit, OnDestroy {
 
     this.messageservice.onMessage('/feed/comment/update').subscribe((data) => {
       if (data) {
-        console.log(data, 'comment update');
         this.store.dispatch(PostApiActions.updateAComment({ comment: data }));
       }
     });
 
     this.messageservice.onMessage('/feed/reply/new').subscribe((data) => {
       if (data) {
-        console.log(data, 'reply new');
         this.store.dispatch(PostApiActions.addNewReply({ newReply: data }));
       }
     });

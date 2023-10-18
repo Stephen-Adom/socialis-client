@@ -16,6 +16,7 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
+import { PostService } from 'services';
 
 @Component({
   selector: 'lib-post-card',
@@ -38,7 +39,11 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
 
   likedPost$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private store: Store<PostState>, private router: Router) {}
+  constructor(
+    private store: Store<PostState>,
+    private router: Router,
+    private postservice: PostService
+  ) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
