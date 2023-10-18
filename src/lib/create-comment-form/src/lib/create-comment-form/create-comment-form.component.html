@@ -1,4 +1,4 @@
-<section class="comment-form">
+<section class="comment-form relative">
   <span
     class="inline-block dark:text-gray-400 ml-7 italic font-normal mb-3 text-sm"
     >Replying to
@@ -103,7 +103,12 @@
         </svg>
       </button>
 
-      <button type="button" class="btn btn-circle btn-icon p-2" title="emoji">
+      <button
+        type="button"
+        class="btn btn-circle btn-icon p-2"
+        title="emoji"
+        (click)="toggleEmoji = !toggleEmoji"
+      >
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -162,4 +167,10 @@
       </button>
     </div>
   </div>
+
+  <emoji-mart
+    [darkMode]="false"
+    (emojiSelect)="addEmoji($event)"
+    *ngIf="toggleEmoji"
+  ></emoji-mart>
 </section>

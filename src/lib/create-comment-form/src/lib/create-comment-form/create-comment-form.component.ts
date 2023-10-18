@@ -28,6 +28,7 @@ import {
 import { Store } from '@ngrx/store';
 import { Observable, Subscription, debounceTime } from 'rxjs';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 type commentImageType = {
   base64: string;
@@ -38,7 +39,7 @@ type commentImageType = {
 @Component({
   selector: 'lib-create-comment-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, PickerComponent],
   templateUrl: './create-comment-form.component.html',
   styleUrls: ['./create-comment-form.component.css'],
 })
@@ -51,6 +52,7 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
   authUserSubscription = new Subscription();
   postDetailsSubscription = new Subscription();
   formInvalid = false;
+  toggleEmoji = false;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -86,6 +88,12 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
       this.formInvalid = this.Form.invalid;
       console.log(this.Form.valid);
     });
+  }
+
+  addEmoji(event: any) {
+    this.Form.get('content')?.setValue(
+      this.Form.get('content')?.value + event.emoji.native
+    );
   }
 
   async uploadImage(event: any) {
