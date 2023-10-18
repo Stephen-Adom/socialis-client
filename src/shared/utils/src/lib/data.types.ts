@@ -105,3 +105,8 @@ export type AllRepliesResponseType = {
   status: string;
   data: ReplyType[];
 };
+
+export type PostResponseType = {
+  status: string;
+  data: PostType;
+};

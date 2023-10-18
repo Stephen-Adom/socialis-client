@@ -64,25 +64,30 @@
         </button>
       </div>
       <div class="p-4 overflow-y-auto">
-        <ng-container *ngIf="(allReplies$ | async)?.length">
+        <ng-container *ngIf="(allReplies$ | async)?.length; else elseTemplate">
           <lib-reply-card
             [reply]="reply"
             *ngFor="let reply of allReplies$ | async"
           />
         </ng-container>
+        <ng-template #elseTemplate>
+          <p class="text-gray-400 italic text-center">
+            Be the first one to add a reply to this comment!!
+          </p>
+        </ng-template>
       </div>
       <div
         class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-gray-700"
       >
         <button
           type="button"
-          class="hs-dropdown-toggle py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
+          class="hs-dropdown-toggle py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border font-medium bg-white text-gray-700 shadow-sm align-middle hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm dark:bg-slate-900 dark:hover:bg-slate-800 dark:border-gray-700 dark:text-gray-400 dark:hover:text-white dark:focus:ring-offset-gray-800"
           data-hs-overlay="#reply-scrollable-modal"
         >
           Close
         </button>
         <a
-          class="py-3 px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
+          class="py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold bg-blue-500 text-white hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm dark:focus:ring-offset-gray-800"
           href="javascript:;"
           data-hs-overlay="#reply-modal-form"
         >

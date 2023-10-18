@@ -32,6 +32,22 @@ export class PostEffects {
     );
   });
 
+  FetchPostById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.fetchPostById),
+      mergeMap((action: { postId: number }) =>
+        this.postservice.fetchPostById(action.postId).pipe(
+          map((response: any) => {
+            return PostApiActions.fetchPostByIdSuccess({ post: response });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
+
   FetchAllPostComments$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PostApiActions.fetchPostComments),

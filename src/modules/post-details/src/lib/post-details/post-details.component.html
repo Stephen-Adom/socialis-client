@@ -398,8 +398,9 @@
       </div>
 
       <p class="text-xs mt-3 px-3 dark:text-dark-text">
-        Posted on: <span class="font-bold">Oct 3rd, 2023</span> at
-        <span class="font-bold">09:30 am</span>
+        Posted on:
+        <span class="font-bold">{{ formateDate(post.createdAt) }}</span> at
+        <span class="font-bold">{{ formateTime(post.createdAt) }}</span>
       </p>
 
       <hr

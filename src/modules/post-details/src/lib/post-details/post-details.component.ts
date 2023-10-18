@@ -1,13 +1,14 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { CommentListComponent } from 'comment-list';
 import { CreateCommentFormComponent } from 'create-comment-form';
 import { ActivatedRoute } from '@angular/router';
-import { PostState, getPostDetails } from 'state';
+import { PostApiActions, PostState, getPostDetails } from 'state';
 import { Store } from '@ngrx/store';
 import { PostType } from 'utils';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'lib-post-details',
@@ -16,8 +17,12 @@ import { Observable } from 'rxjs';
   templateUrl: './post-details.component.html',
   styleUrls: ['./post-details.component.css'],
 })
-export class PostDetailsComponent implements OnInit {
+export class PostDetailsComponent implements OnInit, OnDestroy {
   post$!: Observable<PostType | null>;
+  postId!: number;
+  postSubscription = new Subscription();
+  routeSubscription = new Subscription();
+
   constructor(
     private location: Location,
     private route: ActivatedRoute,
@@ -25,19 +30,35 @@ export class PostDetailsComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.route.paramMap.subscribe((data) => {
-      console.log(data.get('id'));
+    this.routeSubscription = this.route.paramMap.subscribe((data) => {
+      this.postId = parseInt(data.get('id')!);
     });
 
     this.post$ = this.store.select(getPostDetails);
 
-    this.post$.subscribe((post) => {
+    this.postSubscription = this.post$.subscribe((post) => {
       if (!post) {
+        this.store.dispatch(
+          PostApiActions.fetchPostById({ postId: this.postId })
+        );
       }
     });
   }
 
+  formateDate(createdAt: string) {
+    return format(new Date(createdAt), 'MMM do, yyyy');
+  }
+
+  formateTime(createdAt: string) {
+    return format(new Date(createdAt), 'h:mmaaa');
+  }
+
   back() {
     this.location.back();
+  }
+
+  ngOnDestroy(): void {
+    this.postSubscription.unsubscribe();
+    this.routeSubscription.unsubscribe();
   }
 }

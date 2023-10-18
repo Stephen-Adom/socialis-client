@@ -99,6 +99,7 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       allPosts: updatePost(action.post, state.allPosts),
+      postDetails: state.postDetails && action.post,
     };
   }),
   on(PostApiActions.getCommentDetails, (state: PostState, action) => {
@@ -124,6 +125,12 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       postComments: updateComment(action.comment, state.postComments),
+    };
+  }),
+  on(PostApiActions.fetchPostByIdSuccess, (state: PostState, action) => {
+    return {
+      ...state,
+      postDetails: action.post.data,
     };
   })
 );
