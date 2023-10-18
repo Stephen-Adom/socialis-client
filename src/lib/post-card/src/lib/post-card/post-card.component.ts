@@ -34,6 +34,10 @@ export class PostCardComponent implements OnChanges {
     }
   }
 
+  addComment() {
+    this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
+  }
+
   viewComments() {
     this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
   }

@@ -23,6 +23,7 @@ import { EffectsModule } from '@ngrx/effects';
 import { CommentOffcanvasComponent } from 'comment-offcanvas';
 import { CommentReplyModalComponent } from 'comment-reply-modal';
 import { ReplyModalFormComponent } from 'reply-modal-form';
+import { AddCommentFormModalComponent } from 'add-comment-form-modal';
 
 @NgModule({
   imports: [
@@ -39,6 +40,7 @@ import { ReplyModalFormComponent } from 'reply-modal-form';
     CommentOffcanvasComponent,
     CommentReplyModalComponent,
     ReplyModalFormComponent,
+    AddCommentFormModalComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [

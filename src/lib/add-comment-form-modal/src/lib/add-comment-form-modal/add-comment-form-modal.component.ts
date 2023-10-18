@@ -1,33 +1,42 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  ERROR_MESSAGE_TOKEN,
-  PostType,
-  SUCCESS_MESSAGE_TOKEN,
-  UserInfoType,
-  getBase64,
-} from 'utils';
-import {
-  CommentService,
-  ErrorMessageService,
-  SuccessMessageService,
-} from 'services';
+import { HttpErrorResponse } from '@angular/common/http';
 import {
   FormBuilder,
   FormGroup,
   ReactiveFormsModule,
   Validators,
 } from '@angular/forms';
-import {
-  AppApiActions,
-  AppState,
-  getPostDetails,
-  getUserInformation,
-} from 'state';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription, debounceTime } from 'rxjs';
-import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { formatDistanceToNow } from 'date-fns';
+import {
+  ErrorMessageService,
+  SuccessMessageService,
+  CommentService,
+} from 'services';
+import {
+  AppState,
+  getUserInformation,
+  getPostDetails,
+  AppApiActions,
+} from 'state';
+import {
+  ERROR_MESSAGE_TOKEN,
+  SUCCESS_MESSAGE_TOKEN,
+  getBase64,
+  CommentType,
+  PostType,
+  UserInfoType,
+} from 'utils';
+import { Subscription } from 'rxjs';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 
 type commentImageType = {
@@ -37,13 +46,14 @@ type commentImageType = {
 };
 
 @Component({
-  selector: 'lib-create-comment-form',
+  selector: 'lib-add-comment-form-modal',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, PickerComponent],
-  templateUrl: './create-comment-form.component.html',
-  styleUrls: ['./create-comment-form.component.css'],
+  templateUrl: './add-comment-form-modal.component.html',
+  styleUrls: ['./add-comment-form-modal.component.css'],
 })
-export class CreateCommentFormComponent implements OnInit, OnDestroy {
+export class AddCommentFormModalComponent implements OnInit, OnDestroy {
+  @ViewChild('closeBtn') closeBtn!: ElementRef<HTMLButtonElement>;
   Form: FormGroup;
   authUser!: UserInfoType;
   postDetails!: PostType;
@@ -108,19 +118,25 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
     );
   }
 
-  submitComment() {
+  formatPostDate(post: PostType) {
+    return formatDistanceToNow(new Date(post.createdAt), {
+      includeSeconds: true,
+    });
+  }
+
+  submitPost() {
     if (this.Form.valid || this.commentImages.length > 0) {
-      this.submitCommentToDb();
+      this.submitPostToDb();
     } else {
       this.Form.markAllAsTouched();
       this.errorMessage.sendErrorMessage({
-        message: 'Enter comment or upload images',
+        message: 'Enter Post or upload images',
         error: 'BAD_REQUEST',
       });
     }
   }
 
-  submitCommentToDb() {
+  submitPostToDb() {
     this.submittingForm = true;
 
     const imageForms: any = this.commentImages.map((image) => {
@@ -145,6 +161,7 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
         this.submittingForm = false;
         this.successMessage.sendSuccessMessage('New Comment Created!');
         this.clearCommentForm();
+        this.closeBtn.nativeElement.click();
       },
       error: (error: HttpErrorResponse) => {
         this.submittingForm = false;
