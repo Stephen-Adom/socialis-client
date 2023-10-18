@@ -101,6 +101,10 @@ body {
   .is-invalid {
     @apply border-2 border-red-600 text-red-600;
   }
+
+  svg.active {
+    @apply fill-red-600 stroke-2 stroke-red-600;
+  }
 }
 
 swiper-slide {

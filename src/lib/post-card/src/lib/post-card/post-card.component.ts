@@ -1,13 +1,21 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { PostType, SimpleUserInfoType } from 'utils';
+import { LikeType, PostType, SimpleUserInfoType, UserInfoType } from 'utils';
 import { formatDistanceToNow } from 'date-fns';
-import { PostApiActions, PostState } from 'state';
+import { PostApiActions, PostState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
+import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
+import { OnDestroy } from '@angular/core';
 
 @Component({
   selector: 'lib-post-card',
@@ -16,8 +24,10 @@ import lgZoom from 'lightgallery/plugins/zoom';
   templateUrl: './post-card.component.html',
   styleUrls: ['./post-card.component.css'],
 })
-export class PostCardComponent implements OnChanges {
+export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   @Input({ required: true }) post!: PostType;
+  authUser$!: Observable<UserInfoType | null>;
+  authUserSubscription = new Subscription();
 
   formattedDate: string | null = null;
 
@@ -26,7 +36,14 @@ export class PostCardComponent implements OnChanges {
     plugins: [lgZoom],
   };
 
+  likedPost$ = new BehaviorSubject<boolean>(false);
+
   constructor(private store: Store<PostState>, private router: Router) {}
+
+  ngOnInit(): void {
+    this.authUser$ = this.store.select(getUserInformation);
+    this.checkIfLiked();
+  }
 
   viewPostDetails() {
     this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
@@ -39,6 +56,20 @@ export class PostCardComponent implements OnChanges {
         includeSeconds: true,
       });
     }
+  }
+
+  checkIfLiked() {
+    this.authUser$.subscribe((authUser) => {
+      if (authUser) {
+        const likedPost = this.post.likes.find(
+          (like) => like.username === authUser.username
+        );
+
+        likedPost ? this.likedPost$.next(true) : this.likedPost$.next(false);
+      } else {
+        this.likedPost$.next(false);
+      }
+    });
   }
 
   addComment() {
@@ -55,5 +86,25 @@ export class PostCardComponent implements OnChanges {
     }(${user.username}) </a></h4> <p> About - ${
       user.bio ? user.bio : 'Not Available!'
     }</p>`;
+  }
+
+  toggleLike() {
+    combineLatest([this.authUser$, this.likedPost$]).subscribe(
+      ([authuser, likedPost]) => {
+        if (authuser) {
+          this.store.dispatch(
+            PostApiActions.togglePostLike({
+              post: this.post,
+              authuser,
+              isLiked: likedPost,
+            })
+          );
+        }
+      }
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.authUserSubscription.unsubscribe();
   }
 }

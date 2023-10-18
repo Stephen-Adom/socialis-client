@@ -8,6 +8,7 @@ import {
 import { PostApiActions } from './post.actions';
 import { CommentType, PostType } from 'utils';
 import { ReplyType } from 'utils';
+import { UserInfoType } from 'utils';
 
 export const featurePostKey = 'post';
 
@@ -132,6 +133,17 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       postDetails: action.post.data,
     };
+  }),
+  on(PostApiActions.togglePostLike, (state: PostState, action) => {
+    return {
+      ...state,
+      allPosts: updatePostLike(
+        action.post,
+        action.authuser,
+        action.isLiked,
+        state.allPosts
+      ),
+    };
   })
 );
 
@@ -148,4 +160,28 @@ const updateComment = (
   return allComments.map((comment) =>
     comment.id === updatedComment.id ? updatedComment : comment
   );
+};
+
+const updatePostLike = (
+  post: PostType,
+  user: UserInfoType,
+  isLiked: boolean,
+  allPost: PostType[]
+) => {
+  const postObj = { ...post };
+  if (isLiked) {
+    postObj.numberOfLikes--;
+    postObj.likes = post.likes.filter(
+      (like) => like.username !== user.username
+    );
+  } else {
+    const likedBy = {
+      username: user.username,
+      imageUrl: user.imageUrl,
+    };
+    postObj.numberOfLikes++;
+    postObj.likes = [likedBy, ...postObj.likes];
+  }
+
+  return allPost.map((post) => (post.id === postObj.id ? postObj : post));
 };

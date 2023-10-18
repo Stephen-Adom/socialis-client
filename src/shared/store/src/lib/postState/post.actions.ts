@@ -8,6 +8,7 @@ import {
   PostResponseType,
   PostType,
   ReplyType,
+  UserInfoType,
 } from 'utils';
 
 export const PostApiActions = createActionGroup({
@@ -29,5 +30,10 @@ export const PostApiActions = createActionGroup({
     updateAComment: props<{ comment: CommentType }>(),
     fetchPostById: props<{ postId: number }>(),
     fetchPostByIdSuccess: props<{ post: PostResponseType }>(),
+    togglePostLike: props<{
+      post: PostType;
+      authuser: UserInfoType;
+      isLiked: boolean;
+    }>(),
   },
 });
