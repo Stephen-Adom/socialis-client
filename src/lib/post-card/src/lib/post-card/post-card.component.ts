@@ -22,7 +22,8 @@ export class PostCardComponent implements OnChanges {
   constructor(private store: Store<PostState>, private router: Router) {}
 
   viewPostDetails() {
-    this.router.navigate(['/maria.wanner/details/221232323']);
+    this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
+    this.router.navigate([this.post.user.username, 'details', this.post.id]);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -30,12 +31,10 @@ export class PostCardComponent implements OnChanges {
       this.formattedDate = formatDistanceToNow(new Date(this.post.createdAt), {
         includeSeconds: true,
       });
-
-      console.log(this.formattedDate);
     }
   }
 
-  getPostDetails() {
+  viewComments() {
     this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
   }
 }

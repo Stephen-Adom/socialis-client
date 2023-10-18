@@ -31,4 +31,11 @@ export class PostService {
       this.authHeaders
     );
   }
+
+  fetchPostById(postId: number) {
+    return this.http.get<AllPostResponseType>(
+      BASE_URL + '/' + postId + '/post',
+      this.authHeaders
+    );
+  }
 }
