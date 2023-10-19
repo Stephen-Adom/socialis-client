@@ -4,10 +4,21 @@ import { CommonModule, Location } from '@angular/common';
 import { CommentListComponent } from 'comment-list';
 import { CreateCommentFormComponent } from 'create-comment-form';
 import { ActivatedRoute } from '@angular/router';
-import { PostApiActions, PostState, getPostDetails } from 'state';
+import {
+  PostApiActions,
+  PostState,
+  getPostDetails,
+  getUserInformation,
+} from 'state';
 import { Store } from '@ngrx/store';
-import { PostType, SimpleUserInfoType } from 'utils';
-import { Observable, Subscription } from 'rxjs';
+import { PostType, SimpleUserInfoType, UserInfoType } from 'utils';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  combineLatest,
+  tap,
+} from 'rxjs';
 import { format } from 'date-fns';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
@@ -25,14 +36,18 @@ import lgZoom from 'lightgallery/plugins/zoom';
   styleUrls: ['./post-details.component.css'],
 })
 export class PostDetailsComponent implements OnInit, OnDestroy {
-  post$!: Observable<PostType | null>;
+  post!: PostType;
   postId!: number;
   postSubscription = new Subscription();
   routeSubscription = new Subscription();
+  authUserSubscription = new Subscription();
   settings = {
     counter: false,
     plugins: [lgZoom],
   };
+  likedPost$ = new BehaviorSubject<boolean>(false);
+  authUser$!: Observable<UserInfoType | null>;
+  showAnimation$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private location: Location,
@@ -45,15 +60,74 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
       this.postId = parseInt(data.get('id')!);
     });
 
-    this.post$ = this.store.select(getPostDetails);
+    this.postSubscription = this.store
+      .select(getPostDetails)
+      .pipe(
+        tap((post) => {
+          if (post) {
+            this.post = post;
+            this.checkIfLiked();
+          } else {
+            this.store.dispatch(
+              PostApiActions.fetchPostById({ postId: this.postId })
+            );
+          }
+        })
+      )
+      .subscribe();
 
-    this.postSubscription = this.post$.subscribe((post) => {
-      if (!post) {
-        this.store.dispatch(
-          PostApiActions.fetchPostById({ postId: this.postId })
-        );
-      }
-    });
+    this.authUser$ = this.store.select(getUserInformation);
+
+    this.showAnimation$
+      .pipe(
+        tap((animation) => {
+          if (animation) {
+            setTimeout(() => {
+              this.showAnimation$.next(false);
+            }, 400);
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  checkIfLiked() {
+    this.authUser$
+      .pipe(
+        tap((authUser) => {
+          if (authUser && this.post) {
+            const likedPost = this.post.likes.find(
+              (like) => like.username === authUser.username
+            );
+            likedPost
+              ? this.likedPost$.next(true)
+              : this.likedPost$.next(false);
+          } else {
+            this.likedPost$.next(false);
+          }
+        })
+      )
+      .subscribe();
+  }
+
+  toggleLike() {
+    this.authUser$
+      .pipe(
+        tap((authUser) => {
+          if (authUser) {
+            this.store.dispatch(
+              PostApiActions.togglePostLike({
+                post: this.post,
+                authuser: authUser,
+                isLiked: this.likedPost$.value,
+              })
+            );
+
+            this.showAnimation$.next(true);
+          }
+        })
+      )
+      .subscribe();
   }
 
   formateDate(createdAt: string) {
@@ -79,5 +153,6 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.postSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
+    this.authUserSubscription.unsubscribe();
   }
 }

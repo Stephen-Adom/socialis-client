@@ -8,15 +8,20 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { LikeType, PostType, SimpleUserInfoType, UserInfoType } from 'utils';
+import { PostType, SimpleUserInfoType, UserInfoType } from 'utils';
 import { formatDistanceToNow } from 'date-fns';
 import { PostApiActions, PostState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
-import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  combineLatest,
+  tap,
+} from 'rxjs';
 import { OnDestroy } from '@angular/core';
-import { PostService } from 'services';
 
 @Component({
   selector: 'lib-post-card',
@@ -39,20 +44,24 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
 
   likedPost$ = new BehaviorSubject<boolean>(false);
 
-  constructor(
-    private store: Store<PostState>,
-    private router: Router,
-    private postservice: PostService
-  ) {}
+  constructor(private store: Store<PostState>, private router: Router) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
     this.checkIfLiked();
   }
 
-  viewPostDetails() {
-    this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
-    this.router.navigate([this.post.user.username, 'details', this.post.id]);
+  viewPostDetails(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (
+      target.tagName !== 'A' &&
+      target.tagName !== 'IMG' &&
+      target.tagName !== 'BUTTON' &&
+      target.tagName !== 'svg'
+    ) {
+      this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
+      this.router.navigate([this.post.user.username, 'details', this.post.id]);
+    }
   }
 
   ngOnChanges(changes: SimpleChanges): void {

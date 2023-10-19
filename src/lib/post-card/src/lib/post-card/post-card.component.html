@@ -1,121 +1,51 @@
 <div
+  (click)="viewPostDetails($event)"
   class="card post-card rounded-lg bg-white dark:bg-main-dark p-3 w-full border border-white dark:border-main-dark cursor-pointer"
 >
   <div class="card-header flex items-center justify-between pb-3">
-    <div class="hs-tooltip inline-block [--trigger:hover]">
-      <a class="hs-tooltip-toggle block text-center" href="javascript:;">
-        <div class="flex-shrink-0 group block">
-          <div class="flex items-center">
-            <img
-              class="inline-block flex-shrink-0 h-[3.5rem] w-[3.5rem] rounded-full"
-              [src]="
-                post.user.imageUrl
-                  ? post.user.imageUrl
-                  : 'assets/images/users/default.jpg'
-              "
-              alt="Image Description"
-            />
-            <div class="ml-3 text-left">
-              <h3 class="font-semibold text-gray-800 dark:text-dark-text">
-                {{ post.user.firstname }} {{ post.user.lastname }}
-              </h3>
-              <div class="flex items-center gap-x-1">
-                <p class="font-medium text-gray-400 text-xs">
-                  {{ post.user.username }}
-                </p>
-                <span class="inline-block">
-                  <svg
-                    class="h-3 w-3 text-gray-400"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    stroke-width="2"
-                    stroke="currentColor"
-                    fill="none"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  >
-                    <path stroke="none" d="M0 0h24v24H0z" />
-                    <circle cx="12" cy="12" r="4" />
-                  </svg>
-                </span>
-                <span
-                  class="inline-block text-xs text-gray-400 italic"
-                  *ngIf="formattedDate"
-                  >{{ formattedDate }}</span
-                >
-              </div>
-            </div>
+    <div class="flex-shrink-0 group block">
+      <div class="flex items-center">
+        <img
+          class="inline-block flex-shrink-0 h-[3.5rem] w-[3.5rem] rounded-full"
+          [src]="
+            post.user.imageUrl
+              ? post.user.imageUrl
+              : 'assets/images/users/default.jpg'
+          "
+          alt="Image Description"
+        />
+        <div class="ml-3 text-left">
+          <a href="" class="font-semibold text-gray-800 dark:text-dark-text">
+            {{ post.user.firstname }} {{ post.user.lastname }}
+          </a>
+          <div class="flex items-center gap-x-1">
+            <a href="" class="font-medium text-gray-400 text-xs">
+              {{ post.user.username }}
+            </a>
+            <span class="inline-block">
+              <svg
+                class="h-3 w-3 text-gray-400"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <circle cx="12" cy="12" r="4" />
+              </svg>
+            </span>
+            <span
+              class="inline-block text-xs text-gray-400 italic"
+              *ngIf="formattedDate"
+              >{{ formattedDate }}</span
+            >
           </div>
         </div>
-        <!-- <div
-          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible hidden opacity-0 transition-opacity inline-block absolute invisible z-10 max-w-xs bg-white dark:bg-main-dark border border-gray-100 dark:border-gray-700 text-left rounded-lg shadow-md"
-          role="tooltip"
-        >
-          <section
-            class="tooltip-header flex items-center justify-between border-b border-b-gray-300 dark:border-b-gray-600 px-3 py-[0.65rem]"
-          >
-            <div class="flex-shrink-0 group block">
-              <div class="flex items-center">
-                <img
-                  class="inline-block flex-shrink-0 h-[2.7rem] w-[2.7rem] rounded-full"
-                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                  alt="Image Description"
-                />
-                <div class="ml-3">
-                  <h3
-                    class="font-semibold text-gray-800 dark:text-dark-text leading-none text-sm"
-                  >
-                    Maria Wanner
-                  </h3>
-                  <p class="font-medium text-gray-400 text-xs">maria.wanner</p>
-                </div>
-              </div>
-            </div>
-
-            <button
-              type="button"
-              class="rounded-md bg-secondaryColor dark:bg-blue-700 text-white text-xs px-3 py-[0.45rem] flex items-center gap-x-1 hover:bg-primaryColor focus:ring-2 focus:ring-primaryColor focus:ring-offset-2"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="1.5"
-                stroke="currentColor"
-                class="w-4 h-4 stroke-white"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
-                />
-              </svg>
-
-              Follow
-            </button>
-          </section>
-
-          <div class="py-2 px-4 text-sm text-gray-600 dark:text-dark-text">
-            <p>
-              This is a popover body with supporting text below as a natural
-              lead-in to additional content.
-            </p>
-            <p class="flex items-center gap-x-4 mt-3">
-              <small class="text-gray-400 inline-block">
-                <span class="font-bold">1k</span> Followers</small
-              >
-
-              <small class="text-gray-400 inline-block">
-                <span class="font-bold">1k</span> Following</small
-              >
-              <small class="text-gray-400 inline-block">
-                <span class="font-bold">300</span> posts</small
-              >
-            </p>
-          </div>
-        </div> -->
-      </a>
+      </div>
     </div>
 
     <div class="hs-dropdown relative inline-flex">
@@ -142,7 +72,7 @@
       </button>
 
       <div
-        class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[10rem] bg-white dark:bg-main-dark shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200 dark:divide-gray-600"
+        class="hs-dropdown-menu transition-[opacity,margin] z-[1] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[10rem] bg-white dark:bg-main-dark shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200 dark:divide-gray-600"
         aria-labelledby="hs-dropdown-with-icons"
       >
         <div class="py-2 first:pt-0 last:pb-0">
@@ -238,12 +168,12 @@
     </div>
   </div>
   <div class="card-body dark:text-dark-text ml-[68px]">
-    <p class="text-sm mb-2" *ngIf="post.content">
+    <p *ngIf="post.content" class="text-sm">
       {{ post.content }}
     </p>
 
     <div
-      class="image-container min-h-[4.5rem] rounded-lg overflow-hidden"
+      class="image-container min-h-[4.5rem] rounded-lg overflow-hidden mt-2"
       *ngIf="post.postImages.length"
     >
       <lightgallery [settings]="settings" class="flex flex-wrap gap-3">
@@ -277,8 +207,10 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-5 h-5"
-            [ngClass]="{ active: likedPost$ | async }"
+            class="w-5 h-5 animate-ease-in animate-once animate-jump"
+            [ngClass]="{
+              active: likedPost$ | async,
+            }"
           >
             <path
               stroke-linecap="round"
@@ -358,7 +290,7 @@
         </svg>
       </button>
     </div>
-    <!-- <div
+    <div
       class="like-info flex items-center gap-x-2 px-2 text-sm flex-wrap dark:text-dark-text"
     >
       <div class="flex -space-x-2">
@@ -394,18 +326,6 @@
       Liked by <a href="#" class="font-bold">Maria Wanner</a> and
       <a href="#" class="font-bold">9 others</a>
     </div>
-
-    <div
-      class="post-content flex items-start gap-x-1 text-sm px-2 py-2 dark:text-dark-text"
-    >
-      <p>
-        <span class="inline-block font-bold"> ahmed.Col</span>
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolorum, ipsum
-        laborum. Numquam veniam a nam, obcaecati blanditiis atque incidunt
-        necessitatibus quo dolores, dolore dolorum voluptates vitae quasi,
-        officia temporibus beatae.
-      </p>
-    </div> -->
 
     <a
       href="javascript:;"

@@ -7,7 +7,7 @@
 
     <div class="posts-list-container flex flex-col gap-y-4 w-full mt-4 md:mt-7">
       <ng-container *ngIf="allPosts$ | async as allPosts">
-        <ng-container *ngFor="let post of allPosts">
+        <ng-container *ngFor="let post of allPosts; let i = index">
           <lib-post-card [post]="post" />
         </ng-container>
       </ng-container>
@@ -20,3 +20,11 @@
     <lib-activity-card />
   </div>
 </section>
+
+<ng-template #imageContent let-data="post">
+  <div></div>
+</ng-template>
+
+<ng-template #textContent let-data="post">
+  <div></div>
+</ng-template>
