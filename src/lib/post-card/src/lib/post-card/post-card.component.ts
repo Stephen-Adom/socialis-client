@@ -121,4 +121,23 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.authUserSubscription.unsubscribe();
   }
+
+  generateLikeDescription(
+    likes: { username: string; imageUrl: string }[],
+    authUser: UserInfoType | null
+  ) {
+    if (likes.length && likes.length == 1) {
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      }`;
+    } else if (likes.length === 2) {
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      }  and ${likes[1].username}`;
+    } else {
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      } and ${likes.length - 1} others`;
+    }
+  }
 }

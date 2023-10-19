@@ -291,40 +291,27 @@
       </button>
     </div>
     <div
-      class="like-info flex items-center gap-x-2 px-2 text-sm flex-wrap dark:text-dark-text"
+      class="like-info flex items-center gap-x-2 px-2 text-sm flex-wrap dark:text-dark-text mb-2"
+      *ngIf="post.likes.length"
     >
       <div class="flex -space-x-2">
         <img
           class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-          src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-          alt="Image Description"
+          [src]="
+            like.imageUrl ? like.imageUrl : 'assets/images/users/default.jpg'
+          "
+          [attr.alt]="like.username"
+          *ngFor="let like of post.likes"
         />
-        <img
-          class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-          src="https://images.unsplash.com/photo-1531927557220-a9e23c1e4794?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-          alt="Image Description"
-        />
-        <img
-          class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-          src="https://images.unsplash.com/photo-1541101767792-f9b2b1c4f127?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&&auto=format&fit=facearea&facepad=3&w=300&h=300&q=80"
-          alt="Image Description"
-        />
-        <img
-          class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-          src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-          alt="Image Description"
-        />
-        <div class="hs-dropdown relative inline-flex [--placement:top-left]">
-          <button
-            class="inline-flex items-center justify-center h-[1.8rem] w-[1.8rem] rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:bg-blue-100 focus:text-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs"
-          >
-            <span class="font-xs leading-none">9+</span>
-          </button>
-        </div>
+        <button
+          *ngIf="post.likes.length > 5"
+          class="inline-flex items-center justify-center h-[1.8rem] w-[1.8rem] rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:bg-blue-100 focus:text-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs"
+        >
+          <span class="font-xs leading-none">9+</span>
+        </button>
       </div>
 
-      Liked by <a href="#" class="font-bold">Maria Wanner</a> and
-      <a href="#" class="font-bold">9 others</a>
+      {{ generateLikeDescription(post.likes, authUser$ | async) }}
     </div>
 
     <a

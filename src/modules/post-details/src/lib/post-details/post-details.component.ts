@@ -66,7 +66,6 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
         tap((post) => {
           if (post) {
             this.post = post;
-            this.checkIfLiked();
           } else {
             this.store.dispatch(
               PostApiActions.fetchPostById({ postId: this.postId })
@@ -89,45 +88,37 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe();
+
+    this.checkIfLiked();
   }
 
   checkIfLiked() {
-    this.authUser$
-      .pipe(
-        tap((authUser) => {
-          if (authUser && this.post) {
-            const likedPost = this.post.likes.find(
-              (like) => like.username === authUser.username
-            );
-            likedPost
-              ? this.likedPost$.next(true)
-              : this.likedPost$.next(false);
-          } else {
-            this.likedPost$.next(false);
-          }
-        })
-      )
-      .subscribe();
+    this.authUser$.subscribe((authUser) => {
+      if (authUser && this.post) {
+        const likedPost = this.post.likes.find(
+          (like) => like.username === authUser.username
+        );
+        likedPost ? this.likedPost$.next(true) : this.likedPost$.next(false);
+      } else {
+        this.likedPost$.next(false);
+      }
+    });
   }
 
   toggleLike() {
-    this.authUser$
-      .pipe(
-        tap((authUser) => {
-          if (authUser) {
-            this.store.dispatch(
-              PostApiActions.togglePostLike({
-                post: this.post,
-                authuser: authUser,
-                isLiked: this.likedPost$.value,
-              })
-            );
+    this.authUser$.subscribe((authUser) => {
+      if (authUser) {
+        this.store.dispatch(
+          PostApiActions.togglePostLike({
+            post: this.post,
+            authuser: authUser,
+            isLiked: this.likedPost$.value,
+          })
+        );
 
-            this.showAnimation$.next(true);
-          }
-        })
-      )
-      .subscribe();
+        this.showAnimation$.next(true);
+      }
+    });
   }
 
   formateDate(createdAt: string) {
@@ -154,5 +145,24 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     this.postSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
     this.authUserSubscription.unsubscribe();
+  }
+
+  generateLikeDescription(
+    likes: { username: string; imageUrl: string }[],
+    authUser: UserInfoType | null
+  ) {
+    if (likes.length && likes.length == 1) {
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      }`;
+    } else if (likes.length === 2) {
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      }  and ${likes[1].username}`;
+    } else {
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      } and ${likes.length - 1} others`;
+    }
   }
 }
