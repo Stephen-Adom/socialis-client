@@ -40,9 +40,15 @@ export class PostService {
   }
 
   togglePostLike(postId: number, userId: number) {
-    console.log(postId, userId);
     return this.http.get(
       BASE_URL + `/${userId}/${postId}/like`,
+      this.authHeaders
+    );
+  }
+
+  toggleCommentLike(commentId: number, userId: number) {
+    return this.http.get(
+      BASE_URL + `/${userId}/${commentId}/comment_like`,
       this.authHeaders
     );
   }

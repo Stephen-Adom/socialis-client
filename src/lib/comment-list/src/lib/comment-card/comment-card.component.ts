@@ -1,12 +1,13 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CommentType, SimpleUserInfoType } from 'utils';
+import { CommentType, SimpleUserInfoType, UserInfoType } from 'utils';
 import { format } from 'date-fns';
-import { PostApiActions, PostState } from 'state';
+import { PostApiActions, PostState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
+import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 
 @Component({
   selector: 'lib-comment-card',
@@ -23,7 +24,16 @@ export class CommentCardComponent {
     plugins: [lgZoom],
   };
 
+  likedComment$ = new BehaviorSubject<boolean>(false);
+
+  authUser$!: Observable<UserInfoType | null>;
+
   constructor(private store: Store<PostState>) {}
+
+  ngOnInit(): void {
+    this.authUser$ = this.store.select(getUserInformation);
+    this.checkIfLiked();
+  }
 
   formateDate(createdAt: string) {
     return format(new Date(createdAt), 'MMM do, yyyy');
@@ -43,5 +53,37 @@ export class CommentCardComponent {
     }(${user.username}) </a></h4> <p> About - ${
       user.bio ? user.bio : 'Not Available!'
     }</p>`;
+  }
+
+  toggleLike() {
+    combineLatest([this.authUser$, this.likedComment$]).subscribe(
+      ([authuser, likedComment]) => {
+        if (authuser) {
+          this.store.dispatch(
+            PostApiActions.toggleCommentLike({
+              comment: this.comment,
+              authuser,
+              isLiked: likedComment,
+            })
+          );
+        }
+      }
+    );
+  }
+
+  checkIfLiked() {
+    this.authUser$.subscribe((authUser) => {
+      if (authUser) {
+        const likedComment = this.comment.likes.find(
+          (like) => like.username === authUser.username
+        );
+
+        likedComment
+          ? this.likedComment$.next(true)
+          : this.likedComment$.next(false);
+      } else {
+        this.likedComment$.next(false);
+      }
+    });
   }
 }

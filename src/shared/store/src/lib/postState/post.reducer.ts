@@ -144,6 +144,17 @@ export const PostReducer = createReducer<PostState>(
         state.allPosts
       ),
     };
+  }),
+  on(PostApiActions.toggleCommentLike, (state: PostState, action) => {
+    return {
+      ...state,
+      postComments: updateCommentLike(
+        action.comment,
+        action.authuser,
+        action.isLiked,
+        state.postComments
+      ),
+    };
   })
 );
 
@@ -178,10 +189,40 @@ const updatePostLike = (
     const likedBy = {
       username: user.username,
       imageUrl: user.imageUrl,
+      firstname: user.firstname,
+      lastname: user.lastname,
     };
     postObj.numberOfLikes++;
     postObj.likes = [likedBy, ...postObj.likes];
   }
 
   return allPost.map((post) => (post.id === postObj.id ? postObj : post));
+};
+
+const updateCommentLike = (
+  comment: CommentType,
+  user: UserInfoType,
+  isLiked: boolean,
+  allComment: CommentType[]
+) => {
+  const commentObj = { ...comment };
+  if (isLiked) {
+    commentObj.numberOfLikes--;
+    commentObj.likes = comment.likes.filter(
+      (like) => like.username !== user.username
+    );
+  } else {
+    const likedBy = {
+      username: user.username,
+      imageUrl: user.imageUrl,
+      firstname: user.firstname,
+      lastname: user.lastname,
+    };
+    commentObj.numberOfLikes++;
+    commentObj.likes = [likedBy, ...commentObj.likes];
+  }
+
+  return allComment.map((comment) =>
+    comment.id === commentObj.id ? commentObj : comment
+  );
 };

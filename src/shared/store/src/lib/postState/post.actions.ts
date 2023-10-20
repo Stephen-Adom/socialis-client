@@ -36,5 +36,11 @@ export const PostApiActions = createActionGroup({
       isLiked: boolean;
     }>(),
     togglePostLikeSuccess: emptyProps(),
+    toggleCommentLike: props<{
+      comment: CommentType;
+      authuser: UserInfoType;
+      isLiked: boolean;
+    }>(),
+    toggleCommentLikeSuccess: emptyProps(),
   },
 });

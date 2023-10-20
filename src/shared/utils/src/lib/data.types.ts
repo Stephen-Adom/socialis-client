@@ -69,6 +69,8 @@ export type PostType = {
 export type LikeType = {
   username: string;
   imageUrl: string;
+  firstname: string;
+  lastname: string;
 };
 
 export type CommentType = {
@@ -80,6 +82,7 @@ export type CommentType = {
   numberOfReplies: 0;
   commentImages: ImageType[];
   user: SimpleUserInfoType;
+  likes: LikeType[];
 };
 
 export type ReplyType = {
