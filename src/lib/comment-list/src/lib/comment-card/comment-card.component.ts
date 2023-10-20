@@ -1,7 +1,13 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CommentType, SimpleUserInfoType, UserInfoType } from 'utils';
+import {
+  CommentType,
+  LikeType,
+  SimpleUserInfoType,
+  UserInfoType,
+  generateLikeDescription,
+} from 'utils';
 import { format } from 'date-fns';
 import { PostApiActions, PostState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
@@ -16,7 +22,7 @@ import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
   templateUrl: './comment-card.component.html',
   styleUrls: ['./comment-card.component.scss'],
 })
-export class CommentCardComponent {
+export class CommentCardComponent implements OnInit {
   @Input({ required: true }) comment!: CommentType;
 
   settings = {
@@ -85,5 +91,9 @@ export class CommentCardComponent {
         this.likedComment$.next(false);
       }
     });
+  }
+
+  generateLikeDescription(likes: LikeType[], authUser: UserInfoType | null) {
+    return generateLikeDescription(likes, authUser);
   }
 }

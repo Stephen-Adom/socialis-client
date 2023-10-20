@@ -60,7 +60,14 @@ export class RegisterComponent implements OnInit, OnDestroy {
       });
 
     this.Form.get('username')
-      ?.valueChanges.pipe(debounceTime(800), distinctUntilChanged())
+      ?.valueChanges.pipe(
+        debounceTime(800),
+        distinctUntilChanged(),
+        filter(
+          () =>
+            this.Form.get('username')?.value && this.Form.get('username')?.valid
+        )
+      )
       .subscribe((value) => {
         this.checkIfUsernameAlreadyExist(value);
       });

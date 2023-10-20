@@ -93,6 +93,7 @@ export type ReplyType = {
   numberOfLikes: 0;
   replyImages: ImageType[];
   user: SimpleUserInfoType;
+  likes: LikeType[];
 };
 
 export type NewPostResponseType = {

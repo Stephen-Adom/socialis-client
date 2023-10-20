@@ -22,6 +22,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
   postUpdateSubscription = new Subscription();
   commentUpdateSubscription = new Subscription();
   newReplySubscription = new Subscription();
+  replyUpdateSubscription = new Subscription();
 
   constructor(
     private postservice: PostService,
@@ -48,9 +49,9 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.newPostSubscription = this.messageservice
       .onMessage('/feed/post/new')
       .subscribe({
-        next: (data) => {
-          if (data) {
-            this.store.dispatch(PostApiActions.addNewPost({ newPost: data }));
+        next: (newPost) => {
+          if (newPost) {
+            this.store.dispatch(PostApiActions.addNewPost({ newPost }));
           }
         },
         error: (error) => {
@@ -61,11 +62,9 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.newCommentSubscription = this.messageservice
       .onMessage('/feed/comment/new')
       .subscribe({
-        next: (data) => {
-          if (data) {
-            this.store.dispatch(
-              PostApiActions.addNewComment({ newComment: data })
-            );
+        next: (newComment) => {
+          if (newComment) {
+            this.store.dispatch(PostApiActions.addNewComment({ newComment }));
           }
         },
         error: (error) => {
@@ -76,9 +75,9 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.postUpdateSubscription = this.messageservice
       .onMessage('/feed/post/update')
       .subscribe({
-        next: (data) => {
-          if (data) {
-            this.store.dispatch(PostApiActions.updateAPost({ post: data }));
+        next: (post) => {
+          if (post) {
+            this.store.dispatch(PostApiActions.updateAPost({ post }));
           }
         },
         error: (error) => {
@@ -89,11 +88,9 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.commentUpdateSubscription = this.messageservice
       .onMessage('/feed/comment/update')
       .subscribe({
-        next: (data) => {
-          if (data) {
-            this.store.dispatch(
-              PostApiActions.updateAComment({ comment: data })
-            );
+        next: (comment) => {
+          if (comment) {
+            this.store.dispatch(PostApiActions.updateAComment({ comment }));
           }
         },
         error: (error) => {
@@ -104,9 +101,23 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.newReplySubscription = this.messageservice
       .onMessage('/feed/reply/new')
       .subscribe({
-        next: (data) => {
-          if (data) {
-            this.store.dispatch(PostApiActions.addNewReply({ newReply: data }));
+        next: (newReply) => {
+          if (newReply) {
+            this.store.dispatch(PostApiActions.addNewReply({ newReply }));
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.replyUpdateSubscription = this.messageservice
+      .onMessage('/feed/reply/update')
+      .subscribe({
+        next: (reply) => {
+          if (reply) {
+            console.log(reply, 'reply');
+            this.store.dispatch(PostApiActions.updateReply({ reply }));
           }
         },
         error: (error) => {
@@ -126,5 +137,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.postUpdateSubscription.unsubscribe();
     this.commentUpdateSubscription.unsubscribe();
     this.newReplySubscription.unsubscribe();
+    this.replyUpdateSubscription.unsubscribe();
   }
 }

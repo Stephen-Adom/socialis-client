@@ -8,19 +8,19 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { PostType, SimpleUserInfoType, UserInfoType } from 'utils';
+import {
+  LikeType,
+  PostType,
+  SimpleUserInfoType,
+  UserInfoType,
+  generateLikeDescription,
+} from 'utils';
 import { formatDistanceToNow } from 'date-fns';
 import { PostApiActions, PostState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
-import {
-  BehaviorSubject,
-  Observable,
-  Subscription,
-  combineLatest,
-  tap,
-} from 'rxjs';
+import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 
 @Component({
@@ -122,22 +122,7 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
     this.authUserSubscription.unsubscribe();
   }
 
-  generateLikeDescription(
-    likes: { username: string; imageUrl: string }[],
-    authUser: UserInfoType | null
-  ) {
-    if (likes.length && likes.length == 1) {
-      return `Liked by ${
-        likes[0].username === authUser?.username ? 'You' : likes[0].username
-      }`;
-    } else if (likes.length === 2) {
-      return `Liked by ${
-        likes[0].username === authUser?.username ? 'You' : likes[0].username
-      }  and ${likes[1].username}`;
-    } else {
-      return `Liked by ${
-        likes[0].username === authUser?.username ? 'You' : likes[0].username
-      } and ${likes.length - 1} others`;
-    }
+  generateLikeDescription(likes: LikeType[], authUser: UserInfoType | null) {
+    return generateLikeDescription(likes, authUser);
   }
 }

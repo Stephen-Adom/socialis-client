@@ -193,7 +193,7 @@
             viewBox="0 0 24 24"
             stroke-width="1.5"
             stroke="currentColor"
-            class="w-4 h-4"
+            class="w-4 h-4 animate-ease-in animate-once animate-jump"
             [ngClass]="{
               active: likedComment$ | async,
             }"
@@ -254,6 +254,30 @@
           </svg>
         </button>
       </div>
+    </div>
+
+    <div
+      class="like-info flex items-center gap-x-2 text-sm flex-wrap dark:text-dark-text mb-2"
+      *ngIf="comment.likes.length"
+    >
+      <div class="flex -space-x-2">
+        <img
+          class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
+          [src]="
+            like.imageUrl ? like.imageUrl : 'assets/images/users/default.jpg'
+          "
+          [attr.alt]="like.username"
+          *ngFor="let like of comment.likes"
+        />
+        <button
+          *ngIf="comment.likes.length > 5"
+          class="inline-flex items-center justify-center h-[1.8rem] w-[1.8rem] rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:bg-blue-100 focus:text-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs"
+        >
+          <span class="font-xs leading-none">9+</span>
+        </button>
+      </div>
+
+      {{ generateLikeDescription(comment.likes, authUser$ | async) }}
     </div>
   </div>
 </div>

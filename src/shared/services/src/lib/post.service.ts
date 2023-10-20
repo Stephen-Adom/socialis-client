@@ -52,4 +52,11 @@ export class PostService {
       this.authHeaders
     );
   }
+
+  toggleReplyLike(replyId: number, userId: number) {
+    return this.http.get(
+      BASE_URL + `/${userId}/${replyId}/reply_like`,
+      this.authHeaders
+    );
+  }
 }
