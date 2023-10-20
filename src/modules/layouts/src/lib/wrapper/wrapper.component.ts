@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
-import { Subscription, first, map } from 'rxjs';
+import { Subscription, first, map, tap } from 'rxjs';
 import { MessageService, PostService } from 'services';
 import {
   PostApiActions,
@@ -16,6 +16,12 @@ import {
 })
 export class WrapperComponent implements OnInit, OnDestroy {
   userInfoSubscription = new Subscription();
+  postDetailsSubscription = new Subscription();
+  newPostSubscription = new Subscription();
+  newCommentSubscription = new Subscription();
+  postUpdateSubscription = new Subscription();
+  commentUpdateSubscription = new Subscription();
+  newReplySubscription = new Subscription();
 
   constructor(
     private postservice: PostService,
@@ -26,46 +32,87 @@ export class WrapperComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(PostApiActions.fetchAllPost());
 
-    this.store.select(getPostDetails).subscribe((post) => {
-      if (post) {
-        this.store.dispatch(
-          PostApiActions.fetchPostComments({ postId: post.id })
-        );
-      }
-    });
+    this.postDetailsSubscription = this.store
+      .select(getPostDetails)
+      .pipe(
+        tap((post) => {
+          if (post) {
+            this.store.dispatch(
+              PostApiActions.fetchPostComments({ postId: post.id })
+            );
+          }
+        })
+      )
+      .subscribe();
 
-    this.messageservice.onMessage('/feed/chat').subscribe((data) => {
-      console.log(data, 'data');
-    });
-    this.messageservice.onMessage('/feed/post/new').subscribe((data) => {
-      if (data) {
-        this.store.dispatch(PostApiActions.addNewPost({ newPost: data }));
-      }
-    });
+    this.newPostSubscription = this.messageservice
+      .onMessage('/feed/post/new')
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.store.dispatch(PostApiActions.addNewPost({ newPost: data }));
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
 
-    this.messageservice.onMessage('/feed/comment/new').subscribe((data) => {
-      if (data) {
-        this.store.dispatch(PostApiActions.addNewComment({ newComment: data }));
-      }
-    });
+    this.newCommentSubscription = this.messageservice
+      .onMessage('/feed/comment/new')
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.store.dispatch(
+              PostApiActions.addNewComment({ newComment: data })
+            );
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
 
-    this.messageservice.onMessage('/feed/post/update').subscribe((data) => {
-      if (data) {
-        this.store.dispatch(PostApiActions.updateAPost({ post: data }));
-      }
-    });
+    this.postUpdateSubscription = this.messageservice
+      .onMessage('/feed/post/update')
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.store.dispatch(PostApiActions.updateAPost({ post: data }));
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
 
-    this.messageservice.onMessage('/feed/comment/update').subscribe((data) => {
-      if (data) {
-        this.store.dispatch(PostApiActions.updateAComment({ comment: data }));
-      }
-    });
+    this.commentUpdateSubscription = this.messageservice
+      .onMessage('/feed/comment/update')
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.store.dispatch(
+              PostApiActions.updateAComment({ comment: data })
+            );
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
 
-    this.messageservice.onMessage('/feed/reply/new').subscribe((data) => {
-      if (data) {
-        this.store.dispatch(PostApiActions.addNewReply({ newReply: data }));
-      }
-    });
+    this.newReplySubscription = this.messageservice
+      .onMessage('/feed/reply/new')
+      .subscribe({
+        next: (data) => {
+          if (data) {
+            this.store.dispatch(PostApiActions.addNewReply({ newReply: data }));
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
 
     // this.postservice.fetchAllPost().subscribe((posts) => {
     //   console.log(posts);
@@ -73,5 +120,11 @@ export class WrapperComponent implements OnInit, OnDestroy {
   }
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();
+    this.postDetailsSubscription.unsubscribe();
+    this.newPostSubscription.unsubscribe();
+    this.newCommentSubscription.unsubscribe();
+    this.postUpdateSubscription.unsubscribe();
+    this.commentUpdateSubscription.unsubscribe();
+    this.newReplySubscription.unsubscribe();
   }
 }
