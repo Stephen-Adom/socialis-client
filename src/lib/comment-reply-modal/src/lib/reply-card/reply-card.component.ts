@@ -82,4 +82,8 @@ export class ReplyCardComponent implements OnInit {
       }
     );
   }
+
+  isAuth(author: string, authUser: UserInfoType | null) {
+    return author === authUser?.username;
+  }
 }

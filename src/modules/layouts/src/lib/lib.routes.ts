@@ -9,9 +9,13 @@ export const layoutsRoutes: Route[] = [
     component: WrapperComponent,
     children: [
       {
-        path: 'dashboard',
+        path: 'feeds',
         loadComponent: () =>
           import('dashboard').then((m) => m.DashboardComponent),
+      },
+      {
+        path: 'profile',
+        loadComponent: () => import('profile').then((m) => m.ProfileComponent),
       },
       {
         path: ':username/details/:id',

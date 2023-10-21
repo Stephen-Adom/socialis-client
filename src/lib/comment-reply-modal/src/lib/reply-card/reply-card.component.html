@@ -106,7 +106,8 @@
 
           <a
             class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
-            href="#"
+            href="javascript:;"
+            *ngIf="isAuth(reply.user.username, authUser$ | async)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -128,7 +129,8 @@
 
           <a
             class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 hover:bg-gray-100"
-            href="#"
+            href="javascript:;"
+            *ngIf="isAuth(reply.user.username, authUser$ | async)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

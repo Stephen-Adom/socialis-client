@@ -123,7 +123,7 @@ export class AuthenticationService {
             refreshToken: response.refreshToken,
           })
         );
-        window.location.href = '/dashboard';
+        window.location.href = '/feeds';
       } catch (error) {
         console.log(error);
       }

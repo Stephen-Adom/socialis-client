@@ -31,7 +31,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(PostApiActions.fetchAllPost());
+    // this.store.dispatch(PostApiActions.fetchAllPost());
 
     this.postDetailsSubscription = this.store
       .select(getPostDetails)
@@ -77,6 +77,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (post) => {
           if (post) {
+            console.log(post);
             this.store.dispatch(PostApiActions.updateAPost({ post }));
           }
         },

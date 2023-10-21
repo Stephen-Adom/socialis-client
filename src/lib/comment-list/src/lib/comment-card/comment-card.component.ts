@@ -96,4 +96,8 @@ export class CommentCardComponent implements OnInit {
   generateLikeDescription(likes: LikeType[], authUser: UserInfoType | null) {
     return generateLikeDescription(likes, authUser);
   }
+
+  isAuth(author: string, authUser: UserInfoType | null) {
+    return author === authUser?.username;
+  }
 }
