@@ -24,6 +24,9 @@
       "create-comment-form": ["src/lib/create-comment-form/src/index.ts"],
       "create-post": ["src/lib/create-post/src/index.ts"],
       "dashboard": ["src/modules/dashboard/src/index.ts"],
+      "edit-cover-background-modal": [
+        "src/lib/edit-cover-background-modal/src/index.ts"
+      ],
       "followers": ["src/lib/followers/src/index.ts"],
       "guards": ["src/shared/guards/src/index.ts"],
       "layouts": ["src/modules/layouts/src/index.ts"],

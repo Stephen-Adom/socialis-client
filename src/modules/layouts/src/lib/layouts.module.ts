@@ -24,6 +24,7 @@ import { CommentOffcanvasComponent } from 'comment-offcanvas';
 import { CommentReplyModalComponent } from 'comment-reply-modal';
 import { ReplyModalFormComponent } from 'reply-modal-form';
 import { AddCommentFormModalComponent } from 'add-comment-form-modal';
+import { EditCoverBackgroundModalComponent } from 'edit-cover-background-modal';
 
 @NgModule({
   imports: [
@@ -41,6 +42,7 @@ import { AddCommentFormModalComponent } from 'add-comment-form-modal';
     CommentReplyModalComponent,
     ReplyModalFormComponent,
     AddCommentFormModalComponent,
+    EditCoverBackgroundModalComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
