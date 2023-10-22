@@ -25,6 +25,7 @@ import { CommentReplyModalComponent } from 'comment-reply-modal';
 import { ReplyModalFormComponent } from 'reply-modal-form';
 import { AddCommentFormModalComponent } from 'add-comment-form-modal';
 import { EditCoverBackgroundModalComponent } from 'edit-cover-background-modal';
+import { EditAuthImageModalComponent } from 'edit-auth-image-modal';
 
 @NgModule({
   imports: [
@@ -43,6 +44,7 @@ import { EditCoverBackgroundModalComponent } from 'edit-cover-background-modal';
     ReplyModalFormComponent,
     AddCommentFormModalComponent,
     EditCoverBackgroundModalComponent,
+    EditAuthImageModalComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [

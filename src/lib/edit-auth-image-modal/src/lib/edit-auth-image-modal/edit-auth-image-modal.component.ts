@@ -1,25 +1,24 @@
-/* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { getBase64 } from 'utils';
 import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
+// eslint-disable-next-line @nx/enforce-module-boundaries
+import { getBase64 } from 'utils';
 
 @Component({
-  selector: 'lib-edit-cover-background-modal',
+  selector: 'lib-edit-auth-image-modal',
   standalone: true,
   imports: [CommonModule, ImageCropperModule],
-  templateUrl: './edit-cover-background-modal.component.html',
-  styleUrls: ['./edit-cover-background-modal.component.css'],
+  templateUrl: './edit-auth-image-modal.component.html',
+  styleUrls: ['./edit-auth-image-modal.component.css'],
 })
-export class EditCoverBackgroundModalComponent implements OnInit {
+export class EditAuthImageModalComponent {
   editMode = false;
+  image!: { base64: string; file: File };
   imageBase64!: string;
   edittedImage!: string;
 
-  image!: { base64: string; file: File };
-
-  ngOnInit(): void {
-    console.log('object');
+  imageCropped(event: ImageCroppedEvent) {
+    this.edittedImage = <string>event.objectUrl;
   }
 
   async uploadImage(event: Event) {
@@ -33,14 +32,6 @@ export class EditCoverBackgroundModalComponent implements OnInit {
       };
       this.imageBase64 = base64String;
     }
-  }
-
-  imageCropped(event: ImageCroppedEvent) {
-    this.edittedImage = <string>event.objectUrl;
-  }
-
-  imageLoaded() {
-    console.log('object');
   }
 
   saveEditChanges() {
