@@ -24,6 +24,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     RouterModule.forChild(authRoutes),
     ReactiveFormsModule,
     ActivateAccountNotificationComponent,
+    ErrorMessageComponent,
   ],
   declarations: [
     RegisterComponent,
@@ -31,7 +32,6 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     AnimateSvgComponent,
     ForgotPasswordComponent,
     ForgotAnimateComponent,
-    ErrorMessageComponent,
     AuthComponent,
     VerifyEmailAddressComponent,
     ResetPasswordComponent,

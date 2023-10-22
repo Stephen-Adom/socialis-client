@@ -25,6 +25,9 @@
       "create-post": ["src/lib/create-post/src/index.ts"],
       "dashboard": ["src/modules/dashboard/src/index.ts"],
       "edit-auth-image-modal": ["src/lib/edit-auth-image-modal/src/index.ts"],
+      "edit-auth-profile-modal": [
+        "src/lib/edit-auth-profile-modal/src/index.ts"
+      ],
       "edit-cover-background-modal": [
         "src/lib/edit-cover-background-modal/src/index.ts"
       ],
