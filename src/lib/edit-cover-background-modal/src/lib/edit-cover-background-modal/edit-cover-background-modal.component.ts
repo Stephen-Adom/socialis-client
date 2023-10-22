@@ -1,6 +1,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { getBase64 } from 'utils';
 import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 
 @Component({
@@ -10,20 +11,53 @@ import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
   templateUrl: './edit-cover-background-modal.component.html',
   styleUrls: ['./edit-cover-background-modal.component.css'],
 })
-export class EditCoverBackgroundModalComponent {
-  imageURL =
-    'https://res.cloudinary.com/dt8tdf7uu/image/upload/v1688563062/cld-sample-5.jpg';
-  cropImgPreview!: string | null | undefined;
+export class EditCoverBackgroundModalComponent implements OnInit {
+  editMode = false;
+  imageBase64!: string;
+  edittedImage!: string;
 
-  cropImg(e: ImageCroppedEvent) {
-    this.cropImgPreview = e.base64;
+  ngOnInit(): void {
+    console.log('object');
   }
 
-  imgLoad(e: ImageCroppedEvent) {
-    console.log(e);
+  image!: { base64: string; file: File };
+
+  async uploadImage(event: Event) {
+    const target = event.target as HTMLInputElement;
+    if (target.files?.length) {
+      const file = <File>target.files[0];
+      const base64String = <string>await getBase64(file);
+      this.image = {
+        base64: base64String,
+        file: file,
+      };
+      this.imageBase64 = base64String;
+    }
   }
 
-  imgFailed(e: ImageCroppedEvent) {
-    console.log(e);
+  imageCropped(event: ImageCroppedEvent) {
+    this.edittedImage = <string>event.objectUrl;
+  }
+
+  imageLoaded() {
+    console.log('object');
+  }
+
+  saveEditChanges() {
+    if (this.edittedImage) {
+      this.image.base64 = this.edittedImage;
+
+      this.urlToFile(this.edittedImage).then((file) => {
+        this.image.file = file;
+      });
+    }
+    this.editMode = false;
+  }
+
+  async urlToFile(url: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const filename = url.substring(url.lastIndexOf('/') + 1);
+    return new File([blob], filename, { type: blob.type });
   }
 }

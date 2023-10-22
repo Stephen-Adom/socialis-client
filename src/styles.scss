@@ -78,7 +78,7 @@ body {
     }
 
     &.active {
-      @apply shadow-light-shadow dark:shadow-dark-shadow after:content-[''] text-primaryColor after:absolute after:left-0 after:top-[50%] after:w-1 after:h-[50%] after:bg-primaryColor after:rounded-sm after:-translate-y-[50%] dark:text-dark-text;
+      @apply after:content-[''] text-primaryColor after:absolute after:left-0 after:top-[50%] after:w-1 after:h-[50%] after:bg-primaryColor after:rounded-sm after:-translate-y-[50%] dark:text-dark-text;
     }
   }
 

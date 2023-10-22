@@ -25,7 +25,7 @@ export class MessageService implements OnDestroy {
   private state!: BehaviorSubject<SocketClientState>;
 
   constructor() {
-    this.initializeConnection();
+    // this.initializeConnection();
   }
 
   async initializeConnection() {
