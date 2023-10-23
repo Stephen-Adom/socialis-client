@@ -1,1 +1,5 @@
-<p>all-user-post works!</p>
+<ng-container *ngIf="allPosts$ | async as allPosts">
+  <ng-container *ngFor="let post of allPosts; let i = index">
+    <lib-post-card [post]="post" />
+  </ng-container>
+</ng-container>

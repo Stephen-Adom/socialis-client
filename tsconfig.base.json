@@ -37,6 +37,7 @@
       "message-panel": ["src/lib/message-panel/src/index.ts"],
       "nav-links": ["src/lib/nav-links/src/index.ts"],
       "new-post-modal": ["src/lib/new-post-modal/src/index.ts"],
+      "no-posts": ["src/lib/no-posts/src/index.ts"],
       "notification": ["src/shared/toasters/src/index.ts"],
       "post-card": ["src/lib/post-card/src/index.ts"],
       "post-details": ["src/modules/post-details/src/index.ts"],
