@@ -1,5 +1,8 @@
-<ng-container *ngIf="allPosts$ | async as allPosts">
+<ng-container *ngIf="allPosts$ | async as allPosts; else elseTemplate">
   <ng-container *ngFor="let post of allPosts; let i = index">
     <lib-post-card [post]="post" />
   </ng-container>
 </ng-container>
+<ng-template #elseTemplate>
+  <lib-no-posts />
+</ng-template>

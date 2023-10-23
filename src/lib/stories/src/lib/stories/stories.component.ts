@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import {
   AfterViewInit,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -6,6 +7,10 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { register } from 'swiper/element/bundle';
+import { AppState, getUserInformation } from 'state';
+import { Store } from '@ngrx/store';
+import { UserInfoType } from 'utils';
+import { Observable } from 'rxjs';
 
 register();
 
@@ -17,8 +22,15 @@ register();
   templateUrl: './stories.component.html',
   styleUrls: ['./stories.component.css'],
 })
-export class StoriesComponent implements AfterViewInit {
+export class StoriesComponent implements AfterViewInit, OnInit {
   swiperEl: any;
+  authUser$!: Observable<UserInfoType | null>;
+
+  constructor(private store: Store<AppState>) {}
+
+  ngOnInit(): void {
+    this.authUser$ = this.store.select(getUserInformation);
+  }
 
   ngAfterViewInit(): void {
     this.initializeSwiper();

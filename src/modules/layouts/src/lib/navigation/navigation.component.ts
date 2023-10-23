@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { DOCUMENT } from '@angular/common';
 import {
   Component,
@@ -9,21 +10,29 @@ import {
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as localforage from 'localforage';
-import { AppApiActions, AppState } from 'state';
+import { Observable } from 'rxjs';
+import { AppApiActions, AppState, getUserInformation } from 'state';
+import { UserInfoType } from 'utils';
+import { OnInit } from '@angular/core';
 
 @Component({
   selector: 'feature-navigation',
   templateUrl: './navigation.component.html',
   styleUrls: ['./navigation.component.scss'],
 })
-export class NavigationComponent {
+export class NavigationComponent implements OnInit {
   @ViewChild('navigation') navigation!: ElementRef<HTMLDivElement>;
+  authUser$!: Observable<UserInfoType | null>;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private store: Store<AppState>,
     private router: Router
   ) {}
+
+  ngOnInit(): void {
+    this.authUser$ = this.store.select(getUserInformation);
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {
@@ -44,5 +53,9 @@ export class NavigationComponent {
     } catch (error) {
       console.log(error);
     }
+  }
+
+  truncateEmailLength(email: string) {
+    return email.length >= 15 ? email.substring(0, 15) + '...' : email;
   }
 }

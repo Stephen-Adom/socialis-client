@@ -28,6 +28,10 @@ export type UserInfoType = {
   updatedAt: string;
   loginCount: number;
   imageUrl: string;
+  coverImageUrl: string;
+  bio: string;
+  phonenumber: string;
+  address: string;
 };
 
 export type SimpleUserInfoType = {

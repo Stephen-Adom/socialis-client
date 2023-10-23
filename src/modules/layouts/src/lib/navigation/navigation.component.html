@@ -116,19 +116,28 @@
         </span>
       </button>
 
-      <div class="hs-dropdown relative inline-flex">
+      <div
+        class="hs-dropdown relative inline-flex"
+        *ngIf="authUser$ | async as authUser"
+      >
         <div
           id="hs-dropdown-with-icons"
           class="hs-dropdown-toggle cursor-pointer auth-profile flex items-center gap-x-2"
         >
           <img
             class="inline-block h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
-            src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-            alt="Image Description"
+            [src]="
+              authUser.imageUrl
+                ? authUser.imageUrl
+                : 'assets/images/users/default.jpg'
+            "
+            [attr.alt]="authUser.username"
           />
           <div class="text-sm">
-            <h6 class="font-bold leading-3 dark:text-dark-text">Ahmed Fawal</h6>
-            <span class="block text-gray-400">ahmed.fawal </span>
+            <h6 class="font-bold leading-3 dark:text-dark-text">
+              {{ authUser.firstname }} {{ authUser.lastname }}
+            </h6>
+            <span class="block text-gray-400">{{ authUser.username }} </span>
           </div>
         </div>
 
@@ -141,21 +150,25 @@
           >
             <img
               class="inline-block h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
-              src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-              alt="Image Description"
+              [src]="
+                authUser.imageUrl
+                  ? authUser.imageUrl
+                  : 'assets/images/users/default.jpg'
+              "
+              [attr.alt]="authUser.username"
             />
 
-            <div class="py-3 px-5 rounded-t-lg w-full">
+            <div class="py-3 px-1 rounded-t-lg w-full">
               <p class="text-sm text-gray-500">Signed in as</p>
-              <p class="text-sm font-medium text-gray-800 dark:text-dark-text">
-                james@site.com
+              <p class="text-xs font-medium text-gray-800 dark:text-dark-text">
+                {{ truncateEmailLength(authUser.email) }}
               </p>
             </div>
 
             <button
               (click)="signOut()"
               type="button"
-              class="bg-red-700 hover:bg-red-800 text-white px-1 py-2 rounded-md text-xs font-bold ml-auto w-[60%] flex items-center justify-center gap-x-1"
+              class="w-full bg-red-700 hover:bg-red-800 text-white px-1 py-2 rounded-md text-xs font-bold ml-auto w-[60%] flex items-center justify-center gap-x-1"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -178,8 +191,7 @@
 
           <div class="py-2 px-4 text-sm text-gray-600 dark:bg-main-dark">
             <p class="dark:text-dark-text">
-              This is a popover body with supporting text below as a natural
-              lead-in to additional content.
+              {{ authUser.bio }}
             </p>
             <p class="flex items-center gap-x-4 mt-3">
               <small class="text-gray-400 inline-block">

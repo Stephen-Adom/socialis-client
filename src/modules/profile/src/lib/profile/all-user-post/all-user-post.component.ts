@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { PostType } from 'utils';
 import { Observable } from 'rxjs';
 import { PostCardComponent } from 'post-card';
+import { NoPostsComponent } from 'no-posts';
 
 @Component({
   selector: 'lib-all-user-post',
   standalone: true,
-  imports: [CommonModule, PostCardComponent],
+  imports: [CommonModule, PostCardComponent, NoPostsComponent],
   templateUrl: './all-user-post.component.html',
   styleUrls: ['./all-user-post.component.scss'],
 })
