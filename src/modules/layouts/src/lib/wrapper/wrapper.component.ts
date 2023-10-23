@@ -120,7 +120,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (reply) => {
           if (reply) {
-            console.log(reply, 'reply');
             this.store.dispatch(PostApiActions.updateReply({ reply }));
           }
         },
@@ -134,7 +133,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           if (user) {
-            console.log(user);
             localforage.setItem('userInfo', user).then((userInfo) => {
               this.store.dispatch(AppApiActions.updateUserInfo({ userInfo }));
             });
