@@ -12,5 +12,6 @@ export const AppApiActions = createActionGroup({
       refreshToken: string;
     }>(),
     clearUserAuthInfo: emptyProps(),
+    updateUserInfo: props<{ userInfo: UserInfoType }>(),
   },
 });

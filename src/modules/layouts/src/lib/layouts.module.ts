@@ -16,6 +16,7 @@ import {
   MessageService,
   PostService,
   ReplyService,
+  UserService,
 } from 'services';
 import { StoreModule } from '@ngrx/store';
 import { PostEffects, PostReducer, featurePostKey } from 'state';
@@ -55,6 +56,7 @@ import { EditAuthProfileModalComponent } from 'edit-auth-profile-modal';
     MessageService,
     CommentService,
     ReplyService,
+    UserService,
   ],
 })
 export class LayoutsModule {}

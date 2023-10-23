@@ -71,5 +71,12 @@ export const AppReducer = createReducer<AppState>(
       refreshToken: null,
       error: null,
     };
+  }),
+  on(AppApiActions.updateUserInfo, (state: AppState, action) => {
+    return {
+      ...state,
+      userInfo: action.userInfo,
+      error: null,
+    };
   })
 );

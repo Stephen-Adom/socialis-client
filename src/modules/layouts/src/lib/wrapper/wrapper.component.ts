@@ -1,8 +1,10 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
+import * as localforage from 'localforage';
 import { Subscription, first, map, tap } from 'rxjs';
 import { MessageService, PostService } from 'services';
 import {
+  AppApiActions,
   PostApiActions,
   PostState,
   getPostDetails,
@@ -23,6 +25,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
   commentUpdateSubscription = new Subscription();
   newReplySubscription = new Subscription();
   replyUpdateSubscription = new Subscription();
+  userUpdateSubscription = new Subscription();
 
   constructor(
     private postservice: PostService,
@@ -31,7 +34,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // this.store.dispatch(PostApiActions.fetchAllPost());
+    this.store.dispatch(PostApiActions.fetchAllPost());
 
     this.postDetailsSubscription = this.store
       .select(getPostDetails)
@@ -126,6 +129,22 @@ export class WrapperComponent implements OnInit, OnDestroy {
         },
       });
 
+    this.userUpdateSubscription = this.messageservice
+      .onMessage('/feed/user/update')
+      .subscribe({
+        next: (user) => {
+          if (user) {
+            console.log(user);
+            localforage.setItem('userInfo', user).then((userInfo) => {
+              this.store.dispatch(AppApiActions.updateUserInfo({ userInfo }));
+            });
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
     // this.postservice.fetchAllPost().subscribe((posts) => {
     //   console.log(posts);
     // });
@@ -139,5 +158,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.commentUpdateSubscription.unsubscribe();
     this.newReplySubscription.unsubscribe();
     this.replyUpdateSubscription.unsubscribe();
+    this.userUpdateSubscription.unsubscribe();
   }
 }

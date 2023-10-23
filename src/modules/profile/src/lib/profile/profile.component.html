@@ -1,6 +1,9 @@
 <section id="profile-section" class="pt-2 md:pt-5">
   <div
-    class="cover-background-container relative w-full overflow-hidden rounded-lg bg-[url('assets/images/my-computer-room-setup.jpg')] bg-center bg-no-repeat bg-cover h-[250px]"
+    class="cover-background-container relative w-full overflow-hidden rounded-lg bg-[url('assets/images/my-computer-room-setup.jpg')] h-[250px]"
+    [ngStyle]="{
+      background: 'url(' + (authUser$ | async)?.coverImageUrl + ')',
+    }"
   >
     <button
       type="button"
@@ -29,6 +32,7 @@
     class="container relative -top-[50px] mx-auto w-[90%] grid grid-cols-1 sm:grid-cols-1 md:grid-cols-[35%_65%] space-x-4"
   >
     <div
+      *ngIf="authUser$ | async as authUser"
       class="relative user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark px-3 py-6 w-full border text-center border-white dark:border-main-dark cursor-pointer max-h-[350px]"
     >
       <button
@@ -43,9 +47,13 @@
         class="auth-user-profile-container h-[6rem] w-[6rem] rounded-full ring-2 ring-offset-4 ring-primaryColor dark:ring-primaryColor mx-auto relative"
       >
         <img
-          class="inline-block w-full rounded-full"
-          src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-          alt="Image Description"
+          class="inline-block w-full rounded-full h-full"
+          [src]="
+            authUser.imageUrl
+              ? authUser.imageUrl
+              : 'assets/images/users/default.jpg'
+          "
+          [attr.alt]="authUser.username"
         />
 
         <button
@@ -71,10 +79,12 @@
         </button>
       </div>
 
-      <h5 class="font-bold text-base mt-5">John Ramsey</h5>
+      <h5 class="font-bold text-base mt-5">
+        {{ authUser.firstname }} {{ authUser.lastname }}
+      </h5>
 
       <span class="block text-gray-500 font-light text-xs mt-1"
-        >@johnRamsey</span
+        >@{{ authUser.username }}</span
       >
 
       <p class="flex items-center justify-center gap-1 mt-2 text-sm">
@@ -97,11 +107,11 @@
             d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
           />
         </svg>
-        Los Angeles
+        {{ authUser.address ? authUser.address : 'N/A' }}
       </p>
 
       <p class="mt-2 text-sm">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quis beatae
+        {{ authUser.bio ? authUser.bio : 'N/A' }}
       </p>
 
       <div class="mt-4 flex items-center gap-3 justify-center divide-x">
