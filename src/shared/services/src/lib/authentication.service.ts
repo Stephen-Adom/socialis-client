@@ -42,6 +42,17 @@ export class AuthenticationService {
     );
   }
 
+  validate_phone_exist(phonenumber: string) {
+    return this.Http.post<{
+      phone_exist: boolean;
+      status: string;
+    }>(
+      BASE_URL + '/auth/validate_phonenumber',
+      { phonenumber },
+      getNonAuthHttpOptions()
+    );
+  }
+
   registerUser(userDetails: UserRegistrationDetailsType) {
     return this.Http.post<AuthResponseType>(
       BASE_URL + '/auth/register',

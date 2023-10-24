@@ -32,4 +32,22 @@ export class UserService {
       this.authHeaders
     );
   }
+
+  updateUserInfo(
+    userInfo: {
+      firstname: string;
+      lastname: string;
+      username: string;
+      bio: string;
+      phonenumber: string;
+      address: string;
+    },
+    userId: number
+  ) {
+    return this.http.post<SuccessMessageType>(
+      BASE_URL + `/user/${userId}/update_user_info`,
+      userInfo,
+      this.authHeaders
+    );
+  }
 }

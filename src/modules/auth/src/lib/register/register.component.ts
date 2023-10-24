@@ -29,8 +29,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   constructor(
     private formBuilder: FormBuilder,
     private authservice: AuthenticationService,
-    private store: Store<AppState>,
-    private router: Router
+    private store: Store<AppState>
   ) {
     this.Form = this.formBuilder.group(
       {
@@ -115,7 +114,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
           this.store.dispatch(
             AppApiActions.displayErrorMessage({ error: error.error })
           );
-          console.log(error);
         },
       });
   }
