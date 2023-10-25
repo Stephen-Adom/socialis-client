@@ -56,6 +56,6 @@ export class NavigationComponent implements OnInit {
   }
 
   truncateEmailLength(email: string) {
-    return email.length >= 15 ? email.substring(0, 15) + '...' : email;
+    return email.length >= 25 ? email.substring(0, 25) + '...' : email;
   }
 }
