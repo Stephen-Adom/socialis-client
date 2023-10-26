@@ -29,7 +29,7 @@
   </div>
 
   <div
-    class="container relative -top-[50px] mx-auto w-[90%] grid grid-cols-1 sm:grid-cols-1 md:grid-cols-[35%_65%] space-x-4"
+    class="container relative -top-[50px] mx-auto w-[95%] md:w-[90%] grid grid-cols-1 sm:grid-cols-1 md:grid-cols-[35%_65%] gap-x-0 md:gap-x-4 gap-y-6 md:gap-y-0"
   >
     <div
       *ngIf="authUser$ | async as authUser"
@@ -136,7 +136,11 @@
       <div
         class="flex bg-gray-100 hover:bg-gray-200 rounded-lg transition p-1 dark:bg-gray-700 dark:hover:bg-gray-600"
       >
-        <nav class="flex space-x-2 w-full" aria-label="Tabs" role="tablist">
+        <nav
+          class="flex space-x-2 w-full overflow-x-auto"
+          aria-label="Tabs"
+          role="tablist"
+        >
           <button
             type="button"
             class="hs-tab-active:bg-white hs-tab-active:text-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-400 dark:hs-tab-active:bg-gray-800 w-full py-3 px-4 flex-auto inline-flex items-center justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white active"
