@@ -49,5 +49,7 @@ export const PostApiActions = createActionGroup({
     }>(),
     toggleReplyLikeSuccess: emptyProps(),
     updateReply: props<{ reply: ReplyType }>(),
+    editPost: props<{ post: PostType }>(),
+    completePostEdit: emptyProps(),
   },
 });

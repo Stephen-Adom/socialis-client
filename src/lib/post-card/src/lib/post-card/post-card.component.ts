@@ -129,4 +129,8 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   isAuth(author: string, authUser: UserInfoType | null) {
     return author === authUser?.username;
   }
+
+  editPost(post: PostType) {
+    this.store.dispatch(PostApiActions.editPost({ post }));
+  }
 }

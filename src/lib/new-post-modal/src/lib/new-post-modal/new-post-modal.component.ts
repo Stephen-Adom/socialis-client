@@ -16,11 +16,18 @@ import {
 } from '@angular/forms';
 import {
   ERROR_MESSAGE_TOKEN,
+  PostType,
   SUCCESS_MESSAGE_TOKEN,
   UserInfoType,
   getBase64,
 } from 'utils';
-import { AppApiActions, AppState, getUserInformation } from 'state';
+import {
+  AppApiActions,
+  AppState,
+  PostApiActions,
+  getEditPostDetails,
+  getUserInformation,
+} from 'state';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import {
@@ -52,7 +59,9 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   submittingForm = false;
   authUser!: UserInfoType;
   userInfoSubscription = new Subscription();
+  editPostSubscription = new Subscription();
   toggleEmoji = false;
+  editPost!: PostType | null;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -75,6 +84,19 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
           this.authUser = userInfo;
         }
       });
+
+    this.editPostSubscription = this.store
+      .select(getEditPostDetails)
+      .subscribe((post) => {
+        if (post) {
+          this.editPost = post;
+          this.setPostDetails(post);
+        }
+      });
+  }
+
+  setPostDetails(post: PostType) {
+    this.Form.get('content')?.setValue(post.content);
   }
 
   addEmoji(event: any) {
@@ -147,11 +169,14 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   }
 
   clearPostForm() {
+    this.store.dispatch(PostApiActions.completePostEdit());
     this.Form.reset();
     this.postImages = [];
+    this.editPost = null;
   }
 
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();
+    this.editPostSubscription.unsubscribe();
   }
 }
