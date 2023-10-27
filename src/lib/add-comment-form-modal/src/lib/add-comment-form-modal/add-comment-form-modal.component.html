@@ -150,13 +150,13 @@
             (change)="uploadImage($event)"
             aria-label="post image"
             accept="image/*"
-            #fileInput
+            #fileInput2
           />
           <button
             type="button"
             class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2 disabled:cursor-not-allowed"
             title="image"
-            (click)="fileInput.click()"
+            (click)="fileInput2.click()"
             [disabled]="commentImages.length === 4"
           >
             <svg
@@ -255,7 +255,13 @@
             class="py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold btn-custom text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm disabled:cursor-wait disabled:bg-blue-300"
             href="javascript:;"
           >
-            {{ submittingForm ? 'Submitting...' : 'Comment' }}
+            {{
+              submittingForm
+                ? 'Submitting...'
+                : editComment
+                ? 'Update'
+                : 'Comment'
+            }}
 
             <div
               *ngIf="submittingForm"

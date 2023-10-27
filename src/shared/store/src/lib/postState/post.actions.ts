@@ -52,5 +52,7 @@ export const PostApiActions = createActionGroup({
     editPost: props<{ post: PostType }>(),
     completePostEdit: emptyProps(),
     deletePost: props<{ postId: number }>(),
+    editComment: props<{ comment: CommentType }>(),
+    completeEditComment: emptyProps(),
   },
 });

@@ -100,4 +100,8 @@ export class CommentCardComponent implements OnInit {
   isAuth(author: string, authUser: UserInfoType | null) {
     return author === authUser?.username;
   }
+
+  editComment(comment: CommentType) {
+    this.store.dispatch(PostApiActions.editComment({ comment }));
+  }
 }

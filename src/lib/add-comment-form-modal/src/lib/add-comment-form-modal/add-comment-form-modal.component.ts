@@ -27,6 +27,8 @@ import {
   getUserInformation,
   getPostDetails,
   AppApiActions,
+  getEditCommentDetails,
+  PostApiActions,
 } from 'state';
 import {
   ERROR_MESSAGE_TOKEN,
@@ -54,6 +56,7 @@ type commentImageType = {
 })
 export class AddCommentFormModalComponent implements OnInit, OnDestroy {
   @ViewChild('closeBtn') closeBtn!: ElementRef<HTMLButtonElement>;
+  @ViewChild('fileInput2') fileInput2!: ElementRef<HTMLInputElement>;
   Form: FormGroup;
   authUser!: UserInfoType;
   postDetails!: PostType;
@@ -61,7 +64,9 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
   submittingForm = false;
   authUserSubscription = new Subscription();
   postDetailsSubscription = new Subscription();
+  editPostDetailsSubscription = new Subscription();
   toggleEmoji = false;
+  editComment!: CommentType | null;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -92,6 +97,19 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
           this.postDetails = data;
         }
       });
+
+    this.editPostDetailsSubscription = this.store
+      .select(getEditCommentDetails)
+      .subscribe((data) => {
+        if (data) {
+          this.editComment = data;
+          this.setFormValues();
+        }
+      });
+  }
+
+  setFormValues() {
+    this.Form.get('content')?.setValue(this.editComment?.content);
   }
 
   addEmoji(event: any) {
@@ -109,6 +127,7 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
         file: file,
         id: Math.ceil(Math.random() * 1000),
       });
+      this.fileInput2.nativeElement.value = '';
     }
   }
 
@@ -126,7 +145,11 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
 
   submitPost() {
     if (this.Form.valid || this.commentImages.length > 0) {
-      this.submitPostToDb();
+      if (this.editComment) {
+        this.submitEditPostToDb();
+      } else {
+        this.submitPostToDb();
+      }
     } else {
       this.Form.markAllAsTouched();
       this.errorMessage.sendErrorMessage({
@@ -134,6 +157,42 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
         error: 'BAD_REQUEST',
       });
     }
+  }
+
+  submitEditPostToDb() {
+    this.submittingForm = true;
+
+    const imageForms: any = this.commentImages.map((image) => {
+      return image.file;
+    });
+
+    const formData = new FormData();
+    formData.append('content', this.Form.get('content')?.value);
+
+    if (imageForms) {
+      imageForms.forEach((image: any) => {
+        formData.append('images', image);
+      });
+    } else {
+      formData.append('images', '');
+    }
+
+    this.commentservice
+      .editComment(<number>this.editComment?.id, formData)
+      .subscribe({
+        next: (response: any) => {
+          this.submittingForm = false;
+          this.successMessage.sendSuccessMessage(response['message']);
+          this.clearCommentForm();
+          this.closeBtn.nativeElement.click();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.submittingForm = false;
+          this.store.dispatch(
+            AppApiActions.displayErrorMessage({ error: error.error })
+          );
+        },
+      });
   }
 
   submitPostToDb() {
@@ -157,9 +216,9 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
     }
 
     this.commentservice.createComment(formData).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.submittingForm = false;
-        this.successMessage.sendSuccessMessage('New Comment Created!');
+        this.successMessage.sendSuccessMessage(response['message']);
         this.clearCommentForm();
         this.closeBtn.nativeElement.click();
       },
@@ -173,12 +232,16 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
   }
 
   clearCommentForm() {
+    this.store.dispatch(PostApiActions.completeEditComment());
     this.Form.reset();
     this.commentImages = [];
+    this.toggleEmoji = false;
+    this.editComment = null;
   }
 
   ngOnDestroy(): void {
     this.authUserSubscription.unsubscribe();
     this.postDetailsSubscription.unsubscribe();
+    this.editPostDetailsSubscription.unsubscribe();
   }
 }

@@ -25,6 +25,14 @@ export class CommentService {
     );
   }
 
+  editComment(commentId: number, formData: FormData) {
+    return this.http.patch<SuccessMessageType>(
+      BASE_URL + '/comment/' + commentId + '/edit',
+      formData,
+      this.authHeaders
+    );
+  }
+
   fetchAllPost(postId: number) {
     return this.http.get<AllCommentResponseType>(
       BASE_URL + `/${postId}/comments`,
