@@ -47,7 +47,7 @@ export class SuccessNotificationComponent implements OnInit, OnDestroy {
   dismissAlertAfterSixSeconds() {
     this.setTimoutSub = setTimeout(() => {
       this.successMessage = '';
-      this.successMessageNotification.nativeElement.classList.replace(
+      this.successMessageNotification?.nativeElement.classList.replace(
         'animate-normal',
         'animate-reverse'
       );

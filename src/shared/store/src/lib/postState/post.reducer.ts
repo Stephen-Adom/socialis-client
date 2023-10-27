@@ -191,6 +191,12 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       editPost: null,
     };
+  }),
+  on(PostApiActions.deletePost, (state: PostState, action) => {
+    return {
+      ...state,
+      allPosts: state.allPosts.filter((post) => post.id !== action.postId),
+    };
   })
 );
 

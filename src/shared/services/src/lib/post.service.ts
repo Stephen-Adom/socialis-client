@@ -33,6 +33,13 @@ export class PostService {
     );
   }
 
+  deletePost(postId: number) {
+    return this.http.delete<SuccessMessageType>(
+      BASE_URL + '/post/' + postId + '/delete',
+      this.authHeaders
+    );
+  }
+
   fetchAllPost() {
     return this.http.get<AllPostResponseType>(
       BASE_URL + '/all_posts',

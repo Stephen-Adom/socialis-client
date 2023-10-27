@@ -5,23 +5,32 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
+  Inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
   LikeType,
   PostType,
+  SUCCESS_MESSAGE_TOKEN,
   SimpleUserInfoType,
   UserInfoType,
   generateLikeDescription,
 } from 'utils';
 import { formatDistanceToNow } from 'date-fns';
-import { PostApiActions, PostState, getUserInformation } from 'state';
+import {
+  AppApiActions,
+  PostApiActions,
+  PostState,
+  getUserInformation,
+} from 'state';
 import { Store } from '@ngrx/store';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
+import { PostService, SuccessMessageService } from 'services';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'lib-post-card',
@@ -44,7 +53,13 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
 
   likedPost$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private store: Store<PostState>, private router: Router) {}
+  constructor(
+    @Inject(SUCCESS_MESSAGE_TOKEN)
+    private successMessage: SuccessMessageService,
+    private store: Store<PostState>,
+    private router: Router,
+    private postservice: PostService
+  ) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
@@ -132,5 +147,19 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
 
   editPost(post: PostType) {
     this.store.dispatch(PostApiActions.editPost({ post }));
+  }
+
+  deletePost(post: PostType) {
+    this.store.dispatch(PostApiActions.deletePost({ postId: post.id }));
+    this.postservice.deletePost(post.id).subscribe({
+      next: (response: any) => {
+        this.successMessage.sendSuccessMessage(response.message);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
+      },
+    });
   }
 }

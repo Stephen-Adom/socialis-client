@@ -1,17 +1,23 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { CommentListComponent } from 'comment-list';
 import { CreateCommentFormComponent } from 'create-comment-form';
 import { ActivatedRoute } from '@angular/router';
 import {
+  AppApiActions,
   PostApiActions,
   PostState,
   getPostDetails,
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { PostType, SimpleUserInfoType, UserInfoType } from 'utils';
+import {
+  PostType,
+  SUCCESS_MESSAGE_TOKEN,
+  SimpleUserInfoType,
+  UserInfoType,
+} from 'utils';
 import {
   BehaviorSubject,
   Observable,
@@ -22,6 +28,8 @@ import {
 import { format } from 'date-fns';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
+import { PostService, SuccessMessageService } from 'services';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'lib-post-details',
@@ -52,7 +60,10 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   constructor(
     private location: Location,
     private route: ActivatedRoute,
-    private store: Store<PostState>
+    private store: Store<PostState>,
+    private postservice: PostService,
+    @Inject(SUCCESS_MESSAGE_TOKEN)
+    private successMessage: SuccessMessageService
   ) {}
 
   ngOnInit(): void {
@@ -164,5 +175,28 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
         likes[0].username === authUser?.username ? 'You' : likes[0].username
       } and ${likes.length - 1} others`;
     }
+  }
+
+  isAuth(author: string, authUser: UserInfoType | null) {
+    return author === authUser?.username;
+  }
+
+  editPost(post: PostType) {
+    this.store.dispatch(PostApiActions.editPost({ post }));
+  }
+
+  deletePost(post: PostType) {
+    this.store.dispatch(PostApiActions.deletePost({ postId: post.id }));
+    window.location.href = '/feeds';
+    this.postservice.deletePost(post.id).subscribe({
+      next: (response: any) => {
+        this.successMessage.sendSuccessMessage(response.message);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
+      },
+    });
   }
 }

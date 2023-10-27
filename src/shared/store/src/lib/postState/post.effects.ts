@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { CommentService, PostService, ReplyService } from 'services';
 import { PostApiActions } from './post.actions';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppApiActions } from '../appState/app.actions';
 import { CommentType, PostType, ReplyType, UserInfoType } from 'utils';

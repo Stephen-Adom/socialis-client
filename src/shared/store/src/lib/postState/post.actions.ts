@@ -51,5 +51,6 @@ export const PostApiActions = createActionGroup({
     updateReply: props<{ reply: ReplyType }>(),
     editPost: props<{ post: PostType }>(),
     completePostEdit: emptyProps(),
+    deletePost: props<{ postId: number }>(),
   },
 });
