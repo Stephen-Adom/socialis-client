@@ -52,6 +52,7 @@ type postImageType = {
   styleUrls: ['./new-post-modal.component.css'],
 })
 export class NewPostModalComponent implements OnInit, OnDestroy {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   @ViewChild('closeBtn') closeBtn!: ElementRef<HTMLButtonElement>;
 
   Form: FormGroup;
@@ -106,6 +107,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   }
 
   async uploadImage(event: any) {
+    console.log(event, 'event');
     if (event.target.files.length) {
       const file = <File>event.target.files[0];
       const base64String = <string>await getBase64(file);
@@ -114,6 +116,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         file: file,
         id: Math.ceil(Math.random() * 1000),
       });
+      this.fileInput.nativeElement.value = '';
     }
   }
 
@@ -123,7 +126,11 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
   submitPost() {
     if (this.Form.valid || this.postImages.length > 0) {
-      this.submitPostToDb();
+      if (this.editPost) {
+        this.submitEditPostToDb();
+      } else {
+        this.submitPostToDb();
+      }
     } else {
       this.Form.markAllAsTouched();
       this.errorMessage.sendErrorMessage({
@@ -131,6 +138,40 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         error: 'BAD_REQUEST',
       });
     }
+  }
+
+  submitEditPostToDb() {
+    this.submittingForm = true;
+
+    const imageForms: any = this.postImages.map((image) => {
+      return image.file;
+    });
+
+    const formData = new FormData();
+    formData.append('content', this.Form.get('content')?.value);
+
+    if (imageForms) {
+      imageForms.forEach((image: any) => {
+        formData.append('images', image);
+      });
+    } else {
+      formData.append('images', '');
+    }
+
+    this.postservice.editPost(<number>this.editPost?.id, formData).subscribe({
+      next: (response: any) => {
+        this.submittingForm = false;
+        this.successMessage.sendSuccessMessage(response['message']);
+        this.clearPostForm();
+        this.closeBtn.nativeElement.click();
+      },
+      error: (error: HttpErrorResponse) => {
+        this.submittingForm = false;
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
+      },
+    });
   }
 
   submitPostToDb() {
@@ -173,6 +214,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
     this.Form.reset();
     this.postImages = [];
     this.editPost = null;
+    this.toggleEmoji = false;
   }
 
   ngOnDestroy(): void {

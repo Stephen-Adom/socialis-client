@@ -25,6 +25,14 @@ export class PostService {
     );
   }
 
+  editPost(postId: number, formData: FormData) {
+    return this.http.patch<SuccessMessageType>(
+      BASE_URL + '/post/' + postId + '/edit',
+      formData,
+      this.authHeaders
+    );
+  }
+
   fetchAllPost() {
     return this.http.get<AllPostResponseType>(
       BASE_URL + '/all_posts',

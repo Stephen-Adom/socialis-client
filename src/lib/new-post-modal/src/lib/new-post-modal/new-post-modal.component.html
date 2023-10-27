@@ -54,55 +54,43 @@
 
         <!-- START:: UPLOADED POST IMAGES-->
 
-        <ng-container *ngIf="editPost; else elseTemplate">
-          <div class="flex flex-wrap gap-3" *ngIf="editPost.postImages.length">
-            <div
-              class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
-              *ngFor="let image of editPost.postImages"
+        <div class="flex flex-wrap gap-3" *ngIf="postImages.length">
+          <div
+            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
+            *ngFor="let image of postImages"
+          >
+            <button
+              type="button"
+              class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
+              title="close"
+              (click)="removeImage(image.id)"
             >
-              <img [src]="image.mediaUrl" class="w-full" alt="" />
-            </div>
-          </div>
-        </ng-container>
-        <ng-template #elseTemplate>
-          <div class="flex flex-wrap gap-3" *ngIf="postImages.length">
-            <div
-              class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
-              *ngFor="let image of postImages"
-            >
-              <button
-                type="button"
-                class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
-                title="close"
-                (click)="removeImage(image.id)"
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="w-5 h-5"
               >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="w-5 h-5"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
+            </button>
 
-              <button
-                type="button"
-                class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
-                title="edit"
-              >
-                Edit
-              </button>
-              <img [src]="image.base64" class="w-full" alt="" />
-            </div>
+            <button
+              type="button"
+              class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
+              title="edit"
+            >
+              Edit
+            </button>
+            <img [src]="image.base64" class="w-full" alt="" />
           </div>
-        </ng-template>
+        </div>
 
         <!-- END:: UPLOADED POST IMAGES-->
       </div>
