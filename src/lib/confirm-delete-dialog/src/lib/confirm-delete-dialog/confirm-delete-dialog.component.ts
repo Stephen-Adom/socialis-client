@@ -1,14 +1,21 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Inject, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AppApiActions, PostApiActions, PostState } from 'state';
 import {
+  ActionProgressService,
   ConfirmDeleteService,
   PostService,
   SuccessMessageService,
   dataDeleteObject,
 } from 'services';
-import { PostType, SUCCESS_MESSAGE_TOKEN } from 'utils';
+import { SUCCESS_MESSAGE_TOKEN } from 'utils';
 import { Store } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
 
@@ -20,6 +27,7 @@ import { HttpErrorResponse } from '@angular/common/http';
   styleUrls: ['./confirm-delete-dialog.component.css'],
 })
 export class ConfirmDeleteDialogComponent implements OnInit {
+  @ViewChild('closeBtn') closeBtn!: ElementRef<HTMLButtonElement>;
   postData!: dataDeleteObject | null;
 
   constructor(
@@ -27,7 +35,8 @@ export class ConfirmDeleteDialogComponent implements OnInit {
     private postservice: PostService,
     @Inject(SUCCESS_MESSAGE_TOKEN)
     private successMessage: SuccessMessageService,
-    private confirmDeleteService: ConfirmDeleteService
+    private confirmDeleteService: ConfirmDeleteService,
+    private actionProgessService: ActionProgressService
   ) {}
 
   ngOnInit(): void {
@@ -39,24 +48,26 @@ export class ConfirmDeleteDialogComponent implements OnInit {
   }
 
   deleteData() {
-    console.log(this.postData);
-    // switch (this.postData?.type) {
-    //   case 'post':
+    switch (this.postData?.type) {
+      case 'post':
+        this.deletePost(this.postData.data);
+        this.clearData();
+        break;
 
-    //     break;
-
-    //   default:
-    //     break;
-    // }
+      default:
+        break;
+    }
   }
 
   clearData() {
     this.postData = null;
+    this.closeBtn.nativeElement.click();
   }
 
-  deletePost(post: PostType) {
-    this.store.dispatch(PostApiActions.deletePost({ postId: post.id }));
-    this.postservice.deletePost(post.id).subscribe({
+  deletePost(postId: number) {
+    this.store.dispatch(PostApiActions.deletePost({ postId }));
+    this.actionProgessService.toggleActionInProgress(true);
+    this.postservice.deletePost(postId).subscribe({
       next: (response: any) => {
         this.successMessage.sendSuccessMessage(response.message);
       },
@@ -64,6 +75,9 @@ export class ConfirmDeleteDialogComponent implements OnInit {
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
+      },
+      complete: () => {
+        this.actionProgessService.toggleActionInProgress(false);
       },
     });
   }

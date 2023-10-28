@@ -12,6 +12,7 @@ import { NewPostModalComponent } from 'new-post-modal';
 import { SearchModalComponent } from 'search-modal';
 import { HttpClientModule } from '@angular/common/http';
 import {
+  ActionProgressService,
   AuthenticationService,
   CommentService,
   ConfirmDeleteService,
@@ -31,6 +32,7 @@ import { EditCoverBackgroundModalComponent } from 'edit-cover-background-modal';
 import { EditAuthImageModalComponent } from 'edit-auth-image-modal';
 import { EditAuthProfileModalComponent } from 'edit-auth-profile-modal';
 import { ConfirmDeleteDialogComponent } from 'confirm-delete-dialog';
+import { ActionInProgressComponent } from 'notification';
 
 @NgModule({
   imports: [
@@ -52,6 +54,7 @@ import { ConfirmDeleteDialogComponent } from 'confirm-delete-dialog';
     EditAuthImageModalComponent,
     EditAuthProfileModalComponent,
     ConfirmDeleteDialogComponent,
+    ActionInProgressComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
@@ -62,6 +65,7 @@ import { ConfirmDeleteDialogComponent } from 'confirm-delete-dialog';
     ReplyService,
     UserService,
     ConfirmDeleteService,
+    ActionProgressService,
   ],
 })
 export class LayoutsModule {}

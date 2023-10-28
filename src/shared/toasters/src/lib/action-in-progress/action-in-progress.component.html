@@ -1,0 +1,20 @@
+<div
+  class="max-w-xs bg-white border-2 rounded-md shadow-lg fixed top-2 right-2 dark:bg-main-dark dark:border-gray-700 z-10"
+  role="alert"
+  *ngIf="actionState$ | async"
+>
+  <div class="flex items-center p-4">
+    <div
+      class="animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+      role="status"
+      aria-label="loading"
+    >
+      <span class="sr-only">Loading...</span>
+    </div>
+    <p
+      class="ml-3 text-sm text-gray-700 dark:text-gray-400 animate-pulse animate-infinite animate-duration-1000"
+    >
+      Action in progress
+    </p>
+  </div>
+</div>

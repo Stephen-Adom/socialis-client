@@ -5,37 +5,24 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
-  Inject,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import {
   LikeType,
   PostType,
-  SUCCESS_MESSAGE_TOKEN,
   SimpleUserInfoType,
   UserInfoType,
   generateLikeDescription,
 } from 'utils';
 import { formatDistanceToNow } from 'date-fns';
-import {
-  AppApiActions,
-  PostApiActions,
-  PostState,
-  getUserInformation,
-} from 'state';
+import { PostApiActions, PostState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
-import {
-  ConfirmDeleteService,
-  PostService,
-  SuccessMessageService,
-  dataDeleteObject,
-} from 'services';
-import { HttpErrorResponse } from '@angular/common/http';
+import { ConfirmDeleteService, dataDeleteObject } from 'services';
 
 @Component({
   selector: 'lib-post-card',
@@ -59,12 +46,9 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   likedPost$ = new BehaviorSubject<boolean>(false);
 
   constructor(
-    @Inject(SUCCESS_MESSAGE_TOKEN)
-    private successMessage: SuccessMessageService,
+    private confirmDeleteService: ConfirmDeleteService,
     private store: Store<PostState>,
-    private router: Router,
-    private postservice: PostService,
-    private confirmDeleteService: ConfirmDeleteService
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -157,20 +141,9 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
 
   deletePost(post: PostType) {
     const data: dataDeleteObject = {
-      data: post,
+      data: post.id,
       type: 'post',
     };
     this.confirmDeleteService.deletePost(data);
-    // this.store.dispatch(PostApiActions.deletePost({ postId: post.id }));
-    // this.postservice.deletePost(post.id).subscribe({
-    //   next: (response: any) => {
-    //     this.successMessage.sendSuccessMessage(response.message);
-    //   },
-    //   error: (error: HttpErrorResponse) => {
-    //     this.store.dispatch(
-    //       AppApiActions.displayErrorMessage({ error: error.error })
-    //     );
-    //   },
-    // });
   }
 }

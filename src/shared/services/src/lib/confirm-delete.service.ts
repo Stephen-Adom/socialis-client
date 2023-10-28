@@ -1,10 +1,9 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { CommentType, PostType, ReplyType } from 'utils';
 
 export interface dataDeleteObject {
-  data: PostType | CommentType | ReplyType;
+  data: number;
   type: 'post' | 'comment' | 'reply';
 }
 
