@@ -22,7 +22,12 @@
           "node_modules/lightgallery/scss/lightgallery.scss",
           "./node_modules/intl-tel-input/build/css/intlTelInput.css"
         ],
-        "scripts": ["./node_modules/preline/dist/preline.js"]
+        "scripts": ["./node_modules/preline/dist/preline.js"],
+        "allowedCommonJsDependencies": [
+          "google-libphonenumber",
+          "localforage",
+          "sockjs-client"
+        ]
       },
       "configurations": {
         "production": {

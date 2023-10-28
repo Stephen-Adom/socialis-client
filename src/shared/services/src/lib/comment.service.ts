@@ -26,9 +26,16 @@ export class CommentService {
   }
 
   editComment(commentId: number, formData: FormData) {
-    return this.http.patch<SuccessMessageType>(
+    return this.http.put<SuccessMessageType>(
       BASE_URL + '/comment/' + commentId + '/edit',
       formData,
+      this.authHeaders
+    );
+  }
+
+  deleteComment(commentId: number) {
+    return this.http.delete<SuccessMessageType>(
+      BASE_URL + '/comment/' + commentId + '/delete',
       this.authHeaders
     );
   }

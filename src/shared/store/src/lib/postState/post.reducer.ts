@@ -216,6 +216,14 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       editComment: null,
     };
+  }),
+  on(PostApiActions.deleteComment, (state: PostState, action) => {
+    return {
+      ...state,
+      postComments: state.postComments.filter(
+        (comment) => comment.id !== action.commentId
+      ),
+    };
   })
 );
 

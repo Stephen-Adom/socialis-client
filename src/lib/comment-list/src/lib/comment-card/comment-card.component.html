@@ -133,6 +133,7 @@
             class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 hover:bg-gray-100"
             href="javascript:;"
             *ngIf="isAuth(comment.user.username, authUser$ | async)"
+            (click)="deleteComment(comment)"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -1,19 +1,27 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   CommentType,
   LikeType,
+  SUCCESS_MESSAGE_TOKEN,
   SimpleUserInfoType,
   UserInfoType,
   generateLikeDescription,
 } from 'utils';
 import { format } from 'date-fns';
-import { PostApiActions, PostState, getUserInformation } from 'state';
+import {
+  AppApiActions,
+  PostApiActions,
+  PostState,
+  getUserInformation,
+} from 'state';
 import { Store } from '@ngrx/store';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { CommentService, SuccessMessageService } from 'services';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'lib-comment-card',
@@ -34,7 +42,12 @@ export class CommentCardComponent implements OnInit {
 
   authUser$!: Observable<UserInfoType | null>;
 
-  constructor(private store: Store<PostState>) {}
+  constructor(
+    @Inject(SUCCESS_MESSAGE_TOKEN)
+    private successMessage: SuccessMessageService,
+    private commentservice: CommentService,
+    private store: Store<PostState>
+  ) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
@@ -103,5 +116,21 @@ export class CommentCardComponent implements OnInit {
 
   editComment(comment: CommentType) {
     this.store.dispatch(PostApiActions.editComment({ comment }));
+  }
+
+  deleteComment(comment: CommentType) {
+    this.store.dispatch(
+      PostApiActions.deleteComment({ commentId: comment.id })
+    );
+    this.commentservice.deleteComment(comment.id).subscribe({
+      next: (response: any) => {
+        this.successMessage.sendSuccessMessage(response.message);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
+      },
+    });
   }
 }
