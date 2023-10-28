@@ -133,6 +133,8 @@
             class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 hover:bg-gray-100 dark:hover:bg-gray-600"
             href="javascript:;"
             *ngIf="isAuth(reply.user.username, authUser$ | async)"
+            (click)="deleteReply(reply)"
+            data-hs-overlay="#hs-small-modal"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

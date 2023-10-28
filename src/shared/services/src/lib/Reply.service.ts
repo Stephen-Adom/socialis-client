@@ -38,4 +38,11 @@ export class ReplyService {
       this.authHeaders
     );
   }
+
+  deleteReply(id: number) {
+    return this.http.delete<SuccessMessageType>(
+      BASE_URL + '/reply/' + id + '/delete',
+      this.authHeaders
+    );
+  }
 }

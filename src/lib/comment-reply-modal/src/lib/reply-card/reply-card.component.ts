@@ -8,6 +8,7 @@ import lgZoom from 'lightgallery/plugins/zoom';
 import { PostApiActions, PostState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
+import { ConfirmDeleteService, dataDeleteObject } from 'services';
 
 @Component({
   selector: 'lib-reply-card',
@@ -28,7 +29,10 @@ export class ReplyCardComponent implements OnInit {
 
   likedReply$ = new BehaviorSubject<boolean>(false);
 
-  constructor(private store: Store<PostState>) {}
+  constructor(
+    private confirmDeleteService: ConfirmDeleteService,
+    private store: Store<PostState>
+  ) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
@@ -89,5 +93,13 @@ export class ReplyCardComponent implements OnInit {
 
   editReply(reply: ReplyType) {
     this.store.dispatch(PostApiActions.editReply({ reply }));
+  }
+
+  deleteReply(reply: ReplyType) {
+    const data: dataDeleteObject = {
+      data: reply.id,
+      type: 'reply',
+    };
+    this.confirmDeleteService.deletePost(data);
   }
 }

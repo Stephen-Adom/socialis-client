@@ -13,6 +13,7 @@ import {
   CommentService,
   ConfirmDeleteService,
   PostService,
+  ReplyService,
   SuccessMessageService,
   dataDeleteObject,
 } from 'services';
@@ -33,14 +34,15 @@ export class ConfirmDeleteDialogComponent implements OnInit {
   postData!: dataDeleteObject | null;
 
   constructor(
+    private router: Router,
     private store: Store<PostState>,
     private postservice: PostService,
+    private replyservice: ReplyService,
     private commentservice: CommentService,
     @Inject(SUCCESS_MESSAGE_TOKEN)
     private successMessage: SuccessMessageService,
     private confirmDeleteService: ConfirmDeleteService,
-    private actionProgessService: ActionProgressService,
-    private router: Router
+    private actionProgessService: ActionProgressService
   ) {}
 
   ngOnInit(): void {
@@ -60,6 +62,11 @@ export class ConfirmDeleteDialogComponent implements OnInit {
 
       case 'comment':
         this.deleteComment(this.postData.data);
+        this.clearData();
+        break;
+
+      case 'reply':
+        this.deleteReply(this.postData.data);
         this.clearData();
         break;
 
@@ -100,6 +107,26 @@ export class ConfirmDeleteDialogComponent implements OnInit {
     this.actionProgessService.toggleActionInProgress(true);
 
     this.commentservice.deleteComment(commentId).subscribe({
+      next: (response: any) => {
+        this.successMessage.sendSuccessMessage(response.message);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
+      },
+      complete: () => {
+        this.actionProgessService.toggleActionInProgress(false);
+      },
+    });
+  }
+
+  deleteReply(replyId: number) {
+    this.store.dispatch(PostApiActions.deleteReply({ replyId }));
+
+    this.actionProgessService.toggleActionInProgress(true);
+
+    this.replyservice.deleteReply(replyId).subscribe({
       next: (response: any) => {
         this.successMessage.sendSuccessMessage(response.message);
       },

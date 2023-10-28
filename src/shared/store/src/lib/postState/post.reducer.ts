@@ -243,6 +243,14 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       editReply: null,
     };
+  }),
+  on(PostApiActions.deleteReply, (state: PostState, action) => {
+    return {
+      ...state,
+      allReplies: state.allReplies.filter(
+        (reply) => reply.id !== action.replyId
+      ),
+    };
   })
 );
 
