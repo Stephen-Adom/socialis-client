@@ -29,7 +29,12 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
-import { PostService, SuccessMessageService } from 'services';
+import {
+  ConfirmDeleteService,
+  PostService,
+  SuccessMessageService,
+  dataDeleteObject,
+} from 'services';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -58,7 +63,8 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
     private successMessage: SuccessMessageService,
     private store: Store<PostState>,
     private router: Router,
-    private postservice: PostService
+    private postservice: PostService,
+    private confirmDeleteService: ConfirmDeleteService
   ) {}
 
   ngOnInit(): void {
@@ -150,16 +156,21 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   deletePost(post: PostType) {
-    this.store.dispatch(PostApiActions.deletePost({ postId: post.id }));
-    this.postservice.deletePost(post.id).subscribe({
-      next: (response: any) => {
-        this.successMessage.sendSuccessMessage(response.message);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.store.dispatch(
-          AppApiActions.displayErrorMessage({ error: error.error })
-        );
-      },
-    });
+    const data: dataDeleteObject = {
+      data: post,
+      type: 'post',
+    };
+    this.confirmDeleteService.deletePost(data);
+    // this.store.dispatch(PostApiActions.deletePost({ postId: post.id }));
+    // this.postservice.deletePost(post.id).subscribe({
+    //   next: (response: any) => {
+    //     this.successMessage.sendSuccessMessage(response.message);
+    //   },
+    //   error: (error: HttpErrorResponse) => {
+    //     this.store.dispatch(
+    //       AppApiActions.displayErrorMessage({ error: error.error })
+    //     );
+    //   },
+    // });
   }
 }

@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {
   AuthenticationService,
   CommentService,
+  ConfirmDeleteService,
   MessageService,
   PostService,
   ReplyService,
@@ -60,6 +61,7 @@ import { ConfirmDeleteDialogComponent } from 'confirm-delete-dialog';
     CommentService,
     ReplyService,
     UserService,
+    ConfirmDeleteService,
   ],
 })
 export class LayoutsModule {}

@@ -149,6 +149,7 @@
             class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 dark:text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
             href="javascript:;"
             *ngIf="isAuth(post.user.username, authUser$ | async)"
+            (click)="deletePost(post)"
             data-hs-overlay="#hs-small-modal"
           >
             <svg
