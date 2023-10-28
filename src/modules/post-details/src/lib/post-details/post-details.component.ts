@@ -1,35 +1,22 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { CommentListComponent } from 'comment-list';
 import { CreateCommentFormComponent } from 'create-comment-form';
 import { ActivatedRoute } from '@angular/router';
 import {
-  AppApiActions,
   PostApiActions,
   PostState,
   getPostDetails,
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import {
-  PostType,
-  SUCCESS_MESSAGE_TOKEN,
-  SimpleUserInfoType,
-  UserInfoType,
-} from 'utils';
-import {
-  BehaviorSubject,
-  Observable,
-  Subscription,
-  combineLatest,
-  tap,
-} from 'rxjs';
+import { PostType, SimpleUserInfoType, UserInfoType } from 'utils';
+import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
 import { format } from 'date-fns';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
-import { PostService, SuccessMessageService } from 'services';
-import { HttpErrorResponse } from '@angular/common/http';
+import { ConfirmDeleteService, dataDeleteObject } from 'services';
 
 @Component({
   selector: 'lib-post-details',
@@ -61,9 +48,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     private location: Location,
     private route: ActivatedRoute,
     private store: Store<PostState>,
-    private postservice: PostService,
-    @Inject(SUCCESS_MESSAGE_TOKEN)
-    private successMessage: SuccessMessageService
+    private confirmDeleteService: ConfirmDeleteService
   ) {}
 
   ngOnInit(): void {
@@ -186,17 +171,10 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   }
 
   deletePost(post: PostType) {
-    this.store.dispatch(PostApiActions.deletePost({ postId: post.id }));
-    window.location.href = '/feeds';
-    this.postservice.deletePost(post.id).subscribe({
-      next: (response: any) => {
-        this.successMessage.sendSuccessMessage(response.message);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.store.dispatch(
-          AppApiActions.displayErrorMessage({ error: error.error })
-        );
-      },
-    });
+    const data: dataDeleteObject = {
+      data: post.id,
+      type: 'post',
+    };
+    this.confirmDeleteService.deletePost(data);
   }
 }

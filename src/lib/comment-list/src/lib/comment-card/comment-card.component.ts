@@ -20,7 +20,12 @@ import { Store } from '@ngrx/store';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
-import { CommentService, SuccessMessageService } from 'services';
+import {
+  CommentService,
+  ConfirmDeleteService,
+  SuccessMessageService,
+  dataDeleteObject,
+} from 'services';
 import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
@@ -43,9 +48,7 @@ export class CommentCardComponent implements OnInit {
   authUser$!: Observable<UserInfoType | null>;
 
   constructor(
-    @Inject(SUCCESS_MESSAGE_TOKEN)
-    private successMessage: SuccessMessageService,
-    private commentservice: CommentService,
+    private confirmDeleteService: ConfirmDeleteService,
     private store: Store<PostState>
   ) {}
 
@@ -119,18 +122,10 @@ export class CommentCardComponent implements OnInit {
   }
 
   deleteComment(comment: CommentType) {
-    this.store.dispatch(
-      PostApiActions.deleteComment({ commentId: comment.id })
-    );
-    this.commentservice.deleteComment(comment.id).subscribe({
-      next: (response: any) => {
-        this.successMessage.sendSuccessMessage(response.message);
-      },
-      error: (error: HttpErrorResponse) => {
-        this.store.dispatch(
-          AppApiActions.displayErrorMessage({ error: error.error })
-        );
-      },
-    });
+    const data: dataDeleteObject = {
+      data: comment.id,
+      type: 'comment',
+    };
+    this.confirmDeleteService.deletePost(data);
   }
 }

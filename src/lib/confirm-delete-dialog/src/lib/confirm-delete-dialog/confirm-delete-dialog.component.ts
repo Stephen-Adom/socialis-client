@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 import { AppApiActions, PostApiActions, PostState } from 'state';
 import {
   ActionProgressService,
+  CommentService,
   ConfirmDeleteService,
   PostService,
   SuccessMessageService,
@@ -18,6 +19,7 @@ import {
 import { SUCCESS_MESSAGE_TOKEN } from 'utils';
 import { Store } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'lib-confirm-delete-dialog',
@@ -33,10 +35,12 @@ export class ConfirmDeleteDialogComponent implements OnInit {
   constructor(
     private store: Store<PostState>,
     private postservice: PostService,
+    private commentservice: CommentService,
     @Inject(SUCCESS_MESSAGE_TOKEN)
     private successMessage: SuccessMessageService,
     private confirmDeleteService: ConfirmDeleteService,
-    private actionProgessService: ActionProgressService
+    private actionProgessService: ActionProgressService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -54,6 +58,11 @@ export class ConfirmDeleteDialogComponent implements OnInit {
         this.clearData();
         break;
 
+      case 'comment':
+        this.deleteComment(this.postData.data);
+        this.clearData();
+        break;
+
       default:
         break;
     }
@@ -66,8 +75,31 @@ export class ConfirmDeleteDialogComponent implements OnInit {
 
   deletePost(postId: number) {
     this.store.dispatch(PostApiActions.deletePost({ postId }));
+    if (this.router.url.includes('details')) {
+      this.router.navigate(['/feeds']);
+    }
     this.actionProgessService.toggleActionInProgress(true);
     this.postservice.deletePost(postId).subscribe({
+      next: (response: any) => {
+        this.successMessage.sendSuccessMessage(response.message);
+      },
+      error: (error: HttpErrorResponse) => {
+        this.store.dispatch(
+          AppApiActions.displayErrorMessage({ error: error.error })
+        );
+      },
+      complete: () => {
+        this.actionProgessService.toggleActionInProgress(false);
+      },
+    });
+  }
+
+  deleteComment(commentId: number) {
+    this.store.dispatch(PostApiActions.deleteComment({ commentId }));
+
+    this.actionProgessService.toggleActionInProgress(true);
+
+    this.commentservice.deleteComment(commentId).subscribe({
       next: (response: any) => {
         this.successMessage.sendSuccessMessage(response.message);
       },

@@ -20,6 +20,7 @@ export interface PostState {
   allReplies: ReplyType[];
   editPost: PostType | null;
   editComment: CommentType | null;
+  editReply: ReplyType | null;
 }
 
 const initialState: PostState = {
@@ -30,6 +31,7 @@ const initialState: PostState = {
   allReplies: [],
   editPost: null,
   editComment: null,
+  editReply: null,
 };
 
 export const selectPostFeature =
@@ -68,6 +70,11 @@ export const getEditPostDetails = createSelector(
 export const getEditCommentDetails = createSelector(
   selectPostFeature,
   (state: PostState) => state.editComment
+);
+
+export const getEditReplyDetails = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.editReply
 );
 
 export const PostReducer = createReducer<PostState>(
@@ -223,6 +230,18 @@ export const PostReducer = createReducer<PostState>(
       postComments: state.postComments.filter(
         (comment) => comment.id !== action.commentId
       ),
+    };
+  }),
+  on(PostApiActions.editReply, (state: PostState, action) => {
+    return {
+      ...state,
+      editReply: action.reply,
+    };
+  }),
+  on(PostApiActions.completeEditComment, (state: PostState) => {
+    return {
+      ...state,
+      editReply: null,
     };
   })
 );

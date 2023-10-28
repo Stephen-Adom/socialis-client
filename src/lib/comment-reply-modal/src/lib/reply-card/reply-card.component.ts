@@ -86,4 +86,8 @@ export class ReplyCardComponent implements OnInit {
   isAuth(author: string, authUser: UserInfoType | null) {
     return author === authUser?.username;
   }
+
+  editReply(reply: ReplyType) {
+    this.store.dispatch(PostApiActions.editReply({ reply }));
+  }
 }

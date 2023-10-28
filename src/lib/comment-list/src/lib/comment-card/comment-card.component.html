@@ -56,12 +56,12 @@
       </button>
 
       <div
-        class="hs-dropdown-menu transition-[opacity,margin] z-[1] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[10rem] bg-white shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200"
+        class="hs-dropdown-menu transition-[opacity,margin] z-[1] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[10rem] bg-white dark:bg-main-dark shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200 dark:divide-gray-600"
         aria-labelledby="comment-menu"
       >
         <div class="py-2 first:pt-0 last:pb-0">
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -83,7 +83,7 @@
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -105,7 +105,7 @@
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="javascript:;"
             (click)="editComment(comment)"
             data-hs-overlay="#add-comment-modal-form"
@@ -130,10 +130,11 @@
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 hover:bg-gray-100 dark:hover:bg-gray-600"
             href="javascript:;"
             *ngIf="isAuth(comment.user.username, authUser$ | async)"
             (click)="deleteComment(comment)"
+            data-hs-overlay="#hs-small-modal"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -11,8 +11,10 @@ import { CommonModule } from '@angular/common';
 import {
   AppApiActions,
   AppState,
+  PostApiActions,
   PostState,
   getCommentDetails,
+  getEditReplyDetails,
   getPostDetails,
   getUserInformation,
 } from 'state';
@@ -21,6 +23,7 @@ import {
   CommentType,
   ERROR_MESSAGE_TOKEN,
   PostType,
+  ReplyType,
   SUCCESS_MESSAGE_TOKEN,
   UserInfoType,
   getBase64,
@@ -56,6 +59,7 @@ type postImageType = {
 })
 export class ReplyModalFormComponent implements OnInit, OnDestroy {
   @ViewChild('closeBtn') closeBtn!: ElementRef<HTMLButtonElement>;
+  @ViewChild('fileInput3') fileInput3!: ElementRef<HTMLInputElement>;
   comment$!: Observable<CommentType | null>;
   Form: FormGroup;
   replyImages: postImageType[] = [];
@@ -63,8 +67,10 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
   submittingForm = false;
   userInfoSubscription = new Subscription();
   postDetailsSubscription = new Subscription();
+  editReplySubscription = new Subscription();
   authUser!: UserInfoType;
   postDetails!: PostType;
+  editReply!: ReplyType | null;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -96,6 +102,19 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
           this.postDetails = data;
         }
       });
+
+    this.editReplySubscription = this.store
+      .select(getEditReplyDetails)
+      .subscribe((data) => {
+        if (data) {
+          this.editReply = data;
+          this.setFormValues(data);
+        }
+      });
+  }
+
+  setFormValues(data: ReplyType) {
+    this.Form.get('content')?.setValue(data.content);
   }
 
   addEmoji(event: any) {
@@ -113,6 +132,7 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
         file: file,
         id: Math.ceil(Math.random() * 1000),
       });
+      this.fileInput3.nativeElement.value = '';
     }
   }
 
@@ -127,13 +147,20 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
   }
 
   clearPostForm() {
+    this.store.dispatch(PostApiActions.completeEditComment());
     this.Form.reset();
     this.replyImages = [];
+    this.toggleEmoji = false;
+    this.editReply = null;
   }
 
   submitPost() {
     if (this.Form.valid || this.replyImages.length > 0) {
-      this.submitPostToDb();
+      if (this.editReply) {
+        this.submitEditPostToDb();
+      } else {
+        this.submitPostToDb();
+      }
     } else {
       this.Form.markAllAsTouched();
       this.errorMessage.sendErrorMessage({
@@ -141,6 +168,42 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
         error: 'BAD_REQUEST',
       });
     }
+  }
+
+  submitEditPostToDb() {
+    this.submittingForm = true;
+
+    const imageForms: any = this.replyImages.map((image) => {
+      return image.file;
+    });
+
+    const formData = new FormData();
+    formData.append('content', this.Form.get('content')?.value);
+
+    if (imageForms) {
+      imageForms.forEach((image: any) => {
+        formData.append('images', image);
+      });
+    } else {
+      formData.append('images', '');
+    }
+
+    this.replyservice
+      .editReply(<number>this.editReply?.id, formData)
+      .subscribe({
+        next: (response: any) => {
+          this.submittingForm = false;
+          this.successMessage.sendSuccessMessage(response['message']);
+          this.clearPostForm();
+          this.closeBtn.nativeElement.click();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.submittingForm = false;
+          this.store.dispatch(
+            AppApiActions.displayErrorMessage({ error: error.error })
+          );
+        },
+      });
   }
 
   submitPostToDb() {
@@ -189,5 +252,6 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();
     this.postDetailsSubscription.unsubscribe();
+    this.editReplySubscription.unsubscribe();
   }
 }

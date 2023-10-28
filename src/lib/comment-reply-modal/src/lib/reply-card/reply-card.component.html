@@ -56,12 +56,12 @@
       </button>
 
       <div
-        class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 opacity-0 hidden min-w-[10rem] bg-white shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200"
+        class="hs-dropdown-menu transition-[opacity,margin] duration hs-dropdown-open:opacity-100 z-[1] opacity-0 hidden min-w-[10rem] bg-white dark:bg-main-dark shadow-md rounded-lg p-2 mt-2 divide-y divide-gray-200 dark:divide-gray-600"
         aria-labelledby="hs-dropdown-with-icons"
       >
         <div class="py-2 first:pt-0 last:pb-0">
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -83,7 +83,7 @@
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -105,9 +105,11 @@
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="javascript:;"
             *ngIf="isAuth(reply.user.username, authUser$ | async)"
+            (click)="editReply(reply)"
+            data-hs-overlay="#reply-modal-form"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -120,7 +122,7 @@
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z"
+                d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"
               />
             </svg>
 
@@ -128,7 +130,7 @@
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 hover:bg-gray-100"
+            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 hover:bg-gray-100 dark:hover:bg-gray-600"
             href="javascript:;"
             *ngIf="isAuth(reply.user.username, authUser$ | async)"
           >

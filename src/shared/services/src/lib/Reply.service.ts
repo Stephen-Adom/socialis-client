@@ -30,4 +30,12 @@ export class ReplyService {
       this.authHeaders
     );
   }
+
+  editReply(id: number, formData: FormData) {
+    return this.http.put<SuccessMessageType>(
+      BASE_URL + '/reply/' + id + '/edit',
+      formData,
+      this.authHeaders
+    );
+  }
 }
