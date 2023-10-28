@@ -29,6 +29,7 @@ import { AddCommentFormModalComponent } from 'add-comment-form-modal';
 import { EditCoverBackgroundModalComponent } from 'edit-cover-background-modal';
 import { EditAuthImageModalComponent } from 'edit-auth-image-modal';
 import { EditAuthProfileModalComponent } from 'edit-auth-profile-modal';
+import { ConfirmDeleteDialogComponent } from 'confirm-delete-dialog';
 
 @NgModule({
   imports: [
@@ -49,6 +50,7 @@ import { EditAuthProfileModalComponent } from 'edit-auth-profile-modal';
     EditCoverBackgroundModalComponent,
     EditAuthImageModalComponent,
     EditAuthProfileModalComponent,
+    ConfirmDeleteDialogComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [

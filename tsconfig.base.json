@@ -21,6 +21,7 @@
       "comment-list": ["src/lib/comment-list/src/index.ts"],
       "comment-offcanvas": ["src/lib/comment-offcanvas/src/index.ts"],
       "comment-reply-modal": ["src/lib/comment-reply-modal/src/index.ts"],
+      "confirm-delete-dialog": ["src/lib/confirm-delete-dialog/src/index.ts"],
       "create-comment-form": ["src/lib/create-comment-form/src/index.ts"],
       "create-post": ["src/lib/create-post/src/index.ts"],
       "dashboard": ["src/modules/dashboard/src/index.ts"],
