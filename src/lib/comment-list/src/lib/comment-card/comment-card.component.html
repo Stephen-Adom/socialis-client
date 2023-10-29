@@ -279,7 +279,9 @@
           *ngIf="comment.likes.length > 5"
           class="inline-flex items-center justify-center h-[1.8rem] w-[1.8rem] rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:bg-blue-100 focus:text-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs"
         >
-          <span class="font-xs leading-none">9+</span>
+          <span class="font-xs leading-none"
+            >{{ comment.likes.length - 5 }}+</span
+          >
         </button>
       </div>
 
