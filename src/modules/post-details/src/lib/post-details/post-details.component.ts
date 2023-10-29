@@ -12,7 +12,13 @@ import {
 } from 'state';
 import { Store } from '@ngrx/store';
 import { PostType, SimpleUserInfoType, UserInfoType } from 'utils';
-import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  combineLatest,
+  tap,
+} from 'rxjs';
 import { format } from 'date-fns';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
@@ -41,8 +47,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     plugins: [lgZoom],
   };
   likedPost$ = new BehaviorSubject<boolean>(false);
-  authUser$!: Observable<UserInfoType | null>;
-  showAnimation$ = new BehaviorSubject<boolean>(false);
+  authUser!: UserInfoType;
 
   constructor(
     private location: Location,
@@ -60,61 +65,49 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
       .select(getPostDetails)
       .pipe(
         tap((post) => {
-          if (post) {
-            this.post = post;
-          } else {
+          if (!post) {
             this.store.dispatch(
               PostApiActions.fetchPostById({ postId: this.postId })
             );
           }
         })
       )
-      .subscribe();
+      .subscribe((post) => {
+        if (post) {
+          this.post = post;
+          this.checkIfLiked(this.post, this.authUser);
+        }
+      });
 
-    this.authUser$ = this.store.select(getUserInformation);
-
-    this.showAnimation$
-      .pipe(
-        tap((animation) => {
-          if (animation) {
-            setTimeout(() => {
-              this.showAnimation$.next(false);
-            }, 400);
-          }
-        })
-      )
-      .subscribe();
-
-    this.checkIfLiked();
+    this.authUserSubscription = this.store
+      .select(getUserInformation)
+      .subscribe((authUser) => {
+        if (authUser) {
+          this.authUser = authUser;
+          this.checkIfLiked(this.post, this.authUser);
+        }
+      });
   }
 
-  checkIfLiked() {
-    this.authUser$.subscribe((authUser) => {
-      if (authUser && this.post) {
-        const likedPost = this.post.likes.find(
-          (like) => like.username === authUser.username
-        );
-        likedPost ? this.likedPost$.next(true) : this.likedPost$.next(false);
-      } else {
-        this.likedPost$.next(false);
-      }
-    });
+  checkIfLiked(post: PostType, authUser: UserInfoType) {
+    if (authUser && post) {
+      const likedPost = post.likes.find(
+        (like) => like.username === authUser.username
+      );
+      likedPost ? this.likedPost$.next(true) : this.likedPost$.next(false);
+    }
   }
 
   toggleLike() {
-    this.authUser$.subscribe((authUser) => {
-      if (authUser) {
-        this.store.dispatch(
-          PostApiActions.togglePostLike({
-            post: this.post,
-            authuser: authUser,
-            isLiked: this.likedPost$.value,
-          })
-        );
-
-        this.showAnimation$.next(true);
-      }
-    });
+    if (this.authUser && this.post) {
+      this.store.dispatch(
+        PostApiActions.togglePostLike({
+          post: this.post,
+          authuser: this.authUser,
+          isLiked: this.likedPost$.value,
+        })
+      );
+    }
   }
 
   formateDate(createdAt: string) {

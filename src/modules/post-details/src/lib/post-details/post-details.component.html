@@ -127,7 +127,7 @@
               </a>
 
               <a
-                *ngIf="isAuth(post.user.username, authUser$ | async)"
+                *ngIf="isAuth(post.user.username, authUser)"
                 class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
                 href="javascript:;"
                 (click)="editPost(post)"
@@ -154,7 +154,7 @@
               <a
                 class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 dark:text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
                 href="javascript:;"
-                *ngIf="isAuth(post.user.username, authUser$ | async)"
+                *ngIf="isAuth(post.user.username, authUser)"
                 (click)="deletePost(post)"
                 data-hs-overlay="#hs-small-modal"
               >
@@ -220,10 +220,9 @@
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-5 h-5 animate-ease-in animate-once"
+              class="w-5 h-5 animate-ease-in animate-once animate-jump"
               [ngClass]="{
                 active: likedPost$ | async,
-                'animate-jump': showAnimation$ | async,
               }"
             >
               <path
@@ -325,7 +324,7 @@
           </button>
         </div>
 
-        {{ generateLikeDescription(post.likes, authUser$ | async) }}
+        {{ generateLikeDescription(post.likes, authUser) }}
       </div>
 
       <p class="text-xs mt-3 px-3 dark:text-dark-text">
