@@ -43,6 +43,7 @@ import {
 } from 'services';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 
 type postImageType = {
   base64: string;
@@ -53,7 +54,12 @@ type postImageType = {
 @Component({
   selector: 'lib-reply-modal-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PickerComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    PickerComponent,
+    ImageCropperModule,
+  ],
   templateUrl: './reply-modal-form.component.html',
   styleUrls: ['./reply-modal-form.component.css'],
 })
@@ -71,6 +77,9 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
   authUser!: UserInfoType;
   postDetails!: PostType;
   editReply!: ReplyType | null;
+  editFile: postImageType | null = null;
+  edittedImage!: string;
+  exitFileIndex = -1;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -253,5 +262,46 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
     this.userInfoSubscription.unsubscribe();
     this.postDetailsSubscription.unsubscribe();
     this.editReplySubscription.unsubscribe();
+  }
+
+  editImage(image: postImageType, index: number) {
+    this.editFile = image;
+    this.exitFileIndex = index;
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.edittedImage = <string>event.objectUrl;
+    console.log(this.edittedImage);
+  }
+
+  cancelEdit() {
+    this.editFile = null;
+    this.edittedImage = '';
+    this.exitFileIndex = -1;
+  }
+
+  saveEditChanges() {
+    if (this.edittedImage) {
+      const updatedFile: postImageType = {
+        base64: this.edittedImage,
+        file: new File([], ''),
+        id: <number>this.editFile?.id,
+      };
+
+      this.urlToFile(this.edittedImage).then((file) => {
+        updatedFile.file = file;
+      });
+
+      this.replyImages.splice(this.exitFileIndex, 1, updatedFile);
+
+      this.cancelEdit();
+    }
+  }
+
+  async urlToFile(url: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const filename = url.substring(url.lastIndexOf('/') + 1);
+    return new File([blob], filename, { type: blob.type });
   }
 }

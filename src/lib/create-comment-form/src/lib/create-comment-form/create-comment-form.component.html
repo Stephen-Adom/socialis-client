@@ -5,168 +5,205 @@
     <span class="text-primaryColor">{{ postDetails.user.username }}</span>
   </span>
 
-  <div class="flex items-start gap-x-4">
-    <img
-      *ngIf="authUser"
-      class="inline-block flex-shrink-0 h-[3rem] w-[3rem] rounded-full"
-      [src]="
-        authUser.imageUrl
-          ? authUser.imageUrl
-          : 'assets/images/users/default.jpg'
-      "
-      [attr.alt]="authUser.firstname"
-    />
-
-    <form novalidate [formGroup]="Form" class="w-full">
-      <textarea
-        class="form-control border-none focus:outline-none w-full bg-transparent dark:text-dark-text"
-        placeholder="What are your thoughts on this?"
-        formControlName="content"
-      ></textarea>
-    </form>
-  </div>
-
-  <!-- START:: UPLOADED POST IMAGES-->
-  <div class="flex flex-wrap gap-3" *ngIf="commentImages.length">
-    <div
-      class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
-      *ngFor="let image of commentImages"
-    >
-      <button
-        type="button"
-        class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
-        title="close"
-        (click)="removeImage(image.id)"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-5 h-5"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M6 18L18 6M6 6l12 12"
-          />
-        </svg>
-      </button>
-
-      <button
-        type="button"
-        class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
-        title="edit"
-      >
-        Edit
-      </button>
-      <img [src]="image.base64" class="w-full" alt="" />
-    </div>
-  </div>
-  <!-- END:: UPLOADED POST IMAGES-->
-
-  <div
-    class="flex justify-between items-center gap-x-2 py-2 px-4 border-y dark:border-y-gray-700"
-  >
-    <div class="post-tools">
-      <input
-        type="file"
-        hidden
-        title=""
-        (change)="uploadImage($event)"
-        aria-label="post image"
-        accept="image/*"
-        #fileInput
+  <ng-container *ngIf="editFile; else elseTemplate">
+    <image-cropper
+      [imageBase64]="editFile.base64"
+      [maintainAspectRatio]="false"
+      [aspectRatio]="4 / 3"
+      format="png"
+      (imageCropped)="imageCropped($event)"
+    ></image-cropper>
+  </ng-container>
+  <ng-template #elseTemplate>
+    <div class="flex items-start gap-x-4">
+      <img
+        *ngIf="authUser"
+        class="inline-block flex-shrink-0 h-[3rem] w-[3rem] rounded-full"
+        [src]="
+          authUser.imageUrl
+            ? authUser.imageUrl
+            : 'assets/images/users/default.jpg'
+        "
+        [attr.alt]="authUser.firstname"
       />
 
-      <button
-        type="button"
-        class="btn btn-circle btn-icon p-2"
-        title="image"
-        (click)="fileInput.click()"
-        [disabled]="commentImages.length === 4"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-5 h-5 dark:text-dark-text"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
-          />
-        </svg>
-      </button>
-
-      <button
-        type="button"
-        class="btn btn-circle btn-icon p-2"
-        title="emoji"
-        (click)="toggleEmoji = !toggleEmoji"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-5 h-5 dark:text-dark-text"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
-          />
-        </svg>
-      </button>
-
-      <button
-        type="button"
-        class="btn btn-circle btn-icon p-2"
-        title="schedule post"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-5 h-5 dark:text-dark-text"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
-          />
-        </svg>
-      </button>
+      <form novalidate [formGroup]="Form" class="w-full">
+        <textarea
+          class="form-control border-none focus:outline-none w-full bg-transparent dark:text-dark-text"
+          placeholder="What are your thoughts on this?"
+          formControlName="content"
+        ></textarea>
+      </form>
     </div>
 
-    <div class="flex gap-x-3">
-      <button
-        type="submit"
-        [disabled]="submittingForm"
-        (click)="submitComment()"
-        class="py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold disabled:bg-blue-300 btn-custom text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm"
+    <!-- START:: UPLOADED POST IMAGES-->
+    <div class="flex flex-wrap gap-3" *ngIf="commentImages.length">
+      <div
+        class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
+        *ngFor="let image of commentImages; let i = index"
       >
-        {{ submittingForm ? 'Submitting...' : 'Comment' }}
-
-        <div
-          *ngIf="submittingForm"
-          class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-          role="status"
-          aria-label="loading"
+        <button
+          type="button"
+          class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
+          title="close"
+          (click)="removeImage(image.id)"
         >
-          <span class="sr-only">Loading...</span>
-        </div>
-      </button>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
+          title="edit"
+          (click)="editImage(image, i)"
+        >
+          Edit
+        </button>
+        <img [src]="image.base64" class="w-full" alt="" />
+      </div>
     </div>
-  </div>
+    <!-- END:: UPLOADED POST IMAGES-->
+  </ng-template>
+
+  <ng-container *ngIf="editFile; else elseTemplate2">
+    <div
+      class="flex justify-end items-center gap-x-2 py-3 px-4 border-t dark:border-t-gray-700"
+    >
+      <div class="flex gap-x-3">
+        <button
+          type="button"
+          class="hs-dropdown-toggle py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border dark:border-gray-500 font-medium bg-transparent text-gray-700 dark:text-dark-text shadow-sm align-middle hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm"
+          (click)="cancelEdit()"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          (click)="saveEditChanges()"
+          class="py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold btn-custom text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm disabled:cursor-wait disabled:bg-blue-300"
+          href="javascript:;"
+        >
+          Save changes
+        </button>
+      </div>
+    </div>
+  </ng-container>
+  <ng-template #elseTemplate2>
+    <div
+      class="flex justify-between items-center gap-x-2 py-2 px-4 border-y dark:border-y-gray-700"
+    >
+      <div class="post-tools">
+        <input
+          type="file"
+          hidden
+          title=""
+          (change)="uploadImage($event)"
+          aria-label="post image"
+          accept="image/*"
+          #fileInput
+        />
+
+        <button
+          type="button"
+          class="btn btn-circle btn-icon p-2"
+          title="image"
+          (click)="fileInput.click()"
+          [disabled]="commentImages.length === 4"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 dark:text-dark-text"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"
+            />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-circle btn-icon p-2"
+          title="emoji"
+          (click)="toggleEmoji = !toggleEmoji"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 dark:text-dark-text"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M15.182 15.182a4.5 4.5 0 01-6.364 0M21 12a9 9 0 11-18 0 9 9 0 0118 0zM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75zm-.375 0h.008v.015h-.008V9.75zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75zm-.375 0h.008v.015h-.008V9.75z"
+            />
+          </svg>
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-circle btn-icon p-2"
+          title="schedule post"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5 dark:text-dark-text"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+            />
+          </svg>
+        </button>
+      </div>
+
+      <div class="flex gap-x-3">
+        <button
+          type="submit"
+          [disabled]="submittingForm"
+          (click)="submitComment()"
+          class="py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border border-transparent font-semibold disabled:bg-blue-300 btn-custom text-white focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-all text-sm"
+        >
+          {{ submittingForm ? 'Submitting...' : 'Comment' }}
+
+          <div
+            *ngIf="submittingForm"
+            class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+            role="status"
+            aria-label="loading"
+          >
+            <span class="sr-only">Loading...</span>
+          </div>
+        </button>
+      </div>
+    </div>
+  </ng-template>
 
   <emoji-mart
     [darkMode]="false"

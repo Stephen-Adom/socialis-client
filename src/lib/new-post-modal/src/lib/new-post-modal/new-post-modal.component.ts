@@ -255,15 +255,11 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         id: <number>this.editFile?.id,
       };
 
-      console.log(updatedFile, this.postImages);
-
       this.urlToFile(this.edittedImage).then((file) => {
         updatedFile.file = file;
       });
 
       this.postImages.splice(this.exitFileIndex, 1, updatedFile);
-
-      console.log(updatedFile, this.postImages);
 
       this.cancelEdit();
     }

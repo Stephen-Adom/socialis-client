@@ -33,12 +33,12 @@
   >
     <div
       *ngIf="authUser$ | async as authUser"
-      class="relative user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark px-3 py-6 w-full border text-center border-white dark:border-main-dark cursor-pointer max-h-[350px]"
+      class="relative user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark dark:text-dark-text px-3 py-6 w-full border text-center border-white dark:border-main-dark cursor-pointer max-h-[350px]"
     >
       <button
         data-hs-overlay="#edit-profile-info-modal"
         type="button"
-        class="border border-gray-300 bg-transparent px-3 py-1 text-xs rounded-full absolute top-2 right-2 hover:bg-gray-300"
+        class="border border-gray-300 bg-transparent px-3 py-1 text-xs rounded-full absolute top-2 right-2 hover:bg-gray-300 dark:text-dark-text"
       >
         Edit
       </button>
@@ -83,7 +83,8 @@
         {{ authUser.firstname }} {{ authUser.lastname }}
       </h5>
 
-      <span class="block text-gray-500 font-light text-xs mt-1"
+      <span
+        class="block text-gray-500 dark:text-gray-300 font-light text-xs mt-1"
         >@{{ authUser.username }}</span
       >
 
@@ -116,16 +117,28 @@
 
       <div class="mt-4 flex items-center gap-3 justify-center divide-x">
         <div class="px-2 text-center">
-          <span class="block text-gray-500 text-sm">Posts</span>
-          <span class="block text-gray-800 text-base">400</span>
+          <span class="block text-gray-500 dark:text-gray-300 text-sm"
+            >Posts</span
+          >
+          <span class="block text-gray-800 dark:text-dark-text text-base"
+            >400</span
+          >
         </div>
         <div class="px-2 text-center">
-          <span class="block text-gray-500 text-sm">Followers</span>
-          <span class="block text-gray-800 text-base">400</span>
+          <span class="block text-gray-500 dark:text-gray-300 text-sm"
+            >Followers</span
+          >
+          <span class="block text-gray-800 dark:text-dark-text text-base"
+            >400</span
+          >
         </div>
         <div class="px-2 text-center">
-          <span class="block text-gray-500 text-sm">Following</span>
-          <span class="block text-gray-800 text-base">400</span>
+          <span class="block text-gray-500 dark:text-gray-300 text-sm"
+            >Following</span
+          >
+          <span class="block text-gray-800 dark:text-dark-text text-base"
+            >400</span
+          >
         </div>
       </div>
     </div>
@@ -133,9 +146,7 @@
     <div
       class="user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark p-1 w-full border text-center border-white dark:border-main-dark cursor-pointer"
     >
-      <div
-        class="flex bg-gray-100 hover:bg-gray-200 rounded-lg transition p-1 dark:bg-gray-700 dark:hover:bg-gray-600"
-      >
+      <div class="flex bg-gray-100 rounded-lg transition p-1 dark:bg-main-dark">
         <nav
           class="flex space-x-2 w-full overflow-x-auto"
           aria-label="Tabs"
@@ -143,7 +154,7 @@
         >
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-400 dark:hs-tab-active:bg-gray-800 w-full py-3 px-4 flex-auto inline-flex items-center justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white active"
+            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white active"
             id="segment-item-1"
             data-hs-tab="#segment-1"
             aria-controls="segment-1"
@@ -168,7 +179,7 @@
           </button>
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-400 dark:hs-tab-active:bg-gray-800 w-full py-3 px-4 flex-auto inline-flex items-center justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white dark:hover:text-gray-300"
+            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
             id="segment-item-2"
             data-hs-tab="#segment-2"
             aria-controls="segment-2"
@@ -193,7 +204,7 @@
           </button>
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-400 dark:hs-tab-active:bg-gray-800 w-full py-3 px-4 flex-auto inline-flex items-center justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white dark:hover:text-gray-300"
+            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
             id="segment-item-3"
             data-hs-tab="#segment-3"
             aria-controls="segment-3"
@@ -219,7 +230,7 @@
 
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-400 dark:hs-tab-active:bg-gray-800 w-full py-3 px-4 flex-auto inline-flex items-center justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white dark:hover:text-gray-300"
+            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
             id="segment-item-4"
             data-hs-tab="#segment-4"
             aria-controls="segment-4"

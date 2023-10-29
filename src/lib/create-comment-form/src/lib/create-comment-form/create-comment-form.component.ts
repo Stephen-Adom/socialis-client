@@ -26,9 +26,10 @@ import {
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription, debounceTime } from 'rxjs';
-import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
+import { Subscription } from 'rxjs';
+import { HttpErrorResponse } from '@angular/common/http';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 
 type commentImageType = {
   base64: string;
@@ -39,7 +40,12 @@ type commentImageType = {
 @Component({
   selector: 'lib-create-comment-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PickerComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    PickerComponent,
+    ImageCropperModule,
+  ],
   templateUrl: './create-comment-form.component.html',
   styleUrls: ['./create-comment-form.component.css'],
 })
@@ -52,6 +58,9 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
   authUserSubscription = new Subscription();
   postDetailsSubscription = new Subscription();
   toggleEmoji = false;
+  editFile: commentImageType | null = null;
+  edittedImage!: string;
+  exitFileIndex = -1;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -163,5 +172,46 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.authUserSubscription.unsubscribe();
     this.postDetailsSubscription.unsubscribe();
+  }
+
+  editImage(image: commentImageType, index: number) {
+    this.editFile = image;
+    this.exitFileIndex = index;
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.edittedImage = <string>event.objectUrl;
+    console.log(this.edittedImage);
+  }
+
+  cancelEdit() {
+    this.editFile = null;
+    this.edittedImage = '';
+    this.exitFileIndex = -1;
+  }
+
+  saveEditChanges() {
+    if (this.edittedImage) {
+      const updatedFile: commentImageType = {
+        base64: this.edittedImage,
+        file: new File([], ''),
+        id: <number>this.editFile?.id,
+      };
+
+      this.urlToFile(this.edittedImage).then((file) => {
+        updatedFile.file = file;
+      });
+
+      this.commentImages.splice(this.exitFileIndex, 1, updatedFile);
+
+      this.cancelEdit();
+    }
+  }
+
+  async urlToFile(url: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const filename = url.substring(url.lastIndexOf('/') + 1);
+    return new File([blob], filename, { type: blob.type });
   }
 }

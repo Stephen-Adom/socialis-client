@@ -40,6 +40,7 @@ import {
 } from 'utils';
 import { Subscription } from 'rxjs';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 
 type commentImageType = {
   base64: string;
@@ -50,7 +51,12 @@ type commentImageType = {
 @Component({
   selector: 'lib-add-comment-form-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PickerComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    PickerComponent,
+    ImageCropperModule,
+  ],
   templateUrl: './add-comment-form-modal.component.html',
   styleUrls: ['./add-comment-form-modal.component.css'],
 })
@@ -67,6 +73,9 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
   editPostDetailsSubscription = new Subscription();
   toggleEmoji = false;
   editComment!: CommentType | null;
+  editFile: commentImageType | null = null;
+  edittedImage!: string;
+  exitFileIndex = -1;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -243,5 +252,46 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
     this.authUserSubscription.unsubscribe();
     this.postDetailsSubscription.unsubscribe();
     this.editPostDetailsSubscription.unsubscribe();
+  }
+
+  editImage(image: commentImageType, index: number) {
+    this.editFile = image;
+    this.exitFileIndex = index;
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.edittedImage = <string>event.objectUrl;
+    console.log(this.edittedImage);
+  }
+
+  cancelEdit() {
+    this.editFile = null;
+    this.edittedImage = '';
+    this.exitFileIndex = -1;
+  }
+
+  saveEditChanges() {
+    if (this.edittedImage) {
+      const updatedFile: commentImageType = {
+        base64: this.edittedImage,
+        file: new File([], ''),
+        id: <number>this.editFile?.id,
+      };
+
+      this.urlToFile(this.edittedImage).then((file) => {
+        updatedFile.file = file;
+      });
+
+      this.commentImages.splice(this.exitFileIndex, 1, updatedFile);
+
+      this.cancelEdit();
+    }
+  }
+
+  async urlToFile(url: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const filename = url.substring(url.lastIndexOf('/') + 1);
+    return new File([blob], filename, { type: blob.type });
   }
 }
