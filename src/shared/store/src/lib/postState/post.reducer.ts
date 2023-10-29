@@ -251,6 +251,12 @@ export const PostReducer = createReducer<PostState>(
         (reply) => reply.id !== action.replyId
       ),
     };
+  }),
+  on(PostApiActions.fetchCommentByIdSuccess, (state: PostState, action) => {
+    return {
+      ...state,
+      commentDetails: action.comment.data,
+    };
   })
 );
 

@@ -1,14 +1,13 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CommentType, PostType, ReplyType } from 'utils';
+import { CommentType, ReplyType } from 'utils';
 import { Observable, Subscription } from 'rxjs';
 import {
   PostApiActions,
   PostState,
   getAllReplies,
   getCommentDetails,
-  getPostDetails,
 } from 'state';
 import { Store } from '@ngrx/store';
 import { formatDistanceToNow } from 'date-fns';

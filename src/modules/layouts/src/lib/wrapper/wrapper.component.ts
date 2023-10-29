@@ -7,6 +7,7 @@ import {
   AppApiActions,
   PostApiActions,
   PostState,
+  getCommentDetails,
   getPostDetails,
   getUserInformation,
 } from 'state';
@@ -26,6 +27,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
   newReplySubscription = new Subscription();
   replyUpdateSubscription = new Subscription();
   userUpdateSubscription = new Subscription();
+  commentDetailsSubscription = new Subscription();
 
   constructor(
     private postservice: PostService,
@@ -43,6 +45,19 @@ export class WrapperComponent implements OnInit, OnDestroy {
           if (post) {
             this.store.dispatch(
               PostApiActions.fetchPostComments({ postId: post.id })
+            );
+          }
+        })
+      )
+      .subscribe();
+
+    this.commentDetailsSubscription = this.store
+      .select(getCommentDetails)
+      .pipe(
+        tap((comment) => {
+          if (comment) {
+            this.store.dispatch(
+              PostApiActions.fetchReplies({ commentId: comment.id })
             );
           }
         })
@@ -157,5 +172,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.newReplySubscription.unsubscribe();
     this.replyUpdateSubscription.unsubscribe();
     this.userUpdateSubscription.unsubscribe();
+    this.commentDetailsSubscription.unsubscribe();
   }
 }

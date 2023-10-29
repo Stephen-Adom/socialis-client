@@ -4,6 +4,7 @@ import {
   AllCommentResponseType,
   AllPostResponseType,
   AllRepliesResponseType,
+  CommentResponseType,
   CommentType,
   PostResponseType,
   PostType,
@@ -58,5 +59,7 @@ export const PostApiActions = createActionGroup({
     editReply: props<{ reply: ReplyType }>(),
     completeEditReply: emptyProps(),
     deleteReply: props<{ replyId: number }>(),
+    fetchCommentById: props<{ commentId: number }>(),
+    fetchCommentByIdSuccess: props<{ comment: CommentResponseType }>(),
   },
 });

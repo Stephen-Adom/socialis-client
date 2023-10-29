@@ -115,6 +115,11 @@ export type AllCommentResponseType = {
   data: CommentType[];
 };
 
+export type CommentResponseType = {
+  status: string;
+  data: CommentType;
+};
+
 export type AllRepliesResponseType = {
   status: string;
   data: ReplyType[];

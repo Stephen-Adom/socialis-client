@@ -53,7 +53,7 @@ export class PostEffects {
     return this.actions$.pipe(
       ofType(PostApiActions.fetchPostComments),
       mergeMap((action: { postId: number }) =>
-        this.commentservice.fetchAllPost(action.postId).pipe(
+        this.commentservice.fetchAllComments(action.postId).pipe(
           map((response: any) => {
             return PostApiActions.fetchPostCommentsSuccess({
               comments: response,
@@ -86,6 +86,24 @@ export class PostEffects {
                 of(AppApiActions.displayErrorMessage({ error: error.error }))
               )
             )
+      )
+    );
+  });
+
+  FetchCommentById$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.fetchCommentById),
+      mergeMap((action: { commentId: number }) =>
+        this.commentservice.fetchCommentById(action.commentId).pipe(
+          map((response: any) => {
+            return PostApiActions.fetchCommentByIdSuccess({
+              comment: response,
+            });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
       )
     );
   });

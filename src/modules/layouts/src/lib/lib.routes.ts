@@ -27,6 +27,11 @@ export const layoutsRoutes: Route[] = [
         loadComponent: () =>
           import('post-details').then((m) => m.PostDetailsComponent),
       },
+      {
+        path: ':username/details/:postId/:commentUsername/details/:commentId',
+        loadComponent: () =>
+          import('comment-details').then((m) => m.CommentDetailsComponent),
+      },
     ],
   },
 ];
