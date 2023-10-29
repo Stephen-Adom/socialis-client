@@ -69,6 +69,11 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
+  viewDetails() {
+    this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
+    this.router.navigate([this.post.user.username, 'details', this.post.id]);
+  }
+
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['post'].currentValue) {
       this.formattedDate = formatDistanceToNow(new Date(this.post.createdAt), {

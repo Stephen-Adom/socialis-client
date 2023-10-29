@@ -24,7 +24,6 @@ import {
 import { StoreModule } from '@ngrx/store';
 import { PostEffects, PostReducer, featurePostKey } from 'state';
 import { EffectsModule } from '@ngrx/effects';
-import { CommentOffcanvasComponent } from 'comment-offcanvas';
 import { CommentReplyModalComponent } from 'comment-reply-modal';
 import { ReplyModalFormComponent } from 'reply-modal-form';
 import { AddCommentFormModalComponent } from 'add-comment-form-modal';
@@ -46,7 +45,6 @@ import { ActionInProgressComponent } from 'notification';
     HttpClientModule,
     StoreModule.forFeature(featurePostKey, PostReducer),
     EffectsModule.forFeature([PostEffects]),
-    CommentOffcanvasComponent,
     CommentReplyModalComponent,
     ReplyModalFormComponent,
     AddCommentFormModalComponent,
