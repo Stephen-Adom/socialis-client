@@ -37,6 +37,7 @@ import {
 } from 'services';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
+import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 
 type postImageType = {
   base64: string;
@@ -47,7 +48,12 @@ type postImageType = {
 @Component({
   selector: 'lib-new-post-modal',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PickerComponent],
+  imports: [
+    CommonModule,
+    ReactiveFormsModule,
+    PickerComponent,
+    ImageCropperModule,
+  ],
   templateUrl: './new-post-modal.component.html',
   styleUrls: ['./new-post-modal.component.css'],
 })
@@ -63,6 +69,9 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   editPostSubscription = new Subscription();
   toggleEmoji = false;
   editPost!: PostType | null;
+  editFile: postImageType | null = null;
+  edittedImage!: string;
+  exitFileIndex = -1;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -220,5 +229,50 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();
     this.editPostSubscription.unsubscribe();
+  }
+
+  editImage(image: postImageType, index: number) {
+    this.editFile = image;
+    this.exitFileIndex = index;
+  }
+
+  imageCropped(event: ImageCroppedEvent) {
+    this.edittedImage = <string>event.objectUrl;
+    console.log(this.edittedImage);
+  }
+
+  cancelEdit() {
+    this.editFile = null;
+    this.edittedImage = '';
+    this.exitFileIndex = -1;
+  }
+
+  saveEditChanges() {
+    if (this.edittedImage) {
+      const updatedFile: postImageType = {
+        base64: this.edittedImage,
+        file: new File([], ''),
+        id: <number>this.editFile?.id,
+      };
+
+      console.log(updatedFile, this.postImages);
+
+      this.urlToFile(this.edittedImage).then((file) => {
+        updatedFile.file = file;
+      });
+
+      this.postImages.splice(this.exitFileIndex, 1, updatedFile);
+
+      console.log(updatedFile, this.postImages);
+
+      this.cancelEdit();
+    }
+  }
+
+  async urlToFile(url: string) {
+    const response = await fetch(url);
+    const blob = await response.blob();
+    const filename = url.substring(url.lastIndexOf('/') + 1);
+    return new File([blob], filename, { type: blob.type });
   }
 }
