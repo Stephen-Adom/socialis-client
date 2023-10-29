@@ -22,11 +22,17 @@ import { format } from 'date-fns';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { ReplyCardComponent } from 'comment-reply-modal';
+import { CreateReplyFormComponent } from '../create-reply-form/create-reply-form.component';
 
 @Component({
   selector: 'lib-comment-details',
   standalone: true,
-  imports: [CommonModule, LightgalleryModule, ReplyCardComponent],
+  imports: [
+    CommonModule,
+    LightgalleryModule,
+    ReplyCardComponent,
+    CreateReplyFormComponent,
+  ],
   templateUrl: './comment-details.component.html',
   styleUrls: ['./comment-details.component.css'],
 })
