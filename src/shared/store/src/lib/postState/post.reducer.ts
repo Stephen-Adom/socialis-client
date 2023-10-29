@@ -147,6 +147,7 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       postComments: updateComment(action.comment, state.postComments),
+      commentDetails: state.commentDetails && action.comment,
     };
   }),
   on(PostApiActions.fetchPostByIdSuccess, (state: PostState, action) => {
@@ -164,6 +165,13 @@ export const PostReducer = createReducer<PostState>(
         action.isLiked,
         state.allPosts
       ),
+      postDetails:
+        state.postDetails &&
+        updatePostLikeDetails(
+          state.postDetails,
+          action.isLiked,
+          action.authuser
+        ),
     };
   }),
   on(PostApiActions.toggleCommentLike, (state: PostState, action) => {
@@ -175,6 +183,13 @@ export const PostReducer = createReducer<PostState>(
         action.isLiked,
         state.postComments
       ),
+      commentDetails:
+        state.commentDetails &&
+        updateCommentLikeDetails(
+          state.commentDetails,
+          action.isLiked,
+          action.authuser
+        ),
     };
   }),
   on(PostApiActions.toggleReplyLike, (state: PostState, action) => {
@@ -305,6 +320,55 @@ const updatePostLike = (
   }
 
   return allPost.map((post) => (post.id === postObj.id ? postObj : post));
+};
+
+const updatePostLikeDetails = (
+  postDetails: PostType,
+  isLiked: boolean,
+  user: UserInfoType
+) => {
+  const postObj = { ...postDetails };
+  if (isLiked) {
+    postObj.numberOfLikes--;
+    postObj.likes = postDetails.likes.filter(
+      (like) => like.username !== user.username
+    );
+  } else {
+    const likedBy = {
+      username: user.username,
+      imageUrl: user.imageUrl,
+      firstname: user.firstname,
+      lastname: user.lastname,
+    };
+    postObj.numberOfLikes++;
+    postObj.likes = [likedBy, ...postObj.likes];
+  }
+
+  return postObj;
+};
+const updateCommentLikeDetails = (
+  postDetails: CommentType,
+  isLiked: boolean,
+  user: UserInfoType
+) => {
+  const postObj = { ...postDetails };
+  if (isLiked) {
+    postObj.numberOfLikes--;
+    postObj.likes = postDetails.likes.filter(
+      (like) => like.username !== user.username
+    );
+  } else {
+    const likedBy = {
+      username: user.username,
+      imageUrl: user.imageUrl,
+      firstname: user.firstname,
+      lastname: user.lastname,
+    };
+    postObj.numberOfLikes++;
+    postObj.likes = [likedBy, ...postObj.likes];
+  }
+
+  return postObj;
 };
 
 const updateCommentLike = (

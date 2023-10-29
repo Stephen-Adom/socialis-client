@@ -128,6 +128,7 @@ export class CommentDetailsComponent implements OnInit {
   }
 
   toggleLike() {
+    console.log(this.authUser, this.comment);
     if (this.authUser && this.comment) {
       this.store.dispatch(
         PostApiActions.toggleCommentLike({
