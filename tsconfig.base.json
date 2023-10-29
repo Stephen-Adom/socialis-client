@@ -18,6 +18,7 @@
       "activity-card": ["src/lib/activity-card/src/index.ts"],
       "add-comment-form-modal": ["src/lib/add-comment-form-modal/src/index.ts"],
       "auth": ["src/modules/auth/src/index.ts"],
+      "bookmarks": ["src/modules/bookmarks/src/index.ts"],
       "comment-list": ["src/lib/comment-list/src/index.ts"],
       "comment-offcanvas": ["src/lib/comment-offcanvas/src/index.ts"],
       "comment-reply-modal": ["src/lib/comment-reply-modal/src/index.ts"],
