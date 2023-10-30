@@ -61,15 +61,15 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   viewPostDetails(event: MouseEvent) {
     const target = event.target as HTMLElement;
     console.log(target.tagName);
-    // if (
-    //   target.tagName !== 'A' &&
-    //   target.tagName !== 'IMG' &&
-    //   target.tagName !== 'BUTTON' &&
-    //   target.tagName !== 'svg'
-    // ) {
-    //   this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
-    //   this.router.navigate([this.post.user.username, 'details', this.post.id]);
-    // }
+    if (
+      target.tagName !== 'A' &&
+      target.tagName !== 'IMG' &&
+      target.tagName !== 'BUTTON' &&
+      target.tagName !== 'svg'
+    ) {
+      this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
+      this.router.navigate([this.post.user.username, 'details', this.post.id]);
+    }
   }
 
   viewDetails() {
@@ -88,11 +88,7 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   checkIfBookmarked() {
     this.authUser$.subscribe((authUser) => {
       if (authUser) {
-        const bookmarked = this.post.bookmarkedUsers.find(
-          (user) => user === authUser.id
-        );
-
-        console.log(bookmarked, 'bookmarked');
+        const bookmarked = this.post.bookmarkedUsers.includes(authUser.id);
 
         bookmarked ? this.bookmarked$.next(true) : this.bookmarked$.next(false);
 

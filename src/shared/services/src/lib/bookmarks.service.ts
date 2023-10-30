@@ -1,7 +1,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { BookmarkResponseType } from 'utils';
+import { BookmarkResponseType, SuccessMessageType } from 'utils';
 import BASE_URL from './base_url';
 import { getAuthHttpOptions } from './httpHeaders';
 
@@ -20,6 +20,18 @@ export class BookmarksService {
   fetchAllBookmarks(userId: number) {
     return this.http.get<BookmarkResponseType>(
       BASE_URL + '/bookmarks/' + userId + '/all',
+      this.authHeaders
+    );
+  }
+
+  toggleBookmark(bookmarkInfo: {
+    userId: number;
+    contentId: number;
+    contentType: string;
+  }) {
+    return this.http.post<SuccessMessageType>(
+      BASE_URL + '/bookmark/toggle',
+      bookmarkInfo,
       this.authHeaders
     );
   }

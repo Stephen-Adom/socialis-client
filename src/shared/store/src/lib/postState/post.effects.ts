@@ -195,4 +195,26 @@ export class PostEffects {
       )
     );
   });
+
+  ToggleBookmarks$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.toggleBookmarkPost),
+      mergeMap((action: { post: PostType; userId: number }) =>
+        this.bookmarkservice
+          .toggleBookmark({
+            userId: action.userId,
+            contentId: action.post.id,
+            contentType: 'post',
+          })
+          .pipe(
+            map(() => {
+              return PostApiActions.toggleBookmarkPostSuccess();
+            }),
+            catchError((error: HttpErrorResponse) =>
+              of(AppApiActions.displayErrorMessage({ error: error.error }))
+            )
+          )
+      )
+    );
+  });
 }

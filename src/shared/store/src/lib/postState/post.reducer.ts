@@ -453,7 +453,7 @@ const updatePostBookmarks = (
   userId: number
 ) => {
   const postObj = { ...post };
-  const userExist = postObj.bookmarkedUsers.find((id) => id === userId);
+  const userExist = postObj.bookmarkedUsers.includes(userId);
 
   if (userExist) {
     postObj.bookmarkedUsers = postObj.bookmarkedUsers.filter(

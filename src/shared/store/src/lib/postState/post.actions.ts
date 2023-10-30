@@ -64,6 +64,10 @@ export const PostApiActions = createActionGroup({
     fetchCommentByIdSuccess: props<{ comment: CommentResponseType }>(),
     fetchAllUserBookmarks: props<{ userId: number }>(),
     fetchAllUserBookmarksSuccess: props<{ bookmarks: BookmarkResponseType }>(),
-    toggleBookmarkPost: props<{ post: PostType; userId: number }>(),
+    toggleBookmarkPost: props<{
+      post: PostType;
+      userId: number;
+    }>(),
+    toggleBookmarkPostSuccess: emptyProps(),
   },
 });
