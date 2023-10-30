@@ -47,6 +47,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     plugins: [lgZoom],
   };
   likedPost$ = new BehaviorSubject<boolean>(false);
+  bookmarked$ = new BehaviorSubject<boolean>(false);
   authUser!: UserInfoType;
 
   constructor(
@@ -76,6 +77,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
         if (post) {
           this.post = post;
           this.checkIfLiked(this.post, this.authUser);
+          this.checkIfBookmarked(this.authUser, this.post);
         }
       });
 
@@ -85,8 +87,17 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
         if (authUser) {
           this.authUser = authUser;
           this.checkIfLiked(this.post, this.authUser);
+          this.checkIfBookmarked(this.authUser, this.post);
         }
       });
+  }
+
+  checkIfBookmarked(authUser: UserInfoType, post: PostType) {
+    if (authUser) {
+      const bookmarked = post.bookmarkedUsers.includes(authUser.id);
+
+      bookmarked ? this.bookmarked$.next(true) : this.bookmarked$.next(false);
+    }
   }
 
   checkIfLiked(post: PostType, authUser: UserInfoType) {
@@ -169,5 +180,16 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
       type: 'post',
     };
     this.confirmDeleteService.deletePost(data);
+  }
+
+  toggleBookmark() {
+    if (this.authUser) {
+      this.store.dispatch(
+        PostApiActions.toggleBookmarkPost({
+          post: this.post,
+          userId: this.authUser.id,
+        })
+      );
+    }
   }
 }

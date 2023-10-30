@@ -281,6 +281,7 @@
         </div>
 
         <button
+          (click)="toggleBookmark()"
           type="button"
           class="btn btn-icon btn-circle p-1 flex items-center text-sm gap-x-1 dark:text-dark-text"
           title="bookmark"
@@ -292,6 +293,9 @@
             stroke-width="1.5"
             stroke="currentColor"
             class="w-5 h-5"
+            [ngClass]="{
+              bookmarked: bookmarked$ | async,
+            }"
           >
             <path
               stroke-linecap="round"

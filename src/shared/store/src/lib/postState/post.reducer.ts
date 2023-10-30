@@ -293,6 +293,9 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       allPosts: updatePostBookmarks(state.allPosts, action.post, action.userId),
+      postDetails:
+        state.postDetails &&
+        updatePostBookmarksDetails(state.postDetails, action.userId),
     };
   })
 );
@@ -468,4 +471,21 @@ const updatePostBookmarks = (
   return allPosts.map((currentPost) =>
     currentPost.id === post.id ? postObj : currentPost
   );
+};
+
+const updatePostBookmarksDetails = (postDetails: PostType, userId: number) => {
+  const postObj = { ...postDetails };
+  const userExist = postObj.bookmarkedUsers.includes(userId);
+
+  if (userExist) {
+    postObj.bookmarkedUsers = postObj.bookmarkedUsers.filter(
+      (id) => id !== userId
+    );
+    postObj.numberOfBookmarks--;
+  } else {
+    postObj.bookmarkedUsers = [...postObj.bookmarkedUsers, userId];
+    postObj.numberOfBookmarks++;
+  }
+
+  return postObj;
 };
