@@ -44,6 +44,7 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   };
 
   likedPost$ = new BehaviorSubject<boolean>(false);
+  bookmarked$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
@@ -54,19 +55,21 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
     this.checkIfLiked();
+    this.checkIfBookmarked();
   }
 
   viewPostDetails(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    if (
-      target.tagName !== 'A' &&
-      target.tagName !== 'IMG' &&
-      target.tagName !== 'BUTTON' &&
-      target.tagName !== 'svg'
-    ) {
-      this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
-      this.router.navigate([this.post.user.username, 'details', this.post.id]);
-    }
+    console.log(target.tagName);
+    // if (
+    //   target.tagName !== 'A' &&
+    //   target.tagName !== 'IMG' &&
+    //   target.tagName !== 'BUTTON' &&
+    //   target.tagName !== 'svg'
+    // ) {
+    //   this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
+    //   this.router.navigate([this.post.user.username, 'details', this.post.id]);
+    // }
   }
 
   viewDetails() {
@@ -82,6 +85,23 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
     }
   }
 
+  checkIfBookmarked() {
+    this.authUser$.subscribe((authUser) => {
+      if (authUser) {
+        const bookmarked = this.post.bookmarkedUsers.find(
+          (user) => user === authUser.id
+        );
+
+        console.log(bookmarked, 'bookmarked');
+
+        bookmarked ? this.bookmarked$.next(true) : this.bookmarked$.next(false);
+
+        return;
+      }
+      this.bookmarked$.next(false);
+    });
+  }
+
   checkIfLiked() {
     this.authUser$.subscribe((authUser) => {
       if (authUser) {
@@ -90,9 +110,9 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
         );
 
         likedPost ? this.likedPost$.next(true) : this.likedPost$.next(false);
-      } else {
-        this.likedPost$.next(false);
+        return;
       }
+      this.likedPost$.next(false);
     });
   }
 
@@ -150,5 +170,18 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
       type: 'post',
     };
     this.confirmDeleteService.deletePost(data);
+  }
+
+  toggleBookmark() {
+    this.authUser$.subscribe((user) => {
+      if (user) {
+        this.store.dispatch(
+          PostApiActions.toggleBookmarkPost({
+            post: this.post,
+            userId: user.id,
+          })
+        );
+      }
+    });
   }
 }

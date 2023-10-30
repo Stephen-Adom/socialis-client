@@ -288,7 +288,13 @@ export const PostReducer = createReducer<PostState>(
         allBookmarks: action.bookmarks.data,
       };
     }
-  )
+  ),
+  on(PostApiActions.toggleBookmarkPost, (state: PostState, action) => {
+    return {
+      ...state,
+      allPosts: updatePostBookmarks(state.allPosts, action.post, action.userId),
+    };
+  })
 );
 
 const updatePost = (updatedPost: PostType, allPost: PostType[]) => {
@@ -439,4 +445,27 @@ const updateReplyLike = (
   }
 
   return allReply.map((reply) => (reply.id === replyObj.id ? replyObj : reply));
+};
+
+const updatePostBookmarks = (
+  allPosts: PostType[],
+  post: PostType,
+  userId: number
+) => {
+  const postObj = { ...post };
+  const userExist = postObj.bookmarkedUsers.find((id) => id === userId);
+
+  if (userExist) {
+    postObj.bookmarkedUsers = postObj.bookmarkedUsers.filter(
+      (id) => id !== userId
+    );
+    postObj.numberOfBookmarks--;
+  } else {
+    postObj.bookmarkedUsers = [...postObj.bookmarkedUsers, userId];
+    postObj.numberOfBookmarks++;
+  }
+
+  return allPosts.map((currentPost) =>
+    currentPost.id === post.id ? postObj : currentPost
+  );
 };

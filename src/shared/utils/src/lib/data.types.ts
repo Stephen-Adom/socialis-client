@@ -71,6 +71,7 @@ export type PostType = {
   postImages: ImageType[];
   user: SimpleUserInfoType;
   likes: LikeType[];
+  bookmarkedUsers: number[];
 };
 
 export type LikeType = {
@@ -92,6 +93,7 @@ export type CommentType = {
   commentImages: ImageType[];
   user: SimpleUserInfoType;
   likes: LikeType[];
+  bookmarkedUsers: number[];
 };
 
 export type ReplyType = {
@@ -105,6 +107,7 @@ export type ReplyType = {
   replyImages: ImageType[];
   user: SimpleUserInfoType;
   likes: LikeType[];
+  bookmarkedUsers: number[];
 };
 
 export type NewPostResponseType = {
