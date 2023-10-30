@@ -19,6 +19,7 @@ export type UserRegistrationDetailsType = {
 
 export type UserInfoType = {
   id: number;
+  uid: string;
   firstname: string;
   lastname: string;
   username: string;
@@ -60,9 +61,11 @@ export type ImageType = {
 
 export type PostType = {
   id: number;
+  uid: string;
   content: string;
   numberOfLikes: number;
   numberOfComments: number;
+  numberOfBookmarks: number;
   createdAt: string;
   updatedAt: string;
   postImages: ImageType[];
@@ -79,11 +82,13 @@ export type LikeType = {
 
 export type CommentType = {
   id: number;
+  uid: string;
   content: string;
   createdAt: string;
   updatedAt: string;
-  numberOfLikes: 0;
-  numberOfReplies: 0;
+  numberOfLikes: number;
+  numberOfReplies: number;
+  numberOfBookmarks: number;
   commentImages: ImageType[];
   user: SimpleUserInfoType;
   likes: LikeType[];
@@ -91,10 +96,12 @@ export type CommentType = {
 
 export type ReplyType = {
   id: number;
+  uid: string;
   content: string;
   createdAt: string;
   updatedAt: string;
-  numberOfLikes: 0;
+  numberOfLikes: number;
+  numberOfBookmarks: number;
   replyImages: ImageType[];
   user: SimpleUserInfoType;
   likes: LikeType[];
