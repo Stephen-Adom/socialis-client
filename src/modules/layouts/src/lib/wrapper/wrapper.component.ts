@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as localforage from 'localforage';
-import { Subscription, first, map, tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import { MessageService, PostService } from 'services';
 import {
   AppApiActions,
@@ -9,7 +9,6 @@ import {
   PostState,
   getCommentDetails,
   getPostDetails,
-  getUserInformation,
 } from 'state';
 
 @Component({

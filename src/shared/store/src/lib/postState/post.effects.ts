@@ -1,9 +1,14 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { CommentService, PostService, ReplyService } from 'services';
+import {
+  BookmarksService,
+  CommentService,
+  PostService,
+  ReplyService,
+} from 'services';
 import { PostApiActions } from './post.actions';
-import { catchError, map, mergeMap, of, tap } from 'rxjs';
+import { catchError, map, mergeMap, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppApiActions } from '../appState/app.actions';
 import { CommentType, PostType, ReplyType, UserInfoType } from 'utils';
@@ -14,7 +19,8 @@ export class PostEffects {
     private actions$: Actions,
     private postservice: PostService,
     private replyService: ReplyService,
-    private commentservice: CommentService
+    private commentservice: CommentService,
+    private bookmarkservice: BookmarksService
   ) {}
 
   FetchAllPosts$ = createEffect(() => {
@@ -162,6 +168,24 @@ export class PostEffects {
           map((response: any) => {
             return PostApiActions.fetchRepliesSuccess({
               replies: response,
+            });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
+
+  FetchAllBookmarks$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.fetchAllUserBookmarks),
+      mergeMap((action: { userId: number }) =>
+        this.bookmarkservice.fetchAllBookmarks(action.userId).pipe(
+          map((response: any) => {
+            return PostApiActions.fetchAllUserBookmarksSuccess({
+              bookmarks: response,
             });
           }),
           catchError((error: HttpErrorResponse) =>

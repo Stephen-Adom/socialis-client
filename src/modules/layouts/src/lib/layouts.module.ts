@@ -14,6 +14,7 @@ import { HttpClientModule } from '@angular/common/http';
 import {
   ActionProgressService,
   AuthenticationService,
+  BookmarksService,
   CommentService,
   ConfirmDeleteService,
   MessageService,
@@ -64,6 +65,7 @@ import { ActionInProgressComponent } from 'notification';
     UserService,
     ConfirmDeleteService,
     ActionProgressService,
+    BookmarksService,
   ],
 })
 export class LayoutsModule {}

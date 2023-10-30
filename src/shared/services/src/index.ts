@@ -4,6 +4,7 @@ export * from './lib/message.service';
 export * from './lib/comment.service';
 export * from './lib/Reply.service';
 export * from './lib/user.service';
+export * from './lib/Bookmarks.service';
 
 export * from './lib/validateAuthUser.service';
 export * from './lib/innactiveAccount.service';

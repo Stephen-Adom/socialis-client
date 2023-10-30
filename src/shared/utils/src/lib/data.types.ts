@@ -136,3 +136,8 @@ export type PostResponseType = {
   status: string;
   data: PostType;
 };
+
+export type BookmarkResponseType = {
+  data: PostType[] | ReplyType[] | CommentType[];
+  status: string;
+};

@@ -4,6 +4,7 @@ import {
   AllCommentResponseType,
   AllPostResponseType,
   AllRepliesResponseType,
+  BookmarkResponseType,
   CommentResponseType,
   CommentType,
   PostResponseType,
@@ -61,5 +62,7 @@ export const PostApiActions = createActionGroup({
     deleteReply: props<{ replyId: number }>(),
     fetchCommentById: props<{ commentId: number }>(),
     fetchCommentByIdSuccess: props<{ comment: CommentResponseType }>(),
+    fetchAllUserBookmarks: props<{ userId: number }>(),
+    fetchAllUserBookmarksSuccess: props<{ bookmarks: BookmarkResponseType }>(),
   },
 });

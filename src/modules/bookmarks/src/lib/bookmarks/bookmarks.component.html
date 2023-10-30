@@ -1,11 +1,37 @@
 <section
   id="post-details-section"
-  class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[70%_30%] gap-5 w-full mt-5"
+  class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[70%_30%] gap-5 w-full"
 >
-  <div
-    class="rounded-lg bg-white dark:bg-main-dark w-full border border-white dark:border-main-dark cursor-pointer post-card p-3"
-  ></div>
+  <div class="posts-list-container flex flex-col gap-y-4 w-full mt-4 md:mt-5">
+    <ng-container *ngIf="allBookmarks$ | async as allBookmarks">
+      <ng-container *ngFor="let post of allBookmarks; let i = index">
+        <ng-container *ngIf="getPostUidTag(post.uid)">
+          <ng-container
+            *ngTemplateOutlet="postTemplate; context: { $implicit: post }"
+          ></ng-container>
+        </ng-container>
+
+        <!-- <ng-container *ngIf="getCommentUidTag(post.uid); else comment">
+          <ng-container
+            *ngTemplateOutlet="comment; context: { $implicit: comment }"
+          ></ng-container>
+        </ng-container>
+
+        <ng-container *ngIf="getReplyUidTag(post.uid); else reply">
+          <ng-container
+            *ngTemplateOutlet="reply; context: { $implicit: reply }"
+          ></ng-container>
+        </ng-container> -->
+      </ng-container>
+    </ng-container>
+  </div>
   <div
     class="right-section pt-5 flex-col gap-y-5 hidden sm:hidden md:flex"
   ></div>
 </section>
+
+<ng-template #postTemplate let-post>
+  <lib-post-card [post]="post" />
+</ng-template>
+<ng-template #commentTemplate let-comment></ng-template>
+<ng-template #replyTemplate let-reply></ng-template>
