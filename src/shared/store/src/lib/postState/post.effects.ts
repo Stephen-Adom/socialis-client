@@ -196,7 +196,7 @@ export class PostEffects {
     );
   });
 
-  ToggleBookmarks$ = createEffect(() => {
+  TogglePostBookmarks$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PostApiActions.toggleBookmarkPost),
       mergeMap((action: { post: PostType; userId: number }) =>
@@ -209,6 +209,28 @@ export class PostEffects {
           .pipe(
             map(() => {
               return PostApiActions.toggleBookmarkPostSuccess();
+            }),
+            catchError((error: HttpErrorResponse) =>
+              of(AppApiActions.displayErrorMessage({ error: error.error }))
+            )
+          )
+      )
+    );
+  });
+
+  ToggleCommentBookmarks$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.toggleBookmarkComment),
+      mergeMap((action: { comment: CommentType; userId: number }) =>
+        this.bookmarkservice
+          .toggleBookmark({
+            userId: action.userId,
+            contentId: action.comment.id,
+            contentType: 'comment',
+          })
+          .pipe(
+            map(() => {
+              return PostApiActions.toggleBookmarkCommentSuccess();
             }),
             catchError((error: HttpErrorResponse) =>
               of(AppApiActions.displayErrorMessage({ error: error.error }))

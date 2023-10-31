@@ -297,6 +297,19 @@ export const PostReducer = createReducer<PostState>(
         state.postDetails &&
         updatePostBookmarksDetails(state.postDetails, action.userId),
     };
+  }),
+  on(PostApiActions.toggleBookmarkComment, (state: PostState, action) => {
+    return {
+      ...state,
+      postComments: updateCommentBookmarks(
+        state.postComments,
+        action.comment,
+        action.userId
+      ),
+      commentDetails:
+        state.commentDetails &&
+        updateCommentBookmarksDetails(state.commentDetails, action.userId),
+    };
   })
 );
 
@@ -469,7 +482,7 @@ const updatePostBookmarks = (
   }
 
   return allPosts.map((currentPost) =>
-    currentPost.id === post.id ? postObj : currentPost
+    currentPost.id === postObj.id ? postObj : currentPost
   );
 };
 
@@ -488,4 +501,47 @@ const updatePostBookmarksDetails = (postDetails: PostType, userId: number) => {
   }
 
   return postObj;
+};
+
+const updateCommentBookmarks = (
+  allComments: CommentType[],
+  comment: CommentType,
+  userId: number
+) => {
+  const commentObj = { ...comment };
+  const userExist = commentObj.bookmarkedUsers.includes(userId);
+
+  if (userExist) {
+    commentObj.bookmarkedUsers = commentObj.bookmarkedUsers.filter(
+      (id) => id !== userId
+    );
+    commentObj.numberOfBookmarks--;
+  } else {
+    commentObj.bookmarkedUsers = [...commentObj.bookmarkedUsers, userId];
+    commentObj.numberOfBookmarks++;
+  }
+
+  return allComments.map((currentComment) =>
+    currentComment.id === commentObj.id ? commentObj : currentComment
+  );
+};
+
+const updateCommentBookmarksDetails = (
+  commentDetails: CommentType,
+  userId: number
+) => {
+  const commentObj = { ...commentDetails };
+  const userExist = commentObj.bookmarkedUsers.includes(userId);
+
+  if (userExist) {
+    commentObj.bookmarkedUsers = commentObj.bookmarkedUsers.filter(
+      (id) => id !== userId
+    );
+    commentObj.numberOfBookmarks--;
+  } else {
+    commentObj.bookmarkedUsers = [...commentObj.bookmarkedUsers, userId];
+    commentObj.numberOfBookmarks++;
+  }
+
+  return commentObj;
 };

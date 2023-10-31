@@ -116,10 +116,6 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
     this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
   }
 
-  viewComments() {
-    this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
-  }
-
   getSubHtml(user: SimpleUserInfoType) {
     return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
       user.lastname

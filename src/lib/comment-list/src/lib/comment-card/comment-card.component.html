@@ -263,6 +263,7 @@
       </div>
 
       <button
+        (click)="toggleBookmark()"
         type="button"
         class="btn btn-icon btn-circle flex items-center text-sm gap-x-1 p-1 dark:text-dark-text"
         title="bookmark"
@@ -273,7 +274,10 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-5 h-5"
+          class="w-5 h-5 animate-ease-in animate-once animate-jump"
+          [ngClass]="{
+            bookmarked: bookmarked$ | async,
+          }"
         >
           <path
             stroke-linecap="round"
@@ -311,5 +315,12 @@
 
       {{ generateLikeDescription(comment.likes, authUser$ | async) }}
     </div>
+
+    <a
+      (click)="viewDetails()"
+      href="javascript:;"
+      class="font-semibold text-gray-600 inline-block px-2 text-xs dark:text-dark-text"
+      >View all {{ comment.numberOfReplies }} replies</a
+    >
   </div>
 </div>

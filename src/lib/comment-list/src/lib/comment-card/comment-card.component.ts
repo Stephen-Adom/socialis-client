@@ -43,6 +43,7 @@ export class CommentCardComponent implements OnInit, OnDestroy {
   authUser$!: Observable<UserInfoType | null>;
   post!: PostType;
   postSubscription = new Subscription();
+  bookmarked$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
@@ -60,6 +61,7 @@ export class CommentCardComponent implements OnInit, OnDestroy {
         }
       });
     this.checkIfLiked();
+    this.checkIfBookmarked();
   }
 
   formateDate(createdAt: string) {
@@ -96,6 +98,19 @@ export class CommentCardComponent implements OnInit, OnDestroy {
         }
       }
     );
+  }
+
+  checkIfBookmarked() {
+    this.authUser$.subscribe((authUser) => {
+      if (authUser) {
+        const bookmarked = this.comment.bookmarkedUsers.includes(authUser.id);
+
+        bookmarked ? this.bookmarked$.next(true) : this.bookmarked$.next(false);
+
+        return;
+      }
+      this.bookmarked$.next(false);
+    });
   }
 
   checkIfLiked() {
@@ -168,6 +183,19 @@ export class CommentCardComponent implements OnInit, OnDestroy {
       'details',
       this.comment.id,
     ]);
+  }
+
+  toggleBookmark() {
+    this.authUser$.subscribe((user) => {
+      if (user) {
+        this.store.dispatch(
+          PostApiActions.toggleBookmarkComment({
+            comment: this.comment,
+            userId: user.id,
+          })
+        );
+      }
+    });
   }
 
   ngOnDestroy(): void {
