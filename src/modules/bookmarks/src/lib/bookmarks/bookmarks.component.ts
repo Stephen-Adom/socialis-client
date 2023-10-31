@@ -2,7 +2,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable, Subscription } from 'rxjs';
-import { CommentType, PostType, ReplyType } from 'utils';
 import {
   PostApiActions,
   PostState,
@@ -44,10 +43,6 @@ export class BookmarksComponent implements OnInit, OnDestroy {
       });
 
     this.allBookmarks$ = this.store.select(getAllBookmarks);
-
-    this.allBookmarks$.subscribe((data) => {
-      console.log(data, 'bookmarks');
-    });
   }
 
   ngOnDestroy(): void {
@@ -55,8 +50,6 @@ export class BookmarksComponent implements OnInit, OnDestroy {
   }
 
   getPostUidTag(uid: string) {
-    console.log(uid.includes('post'));
-    console.log(uid);
     return uid.includes('post');
   }
 

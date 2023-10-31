@@ -11,17 +11,17 @@
           ></ng-container>
         </ng-container>
 
-        <!-- <ng-container *ngIf="getCommentUidTag(post.uid); else comment">
+        <ng-container *ngIf="getCommentUidTag(post.uid)">
           <ng-container
-            *ngTemplateOutlet="comment; context: { $implicit: comment }"
+            *ngTemplateOutlet="commentTemplate; context: { $implicit: post }"
           ></ng-container>
         </ng-container>
 
-        <ng-container *ngIf="getReplyUidTag(post.uid); else reply">
+        <ng-container *ngIf="getReplyUidTag(post.uid)">
           <ng-container
-            *ngTemplateOutlet="reply; context: { $implicit: reply }"
+            *ngTemplateOutlet="replyTemplate; context: { $implicit: post }"
           ></ng-container>
-        </ng-container> -->
+        </ng-container>
       </ng-container>
     </ng-container>
   </div>
@@ -33,5 +33,9 @@
 <ng-template #postTemplate let-post>
   <lib-post-card [post]="post" />
 </ng-template>
-<ng-template #commentTemplate let-comment></ng-template>
-<ng-template #replyTemplate let-reply></ng-template>
+<ng-template #commentTemplate let-post>
+  <lib-comment-card [comment]="post" />
+</ng-template>
+<ng-template #replyTemplate let-post>
+  <lib-reply-card [reply]="post" />
+</ng-template>
