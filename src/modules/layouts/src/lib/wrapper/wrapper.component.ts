@@ -37,31 +37,28 @@ export class WrapperComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(PostApiActions.fetchAllPost());
 
-    this.postDetailsSubscription = this.store
+    const postDetailsSub = (this.postDetailsSubscription = this.store
       .select(getPostDetails)
-      .pipe(
-        tap((post) => {
-          if (post) {
-            this.store.dispatch(
-              PostApiActions.fetchPostComments({ postId: post.id })
-            );
-          }
-        })
-      )
-      .subscribe();
+      .subscribe((post) => {
+        if (post) {
+          this.store.dispatch(
+            PostApiActions.fetchPostComments({ postId: post.id })
+          );
 
-    this.commentDetailsSubscription = this.store
+          postDetailsSub.unsubscribe();
+        }
+      }));
+
+    const sub = (this.commentDetailsSubscription = this.store
       .select(getCommentDetails)
-      .pipe(
-        tap((comment) => {
-          if (comment) {
-            this.store.dispatch(
-              PostApiActions.fetchReplies({ commentId: comment.id })
-            );
-          }
-        })
-      )
-      .subscribe();
+      .subscribe((comment) => {
+        if (comment) {
+          this.store.dispatch(
+            PostApiActions.fetchReplies({ commentId: comment.id })
+          );
+          sub.unsubscribe();
+        }
+      }));
 
     this.newPostSubscription = this.messageservice
       .onMessage('/feed/post/new')

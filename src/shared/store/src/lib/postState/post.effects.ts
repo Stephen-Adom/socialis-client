@@ -239,4 +239,26 @@ export class PostEffects {
       )
     );
   });
+
+  ToggleReplyBookmarks$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.toggleBookmarkReplies),
+      mergeMap((action: { reply: ReplyType; userId: number }) =>
+        this.bookmarkservice
+          .toggleBookmark({
+            userId: action.userId,
+            contentId: action.reply.id,
+            contentType: 'reply',
+          })
+          .pipe(
+            map(() => {
+              return PostApiActions.toggleBookmarkRepliesSuccess();
+            }),
+            catchError((error: HttpErrorResponse) =>
+              of(AppApiActions.displayErrorMessage({ error: error.error }))
+            )
+          )
+      )
+    );
+  });
 }

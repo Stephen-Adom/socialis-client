@@ -38,6 +38,7 @@ import { CreateReplyFormComponent } from '../create-reply-form/create-reply-form
 })
 export class CommentDetailsComponent implements OnInit {
   likedComment$ = new BehaviorSubject<boolean>(false);
+  bookmarked$ = new BehaviorSubject<boolean>(false);
   routeSubscription = new Subscription();
   commentSubscription = new Subscription();
   authUserSubscription = new Subscription();
@@ -82,6 +83,7 @@ export class CommentDetailsComponent implements OnInit {
         if (comment) {
           this.comment = comment;
           this.checkIfLiked(this.comment, this.authUser);
+          this.checkIfBookmarked(this.authUser, this.comment);
         }
       });
 
@@ -91,10 +93,19 @@ export class CommentDetailsComponent implements OnInit {
         if (authUser) {
           this.authUser = authUser;
           this.checkIfLiked(this.comment, this.authUser);
+          this.checkIfBookmarked(this.authUser, this.comment);
         }
       });
 
     this.allReplies$ = this.store.select(getAllReplies);
+  }
+
+  checkIfBookmarked(authUser: UserInfoType, comment: CommentType) {
+    if (authUser) {
+      const bookmarked = comment.bookmarkedUsers.includes(authUser.id);
+
+      bookmarked ? this.bookmarked$.next(true) : this.bookmarked$.next(false);
+    }
   }
 
   formateDate(createdAt: string) {
@@ -173,6 +184,17 @@ export class CommentDetailsComponent implements OnInit {
       likedPost
         ? this.likedComment$.next(true)
         : this.likedComment$.next(false);
+    }
+  }
+
+  toggleBookmark() {
+    if (this.authUser) {
+      this.store.dispatch(
+        PostApiActions.toggleBookmarkComment({
+          comment: this.comment,
+          userId: this.authUser.id,
+        })
+      );
     }
   }
 }

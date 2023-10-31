@@ -310,6 +310,16 @@ export const PostReducer = createReducer<PostState>(
         state.commentDetails &&
         updateCommentBookmarksDetails(state.commentDetails, action.userId),
     };
+  }),
+  on(PostApiActions.toggleBookmarkReplies, (state: PostState, action) => {
+    return {
+      ...state,
+      allReplies: updateReplyBookmarks(
+        state.allReplies,
+        action.reply,
+        action.userId
+      ),
+    };
   })
 );
 
@@ -544,4 +554,27 @@ const updateCommentBookmarksDetails = (
   }
 
   return commentObj;
+};
+
+const updateReplyBookmarks = (
+  allReplies: ReplyType[],
+  reply: ReplyType,
+  userId: number
+) => {
+  const replyObj = { ...reply };
+  const userExist = replyObj.bookmarkedUsers.includes(userId);
+
+  if (userExist) {
+    replyObj.bookmarkedUsers = replyObj.bookmarkedUsers.filter(
+      (id) => id !== userId
+    );
+    replyObj.numberOfBookmarks--;
+  } else {
+    replyObj.bookmarkedUsers = [...replyObj.bookmarkedUsers, userId];
+    replyObj.numberOfBookmarks++;
+  }
+
+  return allReplies.map((currentReply) =>
+    currentReply.id === replyObj.id ? replyObj : currentReply
+  );
 };

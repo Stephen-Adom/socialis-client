@@ -28,6 +28,7 @@ export class ReplyCardComponent implements OnInit {
   authUser$!: Observable<UserInfoType | null>;
 
   likedReply$ = new BehaviorSubject<boolean>(false);
+  bookmarked$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
@@ -37,6 +38,7 @@ export class ReplyCardComponent implements OnInit {
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
     this.checkIfLiked();
+    this.checkIfBookmarked();
   }
 
   formateDate(createdAt: string) {
@@ -53,6 +55,19 @@ export class ReplyCardComponent implements OnInit {
     }(${user.username}) </a></h4> <p> About - ${
       user.bio ? user.bio : 'Not Available!'
     }</p>`;
+  }
+
+  checkIfBookmarked() {
+    this.authUser$.subscribe((authUser) => {
+      if (authUser) {
+        const bookmarked = this.reply.bookmarkedUsers.includes(authUser.id);
+
+        bookmarked ? this.bookmarked$.next(true) : this.bookmarked$.next(false);
+
+        return;
+      }
+      this.bookmarked$.next(false);
+    });
   }
 
   checkIfLiked() {
@@ -101,5 +116,18 @@ export class ReplyCardComponent implements OnInit {
       type: 'reply',
     };
     this.confirmDeleteService.deletePost(data);
+  }
+
+  toggleBookmark() {
+    this.authUser$.subscribe((user) => {
+      if (user) {
+        this.store.dispatch(
+          PostApiActions.toggleBookmarkReplies({
+            reply: this.reply,
+            userId: user.id,
+          })
+        );
+      }
+    });
   }
 }
