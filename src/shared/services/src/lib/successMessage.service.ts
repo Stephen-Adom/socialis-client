@@ -9,7 +9,6 @@ export class SuccessMessageService {
   successMessageObservable = this.successMessage$.asObservable();
 
   sendSuccessMessage(message: string) {
-    console.log(message, 'success message');
     this.successMessage$.next(message);
   }
 }

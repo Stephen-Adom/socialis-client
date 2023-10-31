@@ -12,6 +12,7 @@ import { Store } from '@ngrx/store';
 import { PostCardComponent } from 'post-card';
 import { CommentCardComponent } from 'comment-list';
 import { ReplyCardComponent } from 'comment-reply-modal';
+import { NoPostsComponent } from 'no-posts';
 
 @Component({
   selector: 'lib-bookmarks',
@@ -21,6 +22,7 @@ import { ReplyCardComponent } from 'comment-reply-modal';
     PostCardComponent,
     CommentCardComponent,
     ReplyCardComponent,
+    NoPostsComponent,
   ],
   templateUrl: './bookmarks.component.html',
   styleUrls: ['./bookmarks.component.css'],

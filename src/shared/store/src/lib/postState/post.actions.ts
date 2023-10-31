@@ -79,5 +79,8 @@ export const PostApiActions = createActionGroup({
       userId: number;
     }>(),
     toggleBookmarkRepliesSuccess: emptyProps(),
+    updateUserBookmarks: props<{
+      bookmarks: PostType[] | ReplyType[] | CommentType[];
+    }>(),
   },
 });

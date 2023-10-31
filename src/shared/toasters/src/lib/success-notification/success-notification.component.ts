@@ -28,20 +28,29 @@ export class SuccessNotificationComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(SUCCESS_MESSAGE_TOKEN)
-    private successMessageService: SuccessMessageService
+    private successMessageService: SuccessMessageService,
+
+    private successMessageService2: SuccessMessageService
   ) {}
 
   ngOnInit(): void {
     this.messageSubscription =
       this.successMessageService.successMessageObservable.subscribe(
         (data: string) => {
-          console.log(data);
           if (data) {
             this.successMessage = data;
             this.dismissAlertAfterSixSeconds();
           }
         }
       );
+
+    this.messageSubscription =
+      this.successMessageService2.successMessageObservable.subscribe((data) => {
+        if (data) {
+          this.successMessage = data;
+          this.dismissAlertAfterSixSeconds();
+        }
+      });
   }
 
   dismissAlertAfterSixSeconds() {

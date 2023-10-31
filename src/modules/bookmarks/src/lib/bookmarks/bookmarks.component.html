@@ -2,8 +2,11 @@
   id="post-details-section"
   class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[70%_30%] gap-5 w-full"
 >
-  <div class="posts-list-container flex flex-col gap-y-4 w-full mt-4 md:mt-5">
-    <ng-container *ngIf="allBookmarks$ | async as allBookmarks">
+  <div
+    class="posts-list-container flex flex-col gap-y-4 w-full mt-4 md:mt-5"
+    *ngIf="allBookmarks$ | async as allBookmarks"
+  >
+    <ng-container *ngIf="allBookmarks.length; else noPostTemplate">
       <ng-container *ngFor="let post of allBookmarks; let i = index">
         <ng-container *ngIf="getPostUidTag(post.uid)">
           <ng-container
@@ -24,6 +27,13 @@
         </ng-container>
       </ng-container>
     </ng-container>
+
+    <ng-template #noPostTemplate>
+      <lib-no-posts />
+      <p class="dark:text-dark-text text-center text-lg font-semibold">
+        No Bookmark Saved!
+      </p>
+    </ng-template>
   </div>
   <div
     class="right-section pt-5 flex-col gap-y-5 hidden sm:hidden md:flex"

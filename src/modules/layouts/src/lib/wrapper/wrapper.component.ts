@@ -27,6 +27,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
   replyUpdateSubscription = new Subscription();
   userUpdateSubscription = new Subscription();
   commentDetailsSubscription = new Subscription();
+  bookmarkUpdateSubscription = new Subscription();
 
   constructor(
     private postservice: PostService,
@@ -154,6 +155,22 @@ export class WrapperComponent implements OnInit, OnDestroy {
         },
       });
 
+    this.bookmarkUpdateSubscription = this.messageservice
+      .onMessage('/feed/bookmarks/update')
+      .subscribe({
+        next: (bookmarks) => {
+          if (bookmarks) {
+            console.log(bookmarks);
+            this.store.dispatch(
+              PostApiActions.updateUserBookmarks({ bookmarks })
+            );
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
     // this.postservice.fetchAllPost().subscribe((posts) => {
     //   console.log(posts);
     // });
@@ -169,5 +186,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.replyUpdateSubscription.unsubscribe();
     this.userUpdateSubscription.unsubscribe();
     this.commentDetailsSubscription.unsubscribe();
+    this.bookmarkUpdateSubscription.unsubscribe();
   }
 }

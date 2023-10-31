@@ -6,9 +6,10 @@ import {
   CommentService,
   PostService,
   ReplyService,
+  SuccessMessageService,
 } from 'services';
 import { PostApiActions } from './post.actions';
-import { catchError, map, mergeMap, of } from 'rxjs';
+import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppApiActions } from '../appState/app.actions';
 import { CommentType, PostType, ReplyType, UserInfoType } from 'utils';
@@ -20,7 +21,8 @@ export class PostEffects {
     private postservice: PostService,
     private replyService: ReplyService,
     private commentservice: CommentService,
-    private bookmarkservice: BookmarksService
+    private bookmarkservice: BookmarksService,
+    private successMessage: SuccessMessageService
   ) {}
 
   FetchAllPosts$ = createEffect(() => {
@@ -207,6 +209,9 @@ export class PostEffects {
             contentType: 'post',
           })
           .pipe(
+            tap((response: any) =>
+              this.successMessage.sendSuccessMessage(response['message'])
+            ),
             map(() => {
               return PostApiActions.toggleBookmarkPostSuccess();
             }),
@@ -229,6 +234,9 @@ export class PostEffects {
             contentType: 'comment',
           })
           .pipe(
+            tap((response: any) =>
+              this.successMessage.sendSuccessMessage(response['message'])
+            ),
             map(() => {
               return PostApiActions.toggleBookmarkCommentSuccess();
             }),
@@ -251,6 +259,9 @@ export class PostEffects {
             contentType: 'reply',
           })
           .pipe(
+            tap((response: any) =>
+              this.successMessage.sendSuccessMessage(response['message'])
+            ),
             map(() => {
               return PostApiActions.toggleBookmarkRepliesSuccess();
             }),

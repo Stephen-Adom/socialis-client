@@ -320,6 +320,12 @@ export const PostReducer = createReducer<PostState>(
         action.userId
       ),
     };
+  }),
+  on(PostApiActions.updateUserBookmarks, (state: PostState, action) => {
+    return {
+      ...state,
+      allBookmarks: action.bookmarks,
+    };
   })
 );
 

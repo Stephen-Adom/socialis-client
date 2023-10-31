@@ -20,6 +20,7 @@ import {
   MessageService,
   PostService,
   ReplyService,
+  SuccessMessageService,
   UserService,
 } from 'services';
 import { StoreModule } from '@ngrx/store';
@@ -32,7 +33,10 @@ import { EditCoverBackgroundModalComponent } from 'edit-cover-background-modal';
 import { EditAuthImageModalComponent } from 'edit-auth-image-modal';
 import { EditAuthProfileModalComponent } from 'edit-auth-profile-modal';
 import { ConfirmDeleteDialogComponent } from 'confirm-delete-dialog';
-import { ActionInProgressComponent } from 'notification';
+import {
+  ActionInProgressComponent,
+  SuccessNotificationComponent,
+} from 'notification';
 
 @NgModule({
   imports: [
@@ -54,6 +58,7 @@ import { ActionInProgressComponent } from 'notification';
     EditAuthProfileModalComponent,
     ConfirmDeleteDialogComponent,
     ActionInProgressComponent,
+    SuccessNotificationComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
@@ -66,6 +71,7 @@ import { ActionInProgressComponent } from 'notification';
     ConfirmDeleteService,
     ActionProgressService,
     BookmarksService,
+    SuccessMessageService,
   ],
 })
 export class LayoutsModule {}
