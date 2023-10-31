@@ -157,17 +157,17 @@ export class CommentCardComponent implements OnInit, OnDestroy {
       target.tagName !== 'BUTTON' &&
       target.tagName !== 'svg'
     ) {
-      this.store.dispatch(
-        PostApiActions.getCommentDetails({ comment: this.comment })
-      );
-      this.router.navigate([
-        this.post.user.username,
-        'details',
-        this.post.uid,
-        this.comment.user.username,
-        'details',
-        this.comment.uid,
-      ]);
+      // this.store.dispatch(
+      //   PostApiActions.getCommentDetails({ comment: this.comment })
+      // );
+      // this.router.navigate([
+      //   this.post.user.username,
+      //   'details',
+      //   this.post.uid,
+      //   this.comment.user.username,
+      //   'details',
+      //   this.comment.uid,
+      // ]);
     }
   }
 

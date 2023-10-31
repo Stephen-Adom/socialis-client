@@ -60,15 +60,14 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
 
   viewPostDetails(event: MouseEvent) {
     const target = event.target as HTMLElement;
-    console.log(target.tagName);
     if (
       target.tagName !== 'A' &&
       target.tagName !== 'IMG' &&
       target.tagName !== 'BUTTON' &&
       target.tagName !== 'svg'
     ) {
-      this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
-      this.router.navigate([this.post.user.username, 'details', this.post.uid]);
+      // this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
+      // this.router.navigate([this.post.user.username, 'details', this.post.uid]);
     }
   }
 

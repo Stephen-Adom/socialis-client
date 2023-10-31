@@ -92,7 +92,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (post) => {
           if (post) {
-            console.log(post);
             this.store.dispatch(PostApiActions.updateAPost({ post }));
           }
         },

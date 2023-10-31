@@ -129,6 +129,7 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       allPosts: updatePost(action.post, state.allPosts),
       postDetails: state.postDetails && action.post,
+      allBookmarks: updateBookmarks(action.post, state.allBookmarks),
     };
   }),
   on(PostApiActions.getCommentDetails, (state: PostState, action) => {
@@ -155,6 +156,7 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       postComments: updateComment(action.comment, state.postComments),
       commentDetails: state.commentDetails && action.comment,
+      allBookmarks: updateBookmarks(action.comment, state.allBookmarks),
     };
   }),
   on(PostApiActions.fetchPostByIdSuccess, (state: PostState, action) => {
@@ -214,6 +216,7 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       allReplies: updateReply(action.reply, state.allReplies),
+      allBookmarks: updateBookmarks(action.reply, state.allBookmarks),
     };
   }),
   on(PostApiActions.editPost, (state: PostState, action) => {
@@ -332,6 +335,12 @@ export const PostReducer = createReducer<PostState>(
 const updatePost = (updatedPost: PostType, allPost: PostType[]) => {
   return allPost.map((post) =>
     post.id === updatedPost.id ? updatedPost : post
+  );
+};
+
+const updateBookmarks = (post: any, allBookmarks: any) => {
+  return allBookmarks.map((bookmark: any) =>
+    bookmark.id === post.id ? post : bookmark
   );
 };
 
