@@ -1,8 +1,8 @@
 <section id="profile-section" class="pt-2 md:pt-5">
   <div
-    class="cover-background-container relative w-full overflow-hidden rounded-lg bg-[url('assets/images/my-computer-room-setup.jpg')] h-[250px]"
+    class="cover-background-container relative w-full overflow-hidden rounded-lg h-[250px] bg-primaryColor"
     [ngStyle]="{
-      background: 'url(' + (authUser$ | async)?.coverImageUrl + ')',
+      background: 'url(' + getImage((authUser$ | async)) + ')',
     }"
   >
     <button

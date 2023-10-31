@@ -31,4 +31,10 @@ export class ProfileComponent implements OnInit {
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
   }
+
+  getImage(authUser: UserInfoType | null) {
+    return authUser?.coverImageUrl
+      ? authUser.coverImageUrl
+      : 'assets/images/abstract-banner.jpg';
+  }
 }
