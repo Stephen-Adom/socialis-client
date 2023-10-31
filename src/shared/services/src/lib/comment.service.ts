@@ -51,7 +51,7 @@ export class CommentService {
     );
   }
 
-  fetchCommentById(commentId: number) {
+  fetchCommentById(commentId: string) {
     return this.http.get<CommentResponseType>(
       BASE_URL + `/${commentId}/comment`,
       this.authHeaders

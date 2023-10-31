@@ -163,10 +163,10 @@ export class CommentCardComponent implements OnInit, OnDestroy {
       this.router.navigate([
         this.post.user.username,
         'details',
-        this.post.id,
+        this.post.uid,
         this.comment.user.username,
         'details',
-        this.comment.id,
+        this.comment.uid,
       ]);
     }
   }
@@ -178,10 +178,10 @@ export class CommentCardComponent implements OnInit, OnDestroy {
     this.router.navigate([
       this.post.user.username,
       'details',
-      this.post.id,
+      this.post.uid,
       this.comment.user.username,
       'details',
-      this.comment.id,
+      this.comment.uid,
     ]);
   }
 

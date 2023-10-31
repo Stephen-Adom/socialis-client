@@ -6,7 +6,7 @@
     class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center"
   >
     <div
-      class="w-full flex flex-col bg-white border shadow-sm rounded-xl dark:bg-gray-800 dark:border-gray-700 dark:shadow-slate-700/[.7]"
+      class="w-full flex flex-col bg-white border shadow-sm rounded-xl dark:bg-main-dark dark:border-gray-700 dark:shadow-slate-700/[.7]"
     >
       <div
         class="flex justify-between items-center py-3 px-4 border-b dark:border-gray-700"
@@ -42,13 +42,15 @@
           class="grid grid-cols-1 sm:grid-cols-1 md:grid-cols-2 w-full mx-auto gap-4"
         >
           <div class="form-group">
-            <label for="firstname" class="text-sm mb-1">Firstname</label>
+            <label for="firstname" class="text-sm mb-1 dark:text-dark-text"
+              >Firstname</label
+            >
             <input
               [class.is-invalid]="
                 Form.get('firstname')?.invalid && Form.get('firstname')?.touched
               "
               type="text"
-              class="form-control"
+              class="form-control dark:bg-main-dark dark:border-gray-700 dark:text-dark-text"
               id="firstname"
               placeholder="Enter first name"
               formControlName="firstname"
@@ -62,13 +64,15 @@
           </div>
 
           <div class="form-group">
-            <label for="lastname" class="text-sm mb-1">Lastname</label>
+            <label for="lastname" class="text-sm mb-1 dark:text-dark-text"
+              >Lastname</label
+            >
             <input
               [class.is-invalid]="
                 Form.get('lastname')?.invalid && Form.get('lastname')?.touched
               "
               type="text"
-              class="form-control"
+              class="form-control dark:bg-main-dark dark:border-gray-700 dark:text-dark-text"
               id="lastname"
               placeholder="Enter last name"
               formControlName="lastname"
@@ -81,7 +85,9 @@
           </div>
 
           <div class="form-group relative">
-            <label for="username" class="text-sm mb-1">Username</label>
+            <label for="username" class="text-sm mb-1 dark:text-dark-text"
+              >Username</label
+            >
             <div
               *ngIf="validatingUsername"
               class="absolute top-[31%] right-2 animate-spin inline-block w-4 h-4 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
@@ -96,7 +102,7 @@
                 Form.get('username')?.invalid && Form.get('username')?.touched
               "
               type="text"
-              class="form-control"
+              class="form-control dark:bg-main-dark dark:border-gray-700 dark:text-dark-text"
               id="username"
               placeholder="Enter username"
               formControlName="username"
@@ -109,7 +115,9 @@
           </div>
 
           <div class="form-group relative">
-            <label for="phone" class="text-sm mb-1">Phonenumber</label>
+            <label for="phone" class="text-sm mb-1 dark:text-dark-text"
+              >Phonenumber</label
+            >
 
             <div
               *ngIf="validatingPhonenumber"
@@ -121,7 +129,9 @@
             </div>
 
             <ngx-intl-tel-input
-              [cssClass]="'block w-full form-control'"
+              [cssClass]="
+                'block w-full form-control dark:bg-main-dark dark:border-gray-700 dark:text-dark-text'
+              "
               [separateDialCode]="separateDialCode"
               [preferredCountries]="preferredCountries"
               [enableAutoCountrySelect]="false"
@@ -147,10 +157,12 @@
           </div>
 
           <div class="form-group col-auto sm:col-auto md:col-span-2">
-            <label for="address" class="text-sm mb-1">Address</label>
+            <label for="address" class="text-sm mb-1 dark:text-dark-text"
+              >Address</label
+            >
             <input
               type="text"
-              class="form-control"
+              class="form-control dark:bg-main-dark dark:border-gray-700 dark:text-dark-text"
               id="address"
               placeholder="Enter address"
               formControlName="address"
@@ -158,12 +170,14 @@
           </div>
 
           <div class="form-group col-auto sm:col-auto md:col-span-2">
-            <label for="bio" class="text-sm mb-1">Bio</label>
+            <label for="bio" class="text-sm mb-1 dark:text-dark-text"
+              >Bio</label
+            >
             <textarea
               formControlName="bio"
               id="bio"
               rows="3"
-              class="form-control"
+              class="form-control dark:bg-main-dark dark:border-gray-700 dark:text-dark-text"
             ></textarea>
           </div>
         </form>

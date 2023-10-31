@@ -68,13 +68,13 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
       target.tagName !== 'svg'
     ) {
       this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
-      this.router.navigate([this.post.user.username, 'details', this.post.id]);
+      this.router.navigate([this.post.user.username, 'details', this.post.uid]);
     }
   }
 
   viewDetails() {
     this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
-    this.router.navigate([this.post.user.username, 'details', this.post.id]);
+    this.router.navigate([this.post.user.username, 'details', this.post.uid]);
   }
 
   ngOnChanges(changes: SimpleChanges): void {

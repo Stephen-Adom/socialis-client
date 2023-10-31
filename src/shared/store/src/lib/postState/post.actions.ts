@@ -30,7 +30,7 @@ export const PostApiActions = createActionGroup({
     fetchRepliesSuccess: props<{ replies: AllRepliesResponseType }>(),
     addNewReply: props<{ newReply: ReplyType }>(),
     updateAComment: props<{ comment: CommentType }>(),
-    fetchPostById: props<{ postId: number }>(),
+    fetchPostById: props<{ postId: string }>(),
     fetchPostByIdSuccess: props<{ post: PostResponseType }>(),
     togglePostLike: props<{
       post: PostType;
@@ -60,7 +60,7 @@ export const PostApiActions = createActionGroup({
     editReply: props<{ reply: ReplyType }>(),
     completeEditReply: emptyProps(),
     deleteReply: props<{ replyId: number }>(),
-    fetchCommentById: props<{ commentId: number }>(),
+    fetchCommentById: props<{ commentId: string }>(),
     fetchCommentByIdSuccess: props<{ comment: CommentResponseType }>(),
     fetchAllUserBookmarks: props<{ userId: number }>(),
     fetchAllUserBookmarksSuccess: props<{ bookmarks: BookmarkResponseType }>(),

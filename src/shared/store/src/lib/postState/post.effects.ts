@@ -42,7 +42,7 @@ export class PostEffects {
   FetchPostById$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PostApiActions.fetchPostById),
-      mergeMap((action: { postId: number }) =>
+      mergeMap((action: { postId: string }) =>
         this.postservice.fetchPostById(action.postId).pipe(
           map((response: any) => {
             return PostApiActions.fetchPostByIdSuccess({ post: response });
@@ -99,7 +99,7 @@ export class PostEffects {
   FetchCommentById$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PostApiActions.fetchCommentById),
-      mergeMap((action: { commentId: number }) =>
+      mergeMap((action: { commentId: string }) =>
         this.commentservice.fetchCommentById(action.commentId).pipe(
           map((response: any) => {
             return PostApiActions.fetchCommentByIdSuccess({

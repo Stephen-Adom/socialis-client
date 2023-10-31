@@ -43,8 +43,8 @@ export class CommentDetailsComponent implements OnInit {
   commentSubscription = new Subscription();
   authUserSubscription = new Subscription();
   allReplies$!: Observable<ReplyType[]>;
-  commentId!: number;
-  postId!: number;
+  commentId!: string;
+  postId!: string;
   comment!: CommentType;
   authUser!: UserInfoType;
   settings = {
@@ -61,8 +61,8 @@ export class CommentDetailsComponent implements OnInit {
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe((data) => {
-      this.commentId = parseInt(data.get('commentId')!);
-      this.postId = parseInt(data.get('postId')!);
+      this.commentId = data.get('commentId') as string;
+      this.postId = data.get('postId') as string;
     });
 
     this.commentSubscription = this.store

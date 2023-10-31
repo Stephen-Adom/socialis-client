@@ -38,7 +38,7 @@ import { ConfirmDeleteService, dataDeleteObject } from 'services';
 })
 export class PostDetailsComponent implements OnInit, OnDestroy {
   post!: PostType;
-  postId!: number;
+  postId!: string;
   postSubscription = new Subscription();
   routeSubscription = new Subscription();
   authUserSubscription = new Subscription();
@@ -59,7 +59,7 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe((data) => {
-      this.postId = parseInt(data.get('id')!);
+      this.postId = data.get('id') as string;
     });
 
     this.postSubscription = this.store
