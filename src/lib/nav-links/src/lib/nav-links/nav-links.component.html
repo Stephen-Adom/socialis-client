@@ -84,5 +84,12 @@
     </svg>
 
     <span class="font-medium">Bookmarks</span>
+
+    <span
+      *ngIf="(totalBookmarks$ | async)! > 0"
+      class="inline-flex items-center justify-center w-5 h-5 text-xs font-semibold text-white bg-primaryColor rounded-full ml-auto"
+    >
+      {{ totalBookmarks$ | async }}
+    </span>
   </li>
 </ul>

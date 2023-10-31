@@ -69,6 +69,11 @@ export const getAllBookmarks = createSelector(
   (state: PostState) => state.allBookmarks
 );
 
+export const getTotalBookmarks = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.allBookmarks.length
+);
+
 export const getEditPostDetails = createSelector(
   selectPostFeature,
   (state: PostState) => state.editPost
