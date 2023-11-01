@@ -24,6 +24,7 @@ export interface PostState {
   allBookmarks: PostType[] | CommentType[] | ReplyType[];
   userPosts: PostType[];
   userComments: CommentType[];
+  userReplies: ReplyType[];
 }
 
 const initialState: PostState = {
@@ -38,6 +39,7 @@ const initialState: PostState = {
   allBookmarks: [],
   userPosts: [],
   userComments: [],
+  userReplies: [],
 };
 
 export const selectPostFeature =
@@ -106,6 +108,11 @@ export const getTotalPostsByUser = createSelector(
 export const getAllCommentsByUser = createSelector(
   selectPostFeature,
   (state: PostState) => state.userComments
+);
+
+export const getAllRepliesByUser = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.userReplies
 );
 
 export const PostReducer = createReducer<PostState>(
@@ -182,6 +189,7 @@ export const PostReducer = createReducer<PostState>(
       postComments: updateComment(action.comment, state.postComments),
       commentDetails: state.commentDetails && action.comment,
       allBookmarks: updateBookmarks(action.comment, state.allBookmarks),
+      userComments: updateComment(action.comment, state.userComments),
     };
   }),
   on(PostApiActions.fetchPostByIdSuccess, (state: PostState, action) => {
@@ -230,6 +238,12 @@ export const PostReducer = createReducer<PostState>(
           action.isLiked,
           action.authuser
         ),
+      userComments: updateCommentLike(
+        action.comment,
+        action.authuser,
+        action.isLiked,
+        state.userComments
+      ),
     };
   }),
   on(PostApiActions.toggleReplyLike, (state: PostState, action) => {
@@ -241,6 +255,12 @@ export const PostReducer = createReducer<PostState>(
         action.isLiked,
         state.allReplies
       ),
+      userReplies: updateReplyLike(
+        action.reply,
+        action.authuser,
+        action.isLiked,
+        state.userReplies
+      ),
     };
   }),
   on(PostApiActions.updateReply, (state: PostState, action) => {
@@ -248,6 +268,7 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       allReplies: updateReply(action.reply, state.allReplies),
       allBookmarks: updateBookmarks(action.reply, state.allBookmarks),
+      userReplies: updateReply(action.reply, state.userReplies),
     };
   }),
   on(PostApiActions.editPost, (state: PostState, action) => {
@@ -331,6 +352,11 @@ export const PostReducer = createReducer<PostState>(
       postDetails:
         state.postDetails &&
         updatePostBookmarksDetails(state.postDetails, action.userId),
+      userPosts: updatePostBookmarks(
+        state.userPosts,
+        action.post,
+        action.userId
+      ),
     };
   }),
   on(PostApiActions.toggleBookmarkComment, (state: PostState, action) => {
@@ -344,6 +370,11 @@ export const PostReducer = createReducer<PostState>(
       commentDetails:
         state.commentDetails &&
         updateCommentBookmarksDetails(state.commentDetails, action.userId),
+      userComments: updateCommentBookmarks(
+        state.userComments,
+        action.comment,
+        action.userId
+      ),
     };
   }),
   on(PostApiActions.toggleBookmarkReplies, (state: PostState, action) => {
@@ -351,6 +382,11 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       allReplies: updateReplyBookmarks(
         state.allReplies,
+        action.reply,
+        action.userId
+      ),
+      userReplies: updateReplyBookmarks(
+        state.userReplies,
         action.reply,
         action.userId
       ),
@@ -374,6 +410,15 @@ export const PostReducer = createReducer<PostState>(
       return {
         ...state,
         userComments: action.comments.data,
+      };
+    }
+  ),
+  on(
+    PostApiActions.fetchAllRepliesByUserSuccess,
+    (state: PostState, action) => {
+      return {
+        ...state,
+        userReplies: action.replies.data,
       };
     }
   )

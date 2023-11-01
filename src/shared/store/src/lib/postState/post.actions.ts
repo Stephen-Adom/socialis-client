@@ -88,5 +88,9 @@ export const PostApiActions = createActionGroup({
     fetchAllCommentsByUserSuccess: props<{
       comments: AllCommentResponseType;
     }>(),
+    fetchAllRepliesByUser: props<{ userId: number }>(),
+    fetchAllRepliesByUserSuccess: props<{
+      replies: AllRepliesResponseType;
+    }>(),
   },
 });

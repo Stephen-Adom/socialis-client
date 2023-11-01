@@ -45,4 +45,11 @@ export class ReplyService {
       this.authHeaders
     );
   }
+
+  fetchAllRepliesByUser(userId: number) {
+    return this.http.get<AllRepliesResponseType>(
+      BASE_URL + '/user/' + userId + '/replies',
+      this.authHeaders
+    );
+  }
 }
