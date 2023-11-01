@@ -23,6 +23,7 @@ export interface PostState {
   editReply: ReplyType | null;
   allBookmarks: PostType[] | CommentType[] | ReplyType[];
   userPosts: PostType[];
+  userComments: CommentType[];
 }
 
 const initialState: PostState = {
@@ -36,6 +37,7 @@ const initialState: PostState = {
   editReply: null,
   allBookmarks: [],
   userPosts: [],
+  userComments: [],
 };
 
 export const selectPostFeature =
@@ -101,6 +103,11 @@ export const getTotalPostsByUser = createSelector(
   (state: PostState) => state.userPosts.length
 );
 
+export const getAllCommentsByUser = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.userComments
+);
+
 export const PostReducer = createReducer<PostState>(
   initialState,
   on(PostApiActions.fetchAllPostSuccess, (state: PostState, action) => {
@@ -147,6 +154,7 @@ export const PostReducer = createReducer<PostState>(
       allPosts: updatePost(action.post, state.allPosts),
       postDetails: state.postDetails && action.post,
       allBookmarks: updateBookmarks(action.post, state.allBookmarks),
+      userPosts: updatePost(action.post, state.userPosts),
     };
   }),
   on(PostApiActions.getCommentDetails, (state: PostState, action) => {
@@ -198,6 +206,12 @@ export const PostReducer = createReducer<PostState>(
           action.isLiked,
           action.authuser
         ),
+      userPosts: updatePostLike(
+        action.post,
+        action.authuser,
+        action.isLiked,
+        state.allPosts
+      ),
     };
   }),
   on(PostApiActions.toggleCommentLike, (state: PostState, action) => {
@@ -252,6 +266,7 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       allPosts: state.allPosts.filter((post) => post.id !== action.postId),
+      userPosts: state.userPosts.filter((post) => post.id !== action.postId),
     };
   }),
   on(PostApiActions.editComment, (state: PostState, action) => {
@@ -352,7 +367,16 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       userPosts: action.allPosts.data,
     };
-  })
+  }),
+  on(
+    PostApiActions.fetchAllCommentsByUserSuccess,
+    (state: PostState, action) => {
+      return {
+        ...state,
+        userComments: action.comments.data,
+      };
+    }
+  )
 );
 
 const updatePost = (updatedPost: PostType, allPost: PostType[]) => {

@@ -290,4 +290,22 @@ export class PostEffects {
       )
     );
   });
+
+  FetchAllCommentsByUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.fetchAllCommentsByUser),
+      mergeMap((action: { userId: number }) =>
+        this.commentservice.fetchAllCommentByUser(action.userId).pipe(
+          map((response: any) => {
+            return PostApiActions.fetchAllCommentsByUserSuccess({
+              comments: response,
+            });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
 }

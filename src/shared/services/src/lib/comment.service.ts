@@ -57,4 +57,11 @@ export class CommentService {
       this.authHeaders
     );
   }
+
+  fetchAllCommentByUser(userId: number) {
+    return this.http.get<AllCommentResponseType>(
+      BASE_URL + `/user/${userId}/comments`,
+      this.authHeaders
+    );
+  }
 }

@@ -1,1 +1,10 @@
-<p>all-user-comment works!</p>
+<div class="max-h-[500px] overflow-y-auto pb-8 pr-4">
+  <ng-container *ngIf="allComments$ | async as allComments; else elseTemplate">
+    <ng-container *ngFor="let comment of allComments; let i = index">
+      <lib-comment-card [comment]="comment" />
+    </ng-container>
+  </ng-container>
+  <ng-template #elseTemplate>
+    <lib-no-posts />
+  </ng-template>
+</div>
