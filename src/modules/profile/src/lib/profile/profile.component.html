@@ -38,7 +38,7 @@
       <button
         data-hs-overlay="#edit-profile-info-modal"
         type="button"
-        class="border border-gray-400 dark:border-gray-700 bg-transparent px-3 py-1 text-xs rounded-full absolute top-2 right-2 hover:bg-gray-300 dark:text-dark-text"
+        class="border border-gray-400 dark:border-gray-700 bg-transparent px-3 py-1 text-xs rounded-full absolute top-2 right-2 hover:bg-gray-300 dark:hover:bg-gray-800 dark:text-dark-text"
       >
         Edit Profile
       </button>
@@ -141,9 +141,9 @@
           <span class="block text-gray-500 dark:text-gray-300 text-sm"
             >Posts</span
           >
-          <span class="block text-gray-800 dark:text-gray-500 text-base"
-            >400</span
-          >
+          <span class="block text-gray-800 dark:text-gray-500 text-base">{{
+            totalPosts$ | async
+          }}</span>
         </div>
         <div class="px-2 text-center">
           <span class="block text-gray-500 dark:text-gray-300 text-sm"
@@ -165,7 +165,7 @@
     </div>
 
     <div
-      class="user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark p-1 w-full border text-center border-white dark:border-main-dark cursor-pointer"
+      class="user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark p-1 w-full border border-white dark:border-main-dark cursor-pointer"
     >
       <div class="flex bg-gray-100 rounded-lg transition p-1 dark:bg-main-dark">
         <nav
@@ -279,7 +279,7 @@
 
       <div class="mt-3">
         <div id="segment-1" role="tabpanel" aria-labelledby="segment-item-1">
-          <lib-all-user-post />
+          <lib-all-user-post [authUser]="authUser$ | async" />
         </div>
         <div
           id="segment-2"

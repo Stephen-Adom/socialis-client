@@ -272,4 +272,22 @@ export class PostEffects {
       )
     );
   });
+
+  FetchAllPostsByUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.fetchAllPostsByUser),
+      mergeMap((action: { userId: number }) =>
+        this.postservice.fetchAllPostsByUser(action.userId).pipe(
+          map((response: any) => {
+            return PostApiActions.fetchAllPostsByUserSuccess({
+              allPosts: response,
+            });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
 }

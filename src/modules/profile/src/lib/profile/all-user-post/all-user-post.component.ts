@@ -1,10 +1,18 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChanges,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PostType } from 'utils';
+import { PostType, UserInfoType } from 'utils';
 import { Observable } from 'rxjs';
 import { PostCardComponent } from 'post-card';
 import { NoPostsComponent } from 'no-posts';
+import { PostApiActions, PostState, getAllPostsByUser } from 'state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'lib-all-user-post',
@@ -13,6 +21,23 @@ import { NoPostsComponent } from 'no-posts';
   templateUrl: './all-user-post.component.html',
   styleUrls: ['./all-user-post.component.scss'],
 })
-export class AllUserPostComponent {
+export class AllUserPostComponent implements OnInit, OnChanges {
+  @Input({ required: true }) authUser!: UserInfoType | null;
   allPosts$!: Observable<PostType[]>;
+
+  constructor(private store: Store<PostState>) {}
+
+  ngOnInit(): void {
+    this.allPosts$ = this.store.select(getAllPostsByUser);
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['authUser'].currentValue) {
+      this.store.dispatch(
+        PostApiActions.fetchAllPostsByUser({
+          userId: changes['authUser'].currentValue.id,
+        })
+      );
+    }
+  }
 }

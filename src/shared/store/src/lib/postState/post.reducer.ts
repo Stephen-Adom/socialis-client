@@ -22,6 +22,7 @@ export interface PostState {
   editComment: CommentType | null;
   editReply: ReplyType | null;
   allBookmarks: PostType[] | CommentType[] | ReplyType[];
+  userPosts: PostType[];
 }
 
 const initialState: PostState = {
@@ -34,6 +35,7 @@ const initialState: PostState = {
   editComment: null,
   editReply: null,
   allBookmarks: [],
+  userPosts: [],
 };
 
 export const selectPostFeature =
@@ -87,6 +89,16 @@ export const getEditCommentDetails = createSelector(
 export const getEditReplyDetails = createSelector(
   selectPostFeature,
   (state: PostState) => state.editReply
+);
+
+export const getAllPostsByUser = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.userPosts
+);
+
+export const getTotalPostsByUser = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.userPosts.length
 );
 
 export const PostReducer = createReducer<PostState>(
@@ -333,6 +345,12 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       allBookmarks: action.bookmarks,
+    };
+  }),
+  on(PostApiActions.fetchAllPostsByUserSuccess, (state: PostState, action) => {
+    return {
+      ...state,
+      userPosts: action.allPosts.data,
     };
   })
 );

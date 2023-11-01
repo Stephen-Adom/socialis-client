@@ -82,5 +82,7 @@ export const PostApiActions = createActionGroup({
     updateUserBookmarks: props<{
       bookmarks: PostType[] | ReplyType[] | CommentType[];
     }>(),
+    fetchAllPostsByUser: props<{ userId: number }>(),
+    fetchAllPostsByUserSuccess: props<{ allPosts: AllPostResponseType }>(),
   },
 });

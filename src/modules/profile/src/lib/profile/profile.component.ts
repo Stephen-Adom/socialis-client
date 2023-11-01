@@ -5,7 +5,7 @@ import { AllUserCommentComponent } from './all-user-comment/all-user-comment.com
 import { AllUserLikedPostsComponent } from './all-user-liked-posts/all-user-liked-posts.component';
 import { AllUserPostComponent } from './all-user-post/all-user-post.component';
 import { AllUserRepliesComponent } from './all-user-replies/all-user-replies.component';
-import { AppState, getUserInformation } from 'state';
+import { AppState, getTotalPostsByUser, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { UserInfoType } from 'utils';
 import { Observable } from 'rxjs';
@@ -26,11 +26,13 @@ import { format } from 'date-fns';
 })
 export class ProfileComponent implements OnInit {
   authUser$!: Observable<UserInfoType | null>;
+  totalPosts$!: Observable<number>;
 
   constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
+    this.totalPosts$ = this.store.select(getTotalPostsByUser);
   }
 
   getImage(authUser: UserInfoType | null) {
