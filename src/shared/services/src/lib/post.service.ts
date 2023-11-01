@@ -81,4 +81,11 @@ export class PostService {
       this.authHeaders
     );
   }
+
+  fetchAllLikesByUser(userId: number) {
+    return this.http.get<AllPostResponseType>(
+      BASE_URL + `/user/${userId}/likes`,
+      this.authHeaders
+    );
+  }
 }

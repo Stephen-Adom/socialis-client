@@ -92,5 +92,9 @@ export const PostApiActions = createActionGroup({
     fetchAllRepliesByUserSuccess: props<{
       replies: AllRepliesResponseType;
     }>(),
+    fetchAllPostLikesByUser: props<{ userId: number }>(),
+    fetchAllPostLikesByUserSuccess: props<{
+      postLikes: BookmarkResponseType;
+    }>(),
   },
 });

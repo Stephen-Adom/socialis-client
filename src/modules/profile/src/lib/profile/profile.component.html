@@ -303,7 +303,7 @@
           role="tabpanel"
           aria-labelledby="segment-item-4"
         >
-          <lib-all-user-liked-posts />
+          <lib-all-user-liked-posts [authUser]="authUser$ | async" />
         </div>
       </div>
     </div>

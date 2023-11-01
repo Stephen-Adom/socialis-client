@@ -25,6 +25,7 @@ export interface PostState {
   userPosts: PostType[];
   userComments: CommentType[];
   userReplies: ReplyType[];
+  userPostLikes: PostType[] | CommentType[] | ReplyType[];
 }
 
 const initialState: PostState = {
@@ -40,6 +41,7 @@ const initialState: PostState = {
   userPosts: [],
   userComments: [],
   userReplies: [],
+  userPostLikes: [],
 };
 
 export const selectPostFeature =
@@ -113,6 +115,11 @@ export const getAllCommentsByUser = createSelector(
 export const getAllRepliesByUser = createSelector(
   selectPostFeature,
   (state: PostState) => state.userReplies
+);
+
+export const getAllPostLikesByUser = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.userPostLikes
 );
 
 export const PostReducer = createReducer<PostState>(
@@ -419,6 +426,15 @@ export const PostReducer = createReducer<PostState>(
       return {
         ...state,
         userReplies: action.replies.data,
+      };
+    }
+  ),
+  on(
+    PostApiActions.fetchAllPostLikesByUserSuccess,
+    (state: PostState, action) => {
+      return {
+        ...state,
+        userPostLikes: action.postLikes.data,
       };
     }
   )

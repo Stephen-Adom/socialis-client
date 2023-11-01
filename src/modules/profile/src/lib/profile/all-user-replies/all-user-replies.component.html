@@ -1,6 +1,6 @@
 <div class="max-h-[500px] overflow-y-auto pb-8 pr-4">
-  <ng-container *ngIf="allReplies$ | async as allReplies; else elseTemplate">
-    <ng-container *ngFor="let reply of allReplies; let i = index">
+  <ng-container *ngIf="(allReplies$ | async)?.length; else elseTemplate">
+    <ng-container *ngFor="let reply of allReplies$ | async; let i = index">
       <lib-reply-card [reply]="reply" />
     </ng-container>
   </ng-container>

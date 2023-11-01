@@ -326,4 +326,22 @@ export class PostEffects {
       )
     );
   });
+
+  FetchAllLikesByUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.fetchAllPostLikesByUser),
+      mergeMap((action: { userId: number }) =>
+        this.postservice.fetchAllLikesByUser(action.userId).pipe(
+          map((response: any) => {
+            return PostApiActions.fetchAllPostLikesByUserSuccess({
+              postLikes: response,
+            });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
 }
