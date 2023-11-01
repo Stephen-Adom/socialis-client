@@ -160,6 +160,19 @@
   <div
     class="card-body rounded-lg overflow-hidden ml-[3.5rem] text-sm dark:text-dark-text"
   >
+    <span
+      *ngIf="(post$ | async) && (comment$ | async)"
+      class="inline-block dark:text-gray-400 italic font-normal mb-3 text-sm"
+      >Replying to
+      <span class="text-primaryColor font-bold">{{
+        (comment$ | async)?.user?.username
+      }}</span>
+      and
+      <span class="text-primaryColor font-bold">{{
+        (post$ | async)?.user?.username
+      }}</span>
+    </span>
+
     <p *ngIf="reply.content">
       {{ reply.content }}
     </p>

@@ -1,11 +1,23 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReplyType, SimpleUserInfoType, UserInfoType } from 'utils';
+import {
+  CommentType,
+  PostType,
+  ReplyType,
+  SimpleUserInfoType,
+  UserInfoType,
+} from 'utils';
 import { format } from 'date-fns';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
-import { PostApiActions, PostState, getUserInformation } from 'state';
+import {
+  PostApiActions,
+  PostState,
+  getCommentDetails,
+  getPostDetails,
+  getUserInformation,
+} from 'state';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { ConfirmDeleteService, dataDeleteObject } from 'services';
@@ -26,6 +38,8 @@ export class ReplyCardComponent implements OnInit {
   };
 
   authUser$!: Observable<UserInfoType | null>;
+  post$!: Observable<PostType | null>;
+  comment$!: Observable<CommentType | null>;
 
   likedReply$ = new BehaviorSubject<boolean>(false);
   bookmarked$ = new BehaviorSubject<boolean>(false);
@@ -37,6 +51,8 @@ export class ReplyCardComponent implements OnInit {
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
+    this.post$ = this.store.select(getPostDetails);
+    this.comment$ = this.store.select(getCommentDetails);
     this.checkIfLiked();
     this.checkIfBookmarked();
   }

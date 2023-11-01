@@ -382,6 +382,11 @@ export const PostReducer = createReducer<PostState>(
         action.post,
         action.userId
       ),
+      userPostLikes: updateUserPostBookmark(
+        state.userPostLikes,
+        action.post,
+        action.userId
+      ),
     };
   }),
   on(PostApiActions.toggleBookmarkComment, (state: PostState, action) => {
@@ -400,6 +405,11 @@ export const PostReducer = createReducer<PostState>(
         action.comment,
         action.userId
       ),
+      userPostLikes: updateUserPostBookmark(
+        state.userPostLikes,
+        action.comment,
+        action.userId
+      ),
     };
   }),
   on(PostApiActions.toggleBookmarkReplies, (state: PostState, action) => {
@@ -412,6 +422,11 @@ export const PostReducer = createReducer<PostState>(
       ),
       userReplies: updateReplyBookmarks(
         state.userReplies,
+        action.reply,
+        action.userId
+      ),
+      userPostLikes: updateUserPostBookmark(
+        state.userPostLikes,
         action.reply,
         action.userId
       ),
@@ -793,4 +808,27 @@ const updateUserReplyLike = (
   }
 
   return likes;
+};
+
+const updateUserPostBookmark = (
+  userPostLikes: any[],
+  post: PostType | CommentType | ReplyType,
+  userId: number
+) => {
+  const postObj = { ...post };
+  const userExist = postObj.bookmarkedUsers.includes(userId);
+
+  if (userExist) {
+    postObj.bookmarkedUsers = postObj.bookmarkedUsers.filter(
+      (id) => id !== userId
+    );
+    postObj.numberOfBookmarks--;
+  } else {
+    postObj.bookmarkedUsers = [...postObj.bookmarkedUsers, userId];
+    postObj.numberOfBookmarks++;
+  }
+
+  return userPostLikes.map((currentPost) =>
+    currentPost.id === postObj.id ? postObj : currentPost
+  );
 };
