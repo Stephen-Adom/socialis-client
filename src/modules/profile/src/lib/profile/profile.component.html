@@ -38,13 +38,13 @@
       <button
         data-hs-overlay="#edit-profile-info-modal"
         type="button"
-        class="border border-gray-300 bg-transparent px-3 py-1 text-xs rounded-full absolute top-2 right-2 hover:bg-gray-300 dark:text-dark-text"
+        class="border border-gray-400 dark:border-gray-700 bg-transparent px-3 py-1 text-xs rounded-full absolute top-2 right-2 hover:bg-gray-300 dark:text-dark-text"
       >
-        Edit
+        Edit Profile
       </button>
 
       <div
-        class="auth-user-profile-container h-[6rem] w-[6rem] rounded-full ring-2 ring-offset-4 ring-primaryColor dark:ring-primaryColor mx-auto relative"
+        class="auth-user-profile-container h-[6rem] w-[6rem] rounded-full ring-2 ring-offset-4 ring-offset-transparent ring-primaryColor dark:ring-primaryColor mx-auto relative"
       >
         <img
           class="inline-block w-full rounded-full h-full"
@@ -111,16 +111,37 @@
         {{ authUser.address ? authUser.address : 'N/A' }}
       </p>
 
+      <p class="flex items-center justify-center gap-1 mt-2 text-sm">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+          />
+        </svg>
+
+        Joined {{ formatCreatedAt(authUser.createdAt) }}
+      </p>
+
       <p class="mt-2 text-sm">
         {{ authUser.bio ? authUser.bio : 'N/A' }}
       </p>
 
-      <div class="mt-4 flex items-center gap-3 justify-center divide-x">
+      <div
+        class="mt-4 flex items-center gap-3 justify-center divide-x dark:divide-gray-700"
+      >
         <div class="px-2 text-center">
           <span class="block text-gray-500 dark:text-gray-300 text-sm"
             >Posts</span
           >
-          <span class="block text-gray-800 dark:text-dark-text text-base"
+          <span class="block text-gray-800 dark:text-gray-500 text-base"
             >400</span
           >
         </div>
@@ -128,7 +149,7 @@
           <span class="block text-gray-500 dark:text-gray-300 text-sm"
             >Followers</span
           >
-          <span class="block text-gray-800 dark:text-dark-text text-base"
+          <span class="block text-gray-800 dark:text-gray-500 text-base"
             >400</span
           >
         </div>
@@ -136,7 +157,7 @@
           <span class="block text-gray-500 dark:text-gray-300 text-sm"
             >Following</span
           >
-          <span class="block text-gray-800 dark:text-dark-text text-base"
+          <span class="block text-gray-800 dark:text-gray-500 text-base"
             >400</span
           >
         </div>
@@ -154,7 +175,7 @@
         >
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white active"
+            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-transparent hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border border-transparent justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white active"
             id="segment-item-1"
             data-hs-tab="#segment-1"
             aria-controls="segment-1"
@@ -179,7 +200,7 @@
           </button>
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+            class="hs-tab-active:bg-transparent hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-transparent hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border border-transparent justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
             id="segment-item-2"
             data-hs-tab="#segment-2"
             aria-controls="segment-2"
@@ -204,7 +225,7 @@
           </button>
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+            class="hs-tab-active:bg-transparent hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-transparent hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border border-transparent justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
             id="segment-item-3"
             data-hs-tab="#segment-3"
             aria-controls="segment-3"
@@ -230,7 +251,7 @@
 
           <button
             type="button"
-            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-gray-800 hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+            class="hs-tab-active:bg-transparent hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-transparent hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border border-transparent justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
             id="segment-item-4"
             data-hs-tab="#segment-4"
             aria-controls="segment-4"

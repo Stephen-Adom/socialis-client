@@ -9,6 +9,7 @@ import { AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { UserInfoType } from 'utils';
 import { Observable } from 'rxjs';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'lib-profile',
@@ -36,5 +37,9 @@ export class ProfileComponent implements OnInit {
     return authUser?.coverImageUrl
       ? authUser.coverImageUrl
       : 'assets/images/abstract-banner.jpg';
+  }
+
+  formatCreatedAt(createdAt: string) {
+    return format(new Date(createdAt), 'MMMM, yyyy');
   }
 }
