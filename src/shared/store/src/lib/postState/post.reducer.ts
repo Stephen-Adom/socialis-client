@@ -227,6 +227,12 @@ export const PostReducer = createReducer<PostState>(
         action.isLiked,
         state.allPosts
       ),
+      userPostLikes: updateUserPostLike(
+        action.post,
+        action.authuser,
+        action.isLiked,
+        state.userPostLikes
+      ),
     };
   }),
   on(PostApiActions.toggleCommentLike, (state: PostState, action) => {
@@ -251,6 +257,12 @@ export const PostReducer = createReducer<PostState>(
         action.isLiked,
         state.userComments
       ),
+      userPostLikes: updateUserCommentLike(
+        action.comment,
+        action.authuser,
+        action.isLiked,
+        state.userPostLikes
+      ),
     };
   }),
   on(PostApiActions.toggleReplyLike, (state: PostState, action) => {
@@ -267,6 +279,12 @@ export const PostReducer = createReducer<PostState>(
         action.authuser,
         action.isLiked,
         state.userReplies
+      ),
+      userPostLikes: updateUserReplyLike(
+        action.reply,
+        action.authuser,
+        action.isLiked,
+        state.userPostLikes
       ),
     };
   }),
@@ -700,4 +718,79 @@ const updateReplyBookmarks = (
   return allReplies.map((currentReply) =>
     currentReply.id === replyObj.id ? replyObj : currentReply
   );
+};
+
+const updateUserPostLike = (
+  post: PostType,
+  user: UserInfoType,
+  isLiked: boolean,
+  userPostLikes: any[]
+) => {
+  const postObj = { ...post };
+  let likes = [];
+  if (isLiked) {
+    likes = userPostLikes.filter((like) => like.id !== post.id);
+  } else {
+    const likedBy = {
+      username: user.username,
+      imageUrl: user.imageUrl,
+      firstname: user.firstname,
+      lastname: user.lastname,
+    };
+    postObj.numberOfLikes++;
+    postObj.likes = [likedBy, ...postObj.likes];
+    likes = [postObj, ...userPostLikes];
+  }
+
+  return likes;
+};
+
+const updateUserCommentLike = (
+  comment: CommentType,
+  user: UserInfoType,
+  isLiked: boolean,
+  userPostLikes: any[]
+) => {
+  const commentObj = { ...comment };
+  let likes = [];
+  if (isLiked) {
+    likes = userPostLikes.filter((like) => like.id !== comment.id);
+  } else {
+    const likedBy = {
+      username: user.username,
+      imageUrl: user.imageUrl,
+      firstname: user.firstname,
+      lastname: user.lastname,
+    };
+    commentObj.numberOfLikes++;
+    commentObj.likes = [likedBy, ...commentObj.likes];
+    likes = [commentObj, ...userPostLikes];
+  }
+
+  return likes;
+};
+
+const updateUserReplyLike = (
+  reply: ReplyType,
+  user: UserInfoType,
+  isLiked: boolean,
+  userPostLikes: any[]
+) => {
+  const replyObj = { ...reply };
+  let likes = [];
+  if (isLiked) {
+    likes = userPostLikes.filter((like) => like.id !== reply.id);
+  } else {
+    const likedBy = {
+      username: user.username,
+      imageUrl: user.imageUrl,
+      firstname: user.firstname,
+      lastname: user.lastname,
+    };
+    replyObj.numberOfLikes++;
+    replyObj.likes = [likedBy, ...replyObj.likes];
+    likes = [replyObj, ...userPostLikes];
+  }
+
+  return likes;
 };
