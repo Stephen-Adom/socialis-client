@@ -1,5 +1,5 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -36,7 +36,7 @@ import { CreateReplyFormComponent } from '../create-reply-form/create-reply-form
   templateUrl: './comment-details.component.html',
   styleUrls: ['./comment-details.component.css'],
 })
-export class CommentDetailsComponent implements OnInit {
+export class CommentDetailsComponent implements OnInit, OnDestroy {
   likedComment$ = new BehaviorSubject<boolean>(false);
   bookmarked$ = new BehaviorSubject<boolean>(false);
   routeSubscription = new Subscription();
@@ -196,5 +196,10 @@ export class CommentDetailsComponent implements OnInit {
         })
       );
     }
+  }
+
+  ngOnDestroy(): void {
+    this.store.dispatch(PostApiActions.clearCommentDetails());
+    this.store.dispatch(PostApiActions.clearReplyDetails());
   }
 }

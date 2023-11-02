@@ -149,6 +149,24 @@ export const PostReducer = createReducer<PostState>(
       postDetails: null,
     };
   }),
+  on(PostApiActions.clearCommentDetails, (state: PostState) => {
+    return {
+      ...state,
+      commentDetails: null,
+    };
+  }),
+  on(PostApiActions.clearAllCommentsDetails, (state: PostState) => {
+    return {
+      ...state,
+      postComments: [],
+    };
+  }),
+  on(PostApiActions.clearReplyDetails, (state: PostState) => {
+    return {
+      ...state,
+      allReplies: [],
+    };
+  }),
   on(PostApiActions.fetchPostCommentsSuccess, (state: PostState, action) => {
     return {
       ...state,

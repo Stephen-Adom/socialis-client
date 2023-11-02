@@ -145,6 +145,8 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     this.postSubscription.unsubscribe();
     this.routeSubscription.unsubscribe();
     this.authUserSubscription.unsubscribe();
+    // this.store.dispatch(PostApiActions.clearPostDetails());
+    // this.store.dispatch(PostApiActions.clearAllCommentsDetails());
   }
 
   generateLikeDescription(

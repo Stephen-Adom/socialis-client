@@ -1,4 +1,4 @@
-<div class="max-h-[500px] overflow-y-auto pb-8 pr-4">
+<div class="max-h-[500px] overflow-y-auto pb-8 px-2 flex flex-col gap-y-4">
   <ng-container *ngIf="(allPosts$ | async)?.length; else elseTemplate">
     <ng-container *ngFor="let post of allPosts$ | async; let i = index">
       <lib-post-card [post]="post" />
