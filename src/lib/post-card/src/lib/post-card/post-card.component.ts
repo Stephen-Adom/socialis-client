@@ -13,6 +13,7 @@ import {
   PostType,
   SimpleUserInfoType,
   UserInfoType,
+  UserSummaryInfo,
   generateLikeDescription,
 } from 'utils';
 import { formatDistanceToNow } from 'date-fns';
@@ -22,7 +23,7 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
-import { ConfirmDeleteService, dataDeleteObject } from 'services';
+import { ConfirmDeleteService, UserService, dataDeleteObject } from 'services';
 
 @Component({
   selector: 'lib-post-card',
@@ -45,9 +46,11 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
 
   likedPost$ = new BehaviorSubject<boolean>(false);
   bookmarked$ = new BehaviorSubject<boolean>(false);
+  authorInfo!: UserSummaryInfo;
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
+    private userservice: UserService,
     private store: Store<PostState>,
     private router: Router
   ) {}
@@ -56,6 +59,14 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
     this.authUser$ = this.store.select(getUserInformation);
     this.checkIfLiked();
     this.checkIfBookmarked();
+  }
+
+  showAuthorInfo(user: SimpleUserInfoType) {
+    this.userservice
+      .fetchUserSummaryInfo(user.username)
+      .subscribe((response: any) => {
+        this.authorInfo = response.data;
+      });
   }
 
   viewPostDetails(event: MouseEvent) {
@@ -174,5 +185,9 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
         );
       }
     });
+  }
+
+  viewAuthorDetails(user: SimpleUserInfoType) {
+    this.router.navigate(['user', user.username, 'profile']);
   }
 }

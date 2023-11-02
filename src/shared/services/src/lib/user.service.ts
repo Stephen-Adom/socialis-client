@@ -2,7 +2,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getAuthHttpOptions } from './httpHeaders';
-import { SuccessMessageType } from 'utils';
+import { SuccessMessageType, UserSummaryResponseType } from 'utils';
 import BASE_URL from './base_url';
 
 @Injectable({
@@ -47,6 +47,13 @@ export class UserService {
     return this.http.post<SuccessMessageType>(
       BASE_URL + `/user/${userId}/update_user_info`,
       userInfo,
+      this.authHeaders
+    );
+  }
+
+  fetchUserSummaryInfo(username: string) {
+    return this.http.get<UserSummaryResponseType>(
+      BASE_URL + `/user/${username}/info`,
       this.authHeaders
     );
   }

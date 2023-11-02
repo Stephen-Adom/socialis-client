@@ -34,6 +34,7 @@
         "src/lib/edit-cover-background-modal/src/index.ts"
       ],
       "followers": ["src/lib/followers/src/index.ts"],
+      "friends": ["src/modules/friends/src/index.ts"],
       "guards": ["src/shared/guards/src/index.ts"],
       "layouts": ["src/modules/layouts/src/index.ts"],
       "message-panel": ["src/lib/message-panel/src/index.ts"],
@@ -49,6 +50,7 @@
       "services": ["src/shared/services/src/index.ts"],
       "state": ["src/shared/store/src/index.ts"],
       "stories": ["src/lib/stories/src/index.ts"],
+      "user-profile": ["src/modules/user-profile/src/index.ts"],
       "utils": ["src/shared/utils/src/index.ts"]
     }
   },

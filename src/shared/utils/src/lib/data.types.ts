@@ -110,6 +110,17 @@ export type ReplyType = {
   bookmarkedUsers: number[];
 };
 
+export type UserSummaryInfo = {
+  firstname: string;
+  lastname: string;
+  username: string;
+  bio: string;
+  imageUrl: string;
+  totalPost: number;
+  followers: number;
+  following: number;
+};
+
 export type NewPostResponseType = {
   status: string;
   data: PostType;
@@ -142,5 +153,10 @@ export type PostResponseType = {
 
 export type BookmarkResponseType = {
   data: PostType[] | ReplyType[] | CommentType[];
+  status: string;
+};
+
+export type UserSummaryResponseType = {
+  data: UserSummaryInfo;
   status: string;
 };

@@ -23,6 +23,11 @@ export const layoutsRoutes: Route[] = [
           import('bookmarks').then((m) => m.BookmarksComponent),
       },
       {
+        path: 'user/:username/profile',
+        loadComponent: () =>
+          import('user-profile').then((m) => m.UserProfileComponent),
+      },
+      {
         path: ':username/details/:id',
         loadComponent: () =>
           import('post-details').then((m) => m.PostDetailsComponent),
