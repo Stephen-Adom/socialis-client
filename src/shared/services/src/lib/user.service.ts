@@ -57,4 +57,11 @@ export class UserService {
       this.authHeaders
     );
   }
+
+  fetchUserFullInformation(username: string) {
+    return this.http.get<UserSummaryResponseType>(
+      BASE_URL + `/user/${username}/full_information`,
+      this.authHeaders
+    );
+  }
 }

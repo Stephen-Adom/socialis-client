@@ -5,11 +5,11 @@
   <div class="card-header flex items-center justify-between pb-3">
     <div class="flex-shrink-0 group block">
       <div
-        (click)="viewAuthorDetails(post.user)"
         class="flex items-center relative group"
         (mouseenter)="showAuthorInfo(post.user)"
       >
         <img
+          (click)="viewAuthorDetails(post.user)"
           class="inline-block flex-shrink-0 h-[3.5rem] w-[3.5rem] rounded-full"
           [src]="
             post.user.imageUrl
@@ -19,7 +19,11 @@
           alt="Image Description"
         />
         <div class="ml-3 text-left">
-          <a href="" class="font-semibold text-gray-800 dark:text-dark-text">
+          <a
+            (click)="viewAuthorDetails(post.user)"
+            href="javascript:;"
+            class="font-semibold text-gray-800 dark:text-dark-text"
+          >
             {{ post.user.firstname }} {{ post.user.lastname }}
           </a>
           <div class="flex items-center gap-x-1">

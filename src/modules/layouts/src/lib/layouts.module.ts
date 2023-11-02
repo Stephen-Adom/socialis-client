@@ -24,7 +24,14 @@ import {
   UserService,
 } from 'services';
 import { StoreModule } from '@ngrx/store';
-import { PostEffects, PostReducer, featurePostKey } from 'state';
+import {
+  PostEffects,
+  PostReducer,
+  UserEffects,
+  UserReducer,
+  featurePostKey,
+  featureUserKey,
+} from 'state';
 import { EffectsModule } from '@ngrx/effects';
 import { CommentReplyModalComponent } from 'comment-reply-modal';
 import { ReplyModalFormComponent } from 'reply-modal-form';
@@ -49,7 +56,8 @@ import {
     SearchModalComponent,
     HttpClientModule,
     StoreModule.forFeature(featurePostKey, PostReducer),
-    EffectsModule.forFeature([PostEffects]),
+    StoreModule.forFeature(featureUserKey, UserReducer),
+    EffectsModule.forFeature([PostEffects, UserEffects]),
     CommentReplyModalComponent,
     ReplyModalFormComponent,
     AddCommentFormModalComponent,

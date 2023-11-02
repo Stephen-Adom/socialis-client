@@ -6,9 +6,7 @@ import {
   on,
 } from '@ngrx/store';
 import { PostApiActions } from './post.actions';
-import { CommentType, PostType } from 'utils';
-import { ReplyType } from 'utils';
-import { UserInfoType } from 'utils';
+import { CommentType, PostType, ReplyType, UserInfoType } from 'utils';
 
 export const featurePostKey = 'post';
 
