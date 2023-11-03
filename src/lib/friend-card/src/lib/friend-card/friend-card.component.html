@@ -1,1 +1,86 @@
-<p>friend-card works!</p>
+<div class="friend-card flex items-start gap-x-2">
+  <img
+    class="inline-block flex-shrink-0 h-[3.5rem] w-[3.5rem] rounded-full"
+    src="assets/images/users/default.jpg"
+    alt="Image Description"
+  />
+
+  <section class="w-full">
+    <div class="flex items-center justify-between w-full">
+      <div class="text-left">
+        <a
+          href="javascript:;"
+          class="font-semibold text-gray-800 dark:text-dark-text text-sm"
+        >
+          John Snow
+        </a>
+        <div class="flex items-center gap-x-1 flex-wrap">
+          <a href="" class="font-medium text-gray-400 text-xs"> snow123 </a>
+          <span class="inline-block">
+            <svg
+              class="h-3 w-3 text-gray-400"
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              fill="none"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <path stroke="none" d="M0 0h24v24H0z" />
+              <circle cx="12" cy="12" r="4" />
+            </svg>
+          </span>
+          <span class="inline-block text-xs text-gray-400 italic"
+            >john-snow@gmail.com</span
+          >
+        </div>
+      </div>
+
+      <button
+        type="button"
+        class="w-auto px-4 bg-secondaryColor hover:bg-primaryColor text-white py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4 stroke-white"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+          />
+        </svg>
+
+        Unfriend
+      </button>
+    </div>
+
+    <div class="text-sm mt-1">
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Rem itaque
+      accusamus nisi? Similique ab a optio deserunt, totam quia corporis?
+      Pariatur odio eveniet corporis voluptates minus incidunt eum molestias ea.
+    </div>
+
+    <p class="flex items-center gap-x-4 mt-3 border-t border-gray-200 py-2">
+      <small class="text-gray-400 inline-block">
+        <span class="font-bold dark:text-dark-text">1K</span>
+        Followers</small
+      >
+
+      <small class="text-gray-400 inline-block">
+        <span class="font-bold dark:text-dark-text">1k</span>
+        Following</small
+      >
+      <small class="text-gray-400 inline-block">
+        <span class="font-bold dark:text-dark-text">4</span>
+        posts</small
+      >
+    </p>
+  </section>
+</div>
