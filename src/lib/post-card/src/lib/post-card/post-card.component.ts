@@ -33,6 +33,7 @@ import { ConfirmDeleteService, UserService, dataDeleteObject } from 'services';
   styleUrls: ['./post-card.component.css'],
 })
 export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
+  @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) post!: PostType;
   authUser$!: Observable<UserInfoType | null>;
   authUserSubscription = new Subscription();
@@ -188,6 +189,14 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   viewAuthorDetails(user: SimpleUserInfoType) {
-    this.router.navigate(['user', user.username, 'profile']);
+    const sub = this.authUser$.subscribe((authUser) => {
+      if (authUser?.username === user.username) {
+        this.router.navigate(['profile']);
+      } else {
+        this.router.navigate(['user', user.username, 'profile']);
+      }
+
+      sub.unsubscribe();
+    });
   }
 }

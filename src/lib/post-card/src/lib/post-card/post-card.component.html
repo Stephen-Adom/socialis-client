@@ -1,6 +1,8 @@
 <div
   (click)="viewPostDetails($event)"
-  class="card post-card rounded-lg bg-white dark:bg-main-dark p-3 w-full border border-white dark:border-main-dark cursor-pointer"
+  class="card post-card rounded-lg bg-white dark:bg-main-dark p-3 w-full border border-white dark:border-main-dark cursor-pointer {{
+    pageClass
+  }}"
 >
   <div class="card-header flex items-center justify-between pb-3">
     <div class="flex-shrink-0 group block">

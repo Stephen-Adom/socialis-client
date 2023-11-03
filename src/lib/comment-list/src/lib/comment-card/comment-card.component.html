@@ -1,6 +1,8 @@
 <div
   (click)="viewCommentDetails($event)"
-  class="comment-card bg-white dark:bg-main-dark p-3 w-full cursor-pointer border-gray-200 border-b dark:border-y-gray-700"
+  class="post-card bg-white dark:bg-main-dark p-3 w-full cursor-pointer border-gray-200 border-b dark:border-y-gray-700 {{
+    pageClass
+  }}"
   *ngIf="comment"
 >
   <div class="card-header flex items-center justify-between pb-1">

@@ -30,6 +30,7 @@ import { ConfirmDeleteService, dataDeleteObject } from 'services';
   styleUrls: ['./reply-card.component.scss'],
 })
 export class ReplyCardComponent implements OnInit {
+  @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) reply!: ReplyType;
 
   settings = {

@@ -70,6 +70,16 @@ body {
     @apply shadow-light-shadow dark:shadow-none;
   }
 
+  .post-card.profile-card {
+    border-bottom: 1px solid rgb(229, 231, 235) !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+
+    .image-container a {
+      flex-basis: 180px !important;
+    }
+  }
+
   .list-group-item {
     @apply px-5 py-3 flex items-center gap-x-3 rounded-md relative hover:cursor-pointer hover:after:content-[''] hover:text-primaryColor hover:after:absolute hover:after:left-0 hover:after:top-[50%] hover:after:w-1 hover:after:h-[50%] hover:after:bg-primaryColor hover:after:rounded-sm hover:after:-translate-y-[50%] dark:text-dark-text;
 

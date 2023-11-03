@@ -1,1 +1,282 @@
-<p>user-profile works!</p>
+<section id="profile-section" class="pt-2 md:pt-5">
+  <div
+    class="cover-background-container relative w-full overflow-hidden rounded-lg h-[250px] bg-primaryColor"
+    [ngStyle]="{
+        background: 'url(' + getImage((authorInfo$ | async)) + ')',
+      }"
+  >
+    <button
+      type="button"
+      class="bg-white dark:bg-main-dark dark:border-gray-700 border shadow-md rounded-md p-2 absolute top-2 right-2 flex items-center text-xs gap-x-1"
+      title="back"
+      (click)="back()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-4 h-4"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
+        />
+      </svg>
+      Back
+    </button>
+  </div>
+
+  <div
+    class="container relative -top-[50px] mx-auto w-[95%] md:w-[90%] grid grid-cols-1 sm:grid-cols-1 md:grid-cols-1 lg:grid-cols-[35%_65%] gap-x-0 md:gap-x-4 gap-y-6 md:gap-y-0"
+  >
+    <div
+      *ngIf="authorInfo$ | async as authorInfo"
+      class="relative user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark dark:text-dark-text px-3 py-6 w-full border text-center border-white dark:border-main-dark cursor-pointer max-h-[350px]"
+    >
+      <div
+        class="auth-user-profile-container h-[6rem] w-[6rem] rounded-full ring-2 ring-offset-4 ring-offset-transparent ring-primaryColor dark:ring-primaryColor mx-auto relative"
+      >
+        <img
+          class="inline-block w-full rounded-full h-full"
+          [src]="
+            authorInfo.imageUrl
+              ? authorInfo.imageUrl
+              : 'assets/images/users/default.jpg'
+          "
+          [attr.alt]="authorInfo.username"
+        />
+      </div>
+
+      <h5 class="font-bold text-base mt-5">
+        {{ authorInfo.firstname }} {{ authorInfo.lastname }}
+      </h5>
+
+      <span
+        class="block text-gray-500 dark:text-gray-300 font-light text-xs mt-1"
+        >@{{ authorInfo.username }}</span
+      >
+
+      <p class="flex items-center justify-center gap-1 mt-2 text-sm">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"
+          />
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
+          />
+        </svg>
+        {{ authorInfo.address ? authorInfo.address : 'N/A' }}
+      </p>
+
+      <p class="flex items-center justify-center gap-1 mt-2 text-sm">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M6.75 3v2.25M17.25 3v2.25M3 18.75V7.5a2.25 2.25 0 012.25-2.25h13.5A2.25 2.25 0 0121 7.5v11.25m-18 0A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75m-18 0v-7.5A2.25 2.25 0 015.25 9h13.5A2.25 2.25 0 0121 11.25v7.5m-9-6h.008v.008H12v-.008zM12 15h.008v.008H12V15zm0 2.25h.008v.008H12v-.008zM9.75 15h.008v.008H9.75V15zm0 2.25h.008v.008H9.75v-.008zM7.5 15h.008v.008H7.5V15zm0 2.25h.008v.008H7.5v-.008zm6.75-4.5h.008v.008h-.008v-.008zm0 2.25h.008v.008h-.008V15zm0 2.25h.008v.008h-.008v-.008zm2.25-4.5h.008v.008H16.5v-.008zm0 2.25h.008v.008H16.5V15z"
+          />
+        </svg>
+
+        Joined {{ formatCreatedAt(authorInfo.createdAt) }}
+      </p>
+
+      <p class="mt-2 text-sm">
+        {{ authorInfo.bio ? authorInfo.bio : 'N/A' }}
+      </p>
+
+      <div
+        class="mt-4 flex items-center gap-3 justify-center divide-x dark:divide-gray-700"
+      >
+        <div class="px-2 text-center">
+          <span class="block text-gray-500 dark:text-gray-300 text-sm"
+            >Posts</span
+          >
+          <span class="block text-gray-800 dark:text-gray-500 text-base">{{
+            totalPosts$ | async
+          }}</span>
+        </div>
+        <div class="px-2 text-center">
+          <span class="block text-gray-500 dark:text-gray-300 text-sm"
+            >Followers</span
+          >
+          <span class="block text-gray-800 dark:text-gray-500 text-base"
+            >400</span
+          >
+        </div>
+        <div class="px-2 text-center">
+          <span class="block text-gray-500 dark:text-gray-300 text-sm"
+            >Following</span
+          >
+          <span class="block text-gray-800 dark:text-gray-500 text-base"
+            >400</span
+          >
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark p-1 w-full border border-white dark:border-main-dark cursor-pointer"
+    >
+      <div class="flex bg-gray-100 rounded-lg transition p-1 dark:bg-main-dark">
+        <nav
+          class="flex space-x-2 w-full overflow-x-auto"
+          aria-label="Tabs"
+          role="tablist"
+        >
+          <button
+            type="button"
+            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-transparent hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border border-transparent justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white active"
+            id="segment-item-1"
+            data-hs-tab="#segment-1"
+            aria-controls="segment-1"
+            role="tab"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.068.157 2.148.279 3.238.364.466.037.893.281 1.153.671L12 21l2.652-3.978c.26-.39.687-.634 1.153-.67 1.09-.086 2.17-.208 3.238-.365 1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0012 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018z"
+              />
+            </svg>
+
+            Posts
+          </button>
+          <button
+            type="button"
+            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-transparent hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border border-transparent justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+            id="segment-item-2"
+            data-hs-tab="#segment-2"
+            aria-controls="segment-2"
+            role="tab"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 01-.825-.242m9.345-8.334a2.126 2.126 0 00-.476-.095 48.64 48.64 0 00-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0011.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155"
+              />
+            </svg>
+
+            Comments
+          </button>
+          <button
+            type="button"
+            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-transparent hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border border-transparent justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+            id="segment-item-3"
+            data-hs-tab="#segment-3"
+            aria-controls="segment-3"
+            role="tab"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19.5 12c0-1.232-.046-2.453-.138-3.662a4.006 4.006 0 00-3.7-3.7 48.678 48.678 0 00-7.324 0 4.006 4.006 0 00-3.7 3.7c-.017.22-.032.441-.046.662M19.5 12l3-3m-3 3l-3-3m-12 3c0 1.232.046 2.453.138 3.662a4.006 4.006 0 003.7 3.7 48.656 48.656 0 007.324 0 4.006 4.006 0 003.7-3.7c.017-.22.032-.441.046-.662M4.5 12l3 3m-3-3l-3 3"
+              />
+            </svg>
+
+            Replies
+          </button>
+
+          <button
+            type="button"
+            class="hs-tab-active:bg-white hs-tab-active:text-gray-700 dark:hs-tab-active:text-gray-300 dark:hs-tab-active:border-gray-700 hs-tab-active:dark:bg-transparent hs-tab-active:dark:text-gray-100 dark:hs-tab-active:bg-base-gray-dark w-full py-3 px-4 flex-auto inline-flex items-center border border-transparent justify-center gap-2 bg-transparent text-sm text-gray-500 hover:text-gray-700 font-medium rounded-md hover:hover:text-blue-600 dark:text-gray-400 dark:hover:text-white"
+            id="segment-item-4"
+            data-hs-tab="#segment-4"
+            aria-controls="segment-4"
+            role="tab"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z"
+              />
+            </svg>
+
+            Likes
+          </button>
+        </nav>
+      </div>
+
+      <div class="mt-3">
+        <div id="segment-1" role="tabpanel" aria-labelledby="segment-item-1">
+          <lib-all-user-post [authUser]="authorInfo$ | async" />
+        </div>
+        <div
+          id="segment-2"
+          class="hidden"
+          role="tabpanel"
+          aria-labelledby="segment-item-2"
+        >
+          <lib-all-user-comment [authUser]="authorInfo$ | async" />
+        </div>
+        <div
+          id="segment-3"
+          class="hidden"
+          role="tabpanel"
+          aria-labelledby="segment-item-3"
+        >
+          <lib-all-user-replies [authUser]="authorInfo$ | async" />
+        </div>
+        <div
+          id="segment-4"
+          class="hidden"
+          role="tabpanel"
+          aria-labelledby="segment-item-4"
+        >
+          <lib-all-user-liked-posts [authUser]="authorInfo$ | async" />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

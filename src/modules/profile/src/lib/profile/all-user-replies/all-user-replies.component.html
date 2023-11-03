@@ -1,7 +1,7 @@
-<div class="max-h-[500px] overflow-y-auto pb-8 pr-4">
+<div class="max-h-[500px] overflow-y-auto pb-8 pr-4 flex flex-col gap-y-4">
   <ng-container *ngIf="(allReplies$ | async)?.length; else elseTemplate">
     <ng-container *ngFor="let reply of allReplies$ | async; let i = index">
-      <lib-reply-card [reply]="reply" />
+      <lib-reply-card [reply]="reply" [pageClass]="'profile-card'" />
     </ng-container>
   </ng-container>
   <ng-template #elseTemplate>

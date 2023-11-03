@@ -31,6 +31,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./comment-card.component.scss'],
 })
 export class CommentCardComponent implements OnInit, OnDestroy {
+  @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) comment!: CommentType;
 
   settings = {

@@ -1,5 +1,5 @@
 <div
-  class="max-h-[500px] overflow-y-auto pb-8 pr-4"
+  class="max-h-[500px] overflow-y-auto pb-8 pr-4 flex flex-col gap-y-4"
   *ngIf="(allPosts$ | async)?.length"
 >
   <ng-container *ngFor="let post of allPosts$ | async; let i = index">
@@ -24,11 +24,11 @@
 </div>
 
 <ng-template #postTemplate let-post>
-  <lib-post-card [post]="post" />
+  <lib-post-card [post]="post" [pageClass]="'profile-card'" />
 </ng-template>
 <ng-template #commentTemplate let-post>
-  <lib-comment-card [comment]="post" />
+  <lib-comment-card [comment]="post" [pageClass]="'profile-card'" />
 </ng-template>
 <ng-template #replyTemplate let-post>
-  <lib-reply-card [reply]="post" />
+  <lib-reply-card [reply]="post" [pageClass]="'profile-card'" />
 </ng-template>
