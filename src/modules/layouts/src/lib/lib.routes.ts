@@ -23,6 +23,10 @@ export const layoutsRoutes: Route[] = [
           import('bookmarks').then((m) => m.BookmarksComponent),
       },
       {
+        path: 'friends',
+        loadComponent: () => import('friends').then((m) => m.FriendsComponent),
+      },
+      {
         path: 'user/:username/profile',
         loadComponent: () =>
           import('user-profile').then((m) => m.UserProfileComponent),
