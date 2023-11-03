@@ -350,6 +350,7 @@
       <lib-reply-card
         [reply]="reply"
         *ngFor="let reply of allReplies$ | async"
+        [pageClass]="'profile-card'"
       />
     </ng-container>
     <ng-template #elseTemplate>

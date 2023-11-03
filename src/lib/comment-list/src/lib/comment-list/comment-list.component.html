@@ -5,5 +5,6 @@
   <lib-comment-card
     *ngFor="let comment of allComments$ | async"
     [comment]="comment"
+    [pageClass]="'profile-card'"
   />
 </div>
