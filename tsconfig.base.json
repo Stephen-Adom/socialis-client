@@ -34,6 +34,7 @@
         "src/lib/edit-cover-background-modal/src/index.ts"
       ],
       "followers": ["src/lib/followers/src/index.ts"],
+      "friend-card": ["src/lib/friend-card/src/index.ts"],
       "friends": ["src/modules/friends/src/index.ts"],
       "guards": ["src/shared/guards/src/index.ts"],
       "layouts": ["src/modules/layouts/src/index.ts"],
