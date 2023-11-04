@@ -33,6 +33,8 @@ export type UserInfoType = {
   bio: string;
   phonenumber: string;
   address: string;
+  noOfFollowers: number;
+  noOfFollowing: number;
 };
 
 export type SimpleUserInfoType = {
