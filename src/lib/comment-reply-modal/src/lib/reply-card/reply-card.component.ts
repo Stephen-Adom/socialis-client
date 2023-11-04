@@ -21,11 +21,12 @@ import {
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { ConfirmDeleteService, dataDeleteObject } from 'services';
+import { ProfileTooltipDirective } from 'directives';
 
 @Component({
   selector: 'lib-reply-card',
   standalone: true,
-  imports: [CommonModule, LightgalleryModule],
+  imports: [CommonModule, LightgalleryModule, ProfileTooltipDirective],
   templateUrl: './reply-card.component.html',
   styleUrls: ['./reply-card.component.scss'],
 })

@@ -6,7 +6,11 @@
 >
   <div class="card-header flex items-center justify-between pb-1">
     <div class="flex-shrink-0 group block">
-      <div class="flex items-center">
+      <div
+        class="flex items-center relative group"
+        libProfileTooltip
+        [authorInfo]="reply.user"
+      >
         <img
           class="inline-block flex-shrink-0 h-[2.5rem] w-[2.5rem] rounded-full"
           [src]="

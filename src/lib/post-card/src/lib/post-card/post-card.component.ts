@@ -23,12 +23,13 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
-import { ConfirmDeleteService, UserService, dataDeleteObject } from 'services';
+import { ConfirmDeleteService, dataDeleteObject } from 'services';
+import { ProfileTooltipDirective } from 'directives';
 
 @Component({
   selector: 'lib-post-card',
   standalone: true,
-  imports: [CommonModule, LightgalleryModule],
+  imports: [CommonModule, LightgalleryModule, ProfileTooltipDirective],
   templateUrl: './post-card.component.html',
   styleUrls: ['./post-card.component.css'],
 })
@@ -51,7 +52,6 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
-    private userservice: UserService,
     private store: Store<PostState>,
     private router: Router
   ) {}
@@ -60,14 +60,6 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
     this.authUser$ = this.store.select(getUserInformation);
     this.checkIfLiked();
     this.checkIfBookmarked();
-  }
-
-  showAuthorInfo(user: SimpleUserInfoType) {
-    this.userservice
-      .fetchUserSummaryInfo(user.username)
-      .subscribe((response: any) => {
-        this.authorInfo = response.data;
-      });
   }
 
   viewPostDetails(event: MouseEvent) {

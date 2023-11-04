@@ -26,6 +26,7 @@
       "create-comment-form": ["src/lib/create-comment-form/src/index.ts"],
       "create-post": ["src/lib/create-post/src/index.ts"],
       "dashboard": ["src/modules/dashboard/src/index.ts"],
+      "directives": ["src/shared/directives/src/index.ts"],
       "edit-auth-image-modal": ["src/lib/edit-auth-image-modal/src/index.ts"],
       "edit-auth-profile-modal": [
         "src/lib/edit-auth-profile-modal/src/index.ts"
@@ -46,6 +47,7 @@
       "post-card": ["src/lib/post-card/src/index.ts"],
       "post-details": ["src/modules/post-details/src/index.ts"],
       "profile": ["src/modules/profile/src/index.ts"],
+      "profile-tooltip": ["src/lib/profile-tooltip/src/index.ts"],
       "reply-modal-form": ["src/lib/reply-modal-form/src/index.ts"],
       "search-modal": ["src/lib/search-modal/src/index.ts"],
       "services": ["src/shared/services/src/index.ts"],

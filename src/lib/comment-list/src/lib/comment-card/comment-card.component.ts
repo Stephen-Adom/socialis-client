@@ -22,11 +22,12 @@ import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { ConfirmDeleteService, dataDeleteObject } from 'services';
 import { Router } from '@angular/router';
+import { ProfileTooltipDirective } from 'directives';
 
 @Component({
   selector: 'lib-comment-card',
   standalone: true,
-  imports: [CommonModule, LightgalleryModule],
+  imports: [CommonModule, LightgalleryModule, ProfileTooltipDirective],
   templateUrl: './comment-card.component.html',
   styleUrls: ['./comment-card.component.scss'],
 })
