@@ -35,6 +35,7 @@ export type UserInfoType = {
   address: string;
   noOfFollowers: number;
   noOfFollowing: number;
+  noOfPosts: number;
 };
 
 export type SimpleUserInfoType = {
@@ -113,6 +114,7 @@ export type ReplyType = {
 };
 
 export type UserSummaryInfo = {
+  id: number;
   firstname: string;
   lastname: string;
   username: string;

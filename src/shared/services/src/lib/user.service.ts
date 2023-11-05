@@ -64,4 +64,8 @@ export class UserService {
       this.authHeaders
     );
   }
+
+  followUser(followId: number, followingId: number) {
+    return this.http.get(BASE_URL + `/user/${followId}/follow/${followingId}`);
+  }
 }

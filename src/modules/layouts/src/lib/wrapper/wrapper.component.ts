@@ -1,7 +1,8 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as localforage from 'localforage';
-import { Subscription, tap } from 'rxjs';
+import { Subscription, tap, Observable, switchMap, map } from 'rxjs';
 import { MessageService, PostService } from 'services';
 import {
   AppApiActions,
@@ -9,7 +10,9 @@ import {
   PostState,
   getCommentDetails,
   getPostDetails,
+  getUserInformation,
 } from 'state';
+import { UserInfoType } from 'utils';
 
 @Component({
   selector: 'feature-wrapper',
@@ -29,6 +32,8 @@ export class WrapperComponent implements OnInit, OnDestroy {
   commentDetailsSubscription = new Subscription();
   bookmarkUpdateSubscription = new Subscription();
 
+  authUser$!: Observable<UserInfoType | null>;
+
   constructor(
     private postservice: PostService,
     private messageservice: MessageService,
@@ -37,6 +42,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.store.dispatch(PostApiActions.fetchAllPost());
+    this.authUser$ = this.store.select(getUserInformation);
 
     this.postDetailsSubscription = this.store
       .select(getPostDetails)
@@ -160,6 +166,50 @@ export class WrapperComponent implements OnInit, OnDestroy {
             this.store.dispatch(
               PostApiActions.updateUserBookmarks({ bookmarks })
             );
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage(
+            '/feed/user/follower/update-' + username
+          );
+        })
+      )
+      .subscribe({
+        next: (user) => {
+          if (user) {
+            localforage.setItem('userInfo', user).then((userInfo) => {
+              this.store.dispatch(AppApiActions.updateUserInfo({ userInfo }));
+            });
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage(
+            '/feed/user/following/update-' + username
+          );
+        })
+      )
+      .subscribe({
+        next: (user) => {
+          if (user) {
+            localforage.setItem('userInfo', user).then((userInfo) => {
+              this.store.dispatch(AppApiActions.updateUserInfo({ userInfo }));
+            });
           }
         },
         error: (error) => {

@@ -28,4 +28,20 @@ export class UserEffects {
       )
     );
   });
+
+  FollowUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserApiActions.followUser),
+      mergeMap((action: { followId: number; followingId: number }) =>
+        this.userservice.followUser(action.followId, action.followingId).pipe(
+          map(() => {
+            return UserApiActions.followUserSuccess();
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
 }

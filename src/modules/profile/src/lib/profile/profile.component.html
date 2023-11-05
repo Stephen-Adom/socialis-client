@@ -142,24 +142,24 @@
             >Posts</span
           >
           <span class="block text-gray-800 dark:text-gray-500 text-base">{{
-            totalPosts$ | async
+            authUser.noOfPosts
           }}</span>
         </div>
         <div class="px-2 text-center">
           <span class="block text-gray-500 dark:text-gray-300 text-sm"
             >Followers</span
           >
-          <span class="block text-gray-800 dark:text-gray-500 text-base"
-            >400</span
-          >
+          <span class="block text-gray-800 dark:text-gray-500 text-base">{{
+            authUser.noOfFollowers
+          }}</span>
         </div>
         <div class="px-2 text-center">
           <span class="block text-gray-500 dark:text-gray-300 text-sm"
             >Following</span
           >
-          <span class="block text-gray-800 dark:text-gray-500 text-base"
-            >400</span
-          >
+          <span class="block text-gray-800 dark:text-gray-500 text-base">{{
+            authUser.noOfFollowing
+          }}</span>
         </div>
       </div>
     </div>

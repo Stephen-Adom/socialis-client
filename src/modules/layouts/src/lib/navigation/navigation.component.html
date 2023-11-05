@@ -195,16 +195,22 @@
             </p>
             <p class="flex items-center gap-x-4 mt-3">
               <small class="text-gray-400 inline-block">
-                <span class="font-bold dark:text-dark-text">1k</span>
+                <span class="font-bold dark:text-dark-text">{{
+                  authUser.noOfFollowers
+                }}</span>
                 Followers</small
               >
 
               <small class="text-gray-400 inline-block">
-                <span class="font-bold dark:text-dark-text">1k</span>
+                <span class="font-bold dark:text-dark-text">{{
+                  authUser.noOfFollowing
+                }}</span>
                 Following</small
               >
               <small class="text-gray-400 inline-block">
-                <span class="font-bold dark:text-dark-text">300</span>
+                <span class="font-bold dark:text-dark-text">{{
+                  authUser.noOfPosts
+                }}</span>
                 posts</small
               >
             </p>
