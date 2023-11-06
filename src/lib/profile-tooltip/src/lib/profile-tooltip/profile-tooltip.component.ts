@@ -16,7 +16,7 @@ import {
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject, Observable, filter, switchMap } from 'rxjs';
 
 @Component({
   selector: 'lib-profile-tooltip',
@@ -33,15 +33,13 @@ export class ProfileTooltipComponent implements OnInit {
   authFollowers$!: Observable<UserSummaryInfo[]>;
   followingAuthor$ = new BehaviorSubject<boolean>(false);
   followButtonText = 'Follow';
+  usersFollowingAuthorAlsoFollowingAuth: UserSummaryInfo[] = [];
 
   constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.authFollowing$ = this.store.select(getAllAuthUserFollowing);
     this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
-
-    this.checkIfFollowingAuthor();
-    this.checkIfAuthorIsAFollower();
 
     this.store.select(getUserInformation).subscribe((info) => {
       if (
@@ -55,6 +53,10 @@ export class ProfileTooltipComponent implements OnInit {
       }
       this.showFollowButton = false;
     });
+
+    this.checkIfFollowingAuthor();
+    this.checkIfAuthorIsAFollower();
+    this.checkUsersFollowingAuthorAlsoFollowingAuth();
   }
 
   followUser() {
@@ -85,5 +87,46 @@ export class ProfileTooltipComponent implements OnInit {
 
       this.followButtonText = userExist ? 'Follow Back' : 'Follow';
     });
+  }
+
+  checkUsersFollowingAuthorAlsoFollowingAuth() {
+    this.authFollowers$
+      .pipe(
+        filter(
+          (followers) => followers.length > 0 && this.authUser !== undefined
+        ),
+        switchMap((followers) => {
+          console.log(this.authUser, 'this.authuser');
+          return this.authorInfo.followersList
+            .filter((username) => username !== this.authUser.username)
+            .map((username) => {
+              const user = followers.find(
+                (follower) => follower.username === username
+              );
+              return user || null;
+            });
+        }),
+        filter((user) => user !== null)
+      )
+      .subscribe((user) => {
+        if (user) {
+          this.usersFollowingAuthorAlsoFollowingAuth.push(user);
+          console.log(this.usersFollowingAuthorAlsoFollowingAuth);
+        }
+      });
+  }
+
+  getFollowingDescription(users: UserSummaryInfo[]) {
+    if (users.length === 1) {
+      return `followed by ${users[0].username} who also follows you`;
+    } else if (users.length == 2) {
+      return `followed by ${users[0].username} and ${users[1].username} who follow you`;
+    } else if (users.length == 3) {
+      return `followed by ${users[0].username}, ${users[1].username}, and ${users[2].username} who follow you`;
+    } else {
+      return `followed by ${users[0].username}, ${users[1].username}, ${
+        users[2].username
+      } and ${users.length - 3} others who follow you`;
+    }
   }
 }

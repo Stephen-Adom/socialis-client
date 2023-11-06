@@ -103,28 +103,22 @@
     </p>
   </div>
 
-  <div class="py-1 text-sm">
+  <div
+    class="py-1 text-sm flex items-center space-x-1 w-full"
+    *ngIf="usersFollowingAuthorAlsoFollowingAuth.length"
+  >
     <div class="flex mb-5 -space-x-2">
       <img
+        *ngFor="let user of usersFollowingAuthorAlsoFollowingAuth.slice(0, 4)"
         class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
-        src="assets/images/users/default.jpg"
-        alt=""
-      />
-      <img
-        class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
-        src="assets/images/users/default.jpg"
-        alt=""
-      />
-      <img
-        class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
-        src="assets/images/users/default.jpg"
-        alt=""
-      />
-      <img
-        class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
-        src="assets/images/users/default.jpg"
-        alt=""
+        [src]="
+          user.imageUrl ? user.imageUrl : 'assets/images/users/default.jpg'
+        "
+        [alt]="user.username"
       />
     </div>
+    <span class="text-xs text-gray-400 max-w-[70%]">{{
+      getFollowingDescription(usersFollowingAuthorAlsoFollowingAuth)
+    }}</span>
   </div>
 </div>

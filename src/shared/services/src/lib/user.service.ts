@@ -55,12 +55,12 @@ export class UserService {
     );
   }
 
-  fetchUserSummaryInfo(username: string) {
-    return this.http.get<UserSummaryResponseType>(
-      BASE_URL + `/user/${username}/info`,
-      this.authHeaders
-    );
-  }
+  // fetchUserSummaryInfo(username: string) {
+  //   return this.http.get<UserSummaryResponseType>(
+  //     BASE_URL + `/user/${username}/info`,
+  //     this.authHeaders
+  //   );
+  // }
 
   fetchUserFullInformation(username: string) {
     return this.http.get<UserSummaryResponseType>(

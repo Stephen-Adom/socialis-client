@@ -30,7 +30,7 @@ export class ProfileTooltipDirective {
 
   @HostListener('mouseenter') showAuthorInfo() {
     const sub = this.userservice
-      .fetchUserSummaryInfo(this.authorInfo.username)
+      .fetchUserFullInformation(this.authorInfo.username)
       .subscribe((response: any) => {
         this.authorSummaryInfo = response.data;
         this.createTooltip();

@@ -123,6 +123,8 @@ export type UserSummaryInfo = {
   totalPost: number;
   followers: number;
   following: number;
+  followersList: string[];
+  followingList: string[];
 };
 
 export type NewPostResponseType = {
