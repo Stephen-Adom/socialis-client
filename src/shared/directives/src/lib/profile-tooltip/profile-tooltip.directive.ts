@@ -48,7 +48,7 @@ export class ProfileTooltipDirective {
     this.profileTooltip = this.containerRef.createComponent(
       ProfileTooltipComponent
     );
-    this.profileTooltip.instance.authorInfo = this.authorSummaryInfo;
+    this.profileTooltip.setInput('authorInfo', this.authorSummaryInfo);
     this.renderer.appendChild(
       this.el.nativeElement,
       this.profileTooltip.location.nativeElement

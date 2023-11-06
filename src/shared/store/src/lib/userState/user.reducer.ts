@@ -5,17 +5,21 @@ import {
   createSelector,
   on,
 } from '@ngrx/store';
-import { UserInfoType } from 'utils';
+import { UserInfoType, UserSummaryInfo } from 'utils';
 import { UserApiActions } from './user.actions';
 
 export const featureUserKey = 'user';
 
 export interface UserState {
   authorInformation: UserInfoType | null;
+  authUserFollowers: UserSummaryInfo[];
+  authUserFollowing: UserSummaryInfo[];
 }
 
 const initialState: UserState = {
   authorInformation: null,
+  authUserFollowers: [],
+  authUserFollowing: [],
 };
 
 export const selectUserFeature =
@@ -26,12 +30,34 @@ export const getAuthorInformation = createSelector(
   (state: UserState) => state.authorInformation
 );
 
+export const getAllAuthUserFollowers = createSelector(
+  selectUserFeature,
+  (state: UserState) => state.authUserFollowers
+);
+
+export const getAllAuthUserFollowing = createSelector(
+  selectUserFeature,
+  (state: UserState) => state.authUserFollowing
+);
+
 export const UserReducer = createReducer<UserState>(
   initialState,
   on(UserApiActions.fetchUserDetailsSuccess, (state: UserState, action) => {
     return {
       ...state,
       authorInformation: action.userInfo.data,
+    };
+  }),
+  on(UserApiActions.fetchAllFollowersSuccess, (state: UserState, action) => {
+    return {
+      ...state,
+      authUserFollowers: action.usersResponse.data,
+    };
+  }),
+  on(UserApiActions.fetchAllFollowingSuccess, (state: UserState, action) => {
+    return {
+      ...state,
+      authUserFollowing: action.usersResponse.data,
     };
   })
 );

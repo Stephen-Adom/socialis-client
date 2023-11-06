@@ -17,7 +17,12 @@ import {
   generateLikeDescription,
 } from 'utils';
 import { formatDistanceToNow } from 'date-fns';
-import { PostApiActions, PostState, getUserInformation } from 'state';
+import {
+  PostApiActions,
+  PostState,
+  getAllAuthUserFollowers,
+  getUserInformation,
+} from 'state';
 import { Store } from '@ngrx/store';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
@@ -37,6 +42,7 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) post!: PostType;
   authUser$!: Observable<UserInfoType | null>;
+  authFollowers$!: Observable<UserSummaryInfo[]>;
   authUserSubscription = new Subscription();
 
   formattedDate: string | null = null;
@@ -49,6 +55,7 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   likedPost$ = new BehaviorSubject<boolean>(false);
   bookmarked$ = new BehaviorSubject<boolean>(false);
   authorInfo!: UserSummaryInfo;
+  authorIsFollowing$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
@@ -58,8 +65,10 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
+    this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
     this.checkIfLiked();
     this.checkIfBookmarked();
+    this.checkIfAuthorIsFollowing();
   }
 
   viewPostDetails(event: MouseEvent) {
@@ -189,6 +198,17 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
       }
 
       sub.unsubscribe();
+    });
+  }
+
+  checkIfAuthorIsFollowing() {
+    this.authFollowers$.subscribe((followers) => {
+      const userExist = followers.find(
+        (follower) => follower.username === this.post.user.username
+      );
+      userExist
+        ? this.authorIsFollowing$.next(true)
+        : this.authorIsFollowing$.next(false);
     });
   }
 }

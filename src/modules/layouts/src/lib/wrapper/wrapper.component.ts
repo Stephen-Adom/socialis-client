@@ -8,6 +8,7 @@ import {
   AppApiActions,
   PostApiActions,
   PostState,
+  UserApiActions,
   getCommentDetails,
   getPostDetails,
   getUserInformation,
@@ -176,36 +177,19 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.authUser$
       .pipe(
         map((user) => user?.username),
-        switchMap((username) => {
-          return this.messageservice.onMessage(
-            '/feed/user/follower/update-' + username
-          );
-        })
-      )
-      .subscribe({
-        next: (user) => {
-          if (user) {
-            localforage.setItem('userInfo', user).then((userInfo) => {
-              this.store.dispatch(AppApiActions.updateUserInfo({ userInfo }));
-            });
+        tap((username) => {
+          if (username) {
+            this.store.dispatch(UserApiActions.fetchAllFollowers({ username }));
+            this.store.dispatch(UserApiActions.fetchAllFollowing({ username }));
           }
-        },
-        error: (error) => {
-          console.log(error);
-        },
-      });
-
-    this.authUser$
-      .pipe(
-        map((user) => user?.username),
+        }),
         switchMap((username) => {
-          return this.messageservice.onMessage(
-            '/feed/user/following/update-' + username
-          );
+          return this.messageservice.onMessage('/feed/user/update-' + username);
         })
       )
       .subscribe({
         next: (user) => {
+          console.log(user, 'user');
           if (user) {
             localforage.setItem('userInfo', user).then((userInfo) => {
               this.store.dispatch(AppApiActions.updateUserInfo({ userInfo }));

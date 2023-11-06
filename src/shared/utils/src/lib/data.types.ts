@@ -169,3 +169,8 @@ export type UserInfoSummaryType = {
   data: UserInfoType;
   status: string;
 };
+
+export type AllUserSummaryResponseType = {
+  data: UserSummaryInfo[];
+  status: string;
+};

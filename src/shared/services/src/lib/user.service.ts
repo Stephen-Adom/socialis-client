@@ -2,7 +2,11 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getAuthHttpOptions } from './httpHeaders';
-import { SuccessMessageType, UserSummaryResponseType } from 'utils';
+import {
+  AllUserSummaryResponseType,
+  SuccessMessageType,
+  UserSummaryResponseType,
+} from 'utils';
 import BASE_URL from './base_url';
 
 @Injectable({
@@ -67,5 +71,17 @@ export class UserService {
 
   followUser(followId: number, followingId: number) {
     return this.http.get(BASE_URL + `/user/${followId}/follow/${followingId}`);
+  }
+
+  fetchAllFollowers(username: string) {
+    return this.http.get<AllUserSummaryResponseType>(
+      BASE_URL + `/user/${username}/all_followers`
+    );
+  }
+
+  fetchAllFollowings(username: string) {
+    return this.http.get<AllUserSummaryResponseType>(
+      BASE_URL + `/user/${username}/all_following`
+    );
   }
 }

@@ -44,4 +44,36 @@ export class UserEffects {
       )
     );
   });
+
+  FetchAllFollowers$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserApiActions.fetchAllFollowers),
+      mergeMap((action: { username: string }) =>
+        this.userservice.fetchAllFollowers(action.username).pipe(
+          map((usersResponse) => {
+            return UserApiActions.fetchAllFollowersSuccess({ usersResponse });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
+
+  FetchAllFollowings$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserApiActions.fetchAllFollowing),
+      mergeMap((action: { username: string }) =>
+        this.userservice.fetchAllFollowings(action.username).pipe(
+          map((usersResponse) => {
+            return UserApiActions.fetchAllFollowingSuccess({ usersResponse });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
 }
