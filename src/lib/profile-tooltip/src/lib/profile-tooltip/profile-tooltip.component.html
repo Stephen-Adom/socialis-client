@@ -1,8 +1,8 @@
 <div
   *ngIf="authorInfo"
-  class="absolute top-[40px] invisible group-hover:visible left-0 w-[20rem] bg-white dark:bg-main-dark shadow-lg rounded-lg mt-2 divide-y divide-gray-200 dark:divide-gray-600 z-10"
+  class="absolute top-[40px] px-3 left-0 w-[15rem] bg-white border border-gray-200 dark:bg-main-dark shadow-lg rounded-lg mt-2 dark:divide-gray-600 z-10"
 >
-  <div class="flex items-center px-3">
+  <div class="flex items-center py-2">
     <img
       class="inline-block h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
       [src]="
@@ -12,15 +12,6 @@
       "
       [alt]="authorInfo.username"
     />
-
-    <div class="py-3 px-1 rounded-t-lg w-full">
-      <p class="text-sm text-gray-500">
-        {{ authorInfo.firstname }} {{ authorInfo.lastname }}
-      </p>
-      <p class="text-xs font-medium text-gray-800 dark:text-dark-text">
-        {{ authorInfo.username }}
-      </p>
-    </div>
 
     <ng-container *ngIf="showFollowButton">
       <button
@@ -48,28 +39,67 @@
     </ng-container>
   </div>
 
-  <div class="py-2 px-4 text-sm text-gray-600 dark:bg-main-dark">
-    <p class="dark:text-dark-text">{{ authorInfo.bio }}</p>
+  <div class="py-2 rounded-t-lg w-full">
+    <p class="text-base text-gray-500 font-semibold">
+      {{ authorInfo.firstname }} {{ authorInfo.lastname }}
+    </p>
+    <p class="text-xs font-medium text-gray-800 dark:text-dark-text">
+      {{ authorInfo.username }}
+    </p>
+
+    <p class="dark:text-dark-text text-sm">
+      <!-- {{ authorInfo.bio }} -->
+      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore corrupti
+      excepturi
+    </p>
+  </div>
+
+  <div class="py-2 text-sm text-gray-600">
     <p class="flex items-center gap-x-4 mt-3">
-      <small class="text-gray-400 inline-block">
+      <span class="text-gray-400 flex items-center gap-x-1">
         <span class="font-bold dark:text-dark-text">{{
           authorInfo.followers
         }}</span>
-        Followers</small
+        Followers</span
       >
 
-      <small class="text-gray-400 inline-block">
+      <span class="text-gray-400 flex items-center gap-x-1">
         <span class="font-bold dark:text-dark-text">{{
           authorInfo.following
         }}</span>
-        Following</small
+        Following</span
       >
-      <small class="text-gray-400 inline-block">
+      <span class="text-gray-400 flex items-center gap-x-1">
         <span class="font-bold dark:text-dark-text">{{
           authorInfo.totalPost
         }}</span>
-        posts</small
+        posts</span
       >
     </p>
+  </div>
+
+  <div class="py-1 text-sm">
+    <div class="flex mb-5 -space-x-2">
+      <img
+        class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
+        src="assets/images/users/default.jpg"
+        alt=""
+      />
+      <img
+        class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
+        src="assets/images/users/default.jpg"
+        alt=""
+      />
+      <img
+        class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
+        src="assets/images/users/default.jpg"
+        alt=""
+      />
+      <img
+        class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
+        src="assets/images/users/default.jpg"
+        alt=""
+      />
+    </div>
   </div>
 </div>
