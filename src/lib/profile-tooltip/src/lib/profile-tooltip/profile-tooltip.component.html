@@ -16,8 +16,9 @@
     <ng-container *ngIf="showFollowButton">
       <ng-container *ngIf="followingAuthor$ | async; else elseTemplate">
         <button
+          #followingButtonLabel
           type="button"
-          class="w-[50%] bg-transparent hover:bg-gray-200 border border-gray-200 px-1 py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
+          class="w-[50%] bg-transparent hover:bg-red-200 hover:text-red-700 border border-gray-200 px-1 py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -73,9 +74,7 @@
     </p>
 
     <p class="dark:text-dark-text text-sm">
-      <!-- {{ authorInfo.bio }} -->
-      Lorem ipsum dolor, sit amet consectetur adipisicing elit. Dolore corrupti
-      excepturi
+      {{ authorInfo.bio }}
     </p>
   </div>
 
@@ -107,18 +106,39 @@
     class="py-1 text-sm flex items-center space-x-1 w-full"
     *ngIf="usersFollowingAuthorAlsoFollowingAuth.length"
   >
-    <div class="flex mb-5 -space-x-2">
+    <div class="flex mb-2 -space-x-2">
       <img
-        *ngFor="let user of usersFollowingAuthorAlsoFollowingAuth.slice(0, 4)"
+        *ngFor="let user of usersFollowingAuthorAlsoFollowingAuth.slice(0, 3)"
         class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
         [src]="
           user.imageUrl ? user.imageUrl : 'assets/images/users/default.jpg'
         "
         [alt]="user.username"
       />
+
+      <span class="text-xs text-gray-400 !ml-[4px]">{{
+        getFollowersDescription(usersFollowingAuthorAlsoFollowingAuth)
+      }}</span>
     </div>
-    <span class="text-xs text-gray-400 max-w-[70%]">{{
-      getFollowingDescription(usersFollowingAuthorAlsoFollowingAuth)
-    }}</span>
+  </div>
+
+  <div
+    class="py-1 text-sm flex items-center space-x-1 w-full"
+    *ngIf="authorFollowingUsersAuthAlsoFollowing.length"
+  >
+    <div class="flex mb-2 -space-x-2">
+      <img
+        *ngFor="let user of authorFollowingUsersAuthAlsoFollowing.slice(0, 3)"
+        class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
+        [src]="
+          user.imageUrl ? user.imageUrl : 'assets/images/users/default.jpg'
+        "
+        [alt]="user.username"
+      />
+
+      <span class="text-xs text-gray-400 !ml-[4px]">{{
+        getFollowingDescription(authorFollowingUsersAuthAlsoFollowing)
+      }}</span>
+    </div>
   </div>
 </div>

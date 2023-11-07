@@ -189,11 +189,50 @@ export class WrapperComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (user) => {
-          console.log(user, 'user');
           if (user) {
             localforage.setItem('userInfo', user).then((userInfo) => {
               this.store.dispatch(AppApiActions.updateUserInfo({ userInfo }));
             });
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage(
+            '/feed/followers/count-' + username
+          );
+        })
+      )
+      .subscribe({
+        next: (user) => {
+          if (user) {
+            this.store.dispatch(UserApiActions.updateFollowersList({ user }));
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage(
+            '/feed/following/count-' + username
+          );
+        })
+      )
+      .subscribe({
+        next: (user) => {
+          if (user) {
+            this.store.dispatch(UserApiActions.updateFollowingList({ user }));
           }
         },
         error: (error) => {

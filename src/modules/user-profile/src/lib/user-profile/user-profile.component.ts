@@ -10,7 +10,7 @@ import {
 } from 'state';
 import { Store } from '@ngrx/store';
 import { Observable, Subscription } from 'rxjs';
-import { UserInfoType } from 'utils';
+import { UserInfoType, UserSummaryInfoFollowing } from 'utils';
 import { format } from 'date-fns';
 import {
   AllUserPostComponent,
@@ -35,7 +35,7 @@ import {
 })
 export class UserProfileComponent implements OnInit, OnDestroy {
   routeSubscription = new Subscription();
-  authorInfo$!: Observable<UserInfoType | null>;
+  authorInfo$!: Observable<UserSummaryInfoFollowing | null>;
   totalPosts$!: Observable<number>;
 
   constructor(
@@ -59,10 +59,11 @@ export class UserProfileComponent implements OnInit, OnDestroy {
     this.location.back();
   }
 
-  getImage(authorInfo: UserInfoType | null) {
-    return authorInfo?.coverImageUrl
-      ? authorInfo.coverImageUrl
-      : 'assets/images/abstract-banner.jpg';
+  getImage(authorInfo: UserSummaryInfoFollowing | null) {
+    // return authorInfo?.coverImageUrl
+    //   ? authorInfo.coverImageUrl
+    //   : 'assets/images/abstract-banner.jpg';
+    return '';
   }
 
   formatCreatedAt(createdAt: string) {

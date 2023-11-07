@@ -5,13 +5,13 @@ import {
   createSelector,
   on,
 } from '@ngrx/store';
-import { UserInfoType, UserSummaryInfo } from 'utils';
+import { UserSummaryInfoFollowing, UserSummaryInfo } from 'utils';
 import { UserApiActions } from './user.actions';
 
 export const featureUserKey = 'user';
 
 export interface UserState {
-  authorInformation: UserInfoType | null;
+  authorInformation: UserSummaryInfoFollowing | null;
   authUserFollowers: UserSummaryInfo[];
   authUserFollowing: UserSummaryInfo[];
 }
@@ -58,6 +58,18 @@ export const UserReducer = createReducer<UserState>(
     return {
       ...state,
       authUserFollowing: action.usersResponse.data,
+    };
+  }),
+  on(UserApiActions.updateFollowersList, (state: UserState, action) => {
+    return {
+      ...state,
+      authUserFollowers: [...state.authUserFollowers, action.user],
+    };
+  }),
+  on(UserApiActions.updateFollowingList, (state: UserState, action) => {
+    return {
+      ...state,
+      authUserFollowing: [...state.authUserFollowing, action.user],
     };
   })
 );

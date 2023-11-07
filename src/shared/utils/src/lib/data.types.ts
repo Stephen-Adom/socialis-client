@@ -123,6 +123,18 @@ export type UserSummaryInfo = {
   totalPost: number;
   followers: number;
   following: number;
+};
+
+export type UserSummaryInfoFollowing = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  username: string;
+  bio: string;
+  imageUrl: string;
+  totalPost: number;
+  followers: number;
+  following: number;
   followersList: string[];
   followingList: string[];
 };
@@ -167,8 +179,8 @@ export type UserSummaryResponseType = {
   status: string;
 };
 
-export type UserInfoSummaryType = {
-  data: UserInfoType;
+export type UserSummaryInfoResponseType = {
+  data: UserSummaryInfoFollowing;
   status: string;
 };
 

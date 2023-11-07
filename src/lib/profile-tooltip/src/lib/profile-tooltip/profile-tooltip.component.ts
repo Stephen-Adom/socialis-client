@@ -1,13 +1,16 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import {
+  AfterViewInit,
   Component,
+  ElementRef,
   Input,
   OnChanges,
   OnInit,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserInfoType, UserSummaryInfo } from 'utils';
+import { UserInfoType, UserSummaryInfo, UserSummaryInfoFollowing } from 'utils';
 import {
   AppState,
   UserApiActions,
@@ -16,7 +19,14 @@ import {
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, filter, switchMap } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  filter,
+  fromEvent,
+  map,
+  switchMap,
+} from 'rxjs';
 
 @Component({
   selector: 'lib-profile-tooltip',
@@ -25,8 +35,10 @@ import { BehaviorSubject, Observable, filter, switchMap } from 'rxjs';
   templateUrl: './profile-tooltip.component.html',
   styleUrls: ['./profile-tooltip.component.css'],
 })
-export class ProfileTooltipComponent implements OnInit {
-  @Input() authorInfo!: UserSummaryInfo;
+export class ProfileTooltipComponent implements OnInit, AfterViewInit {
+  @ViewChild('followingButtonLabel')
+  followingButtonLabel!: ElementRef<HTMLButtonElement>;
+  @Input() authorInfo!: UserSummaryInfoFollowing;
   authUser!: UserInfoType;
   showFollowButton = false;
   authFollowing$!: Observable<UserSummaryInfo[]>;
@@ -34,6 +46,7 @@ export class ProfileTooltipComponent implements OnInit {
   followingAuthor$ = new BehaviorSubject<boolean>(false);
   followButtonText = 'Follow';
   usersFollowingAuthorAlsoFollowingAuth: UserSummaryInfo[] = [];
+  authorFollowingUsersAuthAlsoFollowing: UserSummaryInfo[] = [];
 
   constructor(private store: Store<AppState>) {}
 
@@ -57,6 +70,51 @@ export class ProfileTooltipComponent implements OnInit {
     this.checkIfFollowingAuthor();
     this.checkIfAuthorIsAFollower();
     this.checkUsersFollowingAuthorAlsoFollowingAuth();
+    this.checkAuthorFollowingUsersAuthAlsoFollowing();
+  }
+
+  ngAfterViewInit(): void {
+    fromEvent(this.followingButtonLabel.nativeElement, 'mouseenter')
+      .pipe(map((event) => event.target as HTMLElement))
+      .subscribe((element) => {
+        if (element) {
+          element.innerHTML = `
+          <svg xmlns="http://www.w3.org/2000/svg" 
+          fill="none" viewBox="0 0 24 24" 
+          stroke-width="1.5" 
+          stroke="currentColor" 
+          class="w-4 h-4 dark:stroke-red-700">
+          <path stroke-linecap="round" 
+          stroke-linejoin="round" 
+          d="M22 10.5h-6m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z" />
+        </svg>
+
+          Unfollow
+          `;
+        }
+      });
+    fromEvent(this.followingButtonLabel.nativeElement, 'mouseleave')
+      .pipe(map((event) => event.target as HTMLElement))
+      .subscribe((element) => {
+        if (element) {
+          element.innerHTML = `<svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-4 h-4 dark:stroke-white"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"
+          />
+        </svg>
+
+        Following`;
+        }
+      });
   }
 
   followUser() {
@@ -96,7 +154,6 @@ export class ProfileTooltipComponent implements OnInit {
           (followers) => followers.length > 0 && this.authUser !== undefined
         ),
         switchMap((followers) => {
-          console.log(this.authUser, 'this.authuser');
           return this.authorInfo.followersList
             .filter((username) => username !== this.authUser.username)
             .map((username) => {
@@ -105,18 +162,41 @@ export class ProfileTooltipComponent implements OnInit {
               );
               return user || null;
             });
-        }),
-        filter((user) => user !== null)
+        })
       )
       .subscribe((user) => {
         if (user) {
           this.usersFollowingAuthorAlsoFollowingAuth.push(user);
+        }
+      });
+  }
+
+  checkAuthorFollowingUsersAuthAlsoFollowing() {
+    this.authFollowing$
+      .pipe(
+        filter(
+          (following) => following.length > 0 && this.authUser !== undefined
+        ),
+        switchMap((following) => {
+          return this.authorInfo.followingList
+            .filter((username) => username !== this.authUser.username)
+            .map((username) => {
+              const user = following.find(
+                (follower) => follower.username === username
+              );
+              return user || null;
+            });
+        })
+      )
+      .subscribe((user) => {
+        if (user) {
+          this.authorFollowingUsersAuthAlsoFollowing.push(user);
           console.log(this.usersFollowingAuthorAlsoFollowingAuth);
         }
       });
   }
 
-  getFollowingDescription(users: UserSummaryInfo[]) {
+  getFollowersDescription(users: UserSummaryInfo[]) {
     if (users.length === 1) {
       return `followed by ${users[0].username} who also follows you`;
     } else if (users.length == 2) {
@@ -127,6 +207,20 @@ export class ProfileTooltipComponent implements OnInit {
       return `followed by ${users[0].username}, ${users[1].username}, ${
         users[2].username
       } and ${users.length - 3} others who follow you`;
+    }
+  }
+
+  getFollowingDescription(users: UserSummaryInfo[]) {
+    if (users.length === 1) {
+      return `follows ${users[0].username} whom you follow`;
+    } else if (users.length == 2) {
+      return `follows ${users[0].username} and ${users[1].username} whom you follow`;
+    } else if (users.length == 3) {
+      return `follows ${users[0].username}, ${users[1].username}, and ${users[2].username} whom you follow`;
+    } else {
+      return `follows ${users[0].username}, ${users[1].username}, ${
+        users[2].username
+      } and ${users.length - 3} others whom you follow`;
     }
   }
 }
