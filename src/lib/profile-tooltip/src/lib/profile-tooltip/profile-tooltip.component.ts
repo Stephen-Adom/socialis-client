@@ -41,7 +41,6 @@ import { HttpErrorResponse } from '@angular/common/http';
 export class ProfileTooltipComponent implements OnInit, AfterViewInit {
   @ViewChild('followingButtonLabel')
   followingButtonLabel!: ElementRef<HTMLButtonElement>;
-  // @Input({ required: true }) authorInfo!: SimpleUserInfoType;
   @Input() authorFullInfo!: UserSummaryInfoFollowing;
   authUser!: UserInfoType;
   showFollowButton = false;
@@ -60,15 +59,6 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    // console.log(this.authUser);
-    // const sub = this.userservice
-    //   .fetchUserFullInformation(this.authorInfo.username)
-    //   .subscribe((response: any) => {
-    //     this.authorFullInfo = response.data;
-
-    //     sub.unsubscribe();
-    //   });
-
     this.authFollowing$ = this.store.select(getAllAuthUserFollowing);
     this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
 
@@ -146,7 +136,6 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
       .followUser(this.authUser.id, this.authorFullInfo.id)
       .subscribe({
         next: (response) => {
-          console.log(response);
           if (response.status === 'OK') {
             this.authorFullInfo = response.data;
           }
@@ -257,7 +246,6 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
       .subscribe((user) => {
         if (user) {
           this.authorFollowingUsersAuthAlsoFollowing.push(user);
-          console.log(this.usersFollowingAuthorAlsoFollowingAuth);
         }
       });
   }
