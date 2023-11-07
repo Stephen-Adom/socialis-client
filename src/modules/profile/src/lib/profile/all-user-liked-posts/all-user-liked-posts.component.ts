@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Observable } from 'rxjs';
-import { UserInfoType } from 'utils';
+import { UserInfoType, UserSummaryInfoFollowing } from 'utils';
 import { PostCardComponent } from 'post-card';
 import { PostApiActions, PostState, getAllPostLikesByUser } from 'state';
 import { Store } from '@ngrx/store';
@@ -30,7 +30,10 @@ import { NoPostsComponent } from 'no-posts';
   styleUrls: ['./all-user-liked-posts.component.scss'],
 })
 export class AllUserLikedPostsComponent implements OnInit, OnChanges {
-  @Input({ required: true }) authUser!: UserInfoType | null;
+  @Input({ required: true }) authUser!:
+    | UserInfoType
+    | UserSummaryInfoFollowing
+    | null;
 
   allPosts$!: Observable<any[]>;
 

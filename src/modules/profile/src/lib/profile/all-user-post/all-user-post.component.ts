@@ -7,7 +7,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PostType, UserInfoType } from 'utils';
+import { PostType, UserInfoType, UserSummaryInfoFollowing } from 'utils';
 import { Observable } from 'rxjs';
 import { PostCardComponent } from 'post-card';
 import { NoPostsComponent } from 'no-posts';
@@ -22,7 +22,10 @@ import { Store } from '@ngrx/store';
   styleUrls: ['./all-user-post.component.scss'],
 })
 export class AllUserPostComponent implements OnInit, OnChanges {
-  @Input({ required: true }) authUser!: UserInfoType | null;
+  @Input({ required: true }) authUser!:
+    | UserInfoType
+    | UserSummaryInfoFollowing
+    | null;
   allPosts$!: Observable<PostType[]>;
 
   constructor(private store: Store<PostState>) {}

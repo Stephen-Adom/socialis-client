@@ -7,7 +7,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReplyType, UserInfoType } from 'utils';
+import { ReplyType, UserInfoType, UserSummaryInfoFollowing } from 'utils';
 import { Observable } from 'rxjs';
 import { PostApiActions, PostState, getAllRepliesByUser } from 'state';
 import { Store } from '@ngrx/store';
@@ -22,7 +22,10 @@ import { ReplyCardComponent } from 'comment-reply-modal';
   styleUrls: ['./all-user-replies.component.scss'],
 })
 export class AllUserRepliesComponent implements OnInit, OnChanges {
-  @Input({ required: true }) authUser!: UserInfoType | null;
+  @Input({ required: true }) authUser!:
+    | UserInfoType
+    | UserSummaryInfoFollowing
+    | null;
   allReplies$!: Observable<ReplyType[]>;
 
   constructor(private store: Store<PostState>) {}

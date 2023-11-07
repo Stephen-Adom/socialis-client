@@ -7,7 +7,7 @@ import {
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CommentType, UserInfoType } from 'utils';
+import { CommentType, UserInfoType, UserSummaryInfoFollowing } from 'utils';
 import { PostApiActions, PostState, getAllCommentsByUser } from 'state';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -22,7 +22,10 @@ import { NoPostsComponent } from 'no-posts';
   styleUrls: ['./all-user-comment.component.scss'],
 })
 export class AllUserCommentComponent implements OnInit, OnChanges {
-  @Input({ required: true }) authUser!: UserInfoType | null;
+  @Input({ required: true }) authUser!:
+    | UserInfoType
+    | UserSummaryInfoFollowing
+    | null;
   allComments$!: Observable<CommentType[]>;
 
   constructor(private store: Store<PostState>) {}
