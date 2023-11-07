@@ -8,7 +8,12 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserInfoType, UserSummaryInfoFollowing } from 'utils';
-import { UserState, getAllAuthUserFollowing, getUserInformation } from 'state';
+import {
+  UserState,
+  getAllAuthUserFollowers,
+  getAllAuthUserFollowing,
+  getUserInformation,
+} from 'state';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subscription, filter, tap } from 'rxjs';
 import { format } from 'date-fns';
@@ -25,6 +30,7 @@ export class FriendCardComponent implements OnInit {
   @Input({ required: true }) user!: UserSummaryInfoFollowing;
   @Input({ required: true }) type!: string;
   authFollowingUser$ = new BehaviorSubject<boolean>(false);
+  userFollowingAuth$ = new BehaviorSubject<boolean>(false);
   followingButtonText = `<svg
   xmlns="http://www.w3.org/2000/svg"
   fill="none"
@@ -48,7 +54,6 @@ Following`;
   ) {}
 
   ngOnInit(): void {
-    console.log('friend card');
     this.store
       .select(getAllAuthUserFollowing)
       .pipe(
@@ -64,6 +69,25 @@ Following`;
           userExist
             ? this.authFollowingUser$.next(true)
             : this.authFollowingUser$.next(false);
+        })
+      )
+      .subscribe();
+
+    this.store
+      .select(getAllAuthUserFollowers)
+      .pipe(
+        filter(
+          () =>
+            (this.user !== null || this.user !== undefined) &&
+            this.type === 'following'
+        ),
+        tap((followers) => {
+          const userExist = followers.find(
+            (follower) => follower.username === this.user.username
+          );
+          userExist
+            ? this.userFollowingAuth$.next(true)
+            : this.userFollowingAuth$.next(false);
         })
       )
       .subscribe();
