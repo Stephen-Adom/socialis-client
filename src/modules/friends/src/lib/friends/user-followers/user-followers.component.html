@@ -1,0 +1,10 @@
+<section
+  class="auth-followers divide-y divide-gray-300"
+  *ngIf="(followers$ | async)?.length"
+>
+  <lib-friend-card
+    [type]="'follower'"
+    [user]="follower"
+    *ngFor="let follower of followers$ | async"
+  />
+</section>
