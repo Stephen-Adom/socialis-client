@@ -192,3 +192,8 @@ export type AllUserSummaryResponseType = {
   data: UserSummaryInfo[];
   status: string;
 };
+
+export type AllUserSummaryInfoResponseType = {
+  data: UserSummaryInfoFollowing[];
+  status: string;
+};

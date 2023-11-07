@@ -9,7 +9,7 @@ import {
 } from 'state';
 import { Store } from '@ngrx/store';
 import { Observable, tap } from 'rxjs';
-import { UserInfoType, UserSummaryInfo } from 'utils';
+import { UserInfoType, UserSummaryInfoFollowing } from 'utils';
 import { FriendCardComponent } from 'friend-card';
 
 @Component({
@@ -21,7 +21,7 @@ import { FriendCardComponent } from 'friend-card';
 })
 export class UserFollowersComponent implements OnInit {
   authUser$!: Observable<UserInfoType | null>;
-  followers$!: Observable<UserSummaryInfo[]>;
+  followers$!: Observable<UserSummaryInfoFollowing[]>;
 
   constructor(private store: Store<UserState>) {}
 

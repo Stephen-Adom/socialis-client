@@ -5,15 +5,15 @@ import {
   createSelector,
   on,
 } from '@ngrx/store';
-import { UserSummaryInfoFollowing, UserSummaryInfo } from 'utils';
+import { UserSummaryInfoFollowing } from 'utils';
 import { UserApiActions } from './user.actions';
 
 export const featureUserKey = 'user';
 
 export interface UserState {
   authorInformation: UserSummaryInfoFollowing | null;
-  authUserFollowers: UserSummaryInfo[];
-  authUserFollowing: UserSummaryInfo[];
+  authUserFollowers: UserSummaryInfoFollowing[];
+  authUserFollowing: UserSummaryInfoFollowing[];
 }
 
 const initialState: UserState = {

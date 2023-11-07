@@ -1,1 +1,10 @@
-<p>user-following works!</p>
+<section
+  class="auth-followers divide-y divide-gray-300"
+  *ngIf="(following$ | async)?.length"
+>
+  <lib-friend-card
+    [type]="'following'"
+    [user]="following"
+    *ngFor="let following of following$ | async"
+  />
+</section>

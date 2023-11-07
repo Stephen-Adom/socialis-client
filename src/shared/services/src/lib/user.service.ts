@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getAuthHttpOptions } from './httpHeaders';
 import {
-  AllUserSummaryResponseType,
+  AllUserSummaryInfoResponseType,
   SuccessMessageType,
   UserSummaryInfoResponseType,
   UserSummaryResponseType,
@@ -83,13 +83,13 @@ export class UserService {
   }
 
   fetchAllFollowers(username: string) {
-    return this.http.get<AllUserSummaryResponseType>(
+    return this.http.get<AllUserSummaryInfoResponseType>(
       BASE_URL + `/user/${username}/all_followers`
     );
   }
 
   fetchAllFollowings(username: string) {
-    return this.http.get<AllUserSummaryResponseType>(
+    return this.http.get<AllUserSummaryInfoResponseType>(
       BASE_URL + `/user/${username}/all_following`
     );
   }

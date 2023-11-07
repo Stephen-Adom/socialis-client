@@ -1,8 +1,8 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { createActionGroup, props } from '@ngrx/store';
 import {
-  AllUserSummaryResponseType,
-  UserSummaryInfo,
+  AllUserSummaryInfoResponseType,
+  UserSummaryInfoFollowing,
   UserSummaryInfoResponseType,
 } from 'utils';
 import { emptyProps } from '@ngrx/store';
@@ -17,13 +17,13 @@ export const UserApiActions = createActionGroup({
     followUserSuccess: emptyProps(),
     fetchAllFollowers: props<{ username: string }>(),
     fetchAllFollowersSuccess: props<{
-      usersResponse: AllUserSummaryResponseType;
+      usersResponse: AllUserSummaryInfoResponseType;
     }>(),
     fetchAllFollowing: props<{ username: string }>(),
     fetchAllFollowingSuccess: props<{
-      usersResponse: AllUserSummaryResponseType;
+      usersResponse: AllUserSummaryInfoResponseType;
     }>(),
-    updateFollowersList: props<{ user: UserSummaryInfo }>(),
-    updateFollowingList: props<{ user: UserSummaryInfo }>(),
+    updateFollowersList: props<{ user: UserSummaryInfoFollowing }>(),
+    updateFollowingList: props<{ user: UserSummaryInfoFollowing }>(),
   },
 });
