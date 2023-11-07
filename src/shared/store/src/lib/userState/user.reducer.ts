@@ -71,5 +71,13 @@ export const UserReducer = createReducer<UserState>(
       ...state,
       authUserFollowing: [...state.authUserFollowing, action.user],
     };
+  }),
+  on(UserApiActions.unfollowUser, (state: UserState, action) => {
+    return {
+      ...state,
+      authUserFollowing: state.authUserFollowing.filter(
+        (following) => following.id !== action.followingId
+      ),
+    };
   })
 );

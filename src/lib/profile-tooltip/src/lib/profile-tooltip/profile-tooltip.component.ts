@@ -4,14 +4,13 @@ import {
   Component,
   ElementRef,
   Input,
-  OnChanges,
   OnInit,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserInfoType, UserSummaryInfo, UserSummaryInfoFollowing } from 'utils';
 import {
+  AppApiActions,
   AppState,
   UserApiActions,
   getAllAuthUserFollowers,
@@ -22,11 +21,15 @@ import { Store } from '@ngrx/store';
 import {
   BehaviorSubject,
   Observable,
+  Subscription,
   filter,
   fromEvent,
   map,
   switchMap,
+  tap,
 } from 'rxjs';
+import { UserService } from 'services';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'lib-profile-tooltip',
@@ -38,7 +41,8 @@ import {
 export class ProfileTooltipComponent implements OnInit, AfterViewInit {
   @ViewChild('followingButtonLabel')
   followingButtonLabel!: ElementRef<HTMLButtonElement>;
-  @Input() authorInfo!: UserSummaryInfoFollowing;
+  // @Input({ required: true }) authorInfo!: SimpleUserInfoType;
+  @Input() authorFullInfo!: UserSummaryInfoFollowing;
   authUser!: UserInfoType;
   showFollowButton = false;
   authFollowing$!: Observable<UserSummaryInfo[]>;
@@ -47,26 +51,43 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
   followButtonText = 'Follow';
   usersFollowingAuthorAlsoFollowingAuth: UserSummaryInfo[] = [];
   authorFollowingUsersAuthAlsoFollowing: UserSummaryInfo[] = [];
+  followUserSubscription: Subscription | undefined;
+  unfollowUserSubscription: Subscription | undefined;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private store: Store<AppState>,
+    private userservice: UserService
+  ) {}
 
   ngOnInit(): void {
+    // console.log(this.authUser);
+    // const sub = this.userservice
+    //   .fetchUserFullInformation(this.authorInfo.username)
+    //   .subscribe((response: any) => {
+    //     this.authorFullInfo = response.data;
+
+    //     sub.unsubscribe();
+    //   });
+
     this.authFollowing$ = this.store.select(getAllAuthUserFollowing);
     this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
 
-    this.store.select(getUserInformation).subscribe((info) => {
-      if (
-        info &&
-        this.authorInfo &&
-        info.username !== this.authorInfo.username
-      ) {
-        this.authUser = info;
-        this.showFollowButton = true;
-        return;
-      }
-      this.showFollowButton = false;
-    });
+    this.store
+      .select(getUserInformation)
+      .pipe(filter((userInfo) => userInfo !== null))
+      .subscribe((info) => {
+        if (info?.username !== this.authorFullInfo.username) {
+          this.authUser = info!;
+          this.showFollowButton = true;
+          return;
+        }
+        this.showFollowButton = false;
+      });
 
+    this.checkFollowingStatus();
+  }
+
+  checkFollowingStatus() {
     this.checkIfFollowingAuthor();
     this.checkIfAuthorIsAFollower();
     this.checkUsersFollowingAuthorAlsoFollowingAuth();
@@ -74,11 +95,12 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    fromEvent(this.followingButtonLabel.nativeElement, 'mouseenter')
-      .pipe(map((event) => event.target as HTMLElement))
-      .subscribe((element) => {
-        if (element) {
-          element.innerHTML = `
+    if (this.followingButtonLabel) {
+      fromEvent(this.followingButtonLabel?.nativeElement, 'mouseenter')
+        .pipe(map((event) => event.target as HTMLElement))
+        .subscribe((element) => {
+          if (element) {
+            element.innerHTML = `
           <svg xmlns="http://www.w3.org/2000/svg" 
           fill="none" viewBox="0 0 24 24" 
           stroke-width="1.5" 
@@ -91,13 +113,14 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
 
           Unfollow
           `;
-        }
-      });
-    fromEvent(this.followingButtonLabel.nativeElement, 'mouseleave')
-      .pipe(map((event) => event.target as HTMLElement))
-      .subscribe((element) => {
-        if (element) {
-          element.innerHTML = `<svg
+          }
+        });
+
+      fromEvent(this.followingButtonLabel?.nativeElement, 'mouseleave')
+        .pipe(map((event) => event.target as HTMLElement))
+        .subscribe((element) => {
+          if (element) {
+            element.innerHTML = `<svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 24 24"
@@ -113,23 +136,64 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
         </svg>
 
         Following`;
-        }
-      });
+          }
+        });
+    }
   }
 
   followUser() {
-    this.store.dispatch(
-      UserApiActions.followUser({
-        followId: this.authUser.id,
-        followingId: this.authorInfo.id,
-      })
-    );
+    this.followUserSubscription = this.userservice
+      .followUser(this.authUser.id, this.authorFullInfo.id)
+      .subscribe({
+        next: (response) => {
+          console.log(response);
+          if (response.status === 'OK') {
+            this.authorFullInfo = response.data;
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.store.dispatch(
+            AppApiActions.displayErrorMessage({ error: error.error })
+          );
+        },
+        complete: () => {
+          this.checkFollowingStatus();
+          this.followUserSubscription?.unsubscribe();
+        },
+      });
+  }
+
+  unfollowUser() {
+    this.unfollowUserSubscription = this.userservice
+      .unfollowUser(this.authUser.id, this.authorFullInfo.id)
+      .subscribe({
+        next: (response) => {
+          if (response.status === 'OK') {
+            this.store.dispatch(
+              UserApiActions.unfollowUser({
+                followId: this.authUser.id,
+                followingId: this.authorFullInfo.id,
+              })
+            );
+            this.authorFullInfo = response.data;
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.store.dispatch(
+            AppApiActions.displayErrorMessage({ error: error.error })
+          );
+        },
+        complete: () => {
+          this.checkFollowingStatus();
+          this.unfollowUserSubscription?.unsubscribe();
+        },
+      });
   }
 
   checkIfFollowingAuthor() {
     this.authFollowing$.subscribe((followings) => {
       const userExist = followings.find(
-        (following) => following.username === this.authorInfo.username
+        (following) => following.username === this.authorFullInfo.username
       );
       userExist
         ? this.followingAuthor$.next(true)
@@ -140,7 +204,7 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
   checkIfAuthorIsAFollower() {
     this.authFollowers$.subscribe((follower) => {
       const userExist = follower.find(
-        (follower) => follower.username === this.authorInfo.username
+        (follower) => follower.username === this.authorFullInfo.username
       );
 
       this.followButtonText = userExist ? 'Follow Back' : 'Follow';
@@ -153,8 +217,9 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
         filter(
           (followers) => followers.length > 0 && this.authUser !== undefined
         ),
+        tap(() => (this.usersFollowingAuthorAlsoFollowingAuth = [])),
         switchMap((followers) => {
-          return this.authorInfo.followersList
+          return this.authorFullInfo.followersList
             .filter((username) => username !== this.authUser.username)
             .map((username) => {
               const user = followers.find(
@@ -177,8 +242,9 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
         filter(
           (following) => following.length > 0 && this.authUser !== undefined
         ),
+        tap(() => (this.authorFollowingUsersAuthAlsoFollowing = [])),
         switchMap((following) => {
-          return this.authorInfo.followingList
+          return this.authorFullInfo.followingList
             .filter((username) => username !== this.authUser.username)
             .map((username) => {
               const user = following.find(

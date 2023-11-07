@@ -2,7 +2,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Store } from '@ngrx/store';
 import * as localforage from 'localforage';
-import { Subscription, tap, Observable, switchMap, map } from 'rxjs';
+import {
+  Subscription,
+  tap,
+  Observable,
+  switchMap,
+  map,
+  distinctUntilChanged,
+} from 'rxjs';
 import { MessageService, PostService } from 'services';
 import {
   AppApiActions,
@@ -44,6 +51,19 @@ export class WrapperComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.store.dispatch(PostApiActions.fetchAllPost());
     this.authUser$ = this.store.select(getUserInformation);
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        distinctUntilChanged(),
+        tap((username) => {
+          if (username) {
+            this.store.dispatch(UserApiActions.fetchAllFollowers({ username }));
+            this.store.dispatch(UserApiActions.fetchAllFollowing({ username }));
+          }
+        })
+      )
+      .subscribe();
 
     this.postDetailsSubscription = this.store
       .select(getPostDetails)
@@ -177,12 +197,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.authUser$
       .pipe(
         map((user) => user?.username),
-        tap((username) => {
-          if (username) {
-            this.store.dispatch(UserApiActions.fetchAllFollowers({ username }));
-            this.store.dispatch(UserApiActions.fetchAllFollowing({ username }));
-          }
-        }),
         switchMap((username) => {
           return this.messageservice.onMessage('/feed/user/update-' + username);
         })

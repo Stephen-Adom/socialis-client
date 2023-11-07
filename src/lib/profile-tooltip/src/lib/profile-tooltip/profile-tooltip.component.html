@@ -1,21 +1,22 @@
 <div
-  *ngIf="authorInfo"
+  *ngIf="authorFullInfo"
   class="absolute top-[40px] hidden group-hover:block px-3 left-0 w-[15rem] bg-white border border-gray-200 dark:bg-main-dark shadow-lg rounded-lg mt-2 dark:divide-gray-600 z-10"
 >
   <div class="flex items-center py-2">
     <img
       class="inline-block h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
       [src]="
-        authorInfo && authorInfo.imageUrl
-          ? authorInfo.imageUrl
+        authorFullInfo && authorFullInfo.imageUrl
+          ? authorFullInfo.imageUrl
           : 'assets/images/users/default.jpg'
       "
-      [alt]="authorInfo.username"
+      [alt]="authorFullInfo.username"
     />
 
     <ng-container *ngIf="showFollowButton">
       <ng-container *ngIf="followingAuthor$ | async; else elseTemplate">
         <button
+          (click)="unfollowUser()"
           #followingButtonLabel
           type="button"
           class="w-[50%] bg-transparent hover:bg-red-200 hover:text-red-700 border border-gray-200 px-1 py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
@@ -67,14 +68,14 @@
 
   <div class="py-2 rounded-t-lg w-full">
     <p class="text-base text-gray-500 font-semibold">
-      {{ authorInfo.firstname }} {{ authorInfo.lastname }}
+      {{ authorFullInfo.firstname }} {{ authorFullInfo.lastname }}
     </p>
     <p class="text-xs font-medium text-gray-800 dark:text-dark-text">
-      {{ authorInfo.username }}
+      {{ authorFullInfo.username }}
     </p>
 
     <p class="dark:text-dark-text text-sm">
-      {{ authorInfo.bio }}
+      {{ authorFullInfo.bio }}
     </p>
   </div>
 
@@ -82,20 +83,20 @@
     <p class="flex items-center gap-x-4 mt-3">
       <span class="text-gray-400 flex items-center gap-x-1">
         <span class="font-bold dark:text-dark-text">{{
-          authorInfo.followers
+          authorFullInfo.followers
         }}</span>
         Followers</span
       >
 
       <span class="text-gray-400 flex items-center gap-x-1">
         <span class="font-bold dark:text-dark-text">{{
-          authorInfo.following
+          authorFullInfo.following
         }}</span>
         Following</span
       >
       <span class="text-gray-400 flex items-center gap-x-1">
         <span class="font-bold dark:text-dark-text">{{
-          authorInfo.totalPost
+          authorFullInfo.totalPost
         }}</span>
         posts</span
       >

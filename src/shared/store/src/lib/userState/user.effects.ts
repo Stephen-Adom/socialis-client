@@ -29,21 +29,40 @@ export class UserEffects {
     );
   });
 
-  FollowUser$ = createEffect(() => {
-    return this.actions$.pipe(
-      ofType(UserApiActions.followUser),
-      mergeMap((action: { followId: number; followingId: number }) =>
-        this.userservice.followUser(action.followId, action.followingId).pipe(
-          map(() => {
-            return UserApiActions.followUserSuccess();
-          }),
-          catchError((error: HttpErrorResponse) =>
-            of(AppApiActions.displayErrorMessage({ error: error.error }))
-          )
-        )
-      )
-    );
-  });
+  // FollowUser$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(UserApiActions.followUser),
+  //     mergeMap((action: { followId: number; followingId: number }) =>
+  //       this.userservice.followUser(action.followId, action.followingId).pipe(
+  //         map(() => {
+  //           return UserApiActions.followUserSuccess();
+  //         }),
+  //         catchError((error: HttpErrorResponse) =>
+  //           of(AppApiActions.displayErrorMessage({ error: error.error }))
+  //         )
+  //       )
+  //     )
+  //   );
+  // });
+
+  // UnfollowUser$ = createEffect(() => {
+  //   return this.actions$.pipe(
+  //     ofType(UserApiActions.unfollowUser),
+  //     mergeMap((action: { followId: number; followingId: number }) =>
+  //       this.userservice.unfollowUser(action.followId, action.followingId).pipe(
+  //         map(() => {
+  //           return UserApiActions.unfollowUser({
+  //             followId: action.followId,
+  //             followingId: action.followingId,
+  //           });
+  //         }),
+  //         catchError((error: HttpErrorResponse) =>
+  //           of(AppApiActions.displayErrorMessage({ error: error.error }))
+  //         )
+  //       )
+  //     )
+  //   );
+  // });
 
   FetchAllFollowers$ = createEffect(() => {
     return this.actions$.pipe(

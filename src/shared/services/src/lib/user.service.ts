@@ -5,6 +5,7 @@ import { getAuthHttpOptions } from './httpHeaders';
 import {
   AllUserSummaryResponseType,
   SuccessMessageType,
+  UserSummaryInfoResponseType,
   UserSummaryResponseType,
 } from 'utils';
 import BASE_URL from './base_url';
@@ -70,7 +71,15 @@ export class UserService {
   }
 
   followUser(followId: number, followingId: number) {
-    return this.http.get(BASE_URL + `/user/${followId}/follow/${followingId}`);
+    return this.http.get<UserSummaryInfoResponseType>(
+      BASE_URL + `/user/${followId}/follow/${followingId}`
+    );
+  }
+
+  unfollowUser(followId: number, followingId: number) {
+    return this.http.get<UserSummaryInfoResponseType>(
+      BASE_URL + `/user/${followId}/unfollow/${followingId}`
+    );
   }
 
   fetchAllFollowers(username: string) {

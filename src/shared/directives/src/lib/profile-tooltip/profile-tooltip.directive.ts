@@ -9,8 +9,9 @@ import {
   ViewContainerRef,
 } from '@angular/core';
 import { ProfileTooltipComponent } from 'profile-tooltip';
+import { Subscription } from 'rxjs';
 import { UserService } from 'services';
-import { SimpleUserInfoType, UserSummaryInfo } from 'utils';
+import { SimpleUserInfoType, UserSummaryInfoFollowing } from 'utils';
 
 @Directive({
   selector: '[libProfileTooltip]',
@@ -18,8 +19,10 @@ import { SimpleUserInfoType, UserSummaryInfo } from 'utils';
 })
 export class ProfileTooltipDirective {
   @Input() authorInfo!: SimpleUserInfoType;
-  authorSummaryInfo!: UserSummaryInfo;
-  private profileTooltip!: ComponentRef<ProfileTooltipComponent>;
+  authorSummaryInfo!: UserSummaryInfoFollowing;
+  private profileTooltip!: ComponentRef<ProfileTooltipComponent> | undefined;
+  private isTooltipCreated = false;
+  private subscription: Subscription | undefined;
 
   constructor(
     private el: ElementRef,
@@ -29,29 +32,35 @@ export class ProfileTooltipDirective {
   ) {}
 
   @HostListener('mouseenter') showAuthorInfo() {
-    const sub = this.userservice
-      .fetchUserFullInformation(this.authorInfo.username)
-      .subscribe((response: any) => {
-        this.authorSummaryInfo = response.data;
-        this.createTooltip();
-        sub.unsubscribe();
-      });
+    if (!this.isTooltipCreated) {
+      this.subscription = this.userservice
+        .fetchUserFullInformation(this.authorInfo.username)
+        .subscribe((response: any) => {
+          this.authorSummaryInfo = response.data;
+          this.createTooltip();
+          this.subscription?.unsubscribe();
+        });
+    }
   }
 
   @HostListener('mouseleave') destroyTooltip() {
     if (this.profileTooltip) {
       this.profileTooltip.destroy();
+      this.profileTooltip = undefined;
     }
+    this.isTooltipCreated = false;
   }
 
   createTooltip() {
+    this.containerRef.clear();
     this.profileTooltip = this.containerRef.createComponent(
       ProfileTooltipComponent
     );
-    this.profileTooltip.setInput('authorInfo', this.authorSummaryInfo);
+    this.profileTooltip.instance.authorFullInfo = this.authorSummaryInfo;
     this.renderer.appendChild(
       this.el.nativeElement,
       this.profileTooltip.location.nativeElement
     );
+    this.isTooltipCreated = true;
   }
 }

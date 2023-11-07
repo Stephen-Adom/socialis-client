@@ -13,6 +13,7 @@ export const UserApiActions = createActionGroup({
     fetchUserDetails: props<{ username: string }>(),
     fetchUserDetailsSuccess: props<{ userInfo: UserSummaryInfoResponseType }>(),
     followUser: props<{ followId: number; followingId: number }>(),
+    unfollowUser: props<{ followId: number; followingId: number }>(),
     followUserSuccess: emptyProps(),
     fetchAllFollowers: props<{ username: string }>(),
     fetchAllFollowersSuccess: props<{
