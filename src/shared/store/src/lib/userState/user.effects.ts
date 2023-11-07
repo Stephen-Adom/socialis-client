@@ -11,7 +11,7 @@ import { UserApiActions } from './user.actions';
 export class UserEffects {
   constructor(private actions$: Actions, private userservice: UserService) {}
 
-  FetchAllPosts$ = createEffect(() => {
+  FetchUserDetails$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(UserApiActions.fetchUserDetails),
       mergeMap((action: { username: string }) =>

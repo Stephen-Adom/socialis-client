@@ -44,6 +44,7 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   authUser$!: Observable<UserInfoType | null>;
   authFollowers$!: Observable<UserSummaryInfo[]>;
   authUserSubscription = new Subscription();
+  authorDetailSubscription: Subscription | undefined;
 
   formattedDate: string | null = null;
 
@@ -190,14 +191,14 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   }
 
   viewAuthorDetails(user: SimpleUserInfoType) {
-    const sub = this.authUser$.subscribe((authUser) => {
+    this.authorDetailSubscription = this.authUser$.subscribe((authUser) => {
       if (authUser?.username === user.username) {
         this.router.navigate(['profile']);
       } else {
         this.router.navigate(['user', user.username, 'profile']);
       }
 
-      sub.unsubscribe();
+      this.authorDetailSubscription?.unsubscribe();
     });
   }
 

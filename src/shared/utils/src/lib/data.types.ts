@@ -132,7 +132,11 @@ export type UserSummaryInfoFollowing = {
   username: string;
   bio: string;
   imageUrl: string;
+  coverImageUrl: string;
+  phonenumber: string;
+  address: string;
   totalPost: number;
+  createdAt: string;
   followers: number;
   following: number;
   followersList: string[];

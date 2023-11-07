@@ -52,6 +52,7 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
   authorFollowingUsersAuthAlsoFollowing: UserSummaryInfo[] = [];
   followUserSubscription: Subscription | undefined;
   unfollowUserSubscription: Subscription | undefined;
+  authUserSubscription: Subscription | undefined;
 
   constructor(
     private store: Store<AppState>,
@@ -62,16 +63,21 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
     this.authFollowing$ = this.store.select(getAllAuthUserFollowing);
     this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
 
-    this.store
+    this.authUserSubscription = this.store
       .select(getUserInformation)
       .pipe(filter((userInfo) => userInfo !== null))
-      .subscribe((info) => {
-        if (info?.username !== this.authorFullInfo.username) {
-          this.authUser = info!;
-          this.showFollowButton = true;
-          return;
-        }
-        this.showFollowButton = false;
+      .subscribe({
+        next: (info) => {
+          if (info?.username !== this.authorFullInfo.username) {
+            this.authUser = info!;
+            this.showFollowButton = true;
+            return;
+          }
+          this.showFollowButton = false;
+        },
+        complete: () => {
+          this.authUserSubscription?.unsubscribe();
+        },
       });
 
     this.checkFollowingStatus();

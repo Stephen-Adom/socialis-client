@@ -34,32 +34,70 @@
   >
     <div
       *ngIf="authorInfo$ | async as authorInfo"
-      class="relative user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark dark:text-dark-text px-3 py-6 w-full border text-center border-white dark:border-main-dark cursor-pointer max-h-[350px]"
+      class="relative user-profile-card shadow-lg rounded-lg bg-white dark:bg-main-dark dark:text-dark-text px-3 py-4 w-full border border-white dark:border-main-dark cursor-pointer"
     >
-      <div
-        class="auth-user-profile-container h-[6rem] w-[6rem] rounded-full ring-2 ring-offset-4 ring-offset-transparent ring-primaryColor dark:ring-primaryColor mx-auto relative"
-      >
-        <img
-          class="inline-block w-full rounded-full h-full"
-          [src]="
-            authorInfo.imageUrl
-              ? authorInfo.imageUrl
-              : 'assets/images/users/default.jpg'
-          "
-          [attr.alt]="authorInfo.username"
-        />
+      <div class="flex items-start justify-between">
+        <div
+          class="auth-user-profile-container h-[4rem] w-[4rem] rounded-full ring-2 ring-offset-4 ring-primaryColor dark:ring-primaryColor mx-auto relative"
+        >
+          <img
+            class="inline-block w-full rounded-full h-full"
+            [src]="
+              authorInfo.imageUrl
+                ? authorInfo.imageUrl
+                : 'assets/images/users/default.jpg'
+            "
+            [attr.alt]="authorInfo.username"
+          />
+        </div>
+
+        <ng-container *ngIf="followingAuthor$ | async; else elseTemplate">
+          <button
+            (click)="unfollowUser()"
+            title="unfollow"
+            (mouseenter)="updateTextButton()"
+            (mouseleave)="updateTextButtonDefault()"
+            type="button"
+            class="w-[50%] bg-transparent hover:bg-red-200 hover:text-red-700 border border-gray-200 px-1 py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
+            [innerHTML]="sanitizeHtml(followingButtonText)"
+          ></button>
+        </ng-container>
+        <ng-template #elseTemplate>
+          <button
+            (click)="followUser()"
+            type="button"
+            class="w-[50%] bg-secondaryColor hover:bg-primaryColor text-white px-1 py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-4 h-4 stroke-white"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.766z"
+              />
+            </svg>
+
+            {{ followButtonText }}
+          </button>
+        </ng-template>
       </div>
 
-      <h5 class="font-bold text-base mt-5">
+      <h5 class="font-bold text-base mt-3 ml-[12px]">
         {{ authorInfo.firstname }} {{ authorInfo.lastname }}
       </h5>
 
       <span
-        class="block text-gray-500 dark:text-gray-300 font-light text-xs mt-1"
+        class="block text-gray-500 dark:text-gray-300 font-light text-xs mt-1 ml-[12px]"
         >@{{ authorInfo.username }}</span
       >
 
-      <p class="flex items-center justify-center gap-1 mt-2 text-sm">
+      <p class="flex items-center justify-start gap-1 mt-2 text-sm ml-[12px]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -79,10 +117,10 @@
             d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"
           />
         </svg>
-        <!-- {{ authorInfo.address ? authorInfo.address : 'N/A' }} -->
+        {{ authorInfo.address ? authorInfo.address : 'N/A' }}
       </p>
 
-      <p class="flex items-center justify-center gap-1 mt-2 text-sm">
+      <p class="flex items-center justify-start gap-1 mt-2 text-sm ml-[12px]">
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -98,39 +136,78 @@
           />
         </svg>
 
-        <!-- Joined {{ formatCreatedAt(authorInfo.createdAt) }} -->
+        Joined {{ formatCreatedAt(authorInfo.createdAt) }}
       </p>
 
-      <p class="mt-2 text-sm">
+      <p class="mt-2 text-sm ml-[12px]">
         {{ authorInfo.bio ? authorInfo.bio : 'N/A' }}
       </p>
 
-      <div
-        class="mt-4 flex items-center gap-3 justify-center divide-x dark:divide-gray-700"
-      >
-        <div class="px-2 text-center">
-          <span class="block text-gray-500 dark:text-gray-300 text-sm"
-            >Posts</span
+      <div class="py-2 text-sm text-gray-600 ml-[12px]">
+        <p class="flex items-center gap-x-4 mt-3">
+          <span class="text-gray-400 flex items-center gap-x-1">
+            <span class="font-bold dark:text-dark-text">{{
+              authorInfo.followers
+            }}</span>
+            Followers</span
           >
-          <span class="block text-gray-800 dark:text-gray-500 text-base">{{
-            totalPosts$ | async
+
+          <span class="text-gray-400 flex items-center gap-x-1">
+            <span class="font-bold dark:text-dark-text">{{
+              authorInfo.following
+            }}</span>
+            Following</span
+          >
+          <span class="text-gray-400 flex items-center gap-x-1">
+            <span class="font-bold dark:text-dark-text">{{
+              authorInfo.totalPost
+            }}</span>
+            posts</span
+          >
+        </p>
+      </div>
+
+      <div
+        class="py-1 text-sm flex items-center space-x-1 w-full"
+        *ngIf="usersFollowingAuthorAlsoFollowingAuth.length"
+      >
+        <div class="flex mb-2 -space-x-2">
+          <img
+            *ngFor="
+              let user of usersFollowingAuthorAlsoFollowingAuth.slice(0, 3)
+            "
+            class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
+            [src]="
+              user.imageUrl ? user.imageUrl : 'assets/images/users/default.jpg'
+            "
+            [alt]="user.username"
+          />
+
+          <span class="text-xs text-gray-400 !ml-[4px]">{{
+            getFollowersDescription(usersFollowingAuthorAlsoFollowingAuth)
           }}</span>
         </div>
-        <div class="px-2 text-center">
-          <span class="block text-gray-500 dark:text-gray-300 text-sm"
-            >Followers</span
-          >
-          <span class="block text-gray-800 dark:text-gray-500 text-base"
-            >400</span
-          >
-        </div>
-        <div class="px-2 text-center">
-          <span class="block text-gray-500 dark:text-gray-300 text-sm"
-            >Following</span
-          >
-          <span class="block text-gray-800 dark:text-gray-500 text-base"
-            >400</span
-          >
+      </div>
+
+      <div
+        class="py-1 text-sm flex items-center space-x-1 w-full"
+        *ngIf="authorFollowingUsersAuthAlsoFollowing.length"
+      >
+        <div class="flex mb-2 -space-x-2">
+          <img
+            *ngFor="
+              let user of authorFollowingUsersAuthAlsoFollowing.slice(0, 3)
+            "
+            class="w-7 h-7 border-2 border-white rounded-full dark:border-gray-800"
+            [src]="
+              user.imageUrl ? user.imageUrl : 'assets/images/users/default.jpg'
+            "
+            [alt]="user.username"
+          />
+
+          <span class="text-xs text-gray-400 !ml-[4px]">{{
+            getFollowingDescription(authorFollowingUsersAuthAlsoFollowing)
+          }}</span>
         </div>
       </div>
     </div>
@@ -248,9 +325,9 @@
         </nav>
       </div>
 
-      <!-- <div class="mt-3">
+      <div class="mt-3">
         <div id="segment-1" role="tabpanel" aria-labelledby="segment-item-1">
-          <lib-all-user-post [authUser]="authorInfo$ | async" />
+          <!-- <lib-all-user-post [authUser]="authorInfo$ | async" /> -->
         </div>
         <div
           id="segment-2"
@@ -258,7 +335,7 @@
           role="tabpanel"
           aria-labelledby="segment-item-2"
         >
-          <lib-all-user-comment [authUser]="authorInfo$ | async" />
+          <!-- <lib-all-user-comment [authUser]="authorInfo$ | async" /> -->
         </div>
         <div
           id="segment-3"
@@ -266,7 +343,7 @@
           role="tabpanel"
           aria-labelledby="segment-item-3"
         >
-          <lib-all-user-replies [authUser]="authorInfo$ | async" />
+          <!-- <lib-all-user-replies [authUser]="authorInfo$ | async" /> -->
         </div>
         <div
           id="segment-4"
@@ -274,9 +351,9 @@
           role="tabpanel"
           aria-labelledby="segment-item-4"
         >
-          <lib-all-user-liked-posts [authUser]="authorInfo$ | async" />
+          <!-- <lib-all-user-liked-posts [authUser]="authorInfo$ | async" /> -->
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
 </section>
