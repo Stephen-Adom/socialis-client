@@ -66,6 +66,7 @@
               (mouseenter)="updateTextButton()"
               (mouseleave)="updateTextButtonDefault()"
               [innerHTML]="sanitizeHtml(followingButtonText)"
+              (click)="unfollowUser()"
               type="button"
               class="w-auto px-4 bg-transparent hover:bg-red-200 hover:text-red-700 border border-gray-200 py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
             >
@@ -89,6 +90,7 @@
           </ng-container>
           <ng-template #elseTemplate>
             <button
+              (click)="followUser()"
               type="button"
               class="w-auto px-4 bg-secondaryColor hover:bg-primaryColor text-white py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
             >

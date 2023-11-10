@@ -310,7 +310,7 @@ Following`;
             );
           },
           complete: () => {
-            this.followUserSubscription?.unsubscribe();
+            this.unfollowUserSubscription?.unsubscribe();
           },
         });
     }

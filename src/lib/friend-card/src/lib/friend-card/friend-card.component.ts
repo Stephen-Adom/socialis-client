@@ -9,6 +9,8 @@ import {
 import { CommonModule } from '@angular/common';
 import { UserInfoType, UserSummaryInfoFollowing } from 'utils';
 import {
+  AppApiActions,
+  UserApiActions,
   UserState,
   getAllAuthUserFollowers,
   getAllAuthUserFollowing,
@@ -18,6 +20,8 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subscription, filter, tap } from 'rxjs';
 import { format } from 'date-fns';
 import { DomSanitizer } from '@angular/platform-browser';
+import { UserService } from 'services';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'lib-friend-card',
@@ -31,6 +35,9 @@ export class FriendCardComponent implements OnInit {
   @Input({ required: true }) type!: string;
   authFollowingUser$ = new BehaviorSubject<boolean>(false);
   userFollowingAuth$ = new BehaviorSubject<boolean>(false);
+  authUser$!: Observable<UserInfoType | null>;
+  unfollowUserSubscription = new Subscription();
+  followUserSubscription = new Subscription();
   followingButtonText = `<svg
   xmlns="http://www.w3.org/2000/svg"
   fill="none"
@@ -49,11 +56,14 @@ export class FriendCardComponent implements OnInit {
 Following`;
 
   constructor(
+    private userservice: UserService,
     private store: Store<UserState>,
     private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
+    this.authUser$ = this.store.select(getUserInformation);
+
     this.store
       .select(getAllAuthUserFollowing)
       .pipe(
@@ -134,5 +144,66 @@ Following`;
 
   sanitizeHtml(followingButtonText: string) {
     return this.sanitizer.bypassSecurityTrustHtml(followingButtonText);
+  }
+
+  unfollowUser() {
+    let authUser: any;
+    this.authUser$.subscribe((data) => (authUser = data));
+
+    if (authUser !== null) {
+      this.unfollowUserSubscription = this.userservice
+        .unfollowUser(authUser?.id as number, this.user?.id as number)
+        .subscribe({
+          next: (response) => {
+            if (response.status === 'OK') {
+              // this.store.dispatch(
+              //   UserApiActions.fetchUserDetailsSuccess({ userInfo: response })
+              // );
+
+              this.store.dispatch(
+                UserApiActions.unfollowUser({
+                  followId: authUser.id,
+                  followingId: this.user.id,
+                })
+              );
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            this.store.dispatch(
+              AppApiActions.displayErrorMessage({ error: error.error })
+            );
+          },
+          complete: () => {
+            this.unfollowUserSubscription?.unsubscribe();
+          },
+        });
+    }
+  }
+
+  followUser() {
+    let authUser: any;
+    this.authUser$.subscribe((data) => (authUser = data));
+
+    if (authUser !== null) {
+      this.followUserSubscription = this.userservice
+        .followUser(authUser?.id as number, this.user?.id as number)
+        .subscribe({
+          next: (response) => {
+            if (response.status === 'OK') {
+              // this.store.dispatch(
+              //   UserApiActions.fetchUserDetailsSuccess({ userInfo: response })
+              // );
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            this.store.dispatch(
+              AppApiActions.displayErrorMessage({ error: error.error })
+            );
+          },
+          complete: () => {
+            this.followUserSubscription?.unsubscribe();
+          },
+        });
+    }
   }
 }

@@ -226,6 +226,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           if (user) {
+            console.log(user, 'followers count');
             this.store.dispatch(UserApiActions.updateFollowersList({ user }));
           }
         },
@@ -246,7 +247,50 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           if (user) {
+            console.log(user, 'following count');
             this.store.dispatch(UserApiActions.updateFollowingList({ user }));
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage(
+            '/feed/following/count/remove-' + username
+          );
+        })
+      )
+      .subscribe({
+        next: (user) => {
+          if (user) {
+            console.log(user, 'remove following count');
+            // this.store.dispatch(UserApiActions.updateFollowingList({ user }));
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage(
+            '/feed/followers/count/remove-' + username
+          );
+        })
+      )
+      .subscribe({
+        next: (user) => {
+          if (user) {
+            console.log(user, 'remove followers count');
+            // this.store.dispatch(UserApiActions.updateFollowingList({ user }));
           }
         },
         error: (error) => {
