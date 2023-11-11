@@ -1,11 +1,5 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import {
-  Component,
-  Input,
-  OnChanges,
-  OnInit,
-  SimpleChanges,
-} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserInfoType, UserSummaryInfoFollowing } from 'utils';
 import {
