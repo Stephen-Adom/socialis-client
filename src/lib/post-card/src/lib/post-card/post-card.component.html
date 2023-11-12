@@ -202,9 +202,7 @@
     </div>
   </div>
   <div class="card-body dark:text-dark-text ml-0 md:ml-[68px]">
-    <p *ngIf="post.content" class="text-sm">
-      {{ post.content }}
-    </p>
+    <p *ngIf="formattedText" class="text-sm" [innerHtml]="formattedText"></p>
 
     <div
       class="image-container min-h-[4.5rem] rounded-lg overflow-hidden mt-2"

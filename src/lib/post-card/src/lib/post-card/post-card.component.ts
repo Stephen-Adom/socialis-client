@@ -1,9 +1,12 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import {
+  AfterViewInit,
+  ChangeDetectorRef,
   Component,
   Input,
   OnChanges,
   OnInit,
+  SecurityContext,
   SimpleChanges,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -30,6 +33,7 @@ import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import { ConfirmDeleteService, dataDeleteObject } from 'services';
 import { ProfileTooltipDirective } from 'directives';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'lib-post-card',
@@ -38,7 +42,9 @@ import { ProfileTooltipDirective } from 'directives';
   templateUrl: './post-card.component.html',
   styleUrls: ['./post-card.component.css'],
 })
-export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
+export class PostCardComponent
+  implements OnChanges, OnInit, OnDestroy, AfterViewInit
+{
   @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) post!: PostType;
   authUser$!: Observable<UserInfoType | null>;
@@ -57,9 +63,12 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
   bookmarked$ = new BehaviorSubject<boolean>(false);
   authorInfo!: UserSummaryInfo;
   authorIsFollowing$ = new BehaviorSubject<boolean>(false);
+  formattedText: string | null = null;
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
+    private cdr: ChangeDetectorRef,
+    private sanitizer: DomSanitizer,
     private store: Store<PostState>,
     private router: Router
   ) {}
@@ -70,6 +79,10 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
     this.checkIfLiked();
     this.checkIfBookmarked();
     this.checkIfAuthorIsFollowing();
+  }
+
+  ngAfterViewInit(): void {
+    this.formatPostContent(this.post.content);
   }
 
   viewPostDetails(event: MouseEvent) {
@@ -211,5 +224,22 @@ export class PostCardComponent implements OnChanges, OnInit, OnDestroy {
         ? this.authorIsFollowing$.next(true)
         : this.authorIsFollowing$.next(false);
     });
+  }
+
+  formatPostContent(content: string) {
+    // Regular expression to find mentions
+    const mentionRegex = /@(\w+)/g;
+
+    // Replace mentions with links
+    const formattedText = content.replace(mentionRegex, (match, username) => {
+      const mentionLink = `<a class="text-primaryColor font-semibold" href='/user/${username}/profile'>${match}</a>`;
+      return mentionLink;
+    });
+
+    this.formattedText = this.sanitizer.sanitize(
+      SecurityContext.HTML,
+      formattedText
+    );
+    this.cdr.detectChanges();
   }
 }
