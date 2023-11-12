@@ -115,6 +115,7 @@
         </ng-container>
         <ng-container *ngSwitchCase="'following'">
           <button
+            (click)="unfollowUser()"
             type="button"
             class="w-auto px-4 bg-red-100 hover:bg-red-200 text-red-700 py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
           >

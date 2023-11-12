@@ -13,7 +13,7 @@ export const UserApiActions = createActionGroup({
     fetchUserDetails: props<{ username: string }>(),
     fetchUserDetailsSuccess: props<{ userInfo: UserSummaryInfoResponseType }>(),
     followUser: props<{ followId: number; followingId: number }>(),
-    unfollowUser: props<{ followId: number; followingId: number }>(),
+    // unfollowUser: props<{ followId: number; followingId: number }>(),
     followUserSuccess: emptyProps(),
     fetchAllFollowers: props<{ username: string }>(),
     fetchAllFollowersSuccess: props<{
@@ -25,5 +25,7 @@ export const UserApiActions = createActionGroup({
     }>(),
     updateFollowersList: props<{ user: UserSummaryInfoFollowing }>(),
     updateFollowingList: props<{ user: UserSummaryInfoFollowing }>(),
+    removeAFollower: props<{ userId: number }>(),
+    removeAFollowing: props<{ userId: number }>(),
   },
 });

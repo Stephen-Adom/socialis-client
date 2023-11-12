@@ -268,8 +268,10 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           if (user) {
+            this.store.dispatch(
+              UserApiActions.removeAFollowing({ userId: user.id })
+            );
             console.log(user, 'remove following count');
-            // this.store.dispatch(UserApiActions.updateFollowingList({ user }));
           }
         },
         error: (error) => {
@@ -290,7 +292,9 @@ export class WrapperComponent implements OnInit, OnDestroy {
         next: (user) => {
           if (user) {
             console.log(user, 'remove followers count');
-            // this.store.dispatch(UserApiActions.updateFollowingList({ user }));
+            this.store.dispatch(
+              UserApiActions.removeAFollower({ userId: user.id })
+            );
           }
         },
         error: (error) => {

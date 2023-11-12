@@ -164,12 +164,6 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
       .subscribe({
         next: (response) => {
           if (response.status === 'OK') {
-            this.store.dispatch(
-              UserApiActions.unfollowUser({
-                followId: this.authUser.id,
-                followingId: this.authorFullInfo.id,
-              })
-            );
             this.authorFullInfo = response.data;
           }
         },

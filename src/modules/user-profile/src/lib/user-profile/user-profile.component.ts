@@ -295,13 +295,6 @@ Following`;
               this.store.dispatch(
                 UserApiActions.fetchUserDetailsSuccess({ userInfo: response })
               );
-
-              this.store.dispatch(
-                UserApiActions.unfollowUser({
-                  followId: authUser.id,
-                  followingId: authorInfo.id,
-                })
-              );
             }
           },
           error: (error: HttpErrorResponse) => {

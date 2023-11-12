@@ -150,16 +150,8 @@ Following`;
         .subscribe({
           next: (response) => {
             if (response.status === 'OK') {
-              // this.store.dispatch(
-              //   UserApiActions.fetchUserDetailsSuccess({ userInfo: response })
-              // );
-
-              this.store.dispatch(
-                UserApiActions.unfollowUser({
-                  followId: authUser.id,
-                  followingId: this.user.id,
-                })
-              );
+              this.user = response.data;
+              console.log(response, 'response');
             }
           },
           error: (error: HttpErrorResponse) => {
@@ -184,9 +176,7 @@ Following`;
         .subscribe({
           next: (response) => {
             if (response.status === 'OK') {
-              // this.store.dispatch(
-              //   UserApiActions.fetchUserDetailsSuccess({ userInfo: response })
-              // );
+              this.user = response.data;
             }
           },
           error: (error: HttpErrorResponse) => {

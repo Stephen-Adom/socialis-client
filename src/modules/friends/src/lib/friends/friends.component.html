@@ -22,6 +22,11 @@
             </svg>
 
             <span>Friends</span>
+            <span
+              class="relative inline-flex text-xs bg-primaryColor text-white rounded-full py-0.5 px-1.5"
+            >
+              9+
+            </span>
           </div>
         </ng-template>
         <div class="flex flex-col gap-y-4">
@@ -232,12 +237,17 @@
             </svg>
 
             <span>Followers</span>
+            <span
+              class="relative inline-flex text-xs bg-primaryColor text-white rounded-full py-0.5 px-1.5"
+            >
+              {{ (authUser$ | async)?.noOfFollowers }}
+            </span>
           </div>
         </ng-template>
 
         <lib-user-followers />
       </p-tabPanel>
-      <p-tabPanel header="Header III">
+      <p-tabPanel>
         <ng-template pTemplate="header">
           <div class="flex items-center gap-x-1">
             <svg
@@ -255,6 +265,11 @@
             </svg>
 
             <span>Following</span>
+            <span
+              class="relative inline-flex text-xs bg-primaryColor text-white rounded-full py-0.5 px-1.5"
+            >
+              {{ (authUser$ | async)?.noOfFollowing }}
+            </span>
           </div>
         </ng-template>
 
