@@ -55,9 +55,11 @@
                   Form.get('content')?.touched && Form.get('content')?.invalid
                 "
                 rows="3"
-                class="border-none focus:border-none w-full focus:outline-none bg-transparent w-full"
+                class="border-none focus:border-none w-full focus:outline-none bg-transparent"
                 placeholder="What's happening?"
                 formControlName="content"
+                [mentionConfig]="mentionConfig"
+                [mentionListTemplate]="mentionListTemplate"
               ></textarea>
             </form>
           </div>
@@ -276,3 +278,92 @@
     *ngIf="toggleEmoji"
   ></emoji-mart>
 </div>
+
+<ng-template #mentionListTemplate let-user="item">
+  <div class="friend-card flex items-start gap-x-2 mb-1">
+    <img
+      class="inline-block flex-shrink-0 h-[2.5rem] w-[2.5rem] rounded-full"
+      [src]="user.imageUrl ? user.imageUrl : 'assets/images/users/default.jpg'"
+      [alt]="user.username"
+    />
+
+    <section class="w-full">
+      <div class="flex items-center justify-between w-full">
+        <div class="text-left">
+          <a
+            href="javascript:;"
+            class="font-semibold text-gray-800 dark:text-dark-text text-sm flex items-center space-x-2"
+          >
+            <span>{{ user.firstname }} {{ user.lastname }}</span>
+
+            <span
+              class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.3 rounded mr-2 dark:bg-gray-700 dark:text-gray-400 border border-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-2.5 h-2.5 mr-1.5"
+              >
+                <path
+                  d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z"
+                />
+              </svg>
+
+              Follows you
+            </span>
+          </a>
+          <div class="flex items-center gap-x-1 flex-wrap">
+            <a href="" class="font-medium text-gray-400 text-xs">
+              {{ user.username }}
+            </a>
+            <span class="inline-block">
+              <svg
+                class="h-3 w-3 text-gray-400"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <circle cx="12" cy="12" r="4" />
+              </svg>
+            </span>
+
+            <span class="inline-block text-[0.65rem] text-gray-500 italic"
+              >joined since {{ formatCreatedAt(user.createdAt) }}</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <p
+        class="flex items-center gap-x-4 mt-1 border-t border-gray-200 py-1 text-xs"
+      >
+        <small class="text-gray-400 inline-block">
+          <span class="font-bold dark:text-dark-text">{{
+            user.followers
+          }}</span>
+          Followers</small
+        >
+
+        <small class="text-gray-400 inline-block">
+          <span class="font-bold dark:text-dark-text">{{
+            user.following
+          }}</span>
+          Following</small
+        >
+        <small class="text-gray-400 inline-block">
+          <span class="font-bold dark:text-dark-text">{{
+            user.totalPost
+          }}</span>
+          posts</small
+        >
+      </p>
+    </section>
+  </div>
+</ng-template>

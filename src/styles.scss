@@ -149,3 +149,17 @@ swiper-slide {
   border-bottom: 3px solid theme('colors.primaryColor') !important;
   color: theme('colors.primaryColor') !important;
 }
+
+.mention-menu {
+  min-width: 300px !important;
+  border: none !important;
+  box-shadow: 10px 10px 19px rgba(0, 0, 0, 0.1) !important;
+
+  .mention-item {
+    padding: 0.2em 0.5em !important;
+  }
+
+  .mention-active a {
+    background-color: #eeeeee !important;
+  }
+}

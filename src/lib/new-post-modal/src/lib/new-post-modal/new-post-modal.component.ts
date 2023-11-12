@@ -2,9 +2,11 @@
 import {
   Component,
   ElementRef,
+  EventEmitter,
   Inject,
   OnDestroy,
   OnInit,
+  Output,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -19,17 +21,19 @@ import {
   PostType,
   SUCCESS_MESSAGE_TOKEN,
   UserInfoType,
+  UserSummaryInfo,
   getBase64,
 } from 'utils';
 import {
   AppApiActions,
   AppState,
   PostApiActions,
+  getAllAuthUserFollowing,
   getEditPostDetails,
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Subscription, map } from 'rxjs';
 import {
   ErrorMessageService,
   PostService,
@@ -38,11 +42,25 @@ import {
 import { HttpErrorResponse } from '@angular/common/http';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
+import { MentionConfig, MentionModule } from 'angular-mentions';
+import { format } from 'date-fns';
 
 type postImageType = {
   base64: string;
   file: File;
   id: number;
+};
+
+type userMentionType = {
+  id: number;
+  firstname: string;
+  lastname: string;
+  username: string;
+  imageUrl: string;
+  totalPost: number;
+  followers: number;
+  following: number;
+  createdAt: string;
 };
 
 @Component({
@@ -53,6 +71,7 @@ type postImageType = {
     ReactiveFormsModule,
     PickerComponent,
     ImageCropperModule,
+    MentionModule,
   ],
   templateUrl: './new-post-modal.component.html',
   styleUrls: ['./new-post-modal.component.css'],
@@ -72,6 +91,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   editFile: postImageType | null = null;
   edittedImage!: string;
   exitFileIndex = -1;
+  mentionConfig!: MentionConfig;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -102,6 +122,46 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
           this.editPost = post;
           this.setPostDetails(post);
         }
+      });
+
+    this.store
+      .select(getAllAuthUserFollowing)
+      .pipe(
+        map((allfollowings) => {
+          return allfollowings.map((following) => {
+            return {
+              id: following.id,
+              firstname: following.firstname,
+              lastname: following.lastname,
+              username: following.username,
+              imageUrl: following.imageUrl,
+              totalPost: following.totalPost,
+              followers: following.followers,
+              following: following.following,
+              createdAt: following.createdAt,
+            };
+          });
+        })
+      )
+      .subscribe((users) => {
+        this.mentionConfig = {
+          triggerChar: '@',
+          labelKey: 'username',
+          allowSpace: true,
+          items: users,
+          mentionSelect: (item: userMentionType, triggerChar?: string) =>
+            triggerChar + item.username + ' ',
+          mentionFilter: (searchString: string, items: userMentionType[]) => {
+            console.log(searchString, 'sdf');
+            if (searchString) {
+              return items.filter((item: userMentionType) =>
+                item.username.toLowerCase().includes(searchString)
+              );
+            }
+
+            return items;
+          },
+        };
       });
   }
 
@@ -270,5 +330,9 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
     const blob = await response.blob();
     const filename = url.substring(url.lastIndexOf('/') + 1);
     return new File([blob], filename, { type: blob.type });
+  }
+
+  formatCreatedAt(createdAt: string) {
+    return format(new Date(createdAt), 'MMMM, yyyy');
   }
 }
