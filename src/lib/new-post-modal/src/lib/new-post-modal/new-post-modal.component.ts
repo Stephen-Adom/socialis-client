@@ -2,11 +2,9 @@
 import {
   Component,
   ElementRef,
-  EventEmitter,
   Inject,
   OnDestroy,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -21,7 +19,6 @@ import {
   PostType,
   SUCCESS_MESSAGE_TOKEN,
   UserInfoType,
-  UserSummaryInfo,
   getBase64,
 } from 'utils';
 import {
@@ -86,6 +83,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   authUser!: UserInfoType;
   userInfoSubscription = new Subscription();
   editPostSubscription = new Subscription();
+  authUserFollowingSubscription = new Subscription();
   toggleEmoji = false;
   editPost!: PostType | null;
   editFile: postImageType | null = null;
@@ -124,7 +122,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         }
       });
 
-    this.store
+    this.authUserFollowingSubscription = this.store
       .select(getAllAuthUserFollowing)
       .pipe(
         map((allfollowings) => {
@@ -289,6 +287,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();
     this.editPostSubscription.unsubscribe();
+    this.authUserFollowingSubscription.unsubscribe();
   }
 
   editImage(image: postImageType, index: number) {
