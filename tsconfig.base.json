@@ -53,6 +53,7 @@
       "services": ["src/shared/services/src/index.ts"],
       "state": ["src/shared/store/src/index.ts"],
       "stories": ["src/lib/stories/src/index.ts"],
+      "textarea-form": ["src/lib/textarea-form/src/index.ts"],
       "user-profile": ["src/modules/user-profile/src/index.ts"],
       "utils": ["src/shared/utils/src/index.ts"]
     }
