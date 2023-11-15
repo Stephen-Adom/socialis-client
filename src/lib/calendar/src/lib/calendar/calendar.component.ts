@@ -21,7 +21,6 @@ export class CalendarComponent {
 
   onDateSelect(event: Date) {
     this.sendSelectedDate.emit(event);
-    this.visible = false;
   }
 
   onHide() {
