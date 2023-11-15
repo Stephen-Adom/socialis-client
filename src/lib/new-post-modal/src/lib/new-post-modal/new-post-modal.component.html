@@ -86,12 +86,42 @@
               [formGroup]="Form"
               class="mt-1 text-gray-800 dark:text-dark-text w-full"
             >
-              <span class="text-xs text-gray-400 italic block mb-1"
-                >Scheduled to publish post on:
-                <span class="text-primaryColor font-semibold"
-                  >November 20, 2020 at 13:00pm</span
+              <div
+                class="mb-1 flex items-center gap-x-1"
+                *ngIf="Form.get('scheduledAt')?.value"
+              >
+                <span class="text-xs text-gray-500 italic block"
+                  >Scheduled to publish post on:
+                  <span
+                    class="text-primaryColor font-semibold"
+                    *ngIf="formattedScheduledDate && formattedScheduledTime"
+                    >{{ formattedScheduledDate }} at
+                    {{ formattedScheduledTime }}</span
+                  >
+                </span>
+
+                <button
+                  type="button"
+                  class="bg-red-600 rounded-full p-[0.15rem]"
+                  title="remove date"
+                  (click)="removeDate()"
                 >
-              </span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-3 h-3 text-white"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
               <lib-textarea-form [Form]="Form" />
             </form>
           </div>

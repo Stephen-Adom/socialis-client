@@ -41,6 +41,7 @@ import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 import { TextareaFormComponent } from 'textarea-form';
 import { CalendarModule } from 'primeng/calendar';
 import { CalendarComponent } from 'calendar';
+import { format } from 'date-fns';
 
 type postImageType = {
   base64: string;
@@ -79,6 +80,8 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   edittedImage!: string;
   exitFileIndex = -1;
   toggleCalendar = false;
+  formattedScheduledDate!: string;
+  formattedScheduledTime!: string;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -90,6 +93,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   ) {
     this.Form = this.formBuilder.nonNullable.group({
       content: ['', Validators.required],
+      scheduledAt: [''],
     });
   }
 
@@ -113,7 +117,13 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   }
 
   sendSelectedDate(event: Date) {
-    console.log(event, 'to parent component');
+    this.Form.get('scheduledAt')?.setValue(new Date(event));
+    this.formattedScheduledDate = format(event, 'MMMM do, yyyy');
+    this.formattedScheduledTime = format(event, 'h:mm a');
+  }
+
+  removeDate() {
+    this.Form.get('scheduledAt')?.setValue('');
   }
 
   setModalHide(event: boolean) {
