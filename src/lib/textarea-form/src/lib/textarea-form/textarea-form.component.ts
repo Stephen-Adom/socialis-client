@@ -1,7 +1,19 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { MentionConfig, MentionModule } from 'angular-mentions';
+import {
+  MentionConfig,
+  MentionDirective,
+  MentionModule,
+} from 'angular-mentions';
 import { format } from 'date-fns';
 import { AppState, getAllAuthUserFollowing } from 'state';
 import { Store } from '@ngrx/store';
@@ -27,11 +39,16 @@ type userMentionType = {
   styleUrls: ['./textarea-form.component.css'],
 })
 export class TextareaFormComponent implements OnInit, OnDestroy {
+  @ViewChild(MentionDirective) mentionDirective!: MentionDirective;
+  @ViewChild('textArea') textArea!: ElementRef<any>;
   @Input({ required: true }) Form!: FormGroup;
   mentionConfig!: MentionConfig;
   authUserFollowingSubscription = new Subscription();
 
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private store: Store<AppState>,
+    @Inject(DOCUMENT) private document: Document
+  ) {}
 
   ngOnInit(): void {
     this.authUserFollowingSubscription = this.store
@@ -57,12 +74,10 @@ export class TextareaFormComponent implements OnInit, OnDestroy {
         this.mentionConfig = {
           triggerChar: '@',
           labelKey: 'username',
-          allowSpace: true,
           items: users,
           mentionSelect: (item: userMentionType, triggerChar?: string) =>
             triggerChar + item.username + ' ',
           mentionFilter: (searchString: string, items: userMentionType[]) => {
-            console.log(searchString, 'sdf');
             if (searchString) {
               return items.filter((item: userMentionType) =>
                 item.username.toLowerCase().includes(searchString)
@@ -77,6 +92,56 @@ export class TextareaFormComponent implements OnInit, OnDestroy {
 
   handleKeyDown(event: KeyboardEvent) {
     console.log(event);
+    if (event.key === 'Escape') {
+      console.log('escape pressed');
+      this.hideMentionList();
+    }
+
+    if (
+      event.key === 'ArrowRight' ||
+      event.key === 'ArrowLeft' ||
+      event.key === 'Backspace'
+    ) {
+      this.isCursorNextToUsername();
+    }
+  }
+
+  showMentionList() {
+    const textarea: HTMLTextAreaElement = this.textArea.nativeElement;
+    this.mentionDirective.mentionConfig.labelKey = 'username';
+    // mentionList.removeAttribute('hidden');
+    this.mentionDirective.updateConfig();
+  }
+
+  hideMentionList() {
+    const mentionList = this.document.documentElement.querySelector(
+      '.scrollable-menu'
+    ) as HTMLDivElement;
+
+    this.mentionDirective.stopSearch();
+    // mentionList.setAttribute('hidden', 'true');
+  }
+
+  isCursorNextToUsername() {
+    const textarea: HTMLTextAreaElement = this.textArea.nativeElement;
+    const cursorPosition = textarea.selectionStart;
+    console.log(cursorPosition, 'cursorPosition');
+
+    // Get the text content of the textarea
+    const text = textarea.value;
+    const textArray = text.substring(0, cursorPosition).split(' ');
+    const textWithCursor =
+      textArray.length === 1 ? textArray[0] : textArray[textArray.length - 1];
+
+    if (textWithCursor.includes('@')) {
+      this.mentionConfig.labelKey = 'username';
+      this.mentionDirective.showSearchList(this.textArea.nativeElement);
+      text.replace(textWithCursor, textWithCursor);
+      // console.log(.substring(0, cursorPosition));
+      // this.showMentionList();
+    } else {
+      this.hideMentionList();
+    }
   }
 
   formatCreatedAt(createdAt: string) {

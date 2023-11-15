@@ -39,6 +39,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 import { TextareaFormComponent } from 'textarea-form';
+import { CalendarModule } from 'primeng/calendar';
+import { CalendarComponent } from 'calendar';
 
 type postImageType = {
   base64: string;
@@ -55,6 +57,8 @@ type postImageType = {
     PickerComponent,
     ImageCropperModule,
     TextareaFormComponent,
+    CalendarModule,
+    CalendarComponent,
   ],
   templateUrl: './new-post-modal.component.html',
   styleUrls: ['./new-post-modal.component.css'],
@@ -74,6 +78,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   editFile: postImageType | null = null;
   edittedImage!: string;
   exitFileIndex = -1;
+  toggleCalendar = false;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -105,6 +110,14 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
           this.setPostDetails(post);
         }
       });
+  }
+
+  sendSelectedDate(event: Date) {
+    console.log(event, 'to parent component');
+  }
+
+  setModalHide(event: boolean) {
+    this.toggleCalendar = event;
   }
 
   setPostDetails(post: PostType) {

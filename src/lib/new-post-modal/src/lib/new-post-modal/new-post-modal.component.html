@@ -234,6 +234,7 @@
               type="button"
               class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2"
               title="schedule post"
+              (click)="toggleCalendar = true"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -304,3 +305,9 @@
     *ngIf="toggleEmoji"
   ></emoji-mart>
 </div>
+
+<lib-calendar
+  [visible]="toggleCalendar"
+  (sendSelectedDate)="sendSelectedDate($event)"
+  (modalHide)="setModalHide($event)"
+/>

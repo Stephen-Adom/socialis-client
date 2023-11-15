@@ -1,0 +1,23 @@
+<p-dialog
+  header="Header"
+  [(visible)]="visible"
+  [modal]="true"
+  [draggable]="false"
+  [resizable]="false"
+  [style]="{ width: '36vw' }"
+  [breakpoints]="{ '640px': '95vw', '768px': '50vw' }"
+  (onHide)="onHide()"
+>
+  <ng-template pTemplate="header">
+    <span class="text-base font-bold block">Choose Date to schedule</span>
+  </ng-template>
+
+  <p-calendar
+    class="max-w-full"
+    [(ngModel)]="date"
+    [inline]="true"
+    [showWeek]="true"
+    [minDate]="minDate"
+    (onSelect)="onDateSelect($event)"
+  ></p-calendar>
+</p-dialog>

@@ -9,7 +9,7 @@
     formControlName="content"
     [mentionConfig]="mentionConfig"
     [mentionListTemplate]="mentionListTemplate"
-    (keydown)="handleKeyDown($event)"
+    #textArea
   ></textarea>
 </form>
 
@@ -31,7 +31,7 @@
             <span>{{ user.firstname }} {{ user.lastname }}</span>
           </a>
           <div class="flex items-center gap-x-1 flex-wrap">
-            <a href="" class="font-medium text-gray-400 text-xs">
+            <a href="javascript:;" class="font-medium text-gray-400 text-xs">
               {{ user.username }}
             </a>
             <span class="inline-block">

@@ -19,6 +19,7 @@
       "add-comment-form-modal": ["src/lib/add-comment-form-modal/src/index.ts"],
       "auth": ["src/modules/auth/src/index.ts"],
       "bookmarks": ["src/modules/bookmarks/src/index.ts"],
+      "calendar": ["src/lib/calendar/src/index.ts"],
       "comment-details": ["src/modules/comment-details/src/index.ts"],
       "comment-list": ["src/lib/comment-list/src/index.ts"],
       "comment-reply-modal": ["src/lib/comment-reply-modal/src/index.ts"],

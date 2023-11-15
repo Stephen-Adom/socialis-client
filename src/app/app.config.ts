@@ -12,6 +12,7 @@ import { StoreModule, provideStore } from '@ngrx/store';
 import { EffectsModule, provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { AppReducer, featureAppKey } from 'state';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -22,5 +23,6 @@ export const appConfig: ApplicationConfig = {
     provideEffects(),
     provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
     provideStoreDevtools({ logOnly: !isDevMode() }),
+    provideAnimations(),
   ],
 };
