@@ -1,1 +1,86 @@
-<p>textarea-form works!</p>
+<form [formGroup]="Form">
+  <textarea
+    [class.is-invalid]="
+      Form.get('content')?.touched && Form.get('content')?.invalid
+    "
+    rows="3"
+    class="border-none focus:border-none w-full focus:outline-none bg-transparent"
+    placeholder="What's happening?"
+    formControlName="content"
+    [mentionConfig]="mentionConfig"
+    [mentionListTemplate]="mentionListTemplate"
+    (keydown)="handleKeyDown($event)"
+  ></textarea>
+</form>
+
+<ng-template #mentionListTemplate let-user="item">
+  <div class="friend-card flex items-start gap-x-2 mb-1">
+    <img
+      class="inline-block flex-shrink-0 h-[2.5rem] w-[2.5rem] rounded-full"
+      [src]="user.imageUrl ? user.imageUrl : 'assets/images/users/default.jpg'"
+      [alt]="user.username"
+    />
+
+    <section class="w-full">
+      <div class="flex items-center justify-between w-full">
+        <div class="text-left">
+          <a
+            href="javascript:;"
+            class="font-semibold text-gray-800 dark:text-dark-text text-sm flex items-center space-x-2"
+          >
+            <span>{{ user.firstname }} {{ user.lastname }}</span>
+          </a>
+          <div class="flex items-center gap-x-1 flex-wrap">
+            <a href="" class="font-medium text-gray-400 text-xs">
+              {{ user.username }}
+            </a>
+            <span class="inline-block">
+              <svg
+                class="h-3 w-3 text-gray-400"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <circle cx="12" cy="12" r="4" />
+              </svg>
+            </span>
+
+            <span class="inline-block text-[0.65rem] text-gray-500 italic"
+              >joined since {{ formatCreatedAt(user.createdAt) }}</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <p
+        class="flex items-center gap-x-4 mt-1 border-t border-gray-200 py-1 text-xs"
+      >
+        <small class="text-gray-400 inline-block">
+          <span class="font-bold dark:text-dark-text">{{
+            user.followers
+          }}</span>
+          Followers</small
+        >
+
+        <small class="text-gray-400 inline-block">
+          <span class="font-bold dark:text-dark-text">{{
+            user.following
+          }}</span>
+          Following</small
+        >
+        <small class="text-gray-400 inline-block">
+          <span class="font-bold dark:text-dark-text">{{
+            user.totalPost
+          }}</span>
+          posts</small
+        >
+      </p>
+    </section>
+  </div>
+</ng-template>
