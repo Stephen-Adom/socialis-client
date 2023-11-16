@@ -74,7 +74,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   authUser!: UserInfoType;
   userInfoSubscription = new Subscription();
   editPostSubscription = new Subscription();
-  toggleEmoji = false;
+  toggleEmoji = true;
   editPost!: PostType | null;
   editFile: postImageType | null = null;
   edittedImage!: string;
