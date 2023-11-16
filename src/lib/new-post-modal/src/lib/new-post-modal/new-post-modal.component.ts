@@ -183,6 +183,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
     formData.append('content', this.Form.get('content')?.value);
+    formData.append('scheduledAt', this.Form.get('scheduledAt')?.value);
 
     if (imageForms) {
       imageForms.forEach((image: any) => {
