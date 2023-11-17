@@ -226,7 +226,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           if (user) {
-            console.log(user, 'followers count');
             this.store.dispatch(UserApiActions.updateFollowersList({ user }));
           }
         },
@@ -247,7 +246,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           if (user) {
-            console.log(user, 'following count');
             this.store.dispatch(UserApiActions.updateFollowingList({ user }));
           }
         },
@@ -271,7 +269,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
             this.store.dispatch(
               UserApiActions.removeAFollowing({ userId: user.id })
             );
-            console.log(user, 'remove following count');
           }
         },
         error: (error) => {
@@ -291,10 +288,32 @@ export class WrapperComponent implements OnInit, OnDestroy {
       .subscribe({
         next: (user) => {
           if (user) {
-            console.log(user, 'remove followers count');
             this.store.dispatch(
               UserApiActions.removeAFollower({ userId: user.id })
             );
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage(
+            '/feed/activities/new-' + username
+          );
+        })
+      )
+      .subscribe({
+        next: (user) => {
+          if (user) {
+            console.log(user, 'new activity');
+            // this.store.dispatch(
+            //   UserApiActions.removeAFollower({ userId: user.id })
+            // );
           }
         },
         error: (error) => {
