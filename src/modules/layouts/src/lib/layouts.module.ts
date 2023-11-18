@@ -44,6 +44,7 @@ import {
   ActionInProgressComponent,
   SuccessNotificationComponent,
 } from 'notification';
+import { TooltipModule } from 'primeng/tooltip';
 
 @NgModule({
   imports: [
@@ -67,6 +68,7 @@ import {
     ConfirmDeleteDialogComponent,
     ActionInProgressComponent,
     SuccessNotificationComponent,
+    TooltipModule,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [

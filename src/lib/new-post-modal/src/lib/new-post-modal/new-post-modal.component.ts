@@ -85,8 +85,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
-    @Inject(SUCCESS_MESSAGE_TOKEN)
-    private successMessage: SuccessMessageService,
+    @Inject(SUCCESS_MESSAGE_TOKEN) private successMessage: SuccessMessageService,
     private postservice: PostService,
     private formBuilder: FormBuilder,
     private store: Store<AppState>

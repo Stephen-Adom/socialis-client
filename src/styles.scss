@@ -175,3 +175,16 @@ swiper-slide {
 .p-timepicker {
   padding: 0 !important;
 }
+
+pTooltip {
+  display: none !important;
+}
+
+.p-tooltip-text {
+  padding: 4px 6px !important;
+  font-size: 10px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 2px !important;
+}

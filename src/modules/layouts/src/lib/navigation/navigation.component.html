@@ -57,9 +57,11 @@
 
       <button
         type="button"
-        class="btn btn-icon btn-circle hidden sm:hidden md:block relative p-0 hs-tooltip hs-tooltip-toggle"
-        title="create post"
-        data-hs-overlay="#hs-slide-down-animation-modal"
+        class="btn btn-icon btn-circle hidden sm:hidden md:block relative p-0"
+        title="Add event"
+        pInputText
+        pTooltip="Add event"
+        tooltipPosition="bottom"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -75,18 +77,15 @@
             d="M13.5 16.875h3.375m0 0h3.375m-3.375 0V13.5m0 3.375v3.375M6 10.5h2.25a2.25 2.25 0 002.25-2.25V6a2.25 2.25 0 00-2.25-2.25H6A2.25 2.25 0 003.75 6v2.25A2.25 2.25 0 006 10.5zm0 9.75h2.25A2.25 2.25 0 0010.5 18v-2.25a2.25 2.25 0 00-2.25-2.25H6a2.25 2.25 0 00-2.25 2.25V18A2.25 2.25 0 006 20.25zm9.75-9.75H18a2.25 2.25 0 002.25-2.25V6A2.25 2.25 0 0018 3.75h-2.25A2.25 2.25 0 0013.5 6v2.25a2.25 2.25 0 002.25 2.25z"
           />
         </svg>
-        <span
-          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"
-          role="tooltip"
-        >
-          Create Post
-        </span>
       </button>
 
       <button
         type="button"
-        class="btn btn-icon btn-circle hidden sm:hidden md:block relative hs-tooltip hs-tooltip-toggle"
+        class="btn btn-icon btn-circle hidden sm:hidden md:block relative"
         title="notification"
+        pInputText
+        [pTooltip]="tooltipContent"
+        tooltipPosition="bottom"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -103,16 +102,15 @@
           />
         </svg>
 
-        <span
-          class="absolute top-[6px] right-[7px] inline-flex items-center py-0.5 px-1.5 rounded-full text-xs font-medium transform -translate-y-1/2 translate-x-1/2 bg-rose-500 text-white"
-          >99+</span
-        >
-
-        <span
-          class="hs-tooltip-content hs-tooltip-shown:opacity-100 hs-tooltip-shown:visible opacity-0 transition-opacity inline-block absolute invisible z-10 py-1 px-2 bg-gray-900 text-xs font-medium text-white rounded-md shadow-sm dark:bg-slate-700"
-          role="tooltip"
-        >
-          Notifications
+        <span class="flex absolute top-0 end-0 -mt-2 -me-2">
+          <span
+            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 dark:bg-red-600"
+          ></span>
+          <span
+            class="relative inline-flex text-xs bg-red-500 text-white rounded-full py-0.5 px-1.5"
+          >
+            9+
+          </span>
         </span>
       </button>
 
@@ -220,3 +218,14 @@
     </div>
   </div>
 </nav>
+
+<ng-template #tooltipContent>
+  <div class="flex items-center space-x-2">
+    <span
+      class="inline-flex text-[9px] bg-red-500 text-white rounded-full py-0.5 px-1.5"
+    >
+      9+
+    </span>
+    <span> <b>Unread</b> notifications! </span>
+  </div>
+</ng-template>
