@@ -10,6 +10,7 @@ import { PostState, getAllPosts } from 'state';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { PostType } from 'utils';
+import { EventCardSummaryComponent } from 'event-card-summary';
 
 @Component({
   selector: 'feature-dashboard',
@@ -20,6 +21,7 @@ import { PostType } from 'utils';
     PostCardComponent,
     ActivityCardComponent,
     MessagePanelComponent,
+    EventCardSummaryComponent,
   ],
   providers: [AuthenticationService],
   templateUrl: './dashboard.component.html',
