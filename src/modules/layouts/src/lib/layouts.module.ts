@@ -18,6 +18,7 @@ import {
   CommentService,
   ConfirmDeleteService,
   MessageService,
+  NotificationOffcanvasService,
   PostService,
   ReplyService,
   SuccessMessageService,
@@ -47,6 +48,7 @@ import {
 import { TooltipModule } from 'primeng/tooltip';
 import { NavLinksComponent } from 'nav-links';
 import { ProfileCardSummaryComponent } from 'profile-card-summary';
+import { NotificationOffcanvasComponent } from 'notification-offcanvas';
 
 @NgModule({
   imports: [
@@ -73,6 +75,7 @@ import { ProfileCardSummaryComponent } from 'profile-card-summary';
     TooltipModule,
     NavLinksComponent,
     ProfileCardSummaryComponent,
+    NotificationOffcanvasComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
@@ -86,6 +89,7 @@ import { ProfileCardSummaryComponent } from 'profile-card-summary';
     ActionProgressService,
     BookmarksService,
     SuccessMessageService,
+    NotificationOffcanvasService,
   ],
 })
 export class LayoutsModule {}

@@ -46,6 +46,7 @@
       "new-post-modal": ["src/lib/new-post-modal/src/index.ts"],
       "no-posts": ["src/lib/no-posts/src/index.ts"],
       "notification": ["src/shared/toasters/src/index.ts"],
+      "notification-offcanvas": ["src/lib/notification-offcanvas/src/index.ts"],
       "post-card": ["src/lib/post-card/src/index.ts"],
       "post-details": ["src/modules/post-details/src/index.ts"],
       "profile": ["src/modules/profile/src/index.ts"],
