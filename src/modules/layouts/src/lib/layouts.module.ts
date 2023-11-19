@@ -45,6 +45,8 @@ import {
   SuccessNotificationComponent,
 } from 'notification';
 import { TooltipModule } from 'primeng/tooltip';
+import { NavLinksComponent } from 'nav-links';
+import { ProfileCardSummaryComponent } from 'profile-card-summary';
 
 @NgModule({
   imports: [
@@ -69,6 +71,8 @@ import { TooltipModule } from 'primeng/tooltip';
     ActionInProgressComponent,
     SuccessNotificationComponent,
     TooltipModule,
+    NavLinksComponent,
+    ProfileCardSummaryComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
