@@ -143,6 +143,39 @@ export type UserSummaryInfoFollowing = {
   followingList: string[];
 };
 
+export type Notifications = {
+  id: number;
+  // user: {
+  //   id: number;
+  //   uid: string;
+  //   firstname: string;
+  //   lastname: string;
+  //   username: string;
+  //   imageUrl: string | null;
+  // },
+  activityType: string;
+  source: {
+    id: number;
+    uid: string;
+    firstname: string;
+    lastname: string;
+    username: string;
+    imageUrl: string;
+  },
+  target: {
+    targetContent?: string;
+    targetUid: string;
+    targetImage: string;
+    targetFirstname?: string;
+    targetLastname?: string;
+    targetUsername?: string;
+  },
+  targetType: string;
+  readAt: string;
+  createdAt: string;
+  read: boolean;
+}
+
 export type NewPostResponseType = {
   status: string;
   data: PostType;
@@ -195,5 +228,10 @@ export type AllUserSummaryResponseType = {
 
 export type AllUserSummaryInfoResponseType = {
   data: UserSummaryInfoFollowing[];
+  status: string;
+};
+
+export type AllNotificationsResponseType = {
+  data: Notifications[];
   status: string;
 };

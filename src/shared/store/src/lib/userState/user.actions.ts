@@ -1,6 +1,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { createActionGroup, props } from '@ngrx/store';
 import {
+  AllNotificationsResponseType,
   AllUserSummaryInfoResponseType,
   UserSummaryInfoFollowing,
   UserSummaryInfoResponseType,
@@ -27,5 +28,7 @@ export const UserApiActions = createActionGroup({
     updateFollowingList: props<{ user: UserSummaryInfoFollowing }>(),
     removeAFollower: props<{ userId: number }>(),
     removeAFollowing: props<{ userId: number }>(),
+    fetchNotifications: props<{ userId: number }>(),
+    fetchNotificationsSuccess: props<{ allNotifications: AllNotificationsResponseType }>()
   },
 });

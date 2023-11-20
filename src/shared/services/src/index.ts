@@ -6,6 +6,7 @@ export * from './lib/Reply.service';
 export * from './lib/user.service';
 export * from './lib/bookmarks.service';
 export * from './lib/notification-offcanvas.service';
+export * from './lib/notification.service';
 
 export * from './lib/validateAuthUser.service';
 export * from './lib/innactiveAccount.service';

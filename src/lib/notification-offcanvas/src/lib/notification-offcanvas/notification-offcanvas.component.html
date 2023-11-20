@@ -19,147 +19,35 @@
     </h6>
   </ng-template>
   <ng-template pTemplate="content">
-    <section class="timeline-group mb-3">
-      <h6 class="text-gray-400 font-semibold text-sm">Today</h6>
+    <ng-container *ngIf="groupedNotifications">
+      <section
+        class="timeline-group mb-3"
+        *ngFor="let group of getGroupedKeys(groupedNotifications)"
+      >
+        <h6 class="text-gray-400 font-semibold text-sm">
+          {{ formatGroupDate(group) }}
+        </h6>
 
-      <ul>
-        <li class="mb-2">
-          <div class="activity-item py-1 cursor-pointer">
-            <div
-              class="flex-shrink-0 group flex items-start justify-between w-full"
-            >
-              <div class="flex items-center gap-x-2">
-                <img
-                  class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
-                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                  alt="Image Description"
-                />
-                <p class="text-xs dark:text-dark-text">
-                  <span class="font-bold">mr.asdot</span> started following you.
-                  <span class="text-gray-300 dark:text-gray-500">1m</span>
-                </p>
-              </div>
-
-              <div class="w-[40%] text-right">
-                <button
-                  type="button"
-                  class="bg-primaryColor text-white text-xs px-4 py-[0.4rem] rounded-full"
-                >
-                  Follow back
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <li class="mb-2">
-          <div class="activity-item py-1 cursor-pointer">
-            <div
-              class="flex-shrink-0 group flex items-start justify-between w-full"
-            >
-              <div class="flex items-center gap-x-2">
-                <img
-                  class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
-                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                  alt="Image Description"
-                />
-                <div class="text-xs dark:text-dark-text">
-                  <span class="font-bold">mr.asdot</span> commented: Amazing
-                  interface.
-                  <span class="text-gray-300 dark:text-gray-500">1m</span>
-
-                  <div
-                    class="flex items-center italic space-x-3 text-gray-500 mt-1"
-                  >
-                    <a href="">Reply</a>
-                    <a href="">Message</a>
-                  </div>
-                </div>
-              </div>
-
-              <div class="w-[40%] text-right">
-                <img
-                  class="w-full"
-                  src="assets/images/post-image.jpg"
-                  alt="Image Description"
-                />
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </section>
-
-    <section class="timeline-group mb-3">
-      <h6 class="text-gray-400 font-semibold text-sm">Yesterday</h6>
-
-      <ul>
-        <li class="mb-2">
-          <div class="activity-item py-1 cursor-pointer">
-            <div
-              class="flex-shrink-0 group flex items-start justify-between w-full"
-            >
-              <div class="flex items-center gap-x-2">
-                <img
-                  class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
-                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                  alt="Image Description"
-                />
-                <p class="text-xs dark:text-dark-text">
-                  <span class="font-bold">mr.asdot</span> started following you.
-                  <span class="text-gray-300 dark:text-gray-500">1m</span>
-                </p>
-              </div>
-
-              <div class="w-[40%] text-right">
-                <button
-                  type="button"
-                  class="bg-primaryColor text-white text-xs px-4 py-[0.4rem] rounded-full"
-                >
-                  Follow back
-                </button>
-              </div>
-            </div>
-          </div>
-        </li>
-
-        <li class="mb-2">
-          <div class="activity-item py-1 cursor-pointer">
-            <div
-              class="flex-shrink-0 group flex items-start justify-between w-full"
-            >
-              <div class="flex items-center gap-x-2">
-                <img
-                  class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
-                  src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-                  alt="Image Description"
-                />
-                <div class="text-xs dark:text-dark-text">
-                  <span class="font-bold">mr.asdot</span> commented: Amazing
-                  interface.
-                  <span class="text-gray-300 dark:text-gray-500">1m</span>
-
-                  <div
-                    class="flex items-center italic space-x-3 text-gray-500 mt-1"
-                  >
-                    <a href="">Reply</a>
-                    <a href="">Message</a>
-                  </div>
-                </div>
-              </div>
-
-              <div class="w-[40%] text-right">
-                <img
-                  class="w-full"
-                  src="assets/images/post-image.jpg"
-                  alt="Image Description"
-                />
-              </div>
-            </div>
-          </div>
-        </li>
-      </ul>
-    </section>
+        <ul *ngIf="groupedNotifications[group].length">
+          <ng-container
+            *ngFor="let notification of groupedNotifications[group]"
+          >
+            <ng-container [ngSwitch]="notification.activityType">
+              <ng-container *ngSwitchCase="NotificationActivities.MENTION">
+                <ng-container
+                  *ngTemplateOutlet="
+                    mentionNotificationTemplate;
+                    context: { $implicit: notification }
+                  "
+                ></ng-container>
+              </ng-container>
+              <ng-container *ngSwitchCase="false"> </ng-container>
+              <ng-container *ngSwitchDefault> </ng-container>
+            </ng-container>
+          </ng-container>
+        </ul>
+      </section>
+    </ng-container>
   </ng-template>
   <ng-template pTemplate="footer">
     <a
@@ -185,3 +73,100 @@
     >
   </ng-template>
 </p-sidebar>
+
+<ng-template #commentNotificationTemplate let-notification="notification">
+  <li class="mb-2">
+    <div class="activity-item py-1 cursor-pointer">
+      <div class="flex-shrink-0 group flex items-start justify-between w-full">
+        <div class="flex items-center gap-x-2">
+          <img
+            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
+            src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
+            alt="Image Description"
+          />
+          <div class="text-xs dark:text-dark-text">
+            <span class="font-bold">mr.asdot</span> commented: Amazing
+            interface.
+            <span class="text-gray-300 dark:text-gray-500">1m</span>
+
+            <div class="flex items-center italic space-x-3 text-gray-500 mt-1">
+              <a href="">Reply</a>
+              <a href="">Message</a>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-[40%] text-right">
+          <img
+            class="w-full"
+            src="assets/images/post-image.jpg"
+            alt="Image Description"
+          />
+        </div>
+      </div>
+    </div>
+  </li>
+</ng-template>
+
+<ng-template #mentionNotificationTemplate let-notification>
+  <li class="mb-2">
+    <div class="activity-item py-1 cursor-pointer">
+      <div class="flex-shrink-0 group flex items-start justify-between w-full">
+        <div class="flex items-center gap-x-2">
+          <img
+            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
+            [src]="
+              notification.source.imageUrl
+                ? notification.source.imageUrl
+                : 'assets/images/users/default.jpg'
+            "
+            [attr.alt]="notification.source.username"
+          />
+          <p class="text-xs dark:text-dark-text">
+            <span [innerHTML]="sanitizeHtml(notification.message)"></span>
+            <span class="text-gray-400 dark:text-gray-500 block">{{
+              formateTime(notification.createdAt)
+            }}</span>
+          </p>
+        </div>
+
+        <div class="w-[40%] text-right" *ngIf="notification.target.targetImage">
+          <img
+            class="w-full"
+            [src]="notification.target.targetImage"
+            [attr.alt]="notification.target.targetContent"
+          />
+        </div>
+      </div>
+    </div>
+  </li>
+</ng-template>
+
+<ng-template #followNotificationTemplate let-notification="notification">
+  <li class="mb-2">
+    <div class="activity-item py-1 cursor-pointer">
+      <div class="flex-shrink-0 group flex items-start justify-between w-full">
+        <div class="flex items-center gap-x-2">
+          <img
+            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
+            src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
+            alt="Image Description"
+          />
+          <p class="text-xs dark:text-dark-text">
+            <span class="font-bold">mr.asdot</span> started following you.
+            <span class="text-gray-300 dark:text-gray-500">1m</span>
+          </p>
+        </div>
+
+        <div class="w-[40%] text-right">
+          <button
+            type="button"
+            class="bg-primaryColor text-white text-xs px-4 py-[0.4rem] rounded-full"
+          >
+            Follow back
+          </button>
+        </div>
+      </div>
+    </div>
+  </li>
+</ng-template>

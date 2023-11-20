@@ -19,6 +19,7 @@ import {
   ConfirmDeleteService,
   MessageService,
   NotificationOffcanvasService,
+  NotificationService,
   PostService,
   ReplyService,
   SuccessMessageService,
@@ -90,6 +91,7 @@ import { NotificationOffcanvasComponent } from 'notification-offcanvas';
     BookmarksService,
     SuccessMessageService,
     NotificationOffcanvasService,
+    NotificationService
   ],
 })
-export class LayoutsModule {}
+export class LayoutsModule { }

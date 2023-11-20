@@ -1,7 +1,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { UserService } from 'services';
+import { NotificationService, UserService } from 'services';
 import { catchError, map, mergeMap, of } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppApiActions } from '../appState/app.actions';
@@ -9,7 +9,7 @@ import { UserApiActions } from './user.actions';
 
 @Injectable()
 export class UserEffects {
-  constructor(private actions$: Actions, private userservice: UserService) {}
+  constructor(private actions$: Actions, private userservice: UserService, private notificationservice: NotificationService) { }
 
   FetchUserDetails$ = createEffect(() => {
     return this.actions$.pipe(
@@ -87,6 +87,22 @@ export class UserEffects {
         this.userservice.fetchAllFollowings(action.username).pipe(
           map((usersResponse) => {
             return UserApiActions.fetchAllFollowingSuccess({ usersResponse });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
+
+  FetchUserNotifications$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserApiActions.fetchNotifications),
+      mergeMap((action: { userId: number }) =>
+        this.notificationservice.getUserNotifications(action.userId).pipe(
+          map((response: any) => {
+            return UserApiActions.fetchNotificationsSuccess({ allNotifications: response });
           }),
           catchError((error: HttpErrorResponse) =>
             of(AppApiActions.displayErrorMessage({ error: error.error }))

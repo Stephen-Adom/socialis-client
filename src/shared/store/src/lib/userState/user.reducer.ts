@@ -5,7 +5,7 @@ import {
   createSelector,
   on,
 } from '@ngrx/store';
-import { UserSummaryInfoFollowing } from 'utils';
+import { Notifications, UserSummaryInfoFollowing } from 'utils';
 import { UserApiActions } from './user.actions';
 
 export const featureUserKey = 'user';
@@ -14,12 +14,14 @@ export interface UserState {
   authorInformation: UserSummaryInfoFollowing | null;
   authUserFollowers: UserSummaryInfoFollowing[];
   authUserFollowing: UserSummaryInfoFollowing[];
+  authNotifications: Notifications[]
 }
 
 const initialState: UserState = {
   authorInformation: null,
   authUserFollowers: [],
   authUserFollowing: [],
+  authNotifications: []
 };
 
 export const selectUserFeature =
@@ -38,6 +40,11 @@ export const getAllAuthUserFollowers = createSelector(
 export const getAllAuthUserFollowing = createSelector(
   selectUserFeature,
   (state: UserState) => state.authUserFollowing
+);
+
+export const getAllUserNotifications = createSelector(
+  selectUserFeature,
+  (state: UserState) => state.authNotifications
 );
 
 export const UserReducer = createReducer<UserState>(
@@ -86,6 +93,12 @@ export const UserReducer = createReducer<UserState>(
       authUserFollowing: state.authUserFollowing.filter(
         (following) => following.id !== action.userId
       ),
+    };
+  }),
+  on(UserApiActions.fetchNotificationsSuccess, (state: UserState, action) => {
+    return {
+      ...state,
+      authNotifications: action.allNotifications.data,
     };
   })
 );
