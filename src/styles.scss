@@ -192,3 +192,7 @@ swiper-slide {
 .p-sidebar-content {
   @apply pt-[10px];
 }
+
+.notification-item {
+  @apply hover:cursor-pointer hover:bg-gray-100 p-2;
+}
