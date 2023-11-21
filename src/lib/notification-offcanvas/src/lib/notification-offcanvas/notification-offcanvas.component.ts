@@ -40,6 +40,19 @@ type groupedNotificationType = {
   [key: string]: formattedNotifications[]
 }
 
+type groupedDateNotificationType = {
+  [key: string]: Notifications[];
+}
+
+type sourceType = {
+  id: number;
+  uid: string;
+  firstname: string;
+  lastname: string;
+  username: string;
+  imageUrl: string;
+}
+
 
 @Component({
   selector: 'lib-notification-offcanvas',
@@ -95,21 +108,53 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
   }
 
   groupNotifications(notifications: Notifications[]) {
-    notifications.reduce((acc: any, currentItem: Notifications) => {
+
+    let groupedNotifications: groupedDateNotificationType = {};
+
+    groupedNotifications = notifications.reduce((acc: any, currentItem: Notifications) => {
       const groupKey = currentItem.createdAt.split('T')[0];
 
       if (acc[groupKey]) {
-        acc[groupKey] = [...acc[groupKey], this.formatNotificationMessage(currentItem)]
+        acc[groupKey] = [...acc[groupKey], currentItem]
       } else {
-        acc[groupKey] = [this.formatNotificationMessage(currentItem)]
+        acc[groupKey] = [currentItem]
       }
 
-    }, this.groupedNotifications);
+      return acc
 
-    console.log(this.groupedNotifications, 'groupedNotifications');
+    }, {});
+
+    const dateKeys = Object.keys(groupedNotifications);
+    Object.values(groupedNotifications).forEach((notificationArr, index) => {
+      const formattedNotifications: formattedNotifications[] = [];
+
+      const sourceTargetMap = notificationArr.reduce((acc: any, notificationItem: Notifications) => {
+        const { source, target } = notificationItem;
+
+        if (acc[target.targetUid]) {
+          acc[target.targetUid].push(source)
+        } else {
+          acc[target.targetUid] = [source]
+        }
+
+        return acc;
+      }, {});
+
+      Object.entries(sourceTargetMap).forEach(([targetId, sources]) => {
+        const notification = notificationArr.find((item: Notifications) => item.target.targetUid === targetId);
+
+        if (notification) {
+          formattedNotifications.push(this.formatNotificationMessage(notification, sources as sourceType[]));
+        }
+      })
+
+      this.groupedNotifications[dateKeys[index]] = formattedNotifications;
+    })
+
+    // console.log(this.groupedNotifications, 'groupedNotifications');
   }
 
-  formatNotificationMessage(notification: Notifications) {
+  formatNotificationMessage(notification: Notifications, sources: sourceType[]) {
     let message = '';
     switch (notification.activityType) {
       case this.NotificationActivities.MENTION:
@@ -121,16 +166,43 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
         break;
 
       case this.NotificationActivities.FOLLOWS:
-        message = `<a href="" class="font-bold italic text-primaryColor">${notification.source.firstname} ${notification.source.lastname}</a> started following you`;
+        if (sources.length === 1) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> started following you`;
+        } else if (sources.length === 2) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> and <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> started following you`;
+        } else if (sources.length > 2) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a>, <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> and ${sources.length - 2} others started following you`;
+        }
+
         break;
       case this.NotificationActivities.LIKED:
-        message = `<a href="" class="font-bold italic text-primaryColor">${notification.source.firstname} ${notification.source.lastname}</a> liked your <a href="" class="font-bold text-primaryColor italic">post</a>`;
+        if (sources.length === 1) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> liked your <a href="" class="font-bold text-primaryColor italic">post</a>`;
+        } else if (sources.length === 2) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> and <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> liked your <a href="" class="font-bold text-primaryColor italic">post</a>`;
+        } else if (sources.length > 2) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a>, <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> and ${sources.length - 2} others liked your <a href="" class="font-bold text-primaryColor italic">post</a>`;
+        }
         break;
       case this.NotificationActivities.REPLY:
-        message = `<a href="" class="font-bold italic text-primaryColor">${notification.source.firstname} ${notification.source.lastname}</a> replied to your comment: <a href="" class="font-bold italic text-primaryColor">${notification.target.targetContent}</a>`;
+        if (sources.length === 1) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> replied to your comment: <a href="" class="font-bold italic text-primaryColor">${notification.target.targetContent}</a>`;
+        } else if (sources.length === 2) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> and <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> replied to your comment: <a href="" class="font-bold italic text-primaryColor">${notification.target.targetContent}</a>`;
+        } else if (sources.length > 2) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a>, <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> and ${sources.length - 2} others replied to your comment: <a href="" class="font-bold italic text-primaryColor">${notification.target.targetContent}</a>`;
+        }
+
         break;
       case this.NotificationActivities.MESSAGE:
-        message = `<a href="" class="font-bold italic text-primaryColor">${notification.source.firstname} ${notification.source.lastname}</a> sent you a message`;
+        if (sources.length === 1) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> sent you a message`;
+        } else if (sources.length === 2) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> and <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> sent you a message`;
+        } else if (sources.length > 2) {
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a>, <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> and ${sources.length - 2} others sent you a message`;
+        }
+
         break;
 
       default:
