@@ -58,7 +58,6 @@ type postImageType = {
     PickerComponent,
     ImageCropperModule,
     TextareaFormComponent,
-    CalendarModule,
     CalendarComponent,
   ],
   templateUrl: './new-post-modal.component.html',

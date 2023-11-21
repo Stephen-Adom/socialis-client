@@ -10,7 +10,6 @@ import {
 import { CommonModule } from '@angular/common';
 import {
   AppApiActions,
-  AppState,
   PostApiActions,
   PostState,
   getCommentDetails,
@@ -29,7 +28,7 @@ import {
   getBase64,
 } from 'utils';
 import { Observable, Subscription } from 'rxjs';
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import {
   FormBuilder,
   FormGroup,
@@ -44,6 +43,8 @@ import {
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
+import { TextareaFormComponent } from 'textarea-form';
+import { CalendarComponent } from 'calendar';
 
 type postImageType = {
   base64: string;
@@ -59,6 +60,8 @@ type postImageType = {
     ReactiveFormsModule,
     PickerComponent,
     ImageCropperModule,
+    TextareaFormComponent,
+    CalendarComponent
   ],
   templateUrl: './reply-modal-form.component.html',
   styleUrls: ['./reply-modal-form.component.css'],
@@ -80,6 +83,9 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
   editFile: postImageType | null = null;
   edittedImage!: string;
   exitFileIndex = -1;
+  toggleCalendar = false;
+  formattedScheduledDate!: string;
+  formattedScheduledTime!: string;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -91,6 +97,7 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
   ) {
     this.Form = this.formBuilder.nonNullable.group({
       content: ['', Validators.required],
+      scheduledAt: [''],
     });
   }
 
@@ -120,6 +127,20 @@ export class ReplyModalFormComponent implements OnInit, OnDestroy {
           this.setFormValues(data);
         }
       });
+  }
+
+  sendSelectedDate(event: Date) {
+    this.Form.get('scheduledAt')?.setValue(new Date(event));
+    this.formattedScheduledDate = format(event, 'MMMM do, yyyy');
+    this.formattedScheduledTime = format(event, 'h:mm a');
+  }
+
+  setModalHide(event: boolean) {
+    this.toggleCalendar = event;
+  }
+
+  removeDate() {
+    this.Form.get('scheduledAt')?.setValue('');
   }
 
   setFormValues(data: ReplyType) {
