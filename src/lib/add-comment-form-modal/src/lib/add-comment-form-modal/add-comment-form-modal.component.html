@@ -53,13 +53,6 @@
             </div>
           </div>
         </div>
-
-        <button
-          type="button"
-          class="rounded-md px-4 text-sm py-1 border border-secondaryColor bg-transparent text-secondaryColor hover:bg-secondaryColor hover:text-white font-semibold"
-        >
-          Drafts
-        </button>
       </div>
       <div class="p-4 overflow-y-auto">
         <ng-container *ngIf="editFile; else elseTemplate">
@@ -97,15 +90,7 @@
               [formGroup]="Form"
               class="mt-1 text-gray-800 dark:text-dark-text w-full"
             >
-              <textarea
-                [class.is-invalid]="
-                  Form.get('content')?.touched && Form.get('content')?.invalid
-                "
-                rows="3"
-                class="border-none focus:border-none w-full focus:outline-none bg-transparent w-full"
-                placeholder="What's happening?"
-                formControlName="content"
-              ></textarea>
+              <lib-textarea-form [Form]="Form" />
             </form>
           </div>
 
@@ -321,3 +306,9 @@
     *ngIf="toggleEmoji"
   ></emoji-mart>
 </div>
+
+<lib-calendar
+  [visible]="toggleCalendar"
+  (sendSelectedDate)="sendSelectedDate($event)"
+  (modalHide)="setModalHide($event)"
+/>

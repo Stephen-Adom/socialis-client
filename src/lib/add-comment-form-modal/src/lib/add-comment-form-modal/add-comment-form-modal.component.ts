@@ -16,7 +16,7 @@ import {
   Validators,
 } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow } from 'date-fns';
 import {
   ErrorMessageService,
   SuccessMessageService,
@@ -41,6 +41,9 @@ import {
 import { Subscription } from 'rxjs';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
+import { TextareaFormComponent } from 'textarea-form';
+import { CalendarModule } from 'primeng/calendar';
+import { CalendarComponent } from 'calendar';
 
 type commentImageType = {
   base64: string;
@@ -56,6 +59,8 @@ type commentImageType = {
     ReactiveFormsModule,
     PickerComponent,
     ImageCropperModule,
+    TextareaFormComponent,
+    CalendarComponent
   ],
   templateUrl: './add-comment-form-modal.component.html',
   styleUrls: ['./add-comment-form-modal.component.css'],
@@ -76,6 +81,9 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
   editFile: commentImageType | null = null;
   edittedImage!: string;
   exitFileIndex = -1;
+  toggleCalendar = false;
+  formattedScheduledDate!: string;
+  formattedScheduledTime!: string;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -87,6 +95,7 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
   ) {
     this.Form = this.formBuilder.nonNullable.group({
       content: ['', Validators.required],
+      scheduledAt: [''],
     });
   }
 
@@ -119,6 +128,16 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
 
   setFormValues() {
     this.Form.get('content')?.setValue(this.editComment?.content);
+  }
+
+  sendSelectedDate(event: Date) {
+    this.Form.get('scheduledAt')?.setValue(new Date(event));
+    this.formattedScheduledDate = format(event, 'MMMM do, yyyy');
+    this.formattedScheduledTime = format(event, 'h:mm a');
+  }
+
+  setModalHide(event: boolean) {
+    this.toggleCalendar = event;
   }
 
   addEmoji(event: any) {

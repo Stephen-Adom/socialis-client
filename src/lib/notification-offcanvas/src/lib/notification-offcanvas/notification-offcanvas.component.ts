@@ -6,7 +6,7 @@ import { SidebarModule } from 'primeng/sidebar';
 import { Subscription, tap } from 'rxjs';
 import { UserApiActions, UserState, getAllUserNotifications, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
-import { Notifications } from 'utils';
+import { Notifications, UserInfoType } from 'utils';
 import { DomSanitizer } from '@angular/platform-browser';
 import { format, formatDistance } from 'date-fns';
 
@@ -76,6 +76,7 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
     MENTION: "MENTION",
     MESSAGE: "MESSAGE"
   }
+  authUser!: UserInfoType;
 
   constructor(private offcanvasService: NotificationOffcanvasService, private sanitizer: DomSanitizer, private store: Store<UserState>) { }
 
@@ -83,6 +84,7 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
     this.userInfoSubscription = this.store.select(getUserInformation).pipe(
       tap(user => {
         if (user) {
+          this.authUser = user;
           this.store.dispatch(UserApiActions.fetchNotifications({ userId: user.id }));
         }
       })
@@ -158,11 +160,11 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
     let message = '';
     switch (notification.activityType) {
       case this.NotificationActivities.MENTION:
-        message = `<a href="" class="font-bold italic text-primaryColor">${notification.source.firstname} ${notification.source.lastname}</a> mentioned you in a <a href="" class="font-bold italic text-primaryColor">post</a>`;
+        message = `<a href="" class="font-bold italic text-primaryColor">${notification.source.firstname} ${notification.source.lastname}</a> mentioned you in a <a href="" class="font-bold italic text-primaryColor">${this.getTargetType(notification)}</a>`;
         break;
 
       case this.NotificationActivities.COMMENTED:
-        message = `<a href="" class="font-bold italic text-primaryColor">${notification.source.firstname} ${notification.source.lastname}</a> commented: <a href="" class="font-bold italic font-primaryColor">${notification.target.targetContent}</a>`;
+        message = `<a href="" class="font-bold italic text-primaryColor">${this.getSourceUsername(this.authUser, notification.source)}</a> commented: <a href="" class="font-bold italic font-primaryColor">${notification.target.targetContent}</a>`;
         break;
 
       case this.NotificationActivities.FOLLOWS:
@@ -177,11 +179,11 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
         break;
       case this.NotificationActivities.LIKED:
         if (sources.length === 1) {
-          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> liked your <a href="" class="font-bold text-primaryColor italic">post</a>`;
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> liked your <a href="" class="font-bold text-primaryColor italic">${this.getTargetType(notification)}</a>`;
         } else if (sources.length === 2) {
-          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> and <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> liked your <a href="" class="font-bold text-primaryColor italic">post</a>`;
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> and <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> liked your <a href="" class="font-bold text-primaryColor italic">${this.getTargetType(notification)}</a>`;
         } else if (sources.length > 2) {
-          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a>, <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> and ${sources.length - 2} others liked your <a href="" class="font-bold text-primaryColor italic">post</a>`;
+          message = `<a href="" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a>, <a href="" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> and ${sources.length - 2} others liked your <a href="" class="font-bold text-primaryColor italic">${this.getTargetType(notification)}</a>`;
         }
         break;
       case this.NotificationActivities.REPLY:
@@ -221,6 +223,30 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
       targetType: notification.targetType
     }
     return notificationObj;
+  }
+
+  getTargetType(notification: Notifications) {
+    switch (notification.targetType) {
+      case 'USER':
+        return "user";
+      case "POST":
+        return "post"
+      case "COMMENT":
+        return "comment"
+      case "REPLY":
+        return "reply"
+      default:
+        return ""
+    }
+  }
+
+  getSourceUsername(authUser: UserInfoType, source: sourceType) {
+    if (source.uid === authUser.uid) {
+      return `You`;
+    } else {
+      return `${source.firstname} ${source.lastname}`;
+    }
+
   }
 
   // formatTargetType(notification: Notifications){
