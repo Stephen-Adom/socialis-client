@@ -31,7 +31,7 @@ import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
-import { ConfirmDeleteService, dataDeleteObject } from 'services';
+import { ConfirmDeleteService, FormatPostService, dataDeleteObject } from 'services';
 import { ProfileTooltipDirective } from 'directives';
 import { DomSanitizer } from '@angular/platform-browser';
 
@@ -43,8 +43,7 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./post-card.component.css'],
 })
 export class PostCardComponent
-  implements OnChanges, OnInit, OnDestroy, AfterViewInit
-{
+  implements OnChanges, OnInit, OnDestroy, AfterViewInit {
   @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) post!: PostType;
   authUser$!: Observable<UserInfoType | null>;
@@ -67,11 +66,11 @@ export class PostCardComponent
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
+    private formatPost: FormatPostService,
     private cdr: ChangeDetectorRef,
-    private sanitizer: DomSanitizer,
     private store: Store<PostState>,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
@@ -143,11 +142,9 @@ export class PostCardComponent
   }
 
   getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
-      user.lastname
-    }(${user.username}) </a></h4> <p> About - ${
-      user.bio ? user.bio : 'Not Available!'
-    }</p>`;
+    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${user.lastname
+      }(${user.username}) </a></h4> <p> About - ${user.bio ? user.bio : 'Not Available!'
+      }</p>`;
   }
 
   toggleLike() {
@@ -227,19 +224,7 @@ export class PostCardComponent
   }
 
   formatPostContent(content: string) {
-    // Regular expression to find mentions
-    const mentionRegex = /@(\w+)/g;
-
-    // Replace mentions with links
-    const formattedText = content.replace(mentionRegex, (match, username) => {
-      const mentionLink = `<a class="text-primaryColor font-semibold" href='/user/${username}/profile'>${match}</a>`;
-      return mentionLink;
-    });
-
-    this.formattedText = this.sanitizer.sanitize(
-      SecurityContext.HTML,
-      formattedText
-    );
+    this.formattedText = this.formatPost.formatPostContent(content);
     this.cdr.detectChanges();
   }
 }

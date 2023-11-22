@@ -7,12 +7,14 @@ import {
   PostType,
   SimpleUserInfoType,
   UserInfoType,
+  UserSummaryInfo,
   generateLikeDescription,
 } from 'utils';
 import { format } from 'date-fns';
 import {
   PostApiActions,
   PostState,
+  getAllAuthUserFollowers,
   getPostDetails,
   getUserInformation,
 } from 'state';
@@ -46,15 +48,18 @@ export class CommentCardComponent implements OnInit, OnDestroy {
   post!: PostType;
   postSubscription = new Subscription();
   bookmarked$ = new BehaviorSubject<boolean>(false);
+  authorIsFollowing$ = new BehaviorSubject<boolean>(false);
+  authFollowers$!: Observable<UserSummaryInfo[]>;
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
     private store: Store<PostState>,
     private router: Router
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
+    this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
     this.postSubscription = this.store
       .select(getPostDetails)
       .subscribe((post) => {
@@ -64,6 +69,7 @@ export class CommentCardComponent implements OnInit, OnDestroy {
       });
     this.checkIfLiked();
     this.checkIfBookmarked();
+    this.checkIfAuthorIsFollowing();
   }
 
   formateDate(createdAt: string) {
@@ -79,11 +85,9 @@ export class CommentCardComponent implements OnInit, OnDestroy {
   }
 
   getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
-      user.lastname
-    }(${user.username}) </a></h4> <p> About - ${
-      user.bio ? user.bio : 'Not Available!'
-    }</p>`;
+    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${user.lastname
+      }(${user.username}) </a></h4> <p> About - ${user.bio ? user.bio : 'Not Available!'
+      }</p>`;
   }
 
   toggleLike() {
@@ -112,6 +116,17 @@ export class CommentCardComponent implements OnInit, OnDestroy {
         return;
       }
       this.bookmarked$.next(false);
+    });
+  }
+
+  checkIfAuthorIsFollowing() {
+    this.authFollowers$.subscribe((followers) => {
+      const userExist = followers.find(
+        (follower) => follower.username === this.comment.user.username
+      );
+      userExist
+        ? this.authorIsFollowing$.next(true)
+        : this.authorIsFollowing$.next(false);
     });
   }
 

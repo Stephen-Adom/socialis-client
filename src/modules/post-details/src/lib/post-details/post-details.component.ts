@@ -1,5 +1,5 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { CommentListComponent } from 'comment-list';
 import { CreateCommentFormComponent } from 'create-comment-form';
@@ -7,22 +7,22 @@ import { ActivatedRoute } from '@angular/router';
 import {
   PostApiActions,
   PostState,
+  getAllAuthUserFollowers,
   getPostDetails,
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { PostType, SimpleUserInfoType, UserInfoType } from 'utils';
+import { PostType, SimpleUserInfoType, UserInfoType, UserSummaryInfo } from 'utils';
 import {
   BehaviorSubject,
   Observable,
   Subscription,
-  combineLatest,
   tap,
 } from 'rxjs';
 import { format } from 'date-fns';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
-import { ConfirmDeleteService, dataDeleteObject } from 'services';
+import { ConfirmDeleteService, FormatPostService, dataDeleteObject } from 'services';
 
 @Component({
   selector: 'lib-post-details',
@@ -49,18 +49,25 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   likedPost$ = new BehaviorSubject<boolean>(false);
   bookmarked$ = new BehaviorSubject<boolean>(false);
   authUser!: UserInfoType;
+  authorIsFollowing$ = new BehaviorSubject<boolean>(false);
+  authFollowers$!: Observable<UserSummaryInfo[]>;
+  formattedText: string | null = null;
 
   constructor(
     private location: Location,
     private route: ActivatedRoute,
     private store: Store<PostState>,
+    private cdr: ChangeDetectorRef,
+    private formatPost: FormatPostService,
     private confirmDeleteService: ConfirmDeleteService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe((data) => {
       this.postId = data.get('id') as string;
     });
+
+    this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
 
     this.postSubscription = this.store
       .select(getPostDetails)
@@ -76,8 +83,10 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
       .subscribe((post) => {
         if (post) {
           this.post = post;
+          this.formatPostContent(this.post.content);
           this.checkIfLiked(this.post, this.authUser);
           this.checkIfBookmarked(this.authUser, this.post);
+          this.checkIfAuthorIsFollowing();
         }
       });
 
@@ -90,6 +99,22 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
           this.checkIfBookmarked(this.authUser, this.post);
         }
       });
+  }
+
+  formatPostContent(content: string) {
+    this.formattedText = this.formatPost.formatPostContent(content);
+    this.cdr.detectChanges();
+  }
+
+  checkIfAuthorIsFollowing() {
+    this.authFollowers$.subscribe((followers) => {
+      const userExist = followers.find(
+        (follower) => follower.username === this.post.user.username
+      );
+      userExist
+        ? this.authorIsFollowing$.next(true)
+        : this.authorIsFollowing$.next(false);
+    });
   }
 
   checkIfBookmarked(authUser: UserInfoType, post: PostType) {
@@ -134,11 +159,9 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   }
 
   getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
-      user.lastname
-    }(${user.username}) </a></h4> <p> About - ${
-      user.bio ? user.bio : 'Not Available!'
-    }</p>`;
+    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${user.lastname
+      }(${user.username}) </a></h4> <p> About - ${user.bio ? user.bio : 'Not Available!'
+      }</p>`;
   }
 
   ngOnDestroy(): void {
@@ -154,17 +177,14 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     authUser: UserInfoType | null
   ) {
     if (likes.length && likes.length == 1) {
-      return `Liked by ${
-        likes[0].username === authUser?.username ? 'You' : likes[0].username
-      }`;
+      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
+        }`;
     } else if (likes.length === 2) {
-      return `Liked by ${
-        likes[0].username === authUser?.username ? 'You' : likes[0].username
-      }  and ${likes[1].username}`;
+      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
+        }  and ${likes[1].username}`;
     } else {
-      return `Liked by ${
-        likes[0].username === authUser?.username ? 'You' : likes[0].username
-      } and ${likes.length - 1} others`;
+      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
+        } and ${likes.length - 1} others`;
     }
   }
 
