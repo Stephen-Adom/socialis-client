@@ -39,7 +39,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 import { TextareaFormComponent } from 'textarea-form';
-import { CalendarModule } from 'primeng/calendar';
+import { TooltipModule } from 'primeng/tooltip';
 import { CalendarComponent } from 'calendar';
 import { format } from 'date-fns';
 
@@ -59,6 +59,7 @@ type postImageType = {
     ImageCropperModule,
     TextareaFormComponent,
     CalendarComponent,
+    TooltipModule
   ],
   templateUrl: './new-post-modal.component.html',
   styleUrls: ['./new-post-modal.component.css'],

@@ -23,7 +23,7 @@
               {{ post.user.firstname }} {{ post.user.lastname }}
             </h3>
             <p class="text-sm font-medium text-gray-400">
-              {{ post.user.username }}
+              @{{ post.user.username }}
             </p>
           </div>
         </div>
@@ -180,7 +180,7 @@
         </div>
       </section>
     </div>
-    <div class="card-body min-h-[4.5rem] rounded-lg overflow-hidden ml-[68px]">
+    <div class="card-body rounded-lg overflow-hidden ml-[68px]">
       <p class="text-sm dark:text-dark-text" *ngIf="post.content">
         {{ post.content }}
       </p>

@@ -1,7 +1,13 @@
-:host ::ng-deep .emoji-mart {
+.emoji-container {
   position: absolute;
-  top: 155px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1;
+  top: 122px;
+  left: -20%;
+  transform: translateX(75%);
+}
+
+@media screen and (max-width: 768px) {
+  .emoji-container {
+    top: 260px;
+    transform: translateX(-50%) !important;
+  }
 }

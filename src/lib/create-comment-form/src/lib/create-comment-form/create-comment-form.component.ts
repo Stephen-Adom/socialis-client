@@ -30,6 +30,7 @@ import { Subscription } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
+import { TextareaFormComponent } from 'textarea-form';
 
 type commentImageType = {
   base64: string;
@@ -45,6 +46,7 @@ type commentImageType = {
     ReactiveFormsModule,
     PickerComponent,
     ImageCropperModule,
+    TextareaFormComponent
   ],
   templateUrl: './create-comment-form.component.html',
   styleUrls: ['./create-comment-form.component.css'],
@@ -61,6 +63,9 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
   editFile: commentImageType | null = null;
   edittedImage!: string;
   exitFileIndex = -1;
+  toggleCalendar = false;
+  formattedScheduledDate!: string;
+  formattedScheduledTime!: string;
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
@@ -72,6 +77,7 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
   ) {
     this.Form = this.formBuilder.nonNullable.group({
       content: ['', Validators.required],
+      scheduledAt: ['']
     });
   }
 
@@ -91,6 +97,10 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
           this.postDetails = data;
         }
       });
+  }
+
+  removeDate() {
+    this.Form.get('scheduledAt')?.setValue('');
   }
 
   addEmoji(event: any) {
