@@ -1,22 +1,24 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
-import { ConfirmDeleteService, dataDeleteObject } from 'services';
+import { ConfirmDeleteService, FormatPostService, dataDeleteObject } from 'services';
 import {
   PostState,
   PostApiActions,
   getUserInformation,
   getCommentDetails,
   getAllReplies,
+  getAllAuthUserFollowers,
 } from 'state';
 import {
   CommentType,
   ReplyType,
   SimpleUserInfoType,
   UserInfoType,
+  UserSummaryInfo,
 } from 'utils';
 import { format } from 'date-fns';
 import { LightgalleryModule } from 'lightgallery/angular';
@@ -51,19 +53,26 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
     counter: false,
     plugins: [lgZoom],
   };
+  formattedText: string | null = null;
+  authorIsFollowing$ = new BehaviorSubject<boolean>(false);
+  authFollowers$!: Observable<UserSummaryInfo[]>;
 
   constructor(
     private location: Location,
     private route: ActivatedRoute,
     private store: Store<PostState>,
+    private cdr: ChangeDetectorRef,
+    private formatPost: FormatPostService,
     private confirmDeleteService: ConfirmDeleteService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe((data) => {
       this.commentId = data.get('commentId') as string;
       this.postId = data.get('postId') as string;
     });
+
+    this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
 
     this.commentSubscription = this.store
       .select(getCommentDetails)
@@ -82,8 +91,10 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
       .subscribe((comment) => {
         if (comment) {
           this.comment = comment;
+          this.formatPostContent(this.comment.content);
           this.checkIfLiked(this.comment, this.authUser);
           this.checkIfBookmarked(this.authUser, this.comment);
+          this.checkIfAuthorIsFollowing();
         }
       });
 
@@ -98,6 +109,22 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
       });
 
     this.allReplies$ = this.store.select(getAllReplies);
+  }
+
+  checkIfAuthorIsFollowing() {
+    this.authFollowers$.subscribe((followers) => {
+      const userExist = followers.find(
+        (follower) => follower.username === this.comment.user.username
+      );
+      userExist
+        ? this.authorIsFollowing$.next(true)
+        : this.authorIsFollowing$.next(false);
+    });
+  }
+
+  formatPostContent(content: string) {
+    this.formattedText = this.formatPost.formatPostContent(content);
+    this.cdr.detectChanges();
   }
 
   checkIfBookmarked(authUser: UserInfoType, comment: CommentType) {
@@ -121,11 +148,9 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
   }
 
   getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
-      user.lastname
-    }(${user.username}) </a></h4> <p> About - ${
-      user.bio ? user.bio : 'Not Available!'
-    }</p>`;
+    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${user.lastname
+      }(${user.username}) </a></h4> <p> About - ${user.bio ? user.bio : 'Not Available!'
+      }</p>`;
   }
 
   isAuth(author: string, authUser: UserInfoType | null) {
@@ -162,17 +187,14 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
     authUser: UserInfoType | null
   ) {
     if (likes.length && likes.length == 1) {
-      return `Liked by ${
-        likes[0].username === authUser?.username ? 'You' : likes[0].username
-      }`;
+      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
+        }`;
     } else if (likes.length === 2) {
-      return `Liked by ${
-        likes[0].username === authUser?.username ? 'You' : likes[0].username
-      }  and ${likes[1].username}`;
+      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
+        }  and ${likes[1].username}`;
     } else {
-      return `Liked by ${
-        likes[0].username === authUser?.username ? 'You' : likes[0].username
-      } and ${likes.length - 1} others`;
+      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
+        } and ${likes.length - 1} others`;
     }
   }
 

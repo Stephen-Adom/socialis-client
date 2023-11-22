@@ -1,0 +1,13 @@
+.emoji-container {
+  position: absolute;
+  top: 122px;
+  left: -20%;
+  transform: translateX(75%);
+}
+
+@media screen and (max-width: 768px) {
+  .emoji-container {
+    top: 260px;
+    transform: translateX(-50%) !important;
+  }
+}

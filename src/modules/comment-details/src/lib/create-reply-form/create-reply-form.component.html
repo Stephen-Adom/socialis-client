@@ -205,9 +205,30 @@
     </div>
   </ng-template>
 
-  <emoji-mart
-    [darkMode]="false"
-    (emojiSelect)="addEmoji($event)"
-    *ngIf="toggleEmoji"
-  ></emoji-mart>
+  <div class="relative emoji-container" *ngIf="toggleEmoji">
+    <emoji-mart [darkMode]="false" (emojiSelect)="addEmoji($event)">
+    </emoji-mart>
+
+    <button
+      (click)="toggleEmoji = false"
+      title="close"
+      type="button"
+      class="bg-neutral-200 flex items-center justify-center w-[25px] h-[25px] rounded-sm absolute top-0 -right-[26px]"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-5 h-5"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18L18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+  </div>
 </section>
