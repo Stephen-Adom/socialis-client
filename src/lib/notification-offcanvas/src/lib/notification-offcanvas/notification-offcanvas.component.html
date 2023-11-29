@@ -90,6 +90,15 @@
                   "
                 ></ng-container>
               </ng-container>
+
+              <ng-container *ngSwitchCase="NotificationActivities.FOLLOWS">
+                <ng-container
+                  *ngTemplateOutlet="
+                    followNotificationTemplate;
+                    context: { $implicit: notification }
+                  "
+                ></ng-container>
+              </ng-container>
             </ng-container>
           </ng-container>
         </ul>
@@ -200,7 +209,7 @@
 </ng-template>
 
 <ng-template #mentionNotificationTemplate let-notification>
-  <li class="notification-item">
+  <li class="notification-item" routerLinkActive="router-link-active">
     <div class="activity-item py-1 cursor-pointer">
       <div class="flex-shrink-0 group flex items-start justify-between w-full">
         <div class="flex items-center gap-x-2">
@@ -233,33 +242,8 @@
   </li>
 </ng-template>
 
-<ng-template #followNotificationTemplate let-notification="notification">
-  <li class="notification-item">
-    <div class="activity-item py-1 cursor-pointer">
-      <div class="flex-shrink-0 group flex items-start justify-between w-full">
-        <div class="flex items-center gap-x-2">
-          <img
-            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
-            src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=facearea&facepad=2&w=300&h=300&q=80"
-            alt="Image Description"
-          />
-          <p class="text-xs dark:text-dark-text">
-            <span class="font-bold">mr.asdot</span> started following you.
-            <span class="text-gray-300 dark:text-gray-500">1m</span>
-          </p>
-        </div>
-
-        <div class="w-[40%] text-right">
-          <button
-            type="button"
-            class="bg-primaryColor text-white text-xs px-4 py-[0.4rem] rounded-full"
-          >
-            Follow back
-          </button>
-        </div>
-      </div>
-    </div>
-  </li>
+<ng-template #followNotificationTemplate let-notification>
+  <lib-notification-card [notification-info]="notification" />
 </ng-template>
 
 <ng-template #likedNotificationTemplate let-notification>

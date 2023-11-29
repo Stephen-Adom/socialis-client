@@ -161,7 +161,7 @@ export type Notifications = {
     lastname: string;
     username: string;
     imageUrl: string;
-  },
+  };
   target: {
     targetContent?: string;
     targetUid: string;
@@ -169,12 +169,13 @@ export type Notifications = {
     targetFirstname?: string;
     targetLastname?: string;
     targetUsername?: string;
-  },
+    targetUrl?: string;
+  };
   targetType: string;
   readAt: string;
   createdAt: string;
   read: boolean;
-}
+};
 
 export type NewPostResponseType = {
   status: string;
