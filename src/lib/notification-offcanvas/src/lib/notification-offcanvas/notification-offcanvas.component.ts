@@ -3,19 +3,19 @@ import { Component, OnInit, OnDestroy, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationOffcanvasService } from 'services';
 import { SidebarModule } from 'primeng/sidebar';
-import { Observable, Subscription, tap } from 'rxjs';
+import { Subscription, tap } from 'rxjs';
 import {
   UserApiActions,
   UserState,
-  getAllAuthUserFollowing,
   getAllUserNotifications,
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { Notifications, UserInfoType, UserSummaryInfo } from 'utils';
+import { Notifications, UserInfoType } from 'utils';
 import { DomSanitizer } from '@angular/platform-browser';
 import { format, formatDistance } from 'date-fns';
 import { NotificationCardComponent } from './notification-card/notification-card.component';
+import { RouterLink } from '@angular/router';
 
 export type formattedNotifications = {
   id: number;
@@ -64,7 +64,7 @@ type sourceType = {
 @Component({
   selector: 'lib-notification-offcanvas',
   standalone: true,
-  imports: [CommonModule, SidebarModule, NotificationCardComponent],
+  imports: [CommonModule, SidebarModule, NotificationCardComponent, RouterLink],
   templateUrl: './notification-offcanvas.component.html',
   styleUrls: ['./notification-offcanvas.component.css'],
 })
@@ -388,8 +388,8 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
     }
   }
 
-  clickNow() {
-    console.log('sdf');
+  readNotification(notification: formattedNotifications) {
+    window.location.href = notification.target.targetUrl as string;
   }
 
   ngOnDestroy(): void {

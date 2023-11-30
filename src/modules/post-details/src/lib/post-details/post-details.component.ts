@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { CommentListComponent } from 'comment-list';
 import { CreateCommentFormComponent } from 'create-comment-form';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   PostApiActions,
   PostState,
@@ -12,17 +12,21 @@ import {
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { PostType, SimpleUserInfoType, UserInfoType, UserSummaryInfo } from 'utils';
 import {
-  BehaviorSubject,
-  Observable,
-  Subscription,
-  tap,
-} from 'rxjs';
+  PostType,
+  SimpleUserInfoType,
+  UserInfoType,
+  UserSummaryInfo,
+} from 'utils';
+import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
 import { format } from 'date-fns';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
-import { ConfirmDeleteService, FormatPostService, dataDeleteObject } from 'services';
+import {
+  ConfirmDeleteService,
+  FormatPostService,
+  dataDeleteObject,
+} from 'services';
 
 @Component({
   selector: 'lib-post-details',
@@ -54,13 +58,14 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   formattedText: string | null = null;
 
   constructor(
+    private router: Router,
     private location: Location,
     private route: ActivatedRoute,
-    private store: Store<PostState>,
     private cdr: ChangeDetectorRef,
+    private store: Store<PostState>,
     private formatPost: FormatPostService,
     private confirmDeleteService: ConfirmDeleteService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe((data) => {
@@ -159,9 +164,11 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   }
 
   getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${user.lastname
-      }(${user.username}) </a></h4> <p> About - ${user.bio ? user.bio : 'Not Available!'
-      }</p>`;
+    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
+      user.lastname
+    }(${user.username}) </a></h4> <p> About - ${
+      user.bio ? user.bio : 'Not Available!'
+    }</p>`;
   }
 
   ngOnDestroy(): void {
@@ -177,14 +184,17 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     authUser: UserInfoType | null
   ) {
     if (likes.length && likes.length == 1) {
-      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
-        }`;
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      }`;
     } else if (likes.length === 2) {
-      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
-        }  and ${likes[1].username}`;
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      }  and ${likes[1].username}`;
     } else {
-      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
-        } and ${likes.length - 1} others`;
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      } and ${likes.length - 1} others`;
     }
   }
 
@@ -212,6 +222,14 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
           userId: this.authUser.id,
         })
       );
+    }
+  }
+
+  viewAuthorDetails(author: SimpleUserInfoType) {
+    if (this.authUser.username === author.username) {
+      this.router.navigate(['profile']);
+    } else {
+      this.router.navigate(['user', author.username, 'profile']);
     }
   }
 }

@@ -19,7 +19,10 @@
             [attr.alt]="post.user.firstname"
           />
           <div class="ml-3 text-left">
-            <div class="flex items-center">
+            <div
+              class="flex items-center"
+              (click)="viewAuthorDetails(post.user)"
+            >
               <h3 class="font-semibold text-gray-800 dark:text-dark-text">
                 {{ post.user.firstname }} {{ post.user.lastname }}
               </h3>

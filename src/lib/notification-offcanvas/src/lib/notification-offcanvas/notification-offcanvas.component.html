@@ -131,12 +131,16 @@
 </p-sidebar>
 
 <ng-template #commentNotificationTemplate let-notification>
-  <li class="notification-item">
+  <li
+    class="notification-item"
+    [ngClass]="{ 'bg-gray-100': !notification.read }"
+    (click)="readNotification(notification)"
+  >
     <div class="activity-item py-1 cursor-pointer">
       <div class="flex-shrink-0 group flex items-start justify-between w-full">
         <div class="flex items-center gap-x-2">
           <img
-            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full ring-2 ring-red-500 ring-offset-1"
+            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
             [src]="
               notification.source.imageUrl
                 ? notification.source.imageUrl
@@ -170,12 +174,16 @@
 </ng-template>
 
 <ng-template #replyNotificationTemplate let-notification>
-  <li class="notification-item">
+  <li
+    class="notification-item"
+    [ngClass]="{ 'bg-gray-100': !notification.read }"
+    (click)="readNotification(notification)"
+  >
     <div class="activity-item py-1 cursor-pointer">
       <div class="flex-shrink-0 group flex items-start justify-between w-full">
         <div class="flex items-center gap-x-2">
           <img
-            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full ring-2 ring-red-500 ring-offset-1"
+            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
             [src]="
               notification.source.imageUrl
                 ? notification.source.imageUrl
@@ -209,12 +217,16 @@
 </ng-template>
 
 <ng-template #mentionNotificationTemplate let-notification>
-  <li class="notification-item" routerLinkActive="router-link-active">
+  <li
+    class="notification-item"
+    [ngClass]="{ 'bg-gray-100': !notification.read }"
+    (click)="readNotification(notification)"
+  >
     <div class="activity-item py-1 cursor-pointer">
       <div class="flex-shrink-0 group flex items-start justify-between w-full">
         <div class="flex items-center gap-x-2">
           <img
-            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full ring-2 ring-red-500 ring-offset-1"
+            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
             [src]="
               notification.source.imageUrl
                 ? notification.source.imageUrl
@@ -247,12 +259,16 @@
 </ng-template>
 
 <ng-template #likedNotificationTemplate let-notification>
-  <li class="notification-item">
+  <li
+    class="notification-item"
+    [ngClass]="{ 'bg-gray-100': !notification.read }"
+    (click)="readNotification(notification)"
+  >
     <div class="activity-item py-1 cursor-pointer">
       <div class="flex-shrink-0 group flex items-start justify-between w-full">
         <div class="flex items-center gap-x-2">
           <img
-            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full ring-2 ring-red-500 ring-offset-1"
+            class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
             [src]="
               notification.source.imageUrl
                 ? notification.source.imageUrl

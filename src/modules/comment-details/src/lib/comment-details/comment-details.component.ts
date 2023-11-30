@@ -1,10 +1,14 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
-import { ConfirmDeleteService, FormatPostService, dataDeleteObject } from 'services';
+import {
+  ConfirmDeleteService,
+  FormatPostService,
+  dataDeleteObject,
+} from 'services';
 import {
   PostState,
   PostApiActions,
@@ -12,9 +16,11 @@ import {
   getCommentDetails,
   getAllReplies,
   getAllAuthUserFollowers,
+  getPostDetails,
 } from 'state';
 import {
   CommentType,
+  PostType,
   ReplyType,
   SimpleUserInfoType,
   UserInfoType,
@@ -56,21 +62,25 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
   formattedText: string | null = null;
   authorIsFollowing$ = new BehaviorSubject<boolean>(false);
   authFollowers$!: Observable<UserSummaryInfo[]>;
+  postDetails$!: Observable<PostType | null>;
 
   constructor(
+    private router: Router,
     private location: Location,
     private route: ActivatedRoute,
-    private store: Store<PostState>,
     private cdr: ChangeDetectorRef,
+    private store: Store<PostState>,
     private formatPost: FormatPostService,
     private confirmDeleteService: ConfirmDeleteService
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe((data) => {
       this.commentId = data.get('commentId') as string;
       this.postId = data.get('postId') as string;
     });
+
+    this.postDetails$ = this.store.select(getPostDetails);
 
     this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
 
@@ -148,9 +158,11 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
   }
 
   getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${user.lastname
-      }(${user.username}) </a></h4> <p> About - ${user.bio ? user.bio : 'Not Available!'
-      }</p>`;
+    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
+      user.lastname
+    }(${user.username}) </a></h4> <p> About - ${
+      user.bio ? user.bio : 'Not Available!'
+    }</p>`;
   }
 
   isAuth(author: string, authUser: UserInfoType | null) {
@@ -170,7 +182,6 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
   }
 
   toggleLike() {
-    console.log(this.authUser, this.comment);
     if (this.authUser && this.comment) {
       this.store.dispatch(
         PostApiActions.toggleCommentLike({
@@ -187,14 +198,17 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
     authUser: UserInfoType | null
   ) {
     if (likes.length && likes.length == 1) {
-      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
-        }`;
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      }`;
     } else if (likes.length === 2) {
-      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
-        }  and ${likes[1].username}`;
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      }  and ${likes[1].username}`;
     } else {
-      return `Liked by ${likes[0].username === authUser?.username ? 'You' : likes[0].username
-        } and ${likes.length - 1} others`;
+      return `Liked by ${
+        likes[0].username === authUser?.username ? 'You' : likes[0].username
+      } and ${likes.length - 1} others`;
     }
   }
 
@@ -217,6 +231,14 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
           userId: this.authUser.id,
         })
       );
+    }
+  }
+
+  viewAuthorDetails(author: SimpleUserInfoType) {
+    if (this.authUser.username === author.username) {
+      this.router.navigate(['profile']);
+    } else {
+      this.router.navigate(['user', author.username, 'profile']);
     }
   }
 

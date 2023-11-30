@@ -6,7 +6,7 @@
     class="rounded-lg bg-white dark:bg-main-dark w-full border border-white dark:border-main-dark cursor-pointer post-card p-3"
     *ngIf="comment"
   >
-    <div class="card-header flex items-center justify-between pb-3">
+    <div class="card-header flex items-center justify-between pb-1">
       <div class="flex-shrink-0 group block">
         <div class="flex items-center">
           <img
@@ -19,7 +19,10 @@
             [attr.alt]="comment.user.firstname"
           />
           <div class="ml-3 text-left">
-            <div class="flex items-center">
+            <div
+              class="flex items-center"
+              (click)="viewAuthorDetails(comment.user)"
+            >
               <h3 class="font-semibold text-gray-800 dark:text-dark-text">
                 {{ comment.user.firstname }} {{ comment.user.lastname }}
               </h3>
@@ -200,6 +203,15 @@
       </section>
     </div>
     <div class="card-body rounded-lg overflow-hidden ml-[68px]">
+      <span
+        *ngIf="postDetails$ | async"
+        class="inline-block dark:text-gray-400 italic font-normal mb-3 text-sm"
+        >Replying to
+        <span class="text-primaryColor font-bold"
+          >@{{ (postDetails$ | async)?.user?.username }}</span
+        >
+      </span>
+
       <p
         class="text-sm dark:text-dark-text"
         *ngIf="formattedText"
