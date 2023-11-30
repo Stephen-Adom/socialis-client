@@ -6,19 +6,28 @@ import BASE_URL from './base_url';
 import { AllNotificationsResponseType } from 'utils';
 
 @Injectable({
-    providedIn: 'root'
+  providedIn: 'root',
 })
 export class NotificationService {
-    authHeaders: any;
+  authHeaders: any;
 
-    constructor(private http: HttpClient) {
-        getAuthHttpOptions().then((options) => {
-            this.authHeaders = options;
-        });
-    }
+  constructor(private http: HttpClient) {
+    getAuthHttpOptions().then((options) => {
+      this.authHeaders = options;
+    });
+  }
 
-    getUserNotifications(userId: number) {
-        return this.http.get<AllNotificationsResponseType>(BASE_URL + '/notifications/' + userId + '/all',
-            this.authHeaders)
-    }
+  getUserNotifications(userId: number) {
+    return this.http.get<AllNotificationsResponseType>(
+      BASE_URL + '/notifications/' + userId + '/all',
+      this.authHeaders
+    );
+  }
+
+  getUserUnreadNotificationCount(userId: number) {
+    return this.http.get<{
+      status: string;
+      data: number;
+    }>(BASE_URL + '/notifications/' + userId + '/count', this.authHeaders);
+  }
 }

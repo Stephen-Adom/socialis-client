@@ -11,8 +11,14 @@ import {
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import * as localforage from 'localforage';
-import { Observable, Subscription } from 'rxjs';
-import { AppApiActions, AppState, getUserInformation } from 'state';
+import { Observable, Subscription, tap } from 'rxjs';
+import {
+  AppApiActions,
+  AppState,
+  UserApiActions,
+  getUnreadNotificationTotalCount,
+  getUserInformation,
+} from 'state';
 import { UserInfoType } from 'utils';
 import { OnInit } from '@angular/core';
 import { NotificationOffcanvasService } from 'services';
@@ -27,6 +33,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   authUser$!: Observable<UserInfoType | null>;
   notificationOffcanvasState!: boolean;
   notificationOffcanvasSubscription = new Subscription();
+  unreadNotificationCount$!: Observable<number>;
 
   constructor(
     private offcanvasService: NotificationOffcanvasService,
@@ -40,7 +47,19 @@ export class NavigationComponent implements OnInit, OnDestroy {
       this.offcanvasService.toggleOffcanvasVisibilityObservable.subscribe(
         (state) => (this.notificationOffcanvasState = state)
       );
-    this.authUser$ = this.store.select(getUserInformation);
+    this.authUser$ = this.store.select(getUserInformation).pipe(
+      tap((authUser) => {
+        if (authUser) {
+          this.store.dispatch(
+            UserApiActions.fetchUnreadNotificationCount({ userId: authUser.id })
+          );
+        }
+      })
+    );
+
+    this.unreadNotificationCount$ = this.store.select(
+      getUnreadNotificationTotalCount
+    );
   }
 
   @HostListener('window:scroll', [])

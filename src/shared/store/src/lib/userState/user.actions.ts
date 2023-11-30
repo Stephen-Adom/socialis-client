@@ -13,9 +13,9 @@ export const UserApiActions = createActionGroup({
   events: {
     fetchUserDetails: props<{ username: string }>(),
     fetchUserDetailsSuccess: props<{ userInfo: UserSummaryInfoResponseType }>(),
-    followUser: props<{ followId: number; followingId: number }>(),
+    // followUser: props<{ followId: number; followingId: number }>(),
     // unfollowUser: props<{ followId: number; followingId: number }>(),
-    followUserSuccess: emptyProps(),
+    // followUserSuccess: emptyProps(),
     fetchAllFollowers: props<{ username: string }>(),
     fetchAllFollowersSuccess: props<{
       usersResponse: AllUserSummaryInfoResponseType;
@@ -29,6 +29,15 @@ export const UserApiActions = createActionGroup({
     removeAFollower: props<{ userId: number }>(),
     removeAFollowing: props<{ userId: number }>(),
     fetchNotifications: props<{ userId: number }>(),
-    fetchNotificationsSuccess: props<{ allNotifications: AllNotificationsResponseType }>()
+    fetchNotificationsSuccess: props<{
+      allNotifications: AllNotificationsResponseType;
+    }>(),
+    fetchUnreadNotificationCount: props<{ userId: number }>(),
+    fetchUnreadNotificationCountSuccess: props<{
+      unreadNotificationCount: {
+        status: string;
+        data: number;
+      };
+    }>(),
   },
 });

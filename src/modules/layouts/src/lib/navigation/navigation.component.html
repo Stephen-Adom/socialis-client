@@ -101,16 +101,18 @@
           />
         </svg>
 
-        <span class="flex absolute top-0 end-0 -mt-2 -me-2">
-          <span
-            class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 dark:bg-red-600"
-          ></span>
-          <span
-            class="relative inline-flex text-xs bg-red-500 text-white rounded-full py-0.5 px-1.5"
-          >
-            9+
+        <ng-container *ngIf="unreadNotificationCount$ | async as count">
+          <span class="flex absolute top-0 end-0 -mt-2 -me-2" *ngIf="count > 0">
+            <span
+              class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 dark:bg-red-600"
+            ></span>
+            <span
+              class="relative inline-flex text-xs bg-red-500 text-white rounded-full py-0.5 px-1.5"
+            >
+              {{ count }}
+            </span>
           </span>
-        </span>
+        </ng-container>
       </button>
 
       <div
@@ -219,12 +221,14 @@
 </nav>
 
 <ng-template #tooltipContent>
-  <div class="flex items-center space-x-2">
-    <span
-      class="inline-flex text-[9px] bg-red-500 text-white rounded-full py-0.5 px-1.5"
-    >
-      9+
-    </span>
-    <span> <b>Unread</b> notifications! </span>
-  </div>
+  <ng-container *ngIf="unreadNotificationCount$ | async as count">
+    <div class="flex items-center space-x-2" *ngIf="count > 0">
+      <span
+        class="inline-flex text-[9px] bg-red-500 text-white rounded-full py-0.5 px-1.5"
+      >
+        {{ count }}
+      </span>
+      <span> <b>Unread</b> notifications! </span>
+    </div>
+  </ng-container>
 </ng-template>

@@ -14,14 +14,16 @@ export interface UserState {
   authorInformation: UserSummaryInfoFollowing | null;
   authUserFollowers: UserSummaryInfoFollowing[];
   authUserFollowing: UserSummaryInfoFollowing[];
-  authNotifications: Notifications[]
+  authNotifications: Notifications[];
+  unreadNotificationCount: number;
 }
 
 const initialState: UserState = {
   authorInformation: null,
   authUserFollowers: [],
   authUserFollowing: [],
-  authNotifications: []
+  authNotifications: [],
+  unreadNotificationCount: 0,
 };
 
 export const selectUserFeature =
@@ -45,6 +47,11 @@ export const getAllAuthUserFollowing = createSelector(
 export const getAllUserNotifications = createSelector(
   selectUserFeature,
   (state: UserState) => state.authNotifications
+);
+
+export const getUnreadNotificationTotalCount = createSelector(
+  selectUserFeature,
+  (state: UserState) => state.unreadNotificationCount
 );
 
 export const UserReducer = createReducer<UserState>(
@@ -100,5 +107,15 @@ export const UserReducer = createReducer<UserState>(
       ...state,
       authNotifications: action.allNotifications.data,
     };
-  })
+  }),
+
+  on(
+    UserApiActions.fetchUnreadNotificationCountSuccess,
+    (state: UserState, action) => {
+      return {
+        ...state,
+        unreadNotificationCount: action.unreadNotificationCount.data,
+      };
+    }
+  )
 );

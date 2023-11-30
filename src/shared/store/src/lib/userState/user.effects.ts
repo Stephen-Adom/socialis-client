@@ -9,7 +9,11 @@ import { UserApiActions } from './user.actions';
 
 @Injectable()
 export class UserEffects {
-  constructor(private actions$: Actions, private userservice: UserService, private notificationservice: NotificationService) { }
+  constructor(
+    private actions$: Actions,
+    private userservice: UserService,
+    private notificationservice: NotificationService
+  ) {}
 
   FetchUserDetails$ = createEffect(() => {
     return this.actions$.pipe(
@@ -102,12 +106,34 @@ export class UserEffects {
       mergeMap((action: { userId: number }) =>
         this.notificationservice.getUserNotifications(action.userId).pipe(
           map((response: any) => {
-            return UserApiActions.fetchNotificationsSuccess({ allNotifications: response });
+            return UserApiActions.fetchNotificationsSuccess({
+              allNotifications: response,
+            });
           }),
           catchError((error: HttpErrorResponse) =>
             of(AppApiActions.displayErrorMessage({ error: error.error }))
           )
         )
+      )
+    );
+  });
+
+  FetchUnreadNotificationsCount$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserApiActions.fetchUnreadNotificationCount),
+      mergeMap((action: { userId: number }) =>
+        this.notificationservice
+          .getUserUnreadNotificationCount(action.userId)
+          .pipe(
+            map((response: any) => {
+              return UserApiActions.fetchUnreadNotificationCountSuccess({
+                unreadNotificationCount: response,
+              });
+            }),
+            catchError((error: HttpErrorResponse) =>
+              of(AppApiActions.displayErrorMessage({ error: error.error }))
+            )
+          )
       )
     );
   });

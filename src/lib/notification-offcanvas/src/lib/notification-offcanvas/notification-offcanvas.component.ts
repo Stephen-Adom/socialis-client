@@ -3,11 +3,12 @@ import { Component, OnInit, OnDestroy, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationOffcanvasService } from 'services';
 import { SidebarModule } from 'primeng/sidebar';
-import { Subscription, tap } from 'rxjs';
+import { Observable, Subscription, tap } from 'rxjs';
 import {
   UserApiActions,
   UserState,
   getAllUserNotifications,
+  getUnreadNotificationTotalCount,
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
@@ -84,6 +85,7 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
     MESSAGE: 'MESSAGE',
   };
   authUser!: UserInfoType;
+  unreadNotificationCount$!: Observable<number>;
 
   constructor(
     private offcanvasService: NotificationOffcanvasService,
@@ -120,6 +122,10 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
           this.sidebarVisible = state;
         }
       );
+
+    this.unreadNotificationCount$ = this.store.select(
+      getUnreadNotificationTotalCount
+    );
   }
 
   onHide() {
