@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { getAuthHttpOptions } from './httpHeaders';
 import BASE_URL from './base_url';
-import { AllNotificationsResponseType } from 'utils';
+import { AllNotificationsResponseType, SuccessMessageType } from 'utils';
 
 @Injectable({
   providedIn: 'root',
@@ -29,5 +29,12 @@ export class NotificationService {
       status: string;
       data: number;
     }>(BASE_URL + '/notifications/' + userId + '/count', this.authHeaders);
+  }
+
+  markNotificationAsRead(notificationId: number) {
+    return this.http.get<SuccessMessageType>(
+      BASE_URL + '/notifications/' + notificationId + '/markAsRead',
+      this.authHeaders
+    );
   }
 }

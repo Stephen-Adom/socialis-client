@@ -1,13 +1,17 @@
 <nav class="w-full bg-white dark:bg-main-dark p-3 md:p-4 navbar" #navigation>
   <div class="w-[98%] flex items-center justify-between mx-auto">
-    <div class="navbar-brand flex items-center gap-x-1">
+    <a
+      href="javascript:;"
+      [routerLink]="['/feeds']"
+      class="navbar-brand flex items-center gap-x-1"
+    >
       <img
         src="assets/images/logo/socialis-logo.png"
         class="w-[2.5rem] md:w-[3rem]"
         alt="socialis"
       />
       <h6 class="font-semibold text-xl dark:text-dark-text">socialis</h6>
-    </div>
+    </a>
 
     <div class="search-bar-container hidden sm:hidden md:block relative">
       <svg
@@ -102,7 +106,10 @@
         </svg>
 
         <ng-container *ngIf="unreadNotificationCount$ | async as count">
-          <span class="flex absolute top-0 end-0 -mt-2 -me-2" *ngIf="count > 0">
+          <span
+            class="flex absolute top-0 end-0 -mt-[0.3rem] me-2"
+            *ngIf="count > 0"
+          >
             <span
               class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75 dark:bg-red-600"
             ></span>

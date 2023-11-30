@@ -3,7 +3,7 @@ import { Component, Input, OnInit, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { formattedNotifications } from '../notification-offcanvas.component';
 import { DomSanitizer } from '@angular/platform-browser';
-import { UserState, getAllAuthUserFollowing } from 'state';
+import { UserApiActions, UserState, getAllAuthUserFollowing } from 'state';
 import { Store } from '@ngrx/store';
 import { formatDistance } from 'date-fns';
 import { UserSummaryInfo } from 'utils';
@@ -55,5 +55,12 @@ export class NotificationCardComponent implements OnInit {
           : this.authIsFollowing$.next(false);
       }
     });
+  }
+
+  readNotification(notification: formattedNotifications) {
+    this.store.dispatch(
+      UserApiActions.markNotificationAsRead({ notificationId: notification.id })
+    );
+    window.location.href = notification.target.targetUrl as string;
   }
 }

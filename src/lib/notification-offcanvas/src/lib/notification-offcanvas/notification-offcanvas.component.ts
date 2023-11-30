@@ -395,6 +395,9 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
   }
 
   readNotification(notification: formattedNotifications) {
+    this.store.dispatch(
+      UserApiActions.markNotificationAsRead({ notificationId: notification.id })
+    );
     window.location.href = notification.target.targetUrl as string;
   }
 

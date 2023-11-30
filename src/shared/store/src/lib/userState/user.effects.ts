@@ -137,4 +137,24 @@ export class UserEffects {
       )
     );
   });
+
+  markNotificationAsRead$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(UserApiActions.markNotificationAsRead),
+      mergeMap((action: { notificationId: number }) =>
+        this.notificationservice
+          .markNotificationAsRead(action.notificationId)
+          .pipe(
+            map((response: any) => {
+              return UserApiActions.markNotificationAsReadSuccess({
+                response,
+              });
+            }),
+            catchError((error: HttpErrorResponse) =>
+              of(AppApiActions.displayErrorMessage({ error: error.error }))
+            )
+          )
+      )
+    );
+  });
 }

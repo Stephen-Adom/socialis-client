@@ -1,4 +1,8 @@
-<li class="notification-item">
+<li
+  class="notification-item"
+  [ngClass]="{ 'bg-gray-100': !notification.read }"
+  (click)="readNotification(notification)"
+>
   <div class="activity-item py-1 cursor-pointer">
     <div class="flex-shrink-0 group flex items-start justify-between w-full">
       <div class="flex items-center gap-x-2">
