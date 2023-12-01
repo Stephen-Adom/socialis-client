@@ -45,6 +45,7 @@ import { EditAuthProfileModalComponent } from 'edit-auth-profile-modal';
 import { ConfirmDeleteDialogComponent } from 'confirm-delete-dialog';
 import {
   ActionInProgressComponent,
+  NotificationAlertsComponent,
   SuccessNotificationComponent,
 } from 'notification';
 import { TooltipModule } from 'primeng/tooltip';
@@ -78,6 +79,7 @@ import { NotificationOffcanvasComponent } from 'notification-offcanvas';
     NavLinksComponent,
     ProfileCardSummaryComponent,
     NotificationOffcanvasComponent,
+    NotificationAlertsComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
@@ -93,7 +95,7 @@ import { NotificationOffcanvasComponent } from 'notification-offcanvas';
     SuccessMessageService,
     NotificationOffcanvasService,
     NotificationService,
-    FormatPostService
+    FormatPostService,
   ],
 })
-export class LayoutsModule { }
+export class LayoutsModule {}
