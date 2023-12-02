@@ -8,19 +8,11 @@ import {
 import { CommonModule } from '@angular/common';
 import {
   BehaviorSubject,
-  Observable,
-  combineLatest,
-  debounceTime,
   filter,
   fromEvent,
-  interval,
-  merge,
-  startWith,
   switchMap,
   take,
   takeUntil,
-  takeWhile,
-  tap,
   timer,
 } from 'rxjs';
 
@@ -34,9 +26,8 @@ import {
 export class MentionAlertComponent implements OnInit, AfterViewInit {
   @ViewChild('toastMessage') toastMessage!: ElementRef<HTMLDivElement>;
   showToast$ = new BehaviorSubject<boolean>(true);
-  pointerHovering$ = new BehaviorSubject<boolean>(false);
   showToastObservable = this.showToast$.asObservable();
-  pointerHoveringObservable = this.pointerHovering$.asObservable();
+  timerCount = 10;
 
   ngOnInit(): void {
     'dfd';
@@ -54,20 +45,25 @@ export class MentionAlertComponent implements OnInit, AfterViewInit {
       'mouseleave'
     );
 
-    mouseLeave$
-      .pipe(
-        filter((event) => event !== undefined && event !== null),
-        switchMap(() => timer$.pipe(take(5)))
-      )
-      .subscribe(() => this.hideToast());
+    // mouseLeave$
+    //   .pipe(
+    //     filter((event) => event !== undefined && event !== null),
+    //     switchMap(() => timer$.pipe(take(5))),
+    //     filter((data) => data === 4)
+    //   )
+    //   .subscribe(() => this.hideToast());
 
-    this.showToastObservable
-      .pipe(
-        filter((state) => state === true),
-        switchMap(() => timer$.pipe(take(10))),
-        takeUntil(mouseEnter$)
-      )
-      .subscribe(() => this.hideToast());
+    // this.showToastObservable
+    //   .pipe(
+    //     filter((state) => state === true),
+    //     switchMap(() => timer$.pipe(take(this.timerCount))),
+    //     filter((data) => data === this.timerCount - 1),
+    //     takeUntil(mouseEnter$)
+    //   )
+    //   .subscribe(() => {
+    //     console.log('disable toast');
+    //     // this.hideToast()
+    //   });
   }
 
   hideToast() {

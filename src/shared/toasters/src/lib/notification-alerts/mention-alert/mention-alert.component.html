@@ -1,7 +1,7 @@
 <div
   id="toast-message-cta"
   #toastMessage
-  class="fixed top-3 right-3 z-10 w-full max-w-xs p-4 text-gray-500 bg-white border border-gray-200 rounded-lg shadow-md dark:bg-main-dark dark:text-gray-400 animate-fade-left animate-once"
+  class="fixed top-3 right-3 z-10 w-full max-w-xs p-4 text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xl dark:bg-main-dark dark:text-gray-400 animate-fade-left animate-once"
   [ngClass]="{
     'animate-normal': (showToast$ | async) === true,
     'animate-reverse': (showToast$ | async) === false
