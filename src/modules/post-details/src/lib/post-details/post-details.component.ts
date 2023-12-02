@@ -70,21 +70,15 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.routeSubscription = this.route.paramMap.subscribe((data) => {
       this.postId = data.get('id') as string;
+      this.store.dispatch(
+        PostApiActions.fetchPostById({ postId: this.postId })
+      );
     });
 
     this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
 
     this.postSubscription = this.store
       .select(getPostDetails)
-      .pipe(
-        tap((post) => {
-          if (!post) {
-            this.store.dispatch(
-              PostApiActions.fetchPostById({ postId: this.postId })
-            );
-          }
-        })
-      )
       .subscribe((post) => {
         if (post) {
           this.post = post;

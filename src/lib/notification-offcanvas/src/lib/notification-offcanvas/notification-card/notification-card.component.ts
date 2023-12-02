@@ -1,13 +1,13 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, Input, OnInit, SecurityContext } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { formattedNotifications } from '../notification-offcanvas.component';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserApiActions, UserState, getAllAuthUserFollowing } from 'state';
 import { Store } from '@ngrx/store';
 import { formatDistance } from 'date-fns';
 import { UserSummaryInfo } from 'utils';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { formattedNotifications } from 'services';
 
 @Component({
   selector: 'lib-notification-card',

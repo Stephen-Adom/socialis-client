@@ -1,8 +1,13 @@
+/* eslint-disable @angular-eslint/no-input-rename */
+/* eslint-disable @nx/enforce-module-boundaries */
 import {
   AfterViewInit,
   Component,
   ElementRef,
-  OnInit,
+  Input,
+  OnChanges,
+  SecurityContext,
+  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -15,6 +20,10 @@ import {
   takeUntil,
   timer,
 } from 'rxjs';
+import { Notifications } from 'utils';
+import { FormatNotificationService } from 'services';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'lib-mention-alert',
@@ -23,14 +32,24 @@ import {
   templateUrl: './mention-alert.component.html',
   styleUrls: ['./mention-alert.component.scss'],
 })
-export class MentionAlertComponent implements OnInit, AfterViewInit {
+export class MentionAlertComponent implements OnChanges, AfterViewInit {
   @ViewChild('toastMessage') toastMessage!: ElementRef<HTMLDivElement>;
+  @Input({ alias: 'notification-info', required: true })
+  notification!: Notifications;
   showToast$ = new BehaviorSubject<boolean>(true);
   showToastObservable = this.showToast$.asObservable();
   timerCount = 10;
 
-  ngOnInit(): void {
-    'dfd';
+  constructor(
+    private formatNotificationService: FormatNotificationService,
+    private santizer: DomSanitizer,
+    private router: Router
+  ) {}
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['notification'].currentValue) {
+      this.showToast();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -45,34 +64,49 @@ export class MentionAlertComponent implements OnInit, AfterViewInit {
       'mouseleave'
     );
 
-    // mouseLeave$
-    //   .pipe(
-    //     filter((event) => event !== undefined && event !== null),
-    //     switchMap(() => timer$.pipe(take(5))),
-    //     filter((data) => data === 4)
-    //   )
-    //   .subscribe(() => this.hideToast());
+    mouseLeave$
+      .pipe(
+        filter((event) => event !== undefined && event !== null),
+        switchMap(() => timer$.pipe(take(5))),
+        filter((data) => data === 4)
+      )
+      .subscribe(() => this.hideToast());
 
-    // this.showToastObservable
-    //   .pipe(
-    //     filter((state) => state === true),
-    //     switchMap(() => timer$.pipe(take(this.timerCount))),
-    //     filter((data) => data === this.timerCount - 1),
-    //     takeUntil(mouseEnter$)
-    //   )
-    //   .subscribe(() => {
-    //     console.log('disable toast');
-    //     // this.hideToast()
-    //   });
+    this.showToastObservable
+      .pipe(
+        filter((state) => state === true),
+        switchMap(() => timer$.pipe(take(this.timerCount))),
+        filter((data) => data === this.timerCount - 1),
+        takeUntil(mouseEnter$)
+      )
+      .subscribe(() => {
+        console.log('disable toast');
+        // this.hideToast()
+      });
   }
 
   hideToast() {
-    console.log('hiding toast');
     this.showToast$.next(false);
   }
 
   showToast() {
-    console.log('showing toast');
     this.showToast$.next(true);
+  }
+
+  getTargetType(notification: Notifications) {
+    return this.formatNotificationService.getTargetType(notification);
+  }
+
+  santizeHTML(targetContent: string | undefined) {
+    if (targetContent) {
+      return this.santizer.sanitize(SecurityContext.HTML, targetContent);
+    }
+
+    return '';
+  }
+
+  viewContent() {
+    this.router.navigate([this.notification.target.targetUrl]);
+    this.hideToast();
   }
 }

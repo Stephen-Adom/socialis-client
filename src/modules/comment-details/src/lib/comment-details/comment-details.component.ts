@@ -78,6 +78,13 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.route.paramMap.subscribe((data) => {
       this.commentId = data.get('commentId') as string;
       this.postId = data.get('postId') as string;
+
+      this.store.dispatch(
+        PostApiActions.fetchCommentById({ commentId: this.commentId })
+      );
+      this.store.dispatch(
+        PostApiActions.fetchPostById({ postId: this.postId })
+      );
     });
 
     this.postDetails$ = this.store.select(getPostDetails);
@@ -86,18 +93,6 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
 
     this.commentSubscription = this.store
       .select(getCommentDetails)
-      .pipe(
-        tap((comment) => {
-          if (!comment) {
-            this.store.dispatch(
-              PostApiActions.fetchCommentById({ commentId: this.commentId })
-            );
-            this.store.dispatch(
-              PostApiActions.fetchPostById({ postId: this.postId })
-            );
-          }
-        })
-      )
       .subscribe((comment) => {
         if (comment) {
           this.comment = comment;

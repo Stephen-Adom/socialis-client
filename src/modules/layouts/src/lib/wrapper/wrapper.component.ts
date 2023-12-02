@@ -10,7 +10,7 @@ import {
   map,
   distinctUntilChanged,
 } from 'rxjs';
-import { MessageService, PostService } from 'services';
+import { DisplayAlertInfoService, MessageService } from 'services';
 import {
   AppApiActions,
   PostApiActions,
@@ -43,7 +43,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
   authUser$!: Observable<UserInfoType | null>;
 
   constructor(
-    private postservice: PostService,
+    private alertInfoService: DisplayAlertInfoService,
     private messageservice: MessageService,
     private store: Store<PostState>
   ) {}
@@ -321,9 +321,49 @@ export class WrapperComponent implements OnInit, OnDestroy {
         },
       });
 
-    // this.postservice.fetchAllPost().subscribe((posts) => {
-    //   console.log(posts);
-    // });
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage(
+            '/feed/notification/user-' + username
+          );
+        })
+      )
+      .subscribe({
+        next: (notification) => {
+          if (notification) {
+            console.log(notification, 'notification');
+            this.alertInfoService.sendAlertInfo(notification);
+            this.store.dispatch(
+              UserApiActions.newNotification({ notification })
+            );
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage(
+            '/feed/notification/count/user-' + username
+          );
+        })
+      )
+      .subscribe({
+        next: (count) => {
+          this.store.dispatch(
+            UserApiActions.updateUnreadNotificationCount({ unreadCount: count })
+          );
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
   }
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();

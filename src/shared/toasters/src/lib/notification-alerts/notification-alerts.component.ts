@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+/* eslint-disable @nx/enforce-module-boundaries */
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MessageAlertComponent } from './message-alert/message-alert.component';
 import { MentionAlertComponent } from './mention-alert/mention-alert.component';
 import { CommentAlertComponent } from './comment-alert/comment-alert.component';
 import { FollowAlertComponent } from './follow-alert/follow-alert.component';
 import { LikeAlertComponent } from './like-alert/like-alert.component';
+import { DisplayAlertInfoService, NotificationActivities } from 'services';
+import { Notifications } from 'utils';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lib-notification-alerts',
@@ -20,4 +24,13 @@ import { LikeAlertComponent } from './like-alert/like-alert.component';
   templateUrl: './notification-alerts.component.html',
   styleUrls: ['./notification-alerts.component.scss'],
 })
-export class NotificationAlertsComponent {}
+export class NotificationAlertsComponent implements OnInit {
+  notificationAlert$!: Observable<Notifications | null>;
+  NotificationActivities = NotificationActivities;
+
+  constructor(private alertInfoService: DisplayAlertInfoService) {}
+
+  ngOnInit(): void {
+    this.notificationAlert$ = this.alertInfoService.alertInfoObservable;
+  }
+}

@@ -3,6 +3,7 @@ import { createActionGroup, props } from '@ngrx/store';
 import {
   AllNotificationsResponseType,
   AllUserSummaryInfoResponseType,
+  Notifications,
   SuccessMessageType,
   UserSummaryInfoFollowing,
   UserSummaryInfoResponseType,
@@ -42,5 +43,7 @@ export const UserApiActions = createActionGroup({
     }>(),
     markNotificationAsRead: props<{ notificationId: number }>(),
     markNotificationAsReadSuccess: props<{ response: SuccessMessageType }>(),
+    newNotification: props<{ notification: Notifications }>(),
+    updateUnreadNotificationCount: props<{ unreadCount: number }>(),
   },
 });

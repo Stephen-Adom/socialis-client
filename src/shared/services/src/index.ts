@@ -15,3 +15,5 @@ export * from './lib/successMessage.service';
 export * from './lib/errorMessage.service';
 export * from './lib/confirm-delete.service';
 export * from './lib/action-progress.service';
+export * from './lib/displayAlertInfo.service';
+export * from './lib/formatNotification.service';

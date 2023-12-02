@@ -117,5 +117,20 @@ export const UserReducer = createReducer<UserState>(
         unreadNotificationCount: action.unreadNotificationCount.data,
       };
     }
+  ),
+  on(UserApiActions.newNotification, (state: UserState, action) => {
+    return {
+      ...state,
+      authNotifications: [action.notification, ...state.authNotifications],
+    };
+  }),
+  on(
+    UserApiActions.updateUnreadNotificationCount,
+    (state: UserState, action) => {
+      return {
+        ...state,
+        unreadNotificationCount: action.unreadCount,
+      };
+    }
   )
 );
