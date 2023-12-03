@@ -1,14 +1,24 @@
 <div
   id="toast-message-cta"
-  class="fixed top-3 right-3 z-10 w-full max-w-xs p-4 text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:text-gray-400"
+  #toastMessage
+  class="fixed top-3 right-3 z-10 w-full max-w-xs p-4 text-gray-500 bg-white border border-gray-200 rounded-lg shadow-xl dark:bg-gray-800 dark:text-gray-400 animate-fade-left animate-once"
   role="alert"
+  [ngClass]="{
+    'animate-normal': (showToast$ | async) === true,
+    'animate-reverse': (showToast$ | async) === false
+  }"
+  *ngIf="notification"
 >
   <div class="flex">
-    <div class="relative inline-block shrink-0">
+    <div class="relative inline-block shrink-0" *ngIf="notification.source">
       <img
         class="w-12 h-12 rounded-full"
-        src="assets/images/users/default.jpg"
-        alt="Jese Leos image"
+        [src]="
+          notification.source.imageUrl
+            ? notification.source.imageUrl
+            : 'assets/images/users/default.jpg'
+        "
+        [attr.alt]="notification.source.username"
       />
       <span
         class="absolute top-[26px] right-0 inline-flex items-center justify-center w-6 h-6 bg-blue-600 rounded-full"
@@ -35,21 +45,55 @@
 
     <div class="ms-3 text-sm font-normal">
       <span class="mb-1 text-sm font-semibold text-gray-900 dark:text-white"
-        >Jese Leos commented on your photo</span
+        >{{ notification.source.firstname }}
+        {{ notification.source.lastname }} commented on your
+        {{ getTargetType(notification) }}</span
       >
-      <div class="mb-2 text-sm font-normal">
-        Hi Neil, thanks for sharing your thoughts regarding Flowbite.
+      <div
+        class="text-sm font-normal flex items-start justify-between space-x-1 mb-2"
+      >
+        <p
+          [ngClass]="{
+            'w-[75%]': notification.target.targetImage,
+            'w-full': !notification.target.targetImage
+          }"
+          [innerHTML]="santizeHTML(notification.target.targetContent)"
+        ></p>
+
+        <div class="w-[25%]" *ngIf="notification.target.targetImage">
+          <img [src]="notification.target.targetImage" class="w-full" alt="" />
+        </div>
       </div>
-      <a
-        href="#"
-        class="inline-flex px-2.5 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
-        >Reply</a
+
+      <button
+        type="button"
+        data-hs-overlay="#reply-modal-form"
+        #replyBtn
+        hidden
       >
+        reply
+      </button>
+
+      <a
+        (click)="reply()"
+        href="javascript:;"
+        class="inline-flex px-2.5 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
+        >{{ fetchingComment ? 'wait...' : 'Reply' }}
+
+        <div
+          *ngIf="fetchingComment"
+          class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
+          role="status"
+          aria-label="loading"
+        >
+          <span class="sr-only">Loading...</span>
+        </div>
+      </a>
     </div>
     <button
       type="button"
       class="ms-auto -mx-1.5 -my-1.5 bg-white justify-center items-center flex-shrink-0 text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
-      data-dismiss-target="#toast-message-cta"
+      (click)="hideToast()"
       aria-label="Close"
     >
       <span class="sr-only">Close</span>

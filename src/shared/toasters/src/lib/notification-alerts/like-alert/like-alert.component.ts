@@ -94,7 +94,12 @@ export class LikeAlertComponent implements OnChanges, AfterViewInit {
 
   santizeHTML(targetContent: string | undefined) {
     if (targetContent) {
-      return this.santizer.sanitize(SecurityContext.HTML, targetContent);
+      return targetContent.length > 35
+        ? this.santizer.sanitize(
+            SecurityContext.HTML,
+            targetContent.slice(0, 35) + '...'
+          )
+        : this.santizer.sanitize(SecurityContext.HTML, targetContent);
     }
 
     return '';
