@@ -6,15 +6,37 @@
   <div class="activity-item py-1 cursor-pointer">
     <div class="flex-shrink-0 group flex items-start justify-between w-full">
       <div class="flex items-center gap-x-2 w-[70%]">
-        <img
-          class="inline-block flex-shrink-0 h-[2.2rem] w-[2.2rem] rounded-full"
-          [src]="
-            notification.source.imageUrl
-              ? notification.source.imageUrl
-              : 'assets/images/users/default.jpg'
-          "
-          [attr.alt]="notification.source.username"
-        />
+        <div class="relative inline-block shrink-0">
+          <img
+            class="h-[2.2rem] w-[2.2rem] rounded-full"
+            [src]="
+              notification.source.imageUrl
+                ? notification.source.imageUrl
+                : 'assets/images/users/default.jpg'
+            "
+            [attr.alt]="notification.source.username"
+          />
+          <span
+            class="absolute top-[18px] right-0 inline-flex items-center justify-center w-5 h-5 bg-blue-600 rounded-full"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-3 h-3 text-white"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3"
+              />
+            </svg>
+
+            <span class="sr-only">Follow icon</span>
+          </span>
+        </div>
         <p class="text-xs dark:text-dark-text">
           <span [innerHTML]="sanitizeHtml(notification.message)"></span>
           <span class="text-gray-400 dark:text-gray-500 ml-2">{{

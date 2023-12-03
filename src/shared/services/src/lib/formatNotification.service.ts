@@ -83,11 +83,13 @@ export class FormatNotificationService {
           notification.source.username
         }/profile" class="font-bold italic text-primaryColor">${
           notification.source.firstname
-        } ${notification.source.lastname}</a> mentioned you in a <a href="${
-          notification.target.targetUrl
-        }" class="font-bold italic text-primaryColor">${this.getTargetType(
+        } ${
+          notification.source.lastname
+        }</a> mentioned you in a ${this.getTargetType(
           notification
-        )}</a>`;
+        )}: <span class="font-bold italic">${this.reduceContentLength(
+          notification.target.targetContent
+        )}</span>`;
         break;
 
       case this.NotificationActivities.COMMENTED:
@@ -96,11 +98,9 @@ export class FormatNotificationService {
         }/profile" class="font-bold italic text-primaryColor">${this.getSourceUsername(
           this.authUser,
           notification.source
-        )}</a> commented: <a href="${
-          notification.target.targetUrl
-        }" class="font-bold italic font-primaryColor">${
+        )}</a> commented: <span class="font-bold italic">${this.reduceContentLength(
           notification.target.targetContent
-        }</a>`;
+        )}</span>`;
         break;
 
       case this.NotificationActivities.FOLLOWS:
@@ -129,11 +129,11 @@ export class FormatNotificationService {
             sources[0].username
           }/profile" class="font-bold italic text-primaryColor">${
             sources[0].firstname
-          } ${sources[0].lastname}</a> liked your <a href="${
-            notification.target.targetUrl
-          }" class="font-bold text-primaryColor italic">${this.getTargetType(
+          } ${sources[0].lastname}</a> liked your ${this.getTargetType(
             notification
-          )}</a>`;
+          )}: <span class="font-bold italic">${this.reduceContentLength(
+            notification.target.targetContent
+          )}</span>`;
         } else if (sources.length === 2) {
           message = `<a href="user/${
             sources[0].username
@@ -143,11 +143,11 @@ export class FormatNotificationService {
             sources[1].username
           }/profile" class="font-bold italic text-primaryColor">${
             sources[1].firstname
-          } ${sources[1].lastname}</a> liked your <a href="${
-            notification.target.targetUrl
-          }" class="font-bold text-primaryColor italic">${this.getTargetType(
+          } ${sources[1].lastname}</a> liked your ${this.getTargetType(
             notification
-          )}</a>`;
+          )}: <span class="font-bold italic">${this.reduceContentLength(
+            notification.target.targetContent
+          )}</span>`;
         } else if (sources.length > 2) {
           message = `<a href="user/${
             sources[0].username
@@ -159,18 +159,38 @@ export class FormatNotificationService {
             sources[1].firstname
           } ${sources[1].lastname}</a> and ${
             sources.length - 2
-          } others liked your <a href="${
-            notification.target.targetUrl
-          }" class="font-bold text-primaryColor italic">${this.getTargetType(
+          } others liked your ${this.getTargetType(
             notification
-          )}</a>`;
+          )}: <span class="font-bold italic">${this.reduceContentLength(
+            notification.target.targetContent
+          )}</span>`;
         }
         break;
       case this.NotificationActivities.REPLY:
         if (sources.length === 1) {
-          message = `<a href="user/${sources[0].username}/profile" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> replied to your comment: <a href="${notification.target.targetUrl}" class="font-bold italic text-primaryColor">${notification.target.targetContent}</a>`;
+          message = `<a href="user/${
+            sources[0].username
+          }/profile" class="font-bold italic text-primaryColor">${
+            sources[0].firstname
+          } ${
+            sources[0].lastname
+          }</a> replied to your comment: <span class="font-bold italic">${this.reduceContentLength(
+            notification.target.targetContent
+          )}</span>`;
         } else if (sources.length === 2) {
-          message = `<a href="user/${sources[0].username}/profile" class="font-bold italic text-primaryColor">${sources[0].firstname} ${sources[0].lastname}</a> and <a href="user/${sources[1].username}/profile" class="font-bold italic text-primaryColor">${sources[1].firstname} ${sources[1].lastname}</a> replied to your comment: <a href="${notification.target.targetUrl}" class="font-bold italic text-primaryColor">${notification.target.targetContent}</a>`;
+          message = `<a href="user/${
+            sources[0].username
+          }/profile" class="font-bold italic text-primaryColor">${
+            sources[0].firstname
+          } ${sources[0].lastname}</a> and <a href="user/${
+            sources[1].username
+          }/profile" class="font-bold italic text-primaryColor">${
+            sources[1].firstname
+          } ${
+            sources[1].lastname
+          }</a> replied to your comment: <span class="font-bold italic">${this.reduceContentLength(
+            notification.target.targetContent
+          )}</span>`;
         } else if (sources.length > 2) {
           message = `<a href="user/${
             sources[0].username
@@ -182,11 +202,9 @@ export class FormatNotificationService {
             sources[1].firstname
           } ${sources[1].lastname}</a> and ${
             sources.length - 2
-          } others replied to your comment: <a href="${
-            notification.target.targetUrl
-          }" class="font-bold italic text-primaryColor">${
+          } others replied to your comment: <span class="font-bold italic">${this.reduceContentLength(
             notification.target.targetContent
-          }</a>`;
+          )}</span>`;
         }
 
         break;
@@ -250,5 +268,15 @@ export class FormatNotificationService {
     } else {
       return `${source.firstname} ${source.lastname}`;
     }
+  }
+
+  reduceContentLength(targetContent: string | undefined) {
+    if (targetContent) {
+      return targetContent.length > 45
+        ? targetContent.slice(0, 45) + '...'
+        : targetContent;
+    }
+
+    return '';
   }
 }
