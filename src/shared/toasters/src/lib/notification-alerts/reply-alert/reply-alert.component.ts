@@ -10,38 +10,35 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import {
   BehaviorSubject,
   Subscription,
-  filter,
+  timer,
   fromEvent,
+  filter,
   switchMap,
   take,
   takeUntil,
-  timer,
 } from 'rxjs';
-import { CommentResponseType, Notifications } from 'utils';
 import { DomSanitizer } from '@angular/platform-browser';
+import { FormatNotificationService } from 'services';
+import { CommonModule } from '@angular/common';
 import { formatDistance } from 'date-fns';
-import { CommentService, FormatNotificationService } from 'services';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AppApiActions, PostApiActions, PostState } from 'state';
-import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
+import { Notifications } from 'utils';
 
 @Component({
-  selector: 'lib-comment-alert',
+  selector: 'lib-reply-alert',
   standalone: true,
   imports: [CommonModule],
-  templateUrl: './comment-alert.component.html',
-  styleUrls: ['./comment-alert.component.scss'],
+  templateUrl: './reply-alert.component.html',
+  styleUrls: ['./reply-alert.component.scss'],
 })
-export class CommentAlertComponent implements OnChanges, AfterViewInit {
+export class ReplyAlertComponent implements OnChanges, AfterViewInit {
   @ViewChild('toastMessage') toastMessage!: ElementRef<HTMLDivElement>;
-  @ViewChild('replyBtn') replyBtn!: ElementRef<HTMLButtonElement>;
-
   @Input({ alias: 'notification-info', required: true })
   notification!: Notifications;
+
   showToast$ = new BehaviorSubject<boolean>(false);
   showToastObservable = this.showToast$.asObservable();
   timerCount = 10;
@@ -50,12 +47,12 @@ export class CommentAlertComponent implements OnChanges, AfterViewInit {
 
   constructor(
     private formatNotificationService: FormatNotificationService,
-    private commentservice: CommentService,
-    private store: Store<PostState>,
-    private santizer: DomSanitizer
+    private santizer: DomSanitizer,
+    private router: Router
   ) {}
 
   ngOnChanges(changes: SimpleChanges): void {
+    console.log(changes, 'changes in reply');
     if (changes['notification'].currentValue) {
       this.showToast();
     }
@@ -126,30 +123,8 @@ export class CommentAlertComponent implements OnChanges, AfterViewInit {
     });
   }
 
-  reply() {
-    this.fetchingComment = true;
-    this.commentSubscription = this.commentservice
-      .fetchCommentById(this.notification.target.targetUid)
-      .subscribe({
-        next: (comment) => {
-          if (comment) {
-            const commentObj = comment as unknown as CommentResponseType;
-            this.store.dispatch(
-              PostApiActions.getCommentDetails({ comment: commentObj.data })
-            );
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          this.store.dispatch(
-            AppApiActions.displayErrorMessage({ error: error.error })
-          );
-        },
-        complete: () => {
-          this.fetchingComment = false;
-          this.commentSubscription.unsubscribe();
-          this.replyBtn.nativeElement.click();
-          this.hideToast();
-        },
-      });
+  viewreply() {
+    this.router.navigate([this.notification.target.targetUrl]);
+    this.hideToast();
   }
 }

@@ -9,6 +9,9 @@
     <ng-container *ngSwitchCase="NotificationActivities.COMMENTED">
       <lib-comment-alert [notification-info]="notificationAlert" />
     </ng-container>
+    <ng-container *ngSwitchCase="NotificationActivities.REPLY">
+      <lib-reply-alert [notification-info]="notificationAlert" />
+    </ng-container>
   </ng-container>
 </ng-container>
 <!-- 

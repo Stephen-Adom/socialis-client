@@ -7,6 +7,7 @@ import { CommentAlertComponent } from './comment-alert/comment-alert.component';
 import { FollowAlertComponent } from './follow-alert/follow-alert.component';
 import { LikeAlertComponent } from './like-alert/like-alert.component';
 import { DisplayAlertInfoService, NotificationActivities } from 'services';
+import { ReplyAlertComponent } from './reply-alert/reply-alert.component';
 import { Notifications } from 'utils';
 import { Observable } from 'rxjs';
 
@@ -20,6 +21,7 @@ import { Observable } from 'rxjs';
     CommentAlertComponent,
     FollowAlertComponent,
     LikeAlertComponent,
+    ReplyAlertComponent,
   ],
   templateUrl: './notification-alerts.component.html',
   styleUrls: ['./notification-alerts.component.scss'],
