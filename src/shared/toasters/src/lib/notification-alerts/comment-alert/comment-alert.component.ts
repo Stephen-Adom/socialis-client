@@ -41,7 +41,7 @@ export class CommentAlertComponent implements OnChanges, AfterViewInit {
   @ViewChild('replyBtn') replyBtn!: ElementRef<HTMLButtonElement>;
 
   @Input({ alias: 'notification-info', required: true })
-  notification!: Notifications;
+  notification!: Notifications | null;
   showToast$ = new BehaviorSubject<boolean>(false);
   showToastObservable = this.showToast$.asObservable();
   timerCount = 10;
@@ -96,6 +96,7 @@ export class CommentAlertComponent implements OnChanges, AfterViewInit {
 
   hideToast() {
     this.showToast$.next(false);
+    this.notification = null;
   }
 
   showToast() {
@@ -129,7 +130,7 @@ export class CommentAlertComponent implements OnChanges, AfterViewInit {
   reply() {
     this.fetchingComment = true;
     this.commentSubscription = this.commentservice
-      .fetchCommentById(this.notification.target.targetUid)
+      .fetchCommentById(this.notification?.target.targetUid as string)
       .subscribe({
         next: (comment) => {
           if (comment) {

@@ -35,7 +35,7 @@ import { formatDistance } from 'date-fns';
 export class LikeAlertComponent implements OnChanges, AfterViewInit {
   @ViewChild('toastMessage') toastMessage!: ElementRef<HTMLDivElement>;
   @Input({ alias: 'notification-info', required: true })
-  notification!: Notifications;
+  notification!: Notifications | null;
   showToast$ = new BehaviorSubject<boolean>(false);
   showToastObservable = this.showToast$.asObservable();
   timerCount = 10;
@@ -86,6 +86,7 @@ export class LikeAlertComponent implements OnChanges, AfterViewInit {
 
   hideToast() {
     this.showToast$.next(false);
+    this.notification = null;
   }
 
   showToast() {

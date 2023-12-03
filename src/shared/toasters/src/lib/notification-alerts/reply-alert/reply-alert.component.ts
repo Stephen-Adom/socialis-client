@@ -37,7 +37,7 @@ import { Notifications } from 'utils';
 export class ReplyAlertComponent implements OnChanges, AfterViewInit {
   @ViewChild('toastMessage') toastMessage!: ElementRef<HTMLDivElement>;
   @Input({ alias: 'notification-info', required: true })
-  notification!: Notifications;
+  notification!: Notifications | null;
 
   showToast$ = new BehaviorSubject<boolean>(false);
   showToastObservable = this.showToast$.asObservable();
@@ -93,6 +93,7 @@ export class ReplyAlertComponent implements OnChanges, AfterViewInit {
 
   hideToast() {
     this.showToast$.next(false);
+    this.notification = null;
   }
 
   showToast() {
@@ -124,7 +125,7 @@ export class ReplyAlertComponent implements OnChanges, AfterViewInit {
   }
 
   viewreply() {
-    this.router.navigate([this.notification.target.targetUrl]);
+    this.router.navigate([this.notification?.target.targetUrl]);
     this.hideToast();
   }
 }

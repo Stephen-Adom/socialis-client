@@ -12,6 +12,9 @@
     <ng-container *ngSwitchCase="NotificationActivities.REPLY">
       <lib-reply-alert [notification-info]="notificationAlert" />
     </ng-container>
+    <ng-container *ngSwitchCase="NotificationActivities.FOLLOWS">
+      <lib-follow-alert [notification-info]="notificationAlert" />
+    </ng-container>
   </ng-container>
 </ng-container>
 <!-- 

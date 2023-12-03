@@ -35,7 +35,7 @@ import { Router } from '@angular/router';
 export class MentionAlertComponent implements OnChanges, AfterViewInit {
   @ViewChild('toastMessage') toastMessage!: ElementRef<HTMLDivElement>;
   @Input({ alias: 'notification-info', required: true })
-  notification!: Notifications;
+  notification!: Notifications | null;
   showToast$ = new BehaviorSubject<boolean>(true);
   showToastObservable = this.showToast$.asObservable();
   timerCount = 10;
@@ -87,6 +87,7 @@ export class MentionAlertComponent implements OnChanges, AfterViewInit {
 
   hideToast() {
     this.showToast$.next(false);
+    this.notification = null;
   }
 
   showToast() {
@@ -111,7 +112,7 @@ export class MentionAlertComponent implements OnChanges, AfterViewInit {
   }
 
   viewContent() {
-    this.router.navigate([this.notification.target.targetUrl]);
+    this.router.navigate([this.notification?.target.targetUrl]);
     this.hideToast();
   }
 }
