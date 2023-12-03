@@ -132,5 +132,23 @@ export const UserReducer = createReducer<UserState>(
         unreadNotificationCount: action.unreadCount,
       };
     }
-  )
+  ),
+  on(UserApiActions.markNotificationAsRead, (state: UserState, action) => {
+    const allNotifications = [...state.authNotifications];
+
+    const allNotificationUpdated = allNotifications.map((notification) => {
+      if (notification.id === action.notificationId) {
+        return {
+          ...notification,
+          read: true,
+        };
+      }
+      return notification;
+    });
+    return {
+      ...state,
+      authNotifications: allNotificationUpdated,
+      unreadNotificationCount: state.unreadNotificationCount - 1,
+    };
+  })
 );

@@ -22,7 +22,7 @@ import { Notifications, UserInfoType } from 'utils';
 import { DomSanitizer } from '@angular/platform-browser';
 import { format, formatDistance } from 'date-fns';
 import { NotificationCardComponent } from './notification-card/notification-card.component';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 type groupedNotificationType = {
   [key: string]: formattedNotifications[];
@@ -53,7 +53,8 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
     private offcanvasService: NotificationOffcanvasService,
     private formatNotificationService: FormatNotificationService,
     private sanitizer: DomSanitizer,
-    private store: Store<UserState>
+    private store: Store<UserState>,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -181,7 +182,9 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
     this.store.dispatch(
       UserApiActions.markNotificationAsRead({ notificationId: notification.id })
     );
-    window.location.href = notification.target.targetUrl as string;
+    this.router.navigate([notification.target.targetUrl as string]);
+    this.offcanvasService.toggleOffcanvas(false);
+    // window.location.href = ;
   }
 
   ngOnDestroy(): void {
