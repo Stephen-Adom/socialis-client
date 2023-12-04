@@ -1,7 +1,15 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnInit, OnDestroy, SecurityContext } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  OnDestroy,
+  SecurityContext,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
+  CommentService,
   FormatNotificationService,
   NotificationActivities,
   NotificationOffcanvasService,
@@ -11,6 +19,8 @@ import {
 import { SidebarModule } from 'primeng/sidebar';
 import { Observable, Subscription, tap } from 'rxjs';
 import {
+  AppApiActions,
+  PostApiActions,
   UserApiActions,
   UserState,
   getAllUserNotifications,
@@ -18,11 +28,13 @@ import {
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { Notifications, UserInfoType } from 'utils';
+import { CommentResponseType, Notifications, UserInfoType } from 'utils';
 import { DomSanitizer } from '@angular/platform-browser';
 import { format, formatDistance } from 'date-fns';
 import { NotificationCardComponent } from './notification-card/notification-card.component';
 import { Router, RouterLink } from '@angular/router';
+import { HttpErrorResponse } from '@angular/common/http';
+import { CommentNotificationCardComponent } from './comment-notification-card/comment-notification-card.component';
 
 type groupedNotificationType = {
   [key: string]: formattedNotifications[];
@@ -35,7 +47,13 @@ type groupedDateNotificationType = {
 @Component({
   selector: 'lib-notification-offcanvas',
   standalone: true,
-  imports: [CommonModule, SidebarModule, NotificationCardComponent, RouterLink],
+  imports: [
+    CommonModule,
+    SidebarModule,
+    NotificationCardComponent,
+    RouterLink,
+    CommentNotificationCardComponent,
+  ],
   templateUrl: './notification-offcanvas.component.html',
   styleUrls: ['./notification-offcanvas.component.css'],
 })
@@ -50,8 +68,8 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
   unreadNotificationCount$!: Observable<number>;
 
   constructor(
-    private offcanvasService: NotificationOffcanvasService,
     private formatNotificationService: FormatNotificationService,
+    private offcanvasService: NotificationOffcanvasService,
     private sanitizer: DomSanitizer,
     private store: Store<UserState>,
     private router: Router
@@ -184,7 +202,6 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
     );
     this.router.navigate([notification.target.targetUrl as string]);
     this.offcanvasService.toggleOffcanvas(false);
-    // window.location.href = ;
   }
 
   ngOnDestroy(): void {
