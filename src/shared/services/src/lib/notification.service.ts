@@ -37,4 +37,11 @@ export class NotificationService {
       this.authHeaders
     );
   }
+
+  markAllNotificationAsRead(userId: number) {
+    return this.http.get<SuccessMessageType>(
+      BASE_URL + '/notifications/' + userId + '/markAllAsRead',
+      this.authHeaders
+    );
+  }
 }
