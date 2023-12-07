@@ -40,6 +40,9 @@
       "friend-card": ["src/lib/friend-card/src/index.ts"],
       "friends": ["src/modules/friends/src/index.ts"],
       "guards": ["src/shared/guards/src/index.ts"],
+      "infinite-scrolling-page-loader": [
+        "src/lib/infinite-scrolling-page-loader/src/index.ts"
+      ],
       "layouts": ["src/modules/layouts/src/index.ts"],
       "message-panel": ["src/lib/message-panel/src/index.ts"],
       "nav-links": ["src/lib/nav-links/src/index.ts"],

@@ -47,6 +47,13 @@ export class PostService {
     );
   }
 
+  fetchAllPostWithOffset(offset: number) {
+    return this.http.get<AllPostResponseType>(
+      BASE_URL + '/all_posts_offset?offset=' + offset,
+      this.authHeaders
+    );
+  }
+
   fetchPostById(postId: string) {
     return this.http.get<AllPostResponseType>(
       BASE_URL + '/' + postId + '/post',

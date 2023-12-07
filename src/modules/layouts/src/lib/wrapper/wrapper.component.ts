@@ -49,7 +49,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.store.dispatch(PostApiActions.fetchAllPost());
     this.authUser$ = this.store.select(getUserInformation);
 
     this.authUser$

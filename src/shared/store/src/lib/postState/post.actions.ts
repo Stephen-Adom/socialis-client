@@ -99,5 +99,8 @@ export const PostApiActions = createActionGroup({
     fetchAllPostLikesByUserSuccess: props<{
       postLikes: BookmarkResponseType;
     }>(),
+    fetchAllPostsWithOffset: props<{ offset: number }>(),
+    fetchAllPostsWithOffsetSuccess: props<{ allPosts: AllPostResponseType }>(),
+    toggleDataLoading: props<{ loading: boolean }>(),
   },
 });

@@ -41,6 +41,24 @@ export class PostEffects {
     );
   });
 
+  FetchAllPostsWithOffset$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.fetchAllPostsWithOffset),
+      mergeMap((action: { offset: number }) =>
+        this.postservice.fetchAllPostWithOffset(action.offset).pipe(
+          map((response: any) => {
+            return PostApiActions.fetchAllPostsWithOffsetSuccess({
+              allPosts: response,
+            });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
+
   FetchPostById$ = createEffect(() => {
     return this.actions$.pipe(
       ofType(PostApiActions.fetchPostById),

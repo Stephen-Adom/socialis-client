@@ -1,0 +1,39 @@
+.spinner {
+  position: relative;
+  width: 40px;
+  height: 40px;
+}
+
+.spinner::before,
+.spinner::after {
+  content: '';
+  width: 100%;
+  height: 100%;
+  animation: spinner-rfi6tk 0.8s infinite linear;
+  box-sizing: border-box;
+  border: 8px solid rgba(20, 117, 189, 0.1);
+  border-radius: 50%;
+  position: absolute;
+}
+
+.spinner::before {
+  animation-direction: reverse;
+  border-right-color: #1475bd;
+  right: calc(50% - 4px);
+}
+
+.spinner::after {
+  border-left-color: #1475bd;
+  left: calc(50% - 4px);
+}
+
+@keyframes spinner-rfi6tk {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50%,
+  100% {
+    transform: rotate(360deg);
+  }
+}

@@ -14,6 +14,8 @@
           <lib-post-card [post]="post" />
         </ng-container>
       </ng-container>
+
+      <lib-infinite-scrolling-page-loader [loading]="(dataLoading$ | async)!" />
     </div>
   </div>
   <div

@@ -24,6 +24,7 @@ export interface PostState {
   userComments: CommentType[];
   userReplies: ReplyType[];
   userPostLikes: PostType[] | CommentType[] | ReplyType[];
+  dataLoading: boolean;
 }
 
 const initialState: PostState = {
@@ -40,6 +41,7 @@ const initialState: PostState = {
   userComments: [],
   userReplies: [],
   userPostLikes: [],
+  dataLoading: false,
 };
 
 export const selectPostFeature =
@@ -48,6 +50,11 @@ export const selectPostFeature =
 export const getAllPosts = createSelector(
   selectPostFeature,
   (state: PostState) => state.allPosts
+);
+
+export const getAllTotalPosts = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.allPosts.length
 );
 
 export const getPostDetails = createSelector(
@@ -120,6 +127,11 @@ export const getAllPostLikesByUser = createSelector(
   (state: PostState) => state.userPostLikes
 );
 
+export const getDataLoadingState = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.dataLoading
+);
+
 export const PostReducer = createReducer<PostState>(
   initialState,
   on(PostApiActions.fetchAllPostSuccess, (state: PostState, action) => {
@@ -128,6 +140,16 @@ export const PostReducer = createReducer<PostState>(
       allPosts: action.allPosts.data,
     };
   }),
+  on(
+    PostApiActions.fetchAllPostsWithOffsetSuccess,
+    (state: PostState, action) => {
+      return {
+        ...state,
+        dataLoading: false,
+        allPosts: [...state.allPosts, ...action.allPosts.data],
+      };
+    }
+  ),
   on(PostApiActions.addNewPost, (state: PostState, action) => {
     const currentPost = [action.newPost, ...state.allPosts];
     return {
@@ -486,7 +508,13 @@ export const PostReducer = createReducer<PostState>(
         userPostLikes: action.postLikes.data,
       };
     }
-  )
+  ),
+  on(PostApiActions.toggleDataLoading, (state: PostState, action) => {
+    return {
+      ...state,
+      dataLoading: action.loading,
+    };
+  })
 );
 
 const updatePost = (updatedPost: PostType, allPost: PostType[]) => {

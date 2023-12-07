@@ -12,11 +12,32 @@ import { PostCardComponent } from 'post-card';
 import { ActivityCardComponent } from 'activity-card';
 import { MessagePanelComponent } from 'message-panel';
 import { AuthenticationService } from 'services';
-import { PostState, getAllPosts } from 'state';
+import {
+  PostApiActions,
+  PostState,
+  UserApiActions,
+  getAllPosts,
+  getAllTotalPosts,
+  getDataLoadingState,
+} from 'state';
 import { Store } from '@ngrx/store';
-import { Observable, filter, fromEvent } from 'rxjs';
+import {
+  Observable,
+  Subscription,
+  combineLatest,
+  distinctUntilChanged,
+  filter,
+  fromEvent,
+  mergeMap,
+  of,
+  switchMap,
+  take,
+  tap,
+  throttleTime,
+} from 'rxjs';
 import { PostType } from 'utils';
 import { EventCardSummaryComponent } from 'event-card-summary';
+import { InfiniteScrollingPageLoaderComponent } from 'infinite-scrolling-page-loader';
 
 @Component({
   selector: 'feature-dashboard',
@@ -28,6 +49,7 @@ import { EventCardSummaryComponent } from 'event-card-summary';
     ActivityCardComponent,
     MessagePanelComponent,
     EventCardSummaryComponent,
+    InfiniteScrollingPageLoaderComponent,
   ],
   providers: [AuthenticationService],
   templateUrl: './dashboard.component.html',
@@ -36,11 +58,26 @@ import { EventCardSummaryComponent } from 'event-card-summary';
 export class DashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('dashboardSection') dashboardSection!: ElementRef<HTMLDivElement>;
   allPosts$!: Observable<PostType[]>;
+  dataLoading$!: Observable<boolean>;
+  allPostsSubscription = new Subscription();
+  totalPostsAvailable = 0;
+  totalPostsLength$!: Observable<number>;
 
   constructor(private store: Store<PostState>) {}
 
   ngOnInit(): void {
     this.allPosts$ = this.store.select(getAllPosts);
+    this.dataLoading$ = this.store.select(getDataLoadingState);
+
+    this.totalPostsLength$ = this.store.select(getAllTotalPosts);
+
+    this.totalPostsLength$.subscribe((total) => {
+      if (total === 0) {
+        this.store.dispatch(
+          PostApiActions.fetchAllPostsWithOffset({ offset: total })
+        );
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -48,17 +85,33 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     fromEvent(window, 'scroll')
       .pipe(
-        // switchMap(() => this.store.select(getAllPosts)),
-        // tap((posts) => console.log(posts))
         filter(
           () =>
             window.location.pathname === '/feeds' &&
             window.innerHeight + window.scrollY >=
               document.body.scrollHeight - 1
-        )
+        ),
+        throttleTime(1000)
       )
       .subscribe((event) => {
         console.log(event, 'event');
+        this.store.dispatch(
+          PostApiActions.toggleDataLoading({ loading: true })
+        );
+
+        let total = null;
+
+        this.totalPostsLength$.subscribe((data) => (total = data));
+
+        if (total !== null) {
+          this.store.dispatch(
+            PostApiActions.fetchAllPostsWithOffset({
+              offset: total,
+            })
+          );
+        }
+
+        console.log(total, 'event');
       });
   }
 }
