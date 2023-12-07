@@ -160,11 +160,11 @@ export class UserEffects {
 
   markAllNotificationsAsRead$ = createEffect(() => {
     return this.actions$.pipe(
-      ofType(UserApiActions.markAllUnreadNotifications),
+      ofType(UserApiActions.markAllNotificationsAsRead),
       mergeMap((action: { userId: number }) =>
         this.notificationservice.markAllNotificationAsRead(action.userId).pipe(
           map((response: any) => {
-            return UserApiActions.markAllUnreadNotificationsSuccess({
+            return UserApiActions.markAllNotificationsAsReadSuccess({
               response,
             });
           }),

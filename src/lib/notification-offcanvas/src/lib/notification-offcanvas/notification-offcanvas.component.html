@@ -110,7 +110,8 @@
   </ng-template>
   <ng-template pTemplate="footer">
     <a
-      href=""
+      (click)="markAllAsRead()"
+      href="javascript:;"
       class="text-sm text-primaryColor font-semibold flex items-center"
     >
       <svg

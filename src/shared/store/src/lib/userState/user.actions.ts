@@ -45,8 +45,8 @@ export const UserApiActions = createActionGroup({
     markNotificationAsReadSuccess: props<{ response: SuccessMessageType }>(),
     newNotification: props<{ notification: Notifications }>(),
     updateUnreadNotificationCount: props<{ unreadCount: number }>(),
-    markAllUnreadNotifications: props<{ userId: number }>(),
-    markAllUnreadNotificationsSuccess: props<{
+    markAllNotificationsAsRead: props<{ userId: number }>(),
+    markAllNotificationsAsReadSuccess: props<{
       response: AllNotificationsResponseType;
     }>(),
   },

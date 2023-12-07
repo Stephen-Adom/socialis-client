@@ -150,5 +150,15 @@ export const UserReducer = createReducer<UserState>(
       authNotifications: allNotificationUpdated,
       unreadNotificationCount: state.unreadNotificationCount - 1,
     };
-  })
+  }),
+  on(
+    UserApiActions.markAllNotificationsAsReadSuccess,
+    (state: UserState, action) => {
+      return {
+        ...state,
+        authNotifications: action.response.data,
+        unreadNotificationCount: 0,
+      };
+    }
+  )
 );

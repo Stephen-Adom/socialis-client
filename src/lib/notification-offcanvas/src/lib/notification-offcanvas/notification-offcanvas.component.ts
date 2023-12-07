@@ -193,6 +193,13 @@ export class NotificationOffcanvasComponent implements OnInit, OnDestroy {
     this.offcanvasService.toggleOffcanvas(false);
   }
 
+  markAllAsRead() {
+    this.store.dispatch(
+      UserApiActions.markAllNotificationsAsRead({ userId: this.authUser.id })
+    );
+    this.offcanvasService.toggleOffcanvas(false);
+  }
+
   ngOnDestroy(): void {
     this.offcanvasSubscription.unsubscribe();
     this.userInfoSubscription.unsubscribe();
