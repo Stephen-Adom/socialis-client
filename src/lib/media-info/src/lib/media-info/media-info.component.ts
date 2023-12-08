@@ -1,16 +1,27 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImageType, PostType, SimpleUserInfoType } from 'utils';
+import { ImageType, PostType } from 'utils';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { formatDistanceToNow } from 'date-fns';
 import { FormatPostService } from 'services';
+import { VgCoreModule } from '@videogular/ngx-videogular/core';
+import { VgControlsModule } from '@videogular/ngx-videogular/controls';
+import { VgOverlayPlayModule } from '@videogular/ngx-videogular/overlay-play';
+import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 
 @Component({
   selector: 'lib-media-info',
   standalone: true,
-  imports: [CommonModule, LightgalleryModule],
+  imports: [
+    CommonModule,
+    LightgalleryModule,
+    VgCoreModule,
+    VgControlsModule,
+    VgOverlayPlayModule,
+    VgBufferingModule,
+  ],
   templateUrl: './media-info.component.html',
   styleUrls: ['./media-info.component.css'],
 })

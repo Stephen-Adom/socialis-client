@@ -47,6 +47,7 @@ type postImageType = {
   base64: string;
   file: File;
   id: number;
+  type: string;
 };
 
 @Component({
@@ -141,15 +142,26 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   }
 
   async uploadImage(event: any) {
-    console.log(event, 'event');
     if (event.target.files.length) {
-      const file = <File>event.target.files[0];
-      const base64String = <string>await getBase64(file);
-      this.postImages.push({
-        base64: base64String,
-        file: file,
-        id: Math.ceil(Math.random() * 1000),
-      });
+      for (let i = 0; i < event.target.files.length; i++) {
+        console.log(event.target.files[i]);
+        if (event.target.files[i].size > 100000000) {
+          this.errorMessage.sendErrorMessage({
+            message: 'File size should be less than 90 MB',
+            error: 'BAD_REQUEST',
+          });
+          return;
+        } else {
+          const base64String = <string>await getBase64(event.target.files[i]);
+          this.postImages.push({
+            base64: base64String,
+            file: event.target.files[i],
+            id: Math.ceil(Math.random() * 1000),
+            type: event.target.files[i].type,
+          });
+        }
+      }
+
       this.fileInput.nativeElement.value = '';
     }
   }
@@ -279,6 +291,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         base64: this.edittedImage,
         file: new File([], ''),
         id: <number>this.editFile?.id,
+        type: this.editFile?.type as string,
       };
 
       this.urlToFile(this.edittedImage).then((file) => {

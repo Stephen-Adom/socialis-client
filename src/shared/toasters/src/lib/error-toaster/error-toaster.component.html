@@ -1,7 +1,10 @@
 <ng-container *ngIf="errorMessage">
   <ng-container *ngIf="errorMessage.message; else elseTemplate">
     <ng-container
-      *ngTemplateOutlet="errorToaster; context: { errorMessage: errorMessage }"
+      *ngTemplateOutlet="
+        errorToaster;
+        context: { errorMessage: errorMessage.message }
+      "
     ></ng-container>
   </ng-container>
   <ng-template #elseTemplate>
@@ -16,7 +19,7 @@
 <ng-template #errorToaster let-errorMessage="errorMessage">
   <div
     id="toast-danger"
-    class="toast-danger flex items-center w-full fixed top-3 right-3 z-[999] max-w-xs p-4 mb-4 text-gray-500 dark:text-dark-text bg-white dark:bg-main-dark border dark:border-gray-700 rounded-lg shadow-md animate-fade-left animate-once animate-normal"
+    class="toast-danger flex items-center w-full fixed top-3 right-3 z-[2220] max-w-xs p-4 mb-4 text-gray-500 dark:text-dark-text bg-white dark:bg-main-dark border dark:border-gray-700 rounded-lg shadow-md animate-fade-left animate-once animate-normal"
     role="alert"
   >
     <div
