@@ -200,3 +200,7 @@ swiper-slide {
 #emoji-mart-search-1 {
   @apply bg-white;
 }
+
+.hs-overlay-backdrop {
+  z-index: 1000 !important;
+}

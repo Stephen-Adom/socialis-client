@@ -1,5 +1,12 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   ERROR_MESSAGE_TOKEN,
@@ -7,6 +14,7 @@ import {
   SUCCESS_MESSAGE_TOKEN,
   UserInfoType,
   getBase64,
+  postImageType,
 } from 'utils';
 import {
   CommentService,
@@ -32,12 +40,6 @@ import { PickerComponent } from '@ctrl/ngx-emoji-mart';
 import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 import { TextareaFormComponent } from 'textarea-form';
 
-type commentImageType = {
-  base64: string;
-  file: File;
-  id: number;
-};
-
 @Component({
   selector: 'lib-create-comment-form',
   standalone: true,
@@ -46,21 +48,22 @@ type commentImageType = {
     ReactiveFormsModule,
     PickerComponent,
     ImageCropperModule,
-    TextareaFormComponent
+    TextareaFormComponent,
   ],
   templateUrl: './create-comment-form.component.html',
   styleUrls: ['./create-comment-form.component.css'],
 })
 export class CreateCommentFormComponent implements OnInit, OnDestroy {
+  @ViewChild('fileInput3') fileInput3!: ElementRef<HTMLInputElement>;
   Form: FormGroup;
   authUser!: UserInfoType;
   postDetails!: PostType;
-  commentImages: commentImageType[] = [];
+  commentImages: postImageType[] = [];
   submittingForm = false;
   authUserSubscription = new Subscription();
   postDetailsSubscription = new Subscription();
   toggleEmoji = false;
-  editFile: commentImageType | null = null;
+  editFile: postImageType | null = null;
   edittedImage!: string;
   exitFileIndex = -1;
   toggleCalendar = false;
@@ -77,7 +80,7 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
   ) {
     this.Form = this.formBuilder.nonNullable.group({
       content: ['', Validators.required],
-      scheduledAt: ['']
+      scheduledAt: [''],
     });
   }
 
@@ -111,13 +114,25 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
 
   async uploadImage(event: any) {
     if (event.target.files.length) {
-      const file = <File>event.target.files[0];
-      const base64String = <string>await getBase64(file);
-      this.commentImages.push({
-        base64: base64String,
-        file: file,
-        id: Math.ceil(Math.random() * 1000),
-      });
+      for (let i = 0; i < event.target.files.length; i++) {
+        if (event.target.files[i].size > 100000000) {
+          this.errorMessage.sendErrorMessage({
+            message: 'File size should be less than 90 MB',
+            error: 'BAD_REQUEST',
+          });
+          return;
+        } else {
+          const base64String = <string>await getBase64(event.target.files[i]);
+          this.commentImages.push({
+            base64: base64String,
+            file: event.target.files[i],
+            id: Math.ceil(Math.random() * 1000),
+            type: event.target.files[i].type,
+          });
+        }
+      }
+
+      this.fileInput3.nativeElement.value = '';
     }
   }
 
@@ -184,7 +199,7 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
     this.postDetailsSubscription.unsubscribe();
   }
 
-  editImage(image: commentImageType, index: number) {
+  editImage(image: postImageType, index: number) {
     this.editFile = image;
     this.exitFileIndex = index;
   }
@@ -202,10 +217,11 @@ export class CreateCommentFormComponent implements OnInit, OnDestroy {
 
   saveEditChanges() {
     if (this.edittedImage) {
-      const updatedFile: commentImageType = {
+      const updatedFile: postImageType = {
         base64: this.edittedImage,
         file: new File([], ''),
         id: <number>this.editFile?.id,
+        type: this.editFile?.type as string,
       };
 
       this.urlToFile(this.edittedImage).then((file) => {

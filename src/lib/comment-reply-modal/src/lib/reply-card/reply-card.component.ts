@@ -1,16 +1,8 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, Input, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {
-  CommentType,
-  PostType,
-  ReplyType,
-  SimpleUserInfoType,
-  UserInfoType,
-} from 'utils';
+import { CommentType, PostType, ReplyType, UserInfoType } from 'utils';
 import { format } from 'date-fns';
-import { LightgalleryModule } from 'lightgallery/angular';
-import lgZoom from 'lightgallery/plugins/zoom';
 import {
   PostApiActions,
   PostState,
@@ -22,22 +14,18 @@ import { Store } from '@ngrx/store';
 import { BehaviorSubject, Observable, combineLatest } from 'rxjs';
 import { ConfirmDeleteService, dataDeleteObject } from 'services';
 import { ProfileTooltipDirective } from 'directives';
+import { MediaInfoComponent } from 'media-info';
 
 @Component({
   selector: 'lib-reply-card',
   standalone: true,
-  imports: [CommonModule, LightgalleryModule, ProfileTooltipDirective],
+  imports: [CommonModule, MediaInfoComponent, ProfileTooltipDirective],
   templateUrl: './reply-card.component.html',
   styleUrls: ['./reply-card.component.scss'],
 })
 export class ReplyCardComponent implements OnInit {
   @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) reply!: ReplyType;
-
-  settings = {
-    counter: false,
-    plugins: [lgZoom],
-  };
 
   authUser$!: Observable<UserInfoType | null>;
   post$!: Observable<PostType | null>;
@@ -65,14 +53,6 @@ export class ReplyCardComponent implements OnInit {
 
   formateTime(createdAt: string) {
     return format(new Date(createdAt), 'h:mmaaa');
-  }
-
-  getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
-      user.lastname
-    }(${user.username}) </a></h4> <p> About - ${
-      user.bio ? user.bio : 'Not Available!'
-    }</p>`;
   }
 
   checkIfBookmarked() {

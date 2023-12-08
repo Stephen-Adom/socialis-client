@@ -236,3 +236,10 @@ export type AllNotificationsResponseType = {
   data: Notifications[];
   status: string;
 };
+
+export type postImageType = {
+  base64: string;
+  file: File;
+  id: number;
+  type: string;
+};

@@ -37,6 +37,7 @@ import {
   CommentType,
   PostType,
   UserInfoType,
+  postImageType,
 } from 'utils';
 import { Subscription } from 'rxjs';
 import { PickerComponent } from '@ctrl/ngx-emoji-mart';
@@ -44,12 +45,6 @@ import { ImageCroppedEvent, ImageCropperModule } from 'ngx-image-cropper';
 import { TextareaFormComponent } from 'textarea-form';
 import { CalendarModule } from 'primeng/calendar';
 import { CalendarComponent } from 'calendar';
-
-type commentImageType = {
-  base64: string;
-  file: File;
-  id: number;
-};
 
 @Component({
   selector: 'lib-add-comment-form-modal',
@@ -60,7 +55,7 @@ type commentImageType = {
     PickerComponent,
     ImageCropperModule,
     TextareaFormComponent,
-    CalendarComponent
+    CalendarComponent,
   ],
   templateUrl: './add-comment-form-modal.component.html',
   styleUrls: ['./add-comment-form-modal.component.css'],
@@ -71,14 +66,14 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
   Form: FormGroup;
   authUser!: UserInfoType;
   postDetails!: PostType;
-  commentImages: commentImageType[] = [];
+  commentImages: postImageType[] = [];
   submittingForm = false;
   authUserSubscription = new Subscription();
   postDetailsSubscription = new Subscription();
   editPostDetailsSubscription = new Subscription();
   toggleEmoji = false;
   editComment!: CommentType | null;
-  editFile: commentImageType | null = null;
+  editFile: postImageType | null = null;
   edittedImage!: string;
   exitFileIndex = -1;
   toggleCalendar = false;
@@ -148,13 +143,23 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
 
   async uploadImage(event: any) {
     if (event.target.files.length) {
-      const file = <File>event.target.files[0];
-      const base64String = <string>await getBase64(file);
-      this.commentImages.push({
-        base64: base64String,
-        file: file,
-        id: Math.ceil(Math.random() * 1000),
-      });
+      for (let i = 0; i < event.target.files.length; i++) {
+        if (event.target.files[i].size > 100000000) {
+          this.errorMessage.sendErrorMessage({
+            message: 'File size should be less than 90 MB',
+            error: 'BAD_REQUEST',
+          });
+          return;
+        } else {
+          const base64String = <string>await getBase64(event.target.files[i]);
+          this.commentImages.push({
+            base64: base64String,
+            file: event.target.files[i],
+            id: Math.ceil(Math.random() * 1000),
+            type: event.target.files[i].type,
+          });
+        }
+      }
       this.fileInput2.nativeElement.value = '';
     }
   }
@@ -273,7 +278,7 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
     this.editPostDetailsSubscription.unsubscribe();
   }
 
-  editImage(image: commentImageType, index: number) {
+  editImage(image: postImageType, index: number) {
     this.editFile = image;
     this.exitFileIndex = index;
   }
@@ -291,10 +296,11 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
 
   saveEditChanges() {
     if (this.edittedImage) {
-      const updatedFile: commentImageType = {
+      const updatedFile: postImageType = {
         base64: this.edittedImage,
         file: new File([], ''),
         id: <number>this.editFile?.id,
+        type: this.editFile?.type as string,
       };
 
       this.urlToFile(this.edittedImage).then((file) => {

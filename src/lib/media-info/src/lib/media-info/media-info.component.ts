@@ -1,7 +1,7 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ImageType, PostType } from 'utils';
+import { CommentType, ImageType, PostType, ReplyType } from 'utils';
 import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { formatDistanceToNow } from 'date-fns';
@@ -27,7 +27,7 @@ import { VgBufferingModule } from '@videogular/ngx-videogular/buffering';
 })
 export class MediaInfoComponent {
   @Input({ required: true }) postImages: ImageType[] = [];
-  @Input({ required: true }) post!: PostType;
+  @Input({ required: true }) post!: PostType | CommentType | ReplyType;
 
   settings = {
     counter: false,

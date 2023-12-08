@@ -20,6 +20,7 @@ import {
   SUCCESS_MESSAGE_TOKEN,
   UserInfoType,
   getBase64,
+  postImageType,
 } from 'utils';
 import {
   AppApiActions,
@@ -42,13 +43,6 @@ import { TextareaFormComponent } from 'textarea-form';
 import { TooltipModule } from 'primeng/tooltip';
 import { CalendarComponent } from 'calendar';
 import { format } from 'date-fns';
-
-type postImageType = {
-  base64: string;
-  file: File;
-  id: number;
-  type: string;
-};
 
 @Component({
   selector: 'lib-new-post-modal',
@@ -144,7 +138,6 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
   async uploadImage(event: any) {
     if (event.target.files.length) {
       for (let i = 0; i < event.target.files.length; i++) {
-        console.log(event.target.files[i]);
         if (event.target.files[i].size > 100000000) {
           this.errorMessage.sendErrorMessage({
             message: 'File size should be less than 90 MB',

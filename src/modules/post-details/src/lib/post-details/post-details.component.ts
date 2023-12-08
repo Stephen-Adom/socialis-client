@@ -18,15 +18,14 @@ import {
   UserInfoType,
   UserSummaryInfo,
 } from 'utils';
-import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { format } from 'date-fns';
-import { LightgalleryModule } from 'lightgallery/angular';
-import lgZoom from 'lightgallery/plugins/zoom';
 import {
   ConfirmDeleteService,
   FormatPostService,
   dataDeleteObject,
 } from 'services';
+import { MediaInfoComponent } from 'media-info';
 
 @Component({
   selector: 'lib-post-details',
@@ -35,7 +34,7 @@ import {
     CommonModule,
     CommentListComponent,
     CreateCommentFormComponent,
-    LightgalleryModule,
+    MediaInfoComponent,
   ],
   templateUrl: './post-details.component.html',
   styleUrls: ['./post-details.component.css'],
@@ -46,10 +45,6 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   postSubscription = new Subscription();
   routeSubscription = new Subscription();
   authUserSubscription = new Subscription();
-  settings = {
-    counter: false,
-    plugins: [lgZoom],
-  };
   likedPost$ = new BehaviorSubject<boolean>(false);
   bookmarked$ = new BehaviorSubject<boolean>(false);
   authUser!: UserInfoType;
@@ -155,14 +150,6 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
 
   back() {
     this.location.back();
-  }
-
-  getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
-      user.lastname
-    }(${user.username}) </a></h4> <p> About - ${
-      user.bio ? user.bio : 'Not Available!'
-    }</p>`;
   }
 
   ngOnDestroy(): void {

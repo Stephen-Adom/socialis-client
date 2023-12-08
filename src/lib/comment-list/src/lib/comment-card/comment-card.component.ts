@@ -19,28 +19,23 @@ import {
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { LightgalleryModule } from 'lightgallery/angular';
 import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { ConfirmDeleteService, dataDeleteObject } from 'services';
 import { Router } from '@angular/router';
 import { ProfileTooltipDirective } from 'directives';
+import { MediaInfoComponent } from 'media-info';
 
 @Component({
   selector: 'lib-comment-card',
   standalone: true,
-  imports: [CommonModule, LightgalleryModule, ProfileTooltipDirective],
+  imports: [CommonModule, MediaInfoComponent, ProfileTooltipDirective],
   templateUrl: './comment-card.component.html',
   styleUrls: ['./comment-card.component.scss'],
 })
 export class CommentCardComponent implements OnInit, OnDestroy {
   @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) comment!: CommentType;
-
-  settings = {
-    counter: false,
-    plugins: [lgZoom],
-  };
 
   likedComment$ = new BehaviorSubject<boolean>(false);
 
@@ -55,7 +50,7 @@ export class CommentCardComponent implements OnInit, OnDestroy {
     private confirmDeleteService: ConfirmDeleteService,
     private store: Store<PostState>,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
@@ -82,12 +77,6 @@ export class CommentCardComponent implements OnInit, OnDestroy {
 
   setCommentActive(comment: CommentType) {
     this.store.dispatch(PostApiActions.getCommentDetails({ comment }));
-  }
-
-  getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${user.lastname
-      }(${user.username}) </a></h4> <p> About - ${user.bio ? user.bio : 'Not Available!'
-      }</p>`;
   }
 
   toggleLike() {

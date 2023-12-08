@@ -28,11 +28,7 @@
       />
 
       <form novalidate [formGroup]="Form" class="w-full">
-        <textarea
-          class="form-control border-none focus:outline-none w-full bg-transparent dark:text-dark-text"
-          placeholder="What are your thoughts on this?"
-          formControlName="content"
-        ></textarea>
+        <lib-textarea-form [Form]="Form" />
       </form>
     </div>
 
@@ -40,39 +36,46 @@
     <div class="flex flex-wrap gap-3" *ngIf="replyImages.length">
       <div
         class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
-        *ngFor="let image of replyImages; let i = index"
+        *ngFor="let media of replyImages; let i = index"
       >
-        <button
-          type="button"
-          class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
-          title="close"
-          (click)="removeImage(image.id)"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5"
+        <ng-container *ngIf="media.type.includes('image'); else elseTemplate">
+          <button
+            type="button"
+            class="bg-gray-900 rounded-full p-2 text-white absolute top-2 right-2"
+            title="close"
+            (click)="removeImage(media.id)"
           >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M6 18L18 6M6 6l12 12"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="w-5 h-5"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
 
-        <button
-          type="button"
-          class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
-          title="edit"
-          (click)="editImage(image, i)"
-        >
-          Edit
-        </button>
-        <img [src]="image.base64" class="w-full" alt="" />
+          <button
+            (click)="editImage(media, i)"
+            type="button"
+            class="bg-gray-900 rounded-full py-2 px-4 text-white absolute bottom-2 right-2 text-sm"
+            title="edit"
+          >
+            Edit
+          </button>
+          <img [src]="media.base64" class="w-full" alt="" />
+        </ng-container>
+        <ng-template #elseTemplate>
+          <video muted>
+            <source [src]="media.base64" [type]="media.type" />
+          </video>
+        </ng-template>
       </div>
     </div>
     <!-- END:: UPLOADED POST IMAGES-->
@@ -112,7 +115,8 @@
           title=""
           (change)="uploadImage($event)"
           aria-label="post image"
-          accept="image/*"
+          accept="image/*, video/*"
+          multiple
           #fileInput
         />
 

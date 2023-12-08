@@ -1,5 +1,12 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   FormBuilder,
@@ -29,13 +36,9 @@ import {
   SUCCESS_MESSAGE_TOKEN,
   getBase64,
   CommentType,
+  postImageType,
 } from 'utils';
-
-type postImageType = {
-  base64: string;
-  file: File;
-  id: number;
-};
+import { TextareaFormComponent } from 'textarea-form';
 
 @Component({
   selector: 'lib-create-reply-form',
@@ -45,11 +48,13 @@ type postImageType = {
     ReactiveFormsModule,
     PickerComponent,
     ImageCropperModule,
+    TextareaFormComponent,
   ],
   templateUrl: './create-reply-form.component.html',
   styleUrls: ['./create-reply-form.component.scss'],
 })
 export class CreateReplyFormComponent implements OnInit, OnDestroy {
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   Form: FormGroup;
   authUser!: UserInfoType;
   commentDetails!: CommentType;
@@ -101,13 +106,25 @@ export class CreateReplyFormComponent implements OnInit, OnDestroy {
 
   async uploadImage(event: any) {
     if (event.target.files.length) {
-      const file = <File>event.target.files[0];
-      const base64String = <string>await getBase64(file);
-      this.replyImages.push({
-        base64: base64String,
-        file: file,
-        id: Math.ceil(Math.random() * 1000),
-      });
+      for (let i = 0; i < event.target.files.length; i++) {
+        if (event.target.files[i].size > 100000000) {
+          this.errorMessage.sendErrorMessage({
+            message: 'File size should be less than 90 MB',
+            error: 'BAD_REQUEST',
+          });
+          return;
+        } else {
+          const base64String = <string>await getBase64(event.target.files[i]);
+          this.replyImages.push({
+            base64: base64String,
+            file: event.target.files[i],
+            id: Math.ceil(Math.random() * 1000),
+            type: event.target.files[i].type,
+          });
+        }
+      }
+
+      this.fileInput.nativeElement.value = '';
     }
   }
 
@@ -195,6 +212,7 @@ export class CreateReplyFormComponent implements OnInit, OnDestroy {
         base64: this.edittedImage,
         file: new File([], ''),
         id: <number>this.editFile?.id,
+        type: this.editFile?.type as string,
       };
 
       this.urlToFile(this.edittedImage).then((file) => {

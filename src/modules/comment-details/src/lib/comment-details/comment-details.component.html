@@ -222,20 +222,7 @@
         class="image-container min-h-[4.5rem] rounded-lg overflow-hidden mt-2"
         *ngIf="comment.commentImages.length"
       >
-        <lightgallery [settings]="settings" class="flex flex-wrap gap-3">
-          <a
-            class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
-            *ngFor="let image of comment.commentImages"
-            [href]="image.mediaUrl"
-            [attr.data-sub-html]="getSubHtml(comment.user)"
-          >
-            <img
-              [src]="image.mediaUrl"
-              class="w-full"
-              [attr.alt]="image.mediaType"
-            />
-          </a>
-        </lightgallery>
+        <lib-media-info [postImages]="comment.commentImages" [post]="comment" />
       </div>
     </div>
     <div class="card-footer ml-[68px]">

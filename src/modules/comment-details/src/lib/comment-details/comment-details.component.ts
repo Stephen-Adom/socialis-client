@@ -3,7 +3,7 @@ import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, Subscription, tap } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import {
   ConfirmDeleteService,
   FormatPostService,
@@ -27,17 +27,16 @@ import {
   UserSummaryInfo,
 } from 'utils';
 import { format } from 'date-fns';
-import { LightgalleryModule } from 'lightgallery/angular';
-import lgZoom from 'lightgallery/plugins/zoom';
 import { ReplyCardComponent } from 'comment-reply-modal';
 import { CreateReplyFormComponent } from '../create-reply-form/create-reply-form.component';
+import { MediaInfoComponent } from 'media-info';
 
 @Component({
   selector: 'lib-comment-details',
   standalone: true,
   imports: [
     CommonModule,
-    LightgalleryModule,
+    MediaInfoComponent,
     ReplyCardComponent,
     CreateReplyFormComponent,
   ],
@@ -55,10 +54,6 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
   postId!: string;
   comment!: CommentType;
   authUser!: UserInfoType;
-  settings = {
-    counter: false,
-    plugins: [lgZoom],
-  };
   formattedText: string | null = null;
   authorIsFollowing$ = new BehaviorSubject<boolean>(false);
   authFollowers$!: Observable<UserSummaryInfo[]>;
@@ -150,14 +145,6 @@ export class CommentDetailsComponent implements OnInit, OnDestroy {
 
   back() {
     this.location.back();
-  }
-
-  getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${
-      user.lastname
-    }(${user.username}) </a></h4> <p> About - ${
-      user.bio ? user.bio : 'Not Available!'
-    }</p>`;
   }
 
   isAuth(author: string, authUser: UserInfoType | null) {
