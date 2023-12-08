@@ -38,7 +38,11 @@ export type formattedNotifications = {
   target: {
     targetContent?: string;
     targetUid: string;
-    targetImage: string;
+    targetImage: {
+      id: number;
+      mediaUrl: string;
+      mediaType: string;
+    };
     targetFirstname?: string;
     targetLastname?: string;
     targetUsername?: string;
@@ -98,8 +102,9 @@ export class FormatNotificationService {
         }/profile" class="font-bold italic text-primaryColor">${this.getSourceUsername(
           this.authUser,
           notification.source
-        )}</a> commented: <span class="font-bold italic">${this.reduceContentLength(
-          notification.target.targetContent
+        )}</a> commented: <span class="font-bold italic">${this.noContent(
+          this.reduceContentLength(notification.target.targetContent),
+          notification.target.targetImage
         )}</span>`;
         break;
 
@@ -174,8 +179,9 @@ export class FormatNotificationService {
             sources[0].firstname
           } ${
             sources[0].lastname
-          }</a> replied to your comment: <span class="font-bold italic">${this.reduceContentLength(
-            notification.target.targetContent
+          }</a> replied to your comment: <span class="font-bold italic">${this.noContent(
+            this.reduceContentLength(notification.target.targetContent),
+            notification.target.targetImage
           )}</span>`;
         } else if (sources.length === 2) {
           message = `<a href="user/${
@@ -188,8 +194,9 @@ export class FormatNotificationService {
             sources[1].firstname
           } ${
             sources[1].lastname
-          }</a> replied to your comment: <span class="font-bold italic">${this.reduceContentLength(
-            notification.target.targetContent
+          }</a> replied to your comment: <span class="font-bold italic">${this.noContent(
+            this.reduceContentLength(notification.target.targetContent),
+            notification.target.targetImage
           )}</span>`;
         } else if (sources.length > 2) {
           message = `<a href="user/${
@@ -202,8 +209,9 @@ export class FormatNotificationService {
             sources[1].firstname
           } ${sources[1].lastname}</a> and ${
             sources.length - 2
-          } others replied to your comment: <span class="font-bold italic">${this.reduceContentLength(
-            notification.target.targetContent
+          } others replied to your comment: <span class="font-bold italic">${this.noContent(
+            this.reduceContentLength(notification.target.targetContent),
+            notification.target.targetImage
           )}</span>`;
         }
 
@@ -278,5 +286,22 @@ export class FormatNotificationService {
     }
 
     return '';
+  }
+
+  noContent(
+    content: string,
+    targetImage: {
+      id: number;
+      mediaUrl: string;
+      mediaType: string;
+    }
+  ) {
+    if (content) {
+      return content;
+    } else {
+      return targetImage.mediaType === 'image'
+        ? 'with an image'
+        : 'with a video';
+    }
   }
 }

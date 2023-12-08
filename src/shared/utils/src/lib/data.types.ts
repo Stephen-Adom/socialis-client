@@ -165,7 +165,11 @@ export type Notifications = {
   target: {
     targetContent?: string;
     targetUid: string;
-    targetImage: string;
+    targetImage: {
+      id: number;
+      mediaUrl: string;
+      mediaType: string;
+    };
     targetFirstname?: string;
     targetLastname?: string;
     targetUsername?: string;

@@ -70,12 +70,24 @@
         </div>
       </div>
 
-      <div class="w-[40%] text-right" *ngIf="notification.target.targetImage">
-        <img
-          class="w-full"
-          [src]="notification.target.targetImage"
-          [attr.alt]="notification.target.targetContent"
-        />
+      <div class="w-[30%] text-right" *ngIf="notification.target.targetImage">
+        <ng-container
+          *ngIf="
+            notification.target.targetImage.mediaType === 'image';
+            else elseTemplate
+          "
+        >
+          <img
+            class="w-full"
+            [src]="notification.target.targetImage.mediaUrl"
+            [attr.alt]="notification.target.targetImage.mediaType"
+          />
+        </ng-container>
+        <ng-template #elseTemplate>
+          <video muted>
+            <source [src]="notification.target.targetImage.mediaUrl" />
+          </video>
+        </ng-template>
       </div>
     </div>
   </div>
