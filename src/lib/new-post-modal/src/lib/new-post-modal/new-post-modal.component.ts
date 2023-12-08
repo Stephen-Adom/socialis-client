@@ -59,7 +59,7 @@ type postImageType = {
     ImageCropperModule,
     TextareaFormComponent,
     CalendarComponent,
-    TooltipModule
+    TooltipModule,
   ],
   templateUrl: './new-post-modal.component.html',
   styleUrls: ['./new-post-modal.component.css'],
@@ -85,7 +85,8 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
   constructor(
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
-    @Inject(SUCCESS_MESSAGE_TOKEN) private successMessage: SuccessMessageService,
+    @Inject(SUCCESS_MESSAGE_TOKEN)
+    private successMessage: SuccessMessageService,
     private postservice: PostService,
     private formBuilder: FormBuilder,
     private store: Store<AppState>
@@ -182,7 +183,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
     const formData = new FormData();
     formData.append('content', this.Form.get('content')?.value);
-    formData.append('scheduledAt', this.Form.get('scheduledAt')?.value);
+    // formData.append('scheduledAt', this.Form.get('scheduledAt')?.value);
 
     if (imageForms) {
       imageForms.forEach((image: any) => {
