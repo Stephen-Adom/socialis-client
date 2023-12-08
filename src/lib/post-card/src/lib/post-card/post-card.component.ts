@@ -27,23 +27,27 @@ import {
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { LightgalleryModule } from 'lightgallery/angular';
-import lgZoom from 'lightgallery/plugins/zoom';
 import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
 import { OnDestroy } from '@angular/core';
-import { ConfirmDeleteService, FormatPostService, dataDeleteObject } from 'services';
+import {
+  ConfirmDeleteService,
+  FormatPostService,
+  dataDeleteObject,
+} from 'services';
 import { ProfileTooltipDirective } from 'directives';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MediaInfoComponent } from 'media-info';
 
 @Component({
   selector: 'lib-post-card',
   standalone: true,
-  imports: [CommonModule, LightgalleryModule, ProfileTooltipDirective],
+  imports: [CommonModule, MediaInfoComponent, ProfileTooltipDirective],
   templateUrl: './post-card.component.html',
   styleUrls: ['./post-card.component.css'],
 })
 export class PostCardComponent
-  implements OnChanges, OnInit, OnDestroy, AfterViewInit {
+  implements OnChanges, OnInit, OnDestroy, AfterViewInit
+{
   @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) post!: PostType;
   authUser$!: Observable<UserInfoType | null>;
@@ -52,11 +56,6 @@ export class PostCardComponent
   authorDetailSubscription: Subscription | undefined;
 
   formattedDate: string | null = null;
-
-  settings = {
-    counter: false,
-    plugins: [lgZoom],
-  };
 
   likedPost$ = new BehaviorSubject<boolean>(false);
   bookmarked$ = new BehaviorSubject<boolean>(false);
@@ -70,7 +69,7 @@ export class PostCardComponent
     private cdr: ChangeDetectorRef,
     private store: Store<PostState>,
     private router: Router
-  ) { }
+  ) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
@@ -139,12 +138,6 @@ export class PostCardComponent
 
   addComment() {
     this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
-  }
-
-  getSubHtml(user: SimpleUserInfoType) {
-    return `<h4>Photo Uploaded by - <a href='javascript:;' >${user.firstname} ${user.lastname
-      }(${user.username}) </a></h4> <p> About - ${user.bio ? user.bio : 'Not Available!'
-      }</p>`;
   }
 
   toggleLike() {

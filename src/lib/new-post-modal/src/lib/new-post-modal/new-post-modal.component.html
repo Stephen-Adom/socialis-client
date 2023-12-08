@@ -225,11 +225,11 @@
             />
             <button
               type="button"
-              class="hs-tooltip hs-tooltip-toggle btn btn-circle btn-icon p-2 disabled:cursor-not-allowed"
-              title="image"
+              class="btn btn-circle btn-icon p-2 disabled:cursor-not-allowed"
+              title="Upload media"
               (click)="fileInput.click()"
               [disabled]="postImages.length === 4"
-              pTooltip="Image"
+              pTooltip="Upload media"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -250,7 +250,7 @@
             <button
               type="button"
               class="btn btn-circle btn-icon p-2"
-              title="emoji"
+              title="Emoji"
               (click)="toggleEmoji = !toggleEmoji"
               pTooltip="Emoji"
             >

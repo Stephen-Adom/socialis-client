@@ -1,0 +1,21 @@
+<div class="flex flex-wrap gap-3">
+  <ng-container *ngFor="let media of postImages">
+    <ng-container *ngIf="media.mediaType === 'image'; else elseTemplate">
+      <lightgallery [settings]="settings">
+        <a
+          class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px] relative"
+          [href]="image.mediaUrl"
+          [attr.data-sub-html]="getSubHtml()"
+          *ngFor="let image of post.postImages"
+        >
+          <img
+            [src]="image.mediaUrl"
+            class="w-full"
+            [attr.alt]="image.mediaType"
+          />
+        </a>
+      </lightgallery>
+    </ng-container>
+    <ng-template #elseTemplate> </ng-template>
+  </ng-container>
+</div>
