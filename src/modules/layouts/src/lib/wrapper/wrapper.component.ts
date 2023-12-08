@@ -16,11 +16,12 @@ import {
   PostApiActions,
   PostState,
   UserApiActions,
+  getAllAuthUserFollowing,
   getCommentDetails,
   getPostDetails,
   getUserInformation,
 } from 'state';
-import { UserInfoType } from 'utils';
+import { UserInfoType, UserSummaryInfo } from 'utils';
 
 @Component({
   selector: 'feature-wrapper',
@@ -41,6 +42,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
   bookmarkUpdateSubscription = new Subscription();
 
   authUser$!: Observable<UserInfoType | null>;
+  userFollowing$!: Observable<UserSummaryInfo[]>;
 
   constructor(
     private alertInfoService: DisplayAlertInfoService,
@@ -50,6 +52,8 @@ export class WrapperComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
+
+    this.userFollowing$ = this.store.select(getAllAuthUserFollowing);
 
     this.authUser$
       .pipe(

@@ -1,9 +1,8 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserState, getAllAuthUserFollowing } from 'state';
+import { UserState } from 'state';
 import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { Router } from '@angular/router';
 import { UserSummaryInfo } from 'utils';
 
@@ -14,14 +13,10 @@ import { UserSummaryInfo } from 'utils';
   templateUrl: './followers.component.html',
   styleUrls: ['./followers.component.css'],
 })
-export class FollowersComponent implements OnInit {
-  userFollowing$!: Observable<UserSummaryInfo[]>;
+export class FollowersComponent {
+  @Input({ required: true }) userFollowing: UserSummaryInfo[] = [];
 
   constructor(private store: Store<UserState>, private router: Router) {}
-
-  ngOnInit(): void {
-    this.userFollowing$ = this.store.select(getAllAuthUserFollowing);
-  }
 
   viewDetails(following: UserSummaryInfo) {
     this.router.navigate(['user', following.username, 'profile']);

@@ -1,6 +1,6 @@
 <div
   class="card following-card rounded-lg bg-white dark:bg-main-dark p-5 border border-white dark:border-main-dark"
-  *ngIf="(userFollowing$ | async)?.length"
+  *ngIf="userFollowing.length"
 >
   <div class="card-header flex items-center justify-between">
     <h6 class="font-bold dark:text-dark-text">Following</h6>
@@ -9,7 +9,7 @@
     <li
       (click)="viewDetails(following)"
       class="p-2 flex items-center justify-between w-full cursor-pointer"
-      *ngFor="let following of userFollowing$ | async"
+      *ngFor="let following of userFollowing"
     >
       <div class="profile-info flex items-center gap-x-2">
         <div class="hs-tooltip inline-block">
