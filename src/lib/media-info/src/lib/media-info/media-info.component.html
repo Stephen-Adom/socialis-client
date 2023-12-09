@@ -1,6 +1,6 @@
 <div class="flex flex-wrap gap-3">
   <div
-    class="rounded-lg overflow-hidden basis-[230px] grow max-h-[400px]"
+    class="rounded-lg overflow-hidden basis-[230px] grow min-h-[236px] max-h-[365px]"
     *ngFor="let file of postImages"
   >
     <ng-container *ngIf="file.mediaType === 'image'; else elseTemplate">
@@ -19,37 +19,9 @@
       </lightgallery>
     </ng-container>
     <ng-template #elseTemplate>
-      <vg-player>
-        <vg-overlay-play></vg-overlay-play>
-        <vg-buffering></vg-buffering>
-        <vg-scrub-bar>
-          <vg-scrub-bar-current-time></vg-scrub-bar-current-time>
-          <vg-scrub-bar-buffering-time></vg-scrub-bar-buffering-time>
-        </vg-scrub-bar>
-        <vg-controls [vgAutohide]="true">
-          <vg-play-pause></vg-play-pause>
-          <vg-playback-button></vg-playback-button>
-          <vg-time-display
-            vgProperty="current"
-            vgFormat="mm:ss"
-          ></vg-time-display>
-          <vg-scrub-bar style="pointer-events: none"></vg-scrub-bar>
-
-          <vg-track-selector></vg-track-selector>
-          <vg-mute></vg-mute>
-          <vg-volume></vg-volume>
-          <vg-fullscreen></vg-fullscreen>
-        </vg-controls>
-        <video
-          [vgMedia]="$any(media)"
-          #media
-          id="singleVideo"
-          preload="auto"
-          crossorigin
-        >
-          <source [src]="file.mediaUrl" type="video/mp4" />
-        </video>
-      </vg-player>
+      <video controls data-setup="{}" id="my-player" class="video-js">
+        <source [src]="file.mediaUrl" />
+      </video>
     </ng-template>
   </div>
 </div>

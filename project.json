@@ -20,8 +20,7 @@
           "./src/styles.scss",
           "node_modules/@ctrl/ngx-emoji-mart/picker.css",
           "node_modules/lightgallery/scss/lightgallery.scss",
-          "./node_modules/intl-tel-input/build/css/intlTelInput.css",
-          "./node_modules/@videogular/ngx-videogular/fonts/videogular.css"
+          "./node_modules/intl-tel-input/build/css/intlTelInput.css"
         ],
         "scripts": ["./node_modules/preline/dist/preline.js"],
         "allowedCommonJsDependencies": [
