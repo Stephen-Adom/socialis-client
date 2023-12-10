@@ -44,7 +44,12 @@
       />
     </svg>
   </button>
-  <swiper-container slides-per-view="3" speed="500" space-between="5">
+  <swiper-container
+    #swiperContainer
+    slides-per-view="3"
+    speed="500"
+    space-between="5"
+  >
     <swiper-slide>
       <div
         class="story-container flex flex-col items-center gap-y-2 relative top-1"
@@ -60,7 +65,16 @@
             [attr.alt]="(authUser$ | async)?.username"
           />
 
+          <input
+            type="file"
+            hidden
+            (change)="onFileChange($event)"
+            #fileInput
+            accept="video/*"
+          />
+
           <button
+            (click)="fileInput.click()"
             type="button"
             class="bg-primaryColor btn btn-icon w-1 h-1 absolute bottom-0 right-0 flex items-center justify-center btn-circle p-2"
             title="add story"
@@ -85,4 +99,9 @@
       </div>
     </swiper-slide>
   </swiper-container>
+
+  <video #video id="video" width="100%" controls *ngIf="videoFile">
+    <source [src]="videoFile" />
+    Your browser does not support the video tag.
+  </video>
 </div>
