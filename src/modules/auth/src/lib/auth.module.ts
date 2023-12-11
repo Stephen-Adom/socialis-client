@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
@@ -5,6 +6,12 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationService, InnactiveAccountService } from 'services';
 import { ActivateAccountNotificationComponent } from 'notification';
+import {
+  SocialLoginModule,
+  SocialAuthServiceConfig,
+  GoogleLoginProvider,
+  GoogleSigninButtonModule,
+} from '@abacritt/angularx-social-login';
 
 import { authRoutes } from './lib.routes';
 import { RegisterComponent } from './register/register.component';
@@ -25,6 +32,8 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ReactiveFormsModule,
     ActivateAccountNotificationComponent,
     ErrorMessageComponent,
+    SocialLoginModule,
+    GoogleSigninButtonModule,
   ],
   declarations: [
     RegisterComponent,
@@ -36,6 +45,26 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     VerifyEmailAddressComponent,
     ResetPasswordComponent,
   ],
-  providers: [AuthenticationService, InnactiveAccountService],
+  providers: [
+    AuthenticationService,
+    InnactiveAccountService,
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(
+              '752731306131-k6biq6c3ts8da0831u9lst8js4ffhscd.apps.googleusercontent.com'
+            ),
+          },
+        ],
+        onError: (err) => {
+          console.error(err);
+        },
+      } as SocialAuthServiceConfig,
+    },
+  ],
 })
 export class AuthModule {}
