@@ -73,7 +73,7 @@ export class UserEffects {
       ofType(UserApiActions.fetchAllFollowers),
       mergeMap((action: { username: string }) =>
         this.userservice.fetchAllFollowers(action.username).pipe(
-          map((usersResponse) => {
+          map((usersResponse: any) => {
             return UserApiActions.fetchAllFollowersSuccess({ usersResponse });
           }),
           catchError((error: HttpErrorResponse) =>
@@ -89,7 +89,7 @@ export class UserEffects {
       ofType(UserApiActions.fetchAllFollowing),
       mergeMap((action: { username: string }) =>
         this.userservice.fetchAllFollowings(action.username).pipe(
-          map((usersResponse) => {
+          map((usersResponse: any) => {
             return UserApiActions.fetchAllFollowingSuccess({ usersResponse });
           }),
           catchError((error: HttpErrorResponse) =>

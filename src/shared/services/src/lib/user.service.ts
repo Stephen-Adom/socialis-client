@@ -72,25 +72,29 @@ export class UserService {
 
   followUser(followId: number, followingId: number) {
     return this.http.get<UserSummaryInfoResponseType>(
-      BASE_URL + `/user/${followId}/follow/${followingId}`
+      BASE_URL + `/user/${followId}/follow/${followingId}`,
+      this.authHeaders
     );
   }
 
   unfollowUser(followId: number, followingId: number) {
     return this.http.get<UserSummaryInfoResponseType>(
-      BASE_URL + `/user/${followId}/unfollow/${followingId}`
+      BASE_URL + `/user/${followId}/unfollow/${followingId}`,
+      this.authHeaders
     );
   }
 
   fetchAllFollowers(username: string) {
     return this.http.get<AllUserSummaryInfoResponseType>(
-      BASE_URL + `/user/${username}/all_followers`
+      BASE_URL + `/user/${username}/all_followers`,
+      this.authHeaders
     );
   }
 
   fetchAllFollowings(username: string) {
     return this.http.get<AllUserSummaryInfoResponseType>(
-      BASE_URL + `/user/${username}/all_following`
+      BASE_URL + `/user/${username}/all_following`,
+      this.authHeaders
     );
   }
 }

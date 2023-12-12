@@ -290,7 +290,7 @@ Following`;
       this.unfollowUserSubscription = this.userservice
         .unfollowUser(authUser?.id as number, authorInfo?.id as number)
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             if (response.status === 'OK') {
               this.store.dispatch(
                 UserApiActions.fetchUserDetailsSuccess({ userInfo: response })
@@ -319,7 +319,7 @@ Following`;
       this.followUserSubscription = this.userservice
         .followUser(authUser?.id as number, authorInfo?.id as number)
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             if (response.status === 'OK') {
               this.store.dispatch(
                 UserApiActions.fetchUserDetailsSuccess({ userInfo: response })

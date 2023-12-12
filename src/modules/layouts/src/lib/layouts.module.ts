@@ -10,7 +10,7 @@ import { FollowersComponent } from 'followers';
 import { MobileNavigationComponent } from './mobile-navigation/mobile-navigation.component';
 import { NewPostModalComponent } from 'new-post-modal';
 import { SearchModalComponent } from 'search-modal';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import {
   ActionProgressService,
   AuthenticationService,
@@ -54,6 +54,7 @@ import { TooltipModule } from 'primeng/tooltip';
 import { NavLinksComponent } from 'nav-links';
 import { ProfileCardSummaryComponent } from 'profile-card-summary';
 import { NotificationOffcanvasComponent } from 'notification-offcanvas';
+import { AuthTokenInterceptorInterceptor } from 'interceptors';
 
 @NgModule({
   imports: [
@@ -100,6 +101,11 @@ import { NotificationOffcanvasComponent } from 'notification-offcanvas';
     FormatPostService,
     DisplayAlertInfoService,
     FormatNotificationService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthTokenInterceptorInterceptor,
+      multi: true,
+    },
   ],
 })
 export class LayoutsModule {}

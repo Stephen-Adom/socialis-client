@@ -148,7 +148,7 @@ Following`;
       this.unfollowUserSubscription = this.userservice
         .unfollowUser(authUser?.id as number, this.user?.id as number)
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             if (response.status === 'OK') {
               this.user = response.data;
               console.log(response, 'response');
@@ -174,7 +174,7 @@ Following`;
       this.followUserSubscription = this.userservice
         .followUser(authUser?.id as number, this.user?.id as number)
         .subscribe({
-          next: (response) => {
+          next: (response: any) => {
             if (response.status === 'OK') {
               this.user = response.data;
             }

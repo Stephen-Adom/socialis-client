@@ -141,7 +141,7 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
     this.followUserSubscription = this.userservice
       .followUser(this.authUser.id, this.authorFullInfo.id)
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           if (response.status === 'OK') {
             this.authorFullInfo = response.data;
           }
@@ -162,7 +162,7 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
     this.unfollowUserSubscription = this.userservice
       .unfollowUser(this.authUser.id, this.authorFullInfo.id)
       .subscribe({
-        next: (response) => {
+        next: (response: any) => {
           if (response.status === 'OK') {
             this.authorFullInfo = response.data;
           }

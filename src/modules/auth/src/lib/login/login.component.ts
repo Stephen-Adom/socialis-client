@@ -46,6 +46,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     //Add 'implements OnInit' to the class.
     this.socialAuthService.authState.subscribe((data) => {
       console.log(data);
+      console.log(data['idToken']);
     });
   }
 

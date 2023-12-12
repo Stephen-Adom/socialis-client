@@ -43,6 +43,7 @@
       "infinite-scrolling-page-loader": [
         "src/lib/infinite-scrolling-page-loader/src/index.ts"
       ],
+      "interceptors": ["src/shared/interceptors/src/index.ts"],
       "layouts": ["src/modules/layouts/src/index.ts"],
       "media-info": ["src/lib/media-info/src/index.ts"],
       "message-panel": ["src/lib/message-panel/src/index.ts"],
