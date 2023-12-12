@@ -42,8 +42,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    //Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    //Add 'implements OnInit' to the class.
     this.socialAuthService.authState.subscribe((data) => {
       console.log(data);
       console.log(data['idToken']);

@@ -40,9 +40,9 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   ngAfterViewInit(): void {
     this.initializeSwiper();
 
-    fromEvent(this.video.nativeElement, 'loadedmetadata').subscribe((data) => {
-      console.log(data, 'video element');
-    });
+    // fromEvent(this.video.nativeElement, 'loadedmetadata').subscribe((data) => {
+    //   console.log(data, 'video element');
+    // });
   }
 
   initializeSwiper() {
