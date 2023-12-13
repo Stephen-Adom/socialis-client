@@ -17,7 +17,7 @@ import {
   SocialAuthService,
 } from '@abacritt/angularx-social-login';
 import { DOCUMENT } from '@angular/common';
-import { OAuthService } from 'angular-oauth2-oidc';
+import { LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'feature-login',
@@ -30,12 +30,12 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   loginSubscription = new Subscription();
 
   constructor(
+    public oidcSecurityService: OidcSecurityService,
     @Inject(DOCUMENT) private document: Document,
     private socialAuthService: SocialAuthService,
     private authservice: AuthenticationService,
     private store: Store<AppState>,
-    private formBuilder: FormBuilder,
-    private oauthService: OAuthService
+    private formBuilder: FormBuilder
   ) {
     this.Form = this.formBuilder.group({
       username: ['', Validators.required],
@@ -44,11 +44,18 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.oauthService.initLoginFlow();
-    this.socialAuthService.authState.subscribe((data) => {
-      console.log(data);
-      console.log(data['idToken']);
-    });
+    // this.socialAuthService.authState.subscribe((data) => {
+    //   console.log(data);
+    //   console.log(data['idToken']);
+    // });
+    this.oidcSecurityService
+      .checkAuth()
+      .subscribe((loginResponse: LoginResponse) => {
+        const { isAuthenticated, userData, accessToken, idToken, configId } =
+          loginResponse;
+
+        console.log(isAuthenticated, userData, idToken);
+      });
     return;
   }
 
@@ -97,7 +104,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loginGoogle() {
-    this.oauthService.initLoginFlow();
+    this.oidcSecurityService.authorize();
+    return;
   }
 
   ngOnDestroy(): void {

@@ -23,21 +23,14 @@ import { ErrorMessageComponent } from './errorMessage/error-message.component';
 import { AuthComponent } from './auth/auth.component';
 import { VerifyEmailAddressComponent } from './verify-email-address/verify-email-address.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import { AuthConfig } from 'angular-oauth2-oidc';
-import { OAuthModule } from 'angular-oauth2-oidc';
-
-export const authConfig: AuthConfig = {
-  issuer: 'https://accounts.google.com',
-  redirectUri: window.location.origin,
-  clientId:
-    '752731306131-k6biq6c3ts8da0831u9lst8js4ffhscd.apps.googleusercontent.com',
-  responseType: 'token id_token',
-  scope: 'openid profile email',
-};
+import {
+  AuthModule,
+  LogLevel,
+  OidcSecurityService,
+} from 'angular-auth-oidc-client';
 
 @NgModule({
   imports: [
-    HttpClientModule,
     CommonModule,
     RouterModule.forChild(authRoutes),
     ReactiveFormsModule,
@@ -45,7 +38,6 @@ export const authConfig: AuthConfig = {
     ErrorMessageComponent,
     SocialLoginModule,
     GoogleSigninButtonModule,
-    OAuthModule.forRoot(),
   ],
   declarations: [
     RegisterComponent,
@@ -60,24 +52,23 @@ export const authConfig: AuthConfig = {
   providers: [
     AuthenticationService,
     InnactiveAccountService,
-    { provide: AuthConfig, useValue: authConfig },
-    {
-      provide: 'SocialAuthServiceConfig',
-      useValue: {
-        autoLogin: false,
-        providers: [
-          {
-            id: GoogleLoginProvider.PROVIDER_ID,
-            provider: new GoogleLoginProvider(
-              '752731306131-k6biq6c3ts8da0831u9lst8js4ffhscd.apps.googleusercontent.com'
-            ),
-          },
-        ],
-        onError: (err) => {
-          console.error(err);
-        },
-      } as SocialAuthServiceConfig,
-    },
+    // {
+    //   provide: 'SocialAuthServiceConfig',
+    //   useValue: {
+    //     autoLogin: false,
+    //     providers: [
+    //       {
+    //         id: GoogleLoginProvider.PROVIDER_ID,
+    //         provider: new GoogleLoginProvider(
+    //           '752731306131-k6biq6c3ts8da0831u9lst8js4ffhscd.apps.googleusercontent.com'
+    //         ),
+    //       },
+    //     ],
+    //     onError: (err) => {
+    //       console.error(err);
+    //     },
+    //   } as SocialAuthServiceConfig,
+    // },
   ],
 })
-export class AuthModule {}
+export class CustomAuthModule {}

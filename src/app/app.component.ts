@@ -1,4 +1,5 @@
 /* eslint-disable @nx/enforce-module-boundaries */
+import { SocialAuthService } from '@abacritt/angularx-social-login';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { Store } from '@ngrx/store';
@@ -26,6 +27,7 @@ import {
   imports: [RouterModule, ErrorToasterComponent, SuccessNotificationComponent],
   providers: [
     ValidateAuthUserService,
+    SocialAuthService,
     {
       provide: SUCCESS_MESSAGE_TOKEN,
       useClass: SuccessMessageService,
