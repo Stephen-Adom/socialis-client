@@ -23,6 +23,17 @@ import { ErrorMessageComponent } from './errorMessage/error-message.component';
 import { AuthComponent } from './auth/auth.component';
 import { VerifyEmailAddressComponent } from './verify-email-address/verify-email-address.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { AuthConfig } from 'angular-oauth2-oidc';
+import { OAuthModule } from 'angular-oauth2-oidc';
+
+export const authConfig: AuthConfig = {
+  issuer: 'https://accounts.google.com',
+  redirectUri: window.location.origin,
+  clientId:
+    '752731306131-k6biq6c3ts8da0831u9lst8js4ffhscd.apps.googleusercontent.com',
+  responseType: 'token id_token',
+  scope: 'openid profile email',
+};
 
 @NgModule({
   imports: [
@@ -34,6 +45,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
     ErrorMessageComponent,
     SocialLoginModule,
     GoogleSigninButtonModule,
+    OAuthModule.forRoot(),
   ],
   declarations: [
     RegisterComponent,
@@ -48,6 +60,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
   providers: [
     AuthenticationService,
     InnactiveAccountService,
+    { provide: AuthConfig, useValue: authConfig },
     {
       provide: 'SocialAuthServiceConfig',
       useValue: {

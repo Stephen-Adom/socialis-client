@@ -31,6 +31,7 @@
     "@types/sockjs-client": "^1.5.2",
     "@types/stompjs": "^2.3.6",
     "angular-mentions": "^1.5.0",
+    "angular-oauth2-oidc": "^15.0.1",
     "date-fns": "^2.30.0",
     "google-libphonenumber": "^3.2.33",
     "intl-tel-input": "^17.0.3",

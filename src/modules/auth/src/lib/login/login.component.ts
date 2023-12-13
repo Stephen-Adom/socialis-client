@@ -17,6 +17,7 @@ import {
   SocialAuthService,
 } from '@abacritt/angularx-social-login';
 import { DOCUMENT } from '@angular/common';
+import { OAuthService } from 'angular-oauth2-oidc';
 
 @Component({
   selector: 'feature-login',
@@ -33,7 +34,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     private socialAuthService: SocialAuthService,
     private authservice: AuthenticationService,
     private store: Store<AppState>,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private oauthService: OAuthService
   ) {
     this.Form = this.formBuilder.group({
       username: ['', Validators.required],
@@ -42,10 +44,12 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.oauthService.initLoginFlow();
     this.socialAuthService.authState.subscribe((data) => {
       console.log(data);
       console.log(data['idToken']);
     });
+    return;
   }
 
   ngAfterViewInit(): void {
@@ -90,6 +94,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       .then((user) => {
         console.log(user);
       });
+  }
+
+  loginGoogle() {
+    this.oauthService.initLoginFlow();
   }
 
   ngOnDestroy(): void {
