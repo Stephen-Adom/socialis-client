@@ -3,7 +3,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import BASE_URL from './base_url';
 import { getNonAuthHttpOptions } from './httpHeaders';
-import { AuthResponseType, UserRegistrationDetailsType } from 'utils';
+import {
+  AuthResponseType,
+  SocialUser,
+  UserRegistrationDetailsType,
+} from 'utils';
 import * as localforage from 'localforage';
 import { AppApiActions, AppState } from 'state';
 import { Store } from '@ngrx/store';
@@ -65,6 +69,14 @@ export class AuthenticationService {
     return this.Http.post<AuthResponseType>(
       BASE_URL + '/auth/login',
       userDetails,
+      getNonAuthHttpOptions()
+    );
+  }
+
+  signInWithGoogleSocial(user: SocialUser) {
+    return this.Http.post<AuthResponseType>(
+      BASE_URL + '/auth/google/login',
+      user,
       getNonAuthHttpOptions()
     );
   }

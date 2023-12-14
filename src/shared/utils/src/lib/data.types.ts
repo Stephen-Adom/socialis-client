@@ -247,3 +247,10 @@ export type postImageType = {
   id: number;
   type: string;
 };
+
+export type SocialUser = {
+  email: string;
+  firstName: string;
+  lastName: string;
+  photoUrl: string;
+};

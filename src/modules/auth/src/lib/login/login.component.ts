@@ -17,6 +17,7 @@ import {
   SocialAuthService,
 } from '@abacritt/angularx-social-login';
 import { DOCUMENT } from '@angular/common';
+import { SocialUser } from 'utils';
 
 @Component({
   selector: 'feature-login',
@@ -27,6 +28,7 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   Form: FormGroup;
   submittingForm = false;
   loginSubscription = new Subscription();
+  socialUser!: SocialUser;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
@@ -43,9 +45,37 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnInit(): void {
     this.socialAuthService.authState.subscribe((data) => {
-      console.log(data);
-      console.log(data['idToken']);
+      if (data) {
+        this.socialUser = {
+          email: data.email,
+          firstName: data.firstName,
+          lastName: data.lastName,
+          photoUrl: data.photoUrl,
+        };
+
+        this.signInUser(this.socialUser);
+      }
     });
+  }
+
+  signInUser(user: SocialUser) {
+    this.submittingForm = true;
+    this.loginSubscription = this.authservice
+      .signInWithGoogleSocial(user)
+      .pipe()
+      .subscribe({
+        next: (response) => {
+          console.log(response, 'response');
+          this.submittingForm = false;
+          this.authservice.saveAndRedirectUser(response);
+        },
+        error: (error: HttpErrorResponse) => {
+          this.submittingForm = false;
+          this.store.dispatch(
+            AppApiActions.displayErrorMessage({ error: error.error })
+          );
+        },
+      });
   }
 
   ngAfterViewInit(): void {
