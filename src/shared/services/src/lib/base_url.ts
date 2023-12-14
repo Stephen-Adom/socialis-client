@@ -1,3 +1,5 @@
-const BASE_URL = 'http://localhost:8080/api';
+import { environments } from 'environments';
+
+const BASE_URL = environments.serverUrl + '/api';
 
 export default BASE_URL;

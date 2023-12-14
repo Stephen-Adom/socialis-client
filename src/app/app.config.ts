@@ -13,8 +13,12 @@ import { EffectsModule, provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { AppReducer, featureAppKey } from 'state';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { LogLevel, provideAuth } from 'angular-auth-oidc-client';
 import { provideHttpClient } from '@angular/common/http';
+import {
+  GoogleLoginProvider,
+  SocialAuthServiceConfig,
+} from '@abacritt/angularx-social-login';
+import { environments } from 'environments';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -28,19 +32,26 @@ export const appConfig: ApplicationConfig = {
     provideStoreDevtools({ logOnly: !isDevMode() }),
     provideAnimations(),
     provideHttpClient(),
-    provideAuth({
-      config: {
-        authority: 'https://accounts.google.com',
-        redirectUrl: window.location.origin,
-        postLogoutRedirectUri: window.location.origin,
-        clientId:
-          '752731306131-k6biq6c3ts8da0831u9lst8js4ffhscd.apps.googleusercontent.com',
-        scope: 'openid profile email',
-        responseType: 'code',
-        silentRenew: true,
-        useRefreshToken: true,
-        logLevel: LogLevel.Debug,
-      },
-    }),
+    {
+      provide: 'SocialAuthServiceConfig',
+      useValue: {
+        autoLogin: false,
+        providers: [
+          {
+            id: GoogleLoginProvider.PROVIDER_ID,
+            provider: new GoogleLoginProvider(environments.googleClientId),
+          },
+          // {
+          //   id: Fac,
+          //   provider: new GoogleLoginProvider(
+          //     '752731306131-k6biq6c3ts8da0831u9lst8js4ffhscd.apps.googleusercontent.com'
+          //   ),
+          // },
+        ],
+        onError: (err) => {
+          console.error(err);
+        },
+      } as SocialAuthServiceConfig,
+    },
   ],
 };

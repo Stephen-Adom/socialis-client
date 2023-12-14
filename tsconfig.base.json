@@ -35,6 +35,7 @@
       "edit-cover-background-modal": [
         "src/lib/edit-cover-background-modal/src/index.ts"
       ],
+      "environments": ["src/shared/environments/src/index.ts"],
       "event-card-summary": ["src/lib/event-card-summary/src/index.ts"],
       "followers": ["src/lib/followers/src/index.ts"],
       "friend-card": ["src/lib/friend-card/src/index.ts"],

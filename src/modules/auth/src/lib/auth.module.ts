@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 import { AuthenticationService, InnactiveAccountService } from 'services';
 import { ActivateAccountNotificationComponent } from 'notification';
 import {
@@ -23,16 +22,13 @@ import { ErrorMessageComponent } from './errorMessage/error-message.component';
 import { AuthComponent } from './auth/auth.component';
 import { VerifyEmailAddressComponent } from './verify-email-address/verify-email-address.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
-import {
-  AuthModule,
-  LogLevel,
-  OidcSecurityService,
-} from 'angular-auth-oidc-client';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   imports: [
     CommonModule,
     RouterModule.forChild(authRoutes),
+    HttpClientModule,
     ReactiveFormsModule,
     ActivateAccountNotificationComponent,
     ErrorMessageComponent,
@@ -49,26 +45,6 @@ import {
     VerifyEmailAddressComponent,
     ResetPasswordComponent,
   ],
-  providers: [
-    AuthenticationService,
-    InnactiveAccountService,
-    // {
-    //   provide: 'SocialAuthServiceConfig',
-    //   useValue: {
-    //     autoLogin: false,
-    //     providers: [
-    //       {
-    //         id: GoogleLoginProvider.PROVIDER_ID,
-    //         provider: new GoogleLoginProvider(
-    //           '752731306131-k6biq6c3ts8da0831u9lst8js4ffhscd.apps.googleusercontent.com'
-    //         ),
-    //       },
-    //     ],
-    //     onError: (err) => {
-    //       console.error(err);
-    //     },
-    //   } as SocialAuthServiceConfig,
-    // },
-  ],
+  providers: [AuthenticationService, InnactiveAccountService],
 })
 export class CustomAuthModule {}

@@ -13,11 +13,10 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { AppApiActions, AppState } from 'state';
 import { Store } from '@ngrx/store';
 import {
-  GoogleLoginProvider,
+  FacebookLoginProvider,
   SocialAuthService,
 } from '@abacritt/angularx-social-login';
 import { DOCUMENT } from '@angular/common';
-import { LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'feature-login',
@@ -30,7 +29,6 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   loginSubscription = new Subscription();
 
   constructor(
-    public oidcSecurityService: OidcSecurityService,
     @Inject(DOCUMENT) private document: Document,
     private socialAuthService: SocialAuthService,
     private authservice: AuthenticationService,
@@ -44,19 +42,10 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    // this.socialAuthService.authState.subscribe((data) => {
-    //   console.log(data);
-    //   console.log(data['idToken']);
-    // });
-    this.oidcSecurityService
-      .checkAuth()
-      .subscribe((loginResponse: LoginResponse) => {
-        const { isAuthenticated, userData, accessToken, idToken, configId } =
-          loginResponse;
-
-        console.log(isAuthenticated, userData, idToken);
-      });
-    return;
+    this.socialAuthService.authState.subscribe((data) => {
+      console.log(data);
+      console.log(data['idToken']);
+    });
   }
 
   ngAfterViewInit(): void {
@@ -95,17 +84,8 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  googleLogin() {
-    this.socialAuthService
-      .signIn(GoogleLoginProvider.PROVIDER_ID)
-      .then((user) => {
-        console.log(user);
-      });
-  }
-
-  loginGoogle() {
-    this.oidcSecurityService.authorize();
-    return;
+  facebookLogin() {
+    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
   }
 
   ngOnDestroy(): void {
