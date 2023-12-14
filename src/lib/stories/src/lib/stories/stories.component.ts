@@ -13,6 +13,7 @@ import { AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { UserInfoType, getBase64 } from 'utils';
 import { Observable, fromEvent } from 'rxjs';
+import * as ffmpeg from 'ffmpeg.js/ffmpeg-mp4';
 
 register();
 
@@ -30,6 +31,8 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   swiperEl: any;
   authUser$!: Observable<UserInfoType | null>;
   videoFile: any;
+  startTime = 0;
+  endTime = 0;
 
   constructor(private store: Store<AppState>) {}
 
@@ -39,6 +42,8 @@ export class StoriesComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit(): void {
     this.initializeSwiper();
+
+    // console.log(ffmpeg, 'ffmpeg');
 
     // fromEvent(this.video.nativeElement, 'loadedmetadata').subscribe((data) => {
     //   console.log(data, 'video element');
@@ -89,11 +94,42 @@ export class StoriesComponent implements AfterViewInit, OnInit {
     if (event.target.files.length) {
       for (let i = 0; i < event.target.files.length; i++) {
         if (event.target.files[i].size > 100000000) {
-          return;
+          console.log(event.target.files[i]);
+          this.trimVideo(event.target.files[i]);
         } else {
           return;
         }
       }
     }
+  }
+
+  trimVideo(file: File) {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const data = new Uint8Array(reader.result as ArrayBuffer);
+
+      const result = ffmpeg({
+        MEMFS: [{ name: 'input.mp4', data }],
+        arguments: [
+          '-i',
+          'input.mp4',
+          '-ss',
+          this.startTime.toString(),
+          '-to',
+          this.endTime.toString(),
+          '-c',
+          'copy',
+          'output.mp4',
+        ],
+      });
+
+      const outputData = result.MEMFS[0].data;
+      const trimmedBlob = new Blob([outputData], { type: 'video/mp4' });
+
+      // You can now send `trimmedBlob` to the server.
+      console.log(trimmedBlob, 'trimmedBlob');
+    };
+
+    reader.readAsArrayBuffer(file);
   }
 }
