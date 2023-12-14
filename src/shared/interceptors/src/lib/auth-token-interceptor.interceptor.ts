@@ -7,16 +7,19 @@ import {
 } from '@angular/common/http';
 import { Observable, from, mergeMap } from 'rxjs';
 import * as localforage from 'localforage';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable()
 export class AuthTokenInterceptorInterceptor implements HttpInterceptor {
+  helper = new JwtHelperService();
   intercept(
     request: HttpRequest<unknown>,
     next: HttpHandler
   ): Observable<HttpEvent<unknown>> {
     return from(localforage.getItem('accessToken')).pipe(
       mergeMap((token: unknown) => {
-        if (token) {
+        const isExpired = this.helper.isTokenExpired(token as string);
+        if (!isExpired) {
           const requestClone = request.clone({
             setHeaders: {
               'Content-Type': 'application/json',
