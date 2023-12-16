@@ -95,4 +95,8 @@ export class PostService {
       this.authHeaders
     );
   }
+
+  uploadStories(formData: FormData) {
+    return this.http.post<SuccessMessageType>(BASE_URL + '/stories', formData);
+  }
 }

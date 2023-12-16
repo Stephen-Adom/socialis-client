@@ -13,7 +13,8 @@ import { AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { UserInfoType, getBase64 } from 'utils';
 import { Observable, fromEvent } from 'rxjs';
-import * as ffmpeg from 'ffmpeg.js/ffmpeg-mp4';
+import { PostService } from 'services';
+import Hls from 'hls.js';
 
 register();
 
@@ -34,7 +35,10 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   startTime = 0;
   endTime = 0;
 
-  constructor(private store: Store<AppState>) {}
+  constructor(
+    private postservice: PostService,
+    private store: Store<AppState>
+  ) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
@@ -90,15 +94,32 @@ export class StoriesComponent implements AfterViewInit, OnInit {
     }
   }
 
-  async onFileChange(event: any) {
-    if (event.target.files.length) {
-      for (let i = 0; i < event.target.files.length; i++) {
-        if (event.target.files[i].size > 100000000) {
-          console.log(event.target.files[i]);
+  onFileChange(event: any) {
+    const file = event.target.files[0];
+    console.log(file, 'file');
+    this.uploadStory(file);
+  }
+
+  uploadStory(file: File) {
+    const formData = new FormData();
+    formData.append('video', file);
+
+    this.postservice.uploadStories(formData).subscribe((data: any) => {
+      if (data) {
+        if (data.success) {
+          this.videoFile = data.data;
+          console.log(data, ' data');
+          // 设置封面
+          this.video.nativeElement.poster = data.data.poster;
+
+          // 渲染到播放器
+          const hls = new Hls();
+          hls.loadSource(data.data.m3u8);
+          hls.attachMedia(this.video.nativeElement);
         } else {
-          return;
+          console.log(data.message);
         }
       }
-    }
+    });
   }
 }

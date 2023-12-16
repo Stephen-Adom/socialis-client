@@ -22,7 +22,6 @@ export class AuthTokenInterceptorInterceptor implements HttpInterceptor {
         if (!isExpired) {
           const requestClone = request.clone({
             setHeaders: {
-              'Content-Type': 'application/json',
               Authorization: 'Bearer ' + token,
             },
           });

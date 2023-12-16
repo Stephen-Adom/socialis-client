@@ -70,7 +70,7 @@
             hidden
             (change)="onFileChange($event)"
             #fileInput
-            accept="video/*"
+            accept="video/*, image/*"
           />
 
           <button
@@ -100,8 +100,7 @@
     </swiper-slide>
   </swiper-container>
 
-  <video #video id="video" width="100%" controls *ngIf="videoFile">
-    <source [src]="videoFile" />
+  <video #video id="video" width="100%" controls>
     Your browser does not support the video tag.
   </video>
 </div>
