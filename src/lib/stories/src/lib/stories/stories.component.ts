@@ -53,7 +53,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
       spaceBetween: 5,
       breakpoints: {
         640: {
-          slidesPerView: 2,
+          slidesPerView: 4,
         },
         1024: {
           slidesPerView: 5,
