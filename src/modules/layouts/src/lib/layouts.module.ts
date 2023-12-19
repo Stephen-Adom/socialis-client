@@ -55,6 +55,7 @@ import { NavLinksComponent } from 'nav-links';
 import { ProfileCardSummaryComponent } from 'profile-card-summary';
 import { NotificationOffcanvasComponent } from 'notification-offcanvas';
 import { AuthTokenInterceptorInterceptor } from 'interceptors';
+import { StoriesDialogComponent } from 'stories-dialog';
 
 @NgModule({
   imports: [
@@ -83,6 +84,7 @@ import { AuthTokenInterceptorInterceptor } from 'interceptors';
     ProfileCardSummaryComponent,
     NotificationOffcanvasComponent,
     NotificationAlertsComponent,
+    StoriesDialogComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [

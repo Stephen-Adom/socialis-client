@@ -1,0 +1,4 @@
+:host ::ng-deep .p-dialog-header {
+  padding-top: 14px !important;
+  padding-bottom: 14px !important;
+}
