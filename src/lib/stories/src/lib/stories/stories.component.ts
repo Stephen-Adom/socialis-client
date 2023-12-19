@@ -14,7 +14,7 @@ import { Store } from '@ngrx/store';
 import { UserInfoType, getBase64 } from 'utils';
 import { Observable, fromEvent } from 'rxjs';
 import { PostService } from 'services';
-import Hls from 'hls.js';
+import { SwiperOptions } from 'swiper/types';
 
 register();
 
@@ -29,7 +29,6 @@ register();
 export class StoriesComponent implements AfterViewInit, OnInit {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
-  swiperEl: any;
   authUser$!: Observable<UserInfoType | null>;
   videoFile: any;
   startTime = 0;
@@ -46,17 +45,12 @@ export class StoriesComponent implements AfterViewInit, OnInit {
 
   ngAfterViewInit(): void {
     this.initializeSwiper();
-
-    // console.log(ffmpeg, 'ffmpeg');
-
-    // fromEvent(this.video.nativeElement, 'loadedmetadata').subscribe((data) => {
-    //   console.log(data, 'video element');
-    // });
   }
 
   initializeSwiper() {
-    const swiperParams = {
-      slidesPerView: 2,
+    const swiperParams: SwiperOptions = {
+      slidesPerView: 9,
+      spaceBetween: 5,
       breakpoints: {
         640: {
           slidesPerView: 2,
@@ -65,7 +59,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
           slidesPerView: 5,
         },
         1280: {
-          slidesPerView: 6,
+          slidesPerView: 9,
         },
       },
       on: {
@@ -83,43 +77,21 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   }
 
   nextSlide() {
-    if (this.swiperEl) {
-      this.swiperEl.swiper.slideNext();
+    console.log(this.swiperContainer);
+    console.log(this.swiperContainer.nativeElement.swiper);
+    if (this.swiperContainer) {
+      this.swiperContainer.nativeElement.swiper.slideNext();
     }
   }
 
   prevSlide() {
-    if (this.swiperEl) {
-      this.swiperEl.swiper.slidePrev();
+    if (this.swiperContainer) {
+      this.swiperContainer.nativeElement.swiper.slidePrev();
     }
   }
 
   onFileChange(event: any) {
     const file = event.target.files[0];
     console.log(file, 'file');
-    this.uploadStory(file);
-  }
-
-  uploadStory(file: File) {
-    const formData = new FormData();
-    formData.append('video', file);
-
-    this.postservice.uploadStories(formData).subscribe((data: any) => {
-      if (data) {
-        if (data.success) {
-          this.videoFile = data.data;
-          console.log(data, ' data');
-          // 设置封面
-          this.video.nativeElement.poster = data.data.poster;
-
-          // 渲染到播放器
-          const hls = new Hls();
-          hls.loadSource(data.data.m3u8);
-          hls.attachMedia(this.video.nativeElement);
-        } else {
-          console.log(data.message);
-        }
-      }
-    });
   }
 }

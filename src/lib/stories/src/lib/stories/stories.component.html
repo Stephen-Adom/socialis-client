@@ -1,7 +1,8 @@
 <div
-  class="stories-container bg-white dark:bg-main-dark rounded-lg py-3 w-full gap-x-6 px-4 card border-none relative"
+  class="stories-container bg-white dark:bg-main-dark rounded-lg py-2 w-full gap-x-6 px-4 card border-none relative"
 >
   <button
+    *ngIf="swiperContainer.swiper.isBeginning === false"
     class="prevBtn w-7 h-7 rounded-full bg-white dark:bg-base-gray-dark shadow-md shadow-gray-300 dark:shadow-gray-950 flex items-center justify-center absolute top-[50%] -left-[0.65rem] -translate-y-[50%] z-[2]"
     type="button"
     title="next"
@@ -24,6 +25,7 @@
   </button>
 
   <button
+    *ngIf="swiperContainer.swiper.isEnd === false"
     class="nextBtn w-7 h-7 rounded-full bg-white dark:bg-base-gray-dark shadow-md shadow-gray-300 dark:shadow-gray-950 flex items-center justify-center absolute top-[50%] -right-[0.65rem] -translate-y-[50%] z-[2]"
     type="button"
     title="next"
@@ -44,15 +46,10 @@
       />
     </svg>
   </button>
-  <swiper-container
-    #swiperContainer
-    slides-per-view="3"
-    speed="500"
-    space-between="5"
-  >
+  <swiper-container #swiperContainer>
     <swiper-slide>
       <div
-        class="story-container flex flex-col items-center gap-y-2 relative top-1"
+        class="story-container flex flex-col items-center gap-y-2 relative top-1 w-max px-[11px] py-[2px]"
       >
         <div class="auth-user-story-container relative inline-block">
           <img
@@ -98,9 +95,19 @@
         <span class="d-block text-xs dark:text-dark-text">Your Story</span>
       </div>
     </swiper-slide>
-  </swiper-container>
 
-  <video #video id="video" width="100%" controls>
-    Your browser does not support the video tag.
-  </video>
+    <swiper-slide>
+      <div
+        class="story-container flex flex-col items-center gap-y-2 relative top-1 w-max px-[11px] py-[2px]"
+      >
+        <div class="auth-user-story-container relative inline-block">
+          <img
+            class="inline-block flex-shrink-0 h-[3.875rem] w-[3.875rem] rounded-full outline-offset-[3px] outline outline-gray-300 cursor-pointer"
+            src="assets/images/users/default.jpg"
+          />
+        </div>
+        <span class="d-block text-xs dark:text-dark-text">Alaska</span>
+      </div>
+    </swiper-slide>
+  </swiper-container>
 </div>

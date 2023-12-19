@@ -1,0 +1,3 @@
+:host ::ng-deep swiper-slide {
+  width: max-content !important;
+}
