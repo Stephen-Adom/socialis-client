@@ -64,6 +64,7 @@
       "state": ["src/shared/store/src/index.ts"],
       "stories": ["src/lib/stories/src/index.ts"],
       "stories-dialog": ["src/lib/stories-dialog/src/index.ts"],
+      "stories-edit-preview": ["src/lib/stories-edit-preview/src/index.ts"],
       "textarea-form": ["src/lib/textarea-form/src/index.ts"],
       "user-profile": ["src/modules/user-profile/src/index.ts"],
       "utils": ["src/shared/utils/src/index.ts"]

@@ -56,6 +56,7 @@ import { ProfileCardSummaryComponent } from 'profile-card-summary';
 import { NotificationOffcanvasComponent } from 'notification-offcanvas';
 import { AuthTokenInterceptorInterceptor } from 'interceptors';
 import { StoriesDialogComponent } from 'stories-dialog';
+import { StoriesEditPreviewComponent } from 'stories-edit-preview';
 
 @NgModule({
   imports: [
@@ -85,6 +86,7 @@ import { StoriesDialogComponent } from 'stories-dialog';
     NotificationOffcanvasComponent,
     NotificationAlertsComponent,
     StoriesDialogComponent,
+    StoriesEditPreviewComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
