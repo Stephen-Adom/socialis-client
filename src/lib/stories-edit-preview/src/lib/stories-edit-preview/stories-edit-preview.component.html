@@ -1,1 +1,73 @@
-<p>stories-edit-preview works!</p>
+<div
+  class="dialog-wrapper fixed top-0 left-0 w-full h-screen bg-gray-900 z-[2220] px-10 py-2"
+>
+  <div class="wrapper-header text-right">
+    <button type="button" class="text-white rounded-full p-1" title="close">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        data-slot="icon"
+        class="w-6 h-6"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18 18 6M6 6l12 12"
+        />
+      </svg>
+    </button>
+  </div>
+  <section
+    class="w-[50%] mx-auto text-white flex items-center justify-center h-full"
+  >
+    <swiper-container
+      class="mySwiper"
+      pagination="true"
+      pagination-type="progressbar"
+      navigation="true"
+      slides-per-view="1"
+    >
+      <swiper-slide>
+        <div
+          class="media-container w-full h-full p-4 flex items-center justify-center relative"
+        >
+          <img
+            src="assets/images/my-computer-room-setup.jpg"
+            class="w-full"
+            alt=""
+          />
+
+          <div
+            class="absolute bottom-0 left-0 w-full bg-black opacity-50 h-20 z-[1]"
+          >
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellat
+            exercitationem laborum pariatur quis magni nisi amet vero nesciunt,
+            iste in? Maxime commodi, quam ab nisi illo exercitationem quasi?
+            Explicabo, aliquid!
+          </div>
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="media-container w-full h-full p-4">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis,
+          accusamus unde officiis earum porro dolorem incidunt veniam eaque
+          inventore, quasi obcaecati perspiciatis at. Quo itaque perspiciatis
+          fugit eveniet dolorum saepe.
+        </div>
+      </swiper-slide>
+
+      <swiper-slide>
+        <div class="media-container w-full h-full p-4">
+          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis,
+          accusamus unde officiis earum porro dolorem incidunt veniam eaque
+          inventore, quasi obcaecati perspiciatis at. Quo itaque perspiciatis
+          fugit eveniet dolorum saepe.
+        </div>
+      </swiper-slide>
+    </swiper-container>
+  </section>
+</div>
