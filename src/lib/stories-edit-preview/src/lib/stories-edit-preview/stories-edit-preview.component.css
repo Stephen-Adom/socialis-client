@@ -6,9 +6,3 @@
 :host ::ng-deep swiper-slide {
   width: 100% !important;
 }
-
-:host ::ng-deep .swiper-pagination-progressbar {
-  background: #565353 !important;
-  border-radius: 10px !important;
-  overflow: hidden !important;
-}

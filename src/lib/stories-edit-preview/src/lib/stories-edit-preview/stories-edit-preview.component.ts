@@ -1,6 +1,13 @@
-import { CUSTOM_ELEMENTS_SCHEMA, Component } from '@angular/core';
+import {
+  AfterViewInit,
+  CUSTOM_ELEMENTS_SCHEMA,
+  Component,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { register } from 'swiper/element/bundle';
+import { SwiperContainer, register } from 'swiper/element/bundle';
+import { SwiperOptions } from 'swiper/types';
 
 register();
 
@@ -12,4 +19,38 @@ register();
   templateUrl: './stories-edit-preview.component.html',
   styleUrls: ['./stories-edit-preview.component.css'],
 })
-export class StoriesEditPreviewComponent {}
+export class StoriesEditPreviewComponent implements AfterViewInit {
+  @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
+
+  ngAfterViewInit(): void {
+    const swiperParams: SwiperOptions = {
+      slidesPerView: 1,
+      spaceBetween: 5,
+      pagination: false,
+      navigation: true,
+      breakpoints: {
+        640: {
+          slidesPerView: 1,
+        },
+        1024: {
+          slidesPerView: 1,
+        },
+        1280: {
+          slidesPerView: 1,
+        },
+      },
+      on: {
+        init() {
+          // ...
+        },
+      },
+    };
+
+    // now we need to assign all parameters to Swiper element
+    Object.assign(this.swiperContainer.nativeElement, swiperParams);
+    // and now initialize it
+    this.swiperContainer.nativeElement.initialize();
+    // this.swiperContainer.nativeElement.swiper.
+    console.log(this.swiperContainer);
+  }
+}

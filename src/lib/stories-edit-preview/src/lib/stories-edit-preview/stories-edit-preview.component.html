@@ -1,8 +1,22 @@
 <div
   class="dialog-wrapper fixed top-0 left-0 w-full h-screen bg-gray-900 z-[2220] px-10 py-2"
 >
-  <div class="wrapper-header text-right">
-    <button type="button" class="text-white rounded-full p-1" title="close">
+  <div class="wrapper-header flex items-center justify-center mt-6">
+    <div
+      class="pagination flex items-center justify-center gap-2 w-[50%] mx-auto"
+    >
+      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
+      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
+      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
+      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
+      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
+      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
+    </div>
+    <!-- <button
+      type="button"
+      class="text-white rounded-full p-1 ml-auto"
+      title="close"
+    >
       <svg
         xmlns="http://www.w3.org/2000/svg"
         fill="none"
@@ -18,18 +32,12 @@
           d="M6 18 18 6M6 6l12 12"
         />
       </svg>
-    </button>
+    </button> -->
   </div>
   <section
     class="w-[50%] mx-auto text-white flex items-center justify-center h-full"
   >
-    <swiper-container
-      class="mySwiper"
-      pagination="true"
-      pagination-type="progressbar"
-      navigation="true"
-      slides-per-view="1"
-    >
+    <swiper-container #swiperContainer class="mySwiper">
       <swiper-slide>
         <div
           class="media-container w-full h-full p-4 flex items-center justify-center relative"

@@ -7,9 +7,9 @@
 @import 'primeng/resources/themes/lara-light-blue/theme.css';
 @import 'primeng/resources/primeng.css';
 
-@import 'swiper/css';
-@import 'swiper/css/navigation';
-@import 'swiper/css/pagination';
+@import 'swiper/scss';
+@import 'swiper/scss/navigation';
+@import 'swiper/scss/pagination';
 
 html,
 body {
@@ -196,4 +196,15 @@ swiper-slide {
 .video-js {
   width: 100%;
   height: 100%;
+}
+
+.swiper-pagination.swiper-pagination-progressbar {
+  background: #565353 !important;
+  border-radius: 10px !important;
+  overflow: hidden !important;
+  display: none !important;
+}
+
+.swiper-pagination {
+  background: red !important;
 }

@@ -73,7 +73,6 @@ export class StoriesComponent implements AfterViewInit, OnInit {
     Object.assign(this.swiperContainer.nativeElement, swiperParams);
     // and now initialize it
     this.swiperContainer.nativeElement.initialize();
-    console.log(this.swiperContainer);
   }
 
   nextSlide() {
