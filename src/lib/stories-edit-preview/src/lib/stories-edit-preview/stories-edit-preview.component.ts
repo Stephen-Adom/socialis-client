@@ -27,7 +27,7 @@ export class StoriesEditPreviewComponent implements AfterViewInit {
       slidesPerView: 1,
       spaceBetween: 5,
       pagination: false,
-      navigation: true,
+      navigation: false,
       breakpoints: {
         640: {
           slidesPerView: 1,
