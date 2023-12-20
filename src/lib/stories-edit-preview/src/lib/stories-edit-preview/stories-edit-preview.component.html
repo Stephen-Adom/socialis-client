@@ -1,7 +1,9 @@
 <div
   class="dialog-wrapper fixed top-0 left-0 w-full h-screen bg-gray-900 z-[2220] px-10 py-2"
 >
-  <div class="wrapper-header flex items-center justify-center mt-6">
+  <div
+    class="wrapper-header flex items-center justify-center mt-6 z-10 relative"
+  >
     <div
       class="pagination flex items-center justify-center gap-2 w-[50%] mx-auto"
     >
@@ -26,9 +28,9 @@
         class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
       ></span>
     </div>
-    <!-- <button
+    <button
       type="button"
-      class="text-white rounded-full p-1 ml-auto"
+      class="text-white rounded-full p-1 ml-auto absolute -top-[15px] right-10"
       title="close"
     >
       <svg
@@ -46,10 +48,10 @@
           d="M6 18 18 6M6 6l12 12"
         />
       </svg>
-    </button> -->
+    </button>
   </div>
   <section
-    class="w-[50%] mx-auto text-white flex items-center justify-center h-full relative"
+    class="w-[50%] mx-auto text-white flex flex-col items-center justify-center h-[90%] relative"
   >
     <button
       *ngIf="swiperContainer.swiper.isBeginning === false"
@@ -64,7 +66,7 @@
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        class="w-14 h-14 text-gray-200"
+        class="w-14 h-14 text-gray-500 hover:text-gray-400"
       >
         <path
           stroke-linecap="round"
@@ -87,7 +89,7 @@
         viewBox="0 0 24 24"
         stroke-width="1.5"
         stroke="currentColor"
-        class="w-14 h-14 text-gray-200"
+        class="w-14 h-14 text-gray-500 hover:text-gray-400"
       >
         <path
           stroke-linecap="round"
@@ -109,12 +111,12 @@
           />
 
           <div
-            class="absolute bottom-[70px] left-0 w-full bg-black/50 h-[7rem] z-[1] p-5"
+            class="absolute bottom-0 left-0 w-full bg-black/50 h-[4rem] z-[1] p-5"
           >
             <input
               type="text"
               placeholder="Add caption..."
-              class="text-xs text-white rounded-full px-4 py-2 bg-[#333131] border border-gray-600 focus:outline-none focus:border-gray-500 w-full"
+              class="text-xs text-white text-center rounded-full px-4 py-2 bg-[#333131] border border-gray-600 focus:outline-none focus:border-gray-500 w-full"
             />
           </div>
         </div>
@@ -138,5 +140,39 @@
         </div>
       </swiper-slide>
     </swiper-container>
+
+    <div class="mt-4 flex items-center gap-3">
+      <div class="media-container w-full h-16 overflow-hidden">
+        <img
+          src="assets/images/my-computer-room-setup.jpg"
+          class="w-full"
+          alt=""
+        />
+      </div>
+
+      <div class="media-container w-full h-16 overflow-hidden">
+        <img
+          src="assets/images/my-computer-room-setup.jpg"
+          class="w-full"
+          alt=""
+        />
+      </div>
+
+      <div class="media-container w-full h-16 overflow-hidden">
+        <img
+          src="assets/images/my-computer-room-setup.jpg"
+          class="w-full"
+          alt=""
+        />
+      </div>
+
+      <div class="media-container w-full h-16 overflow-hidden">
+        <img
+          src="assets/images/my-computer-room-setup.jpg"
+          class="w-full"
+          alt=""
+        />
+      </div>
+    </div>
   </section>
 </div>
