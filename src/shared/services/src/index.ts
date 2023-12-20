@@ -17,3 +17,4 @@ export * from './lib/confirm-delete.service';
 export * from './lib/action-progress.service';
 export * from './lib/displayAlertInfo.service';
 export * from './lib/formatNotification.service';
+export * from './lib/stories-edit-preview.service';

@@ -3,11 +3,14 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
   ElementRef,
+  OnInit,
   ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SwiperContainer, register } from 'swiper/element/bundle';
 import { SwiperOptions } from 'swiper/types';
+import { StoriesEditPreviewService } from 'services';
+import { Observable } from 'rxjs';
 
 register();
 
@@ -19,9 +22,16 @@ register();
   templateUrl: './stories-edit-preview.component.html',
   styleUrls: ['./stories-edit-preview.component.css'],
 })
-export class StoriesEditPreviewComponent implements AfterViewInit {
+export class StoriesEditPreviewComponent implements OnInit, AfterViewInit {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
+  storiesDisplay$!: Observable<boolean>;
   activeIndex = 0;
+
+  constructor(private storiesPreview: StoriesEditPreviewService) {}
+
+  ngOnInit(): void {
+    this.storiesDisplay$ = this.storiesPreview.storiesEditPreviewObservable;
+  }
 
   ngAfterViewInit(): void {
     const swiperParams: SwiperOptions = {
@@ -67,5 +77,9 @@ export class StoriesEditPreviewComponent implements AfterViewInit {
       this.swiperContainer.nativeElement.swiper.slidePrev();
       this.activeIndex--;
     }
+  }
+
+  closeEditPreview() {
+    this.storiesPreview.toggleStoriesEditPreview(false);
   }
 }

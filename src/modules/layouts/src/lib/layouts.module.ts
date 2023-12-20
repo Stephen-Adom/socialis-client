@@ -25,6 +25,7 @@ import {
   NotificationService,
   PostService,
   ReplyService,
+  StoriesEditPreviewService,
   SuccessMessageService,
   UserService,
 } from 'services';
@@ -105,6 +106,7 @@ import { StoriesEditPreviewComponent } from 'stories-edit-preview';
     FormatPostService,
     DisplayAlertInfoService,
     FormatNotificationService,
+    StoriesEditPreviewService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptorInterceptor,
