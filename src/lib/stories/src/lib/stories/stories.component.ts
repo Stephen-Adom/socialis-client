@@ -76,8 +76,6 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   }
 
   nextSlide() {
-    console.log(this.swiperContainer);
-    console.log(this.swiperContainer.nativeElement.swiper);
     if (this.swiperContainer) {
       this.swiperContainer.nativeElement.swiper.slideNext();
     }

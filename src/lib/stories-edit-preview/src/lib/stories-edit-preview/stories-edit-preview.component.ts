@@ -21,6 +21,7 @@ register();
 })
 export class StoriesEditPreviewComponent implements AfterViewInit {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
+  activeIndex = 0;
 
   ngAfterViewInit(): void {
     const swiperParams: SwiperOptions = {
@@ -52,5 +53,19 @@ export class StoriesEditPreviewComponent implements AfterViewInit {
     this.swiperContainer.nativeElement.initialize();
     // this.swiperContainer.nativeElement.swiper.
     console.log(this.swiperContainer);
+  }
+
+  nextSlide() {
+    if (this.swiperContainer) {
+      this.swiperContainer.nativeElement.swiper.slideNext();
+      this.activeIndex++;
+    }
+  }
+
+  prevSlide() {
+    if (this.swiperContainer) {
+      this.swiperContainer.nativeElement.swiper.slidePrev();
+      this.activeIndex--;
+    }
   }
 }

@@ -6,3 +6,23 @@
 :host ::ng-deep swiper-slide {
   width: 100% !important;
 }
+
+.pagination-bullet {
+  position: relative;
+}
+
+.pagination-bullet::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 100%;
+  background-color: white !important;
+  border-radius: 9999px;
+  transition: width ease-in-out 0.8s;
+}
+
+.pagination-bullet.active::after {
+  width: 100%;
+}

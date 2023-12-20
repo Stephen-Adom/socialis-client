@@ -5,12 +5,26 @@
     <div
       class="pagination flex items-center justify-center gap-2 w-[50%] mx-auto"
     >
-      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
-      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
-      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
-      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
-      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
-      <span class="block w-full rounded-full h-2 bg-gray-600"></span>
+      <span
+        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
+        [ngClass]="{ active: activeIndex >= 0 }"
+      ></span>
+      <span
+        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
+        [ngClass]="{ active: activeIndex >= 1 }"
+      ></span>
+      <span
+        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
+      ></span>
+      <span
+        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
+      ></span>
+      <span
+        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
+      ></span>
+      <span
+        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
+      ></span>
     </div>
     <!-- <button
       type="button"
@@ -35,8 +49,54 @@
     </button> -->
   </div>
   <section
-    class="w-[50%] mx-auto text-white flex items-center justify-center h-full"
+    class="w-[50%] mx-auto text-white flex items-center justify-center h-full relative"
   >
+    <button
+      *ngIf="swiperContainer.swiper.isBeginning === false"
+      class="prevBtn rounded-full flex items-center justify-center absolute top-[50%] -left-[1.65rem] -translate-y-[50%] z-[2]"
+      type="button"
+      title="previous"
+      (click)="prevSlide()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-14 h-14 text-gray-200"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M15.75 19.5L8.25 12l7.5-7.5"
+        />
+      </svg>
+    </button>
+
+    <button
+      *ngIf="swiperContainer.swiper.isEnd === false"
+      class="nextBtn rounded-full flex items-center justify-center absolute top-[50%] -right-[1.65rem] -translate-y-[50%] z-[2]"
+      type="button"
+      title="next"
+      (click)="nextSlide()"
+    >
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="w-14 h-14 text-gray-200"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M8.25 4.5l7.5 7.5-7.5 7.5"
+        />
+      </svg>
+    </button>
+
     <swiper-container #swiperContainer class="mySwiper">
       <swiper-slide>
         <div
