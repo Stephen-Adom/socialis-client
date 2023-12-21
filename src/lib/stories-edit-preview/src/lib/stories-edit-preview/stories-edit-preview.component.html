@@ -10,24 +10,9 @@
       class="pagination flex items-center justify-center gap-2 w-[50%] mx-auto"
     >
       <span
-        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
-        [ngClass]="{ active: activeIndex >= 0 }"
-      ></span>
-      <span
-        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
-        [ngClass]="{ active: activeIndex >= 1 }"
-      ></span>
-      <span
-        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
-      ></span>
-      <span
-        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
-      ></span>
-      <span
-        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
-      ></span>
-      <span
-        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet"
+        *ngFor="let item of multipleStoriesData; let i = index"
+        class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet ring-2 ring-gray-500/50"
+        [ngClass]="{ active: activeIndex >= i }"
       ></span>
     </div>
     <button
@@ -57,12 +42,18 @@
   <ng-container *ngIf="dataType">
     <ng-container *ngIf="dataType === 'single'; else elseTemplate">
       <ng-container
-        *ngTemplateOutlet="singleUpload; context: { storyInfo: storiesData }"
+        *ngTemplateOutlet="
+          singleUpload;
+          context: { storyInfo: singleStoriesData }
+        "
       ></ng-container>
     </ng-container>
     <ng-template #elseTemplate>
       <ng-container
-        *ngTemplateOutlet="multipleUpload; context: { storyInfo: storiesData }"
+        *ngTemplateOutlet="
+          multipleUpload;
+          context: { storyInfo: multipleStoriesData }
+        "
       ></ng-container>
     </ng-template>
   </ng-container>
@@ -109,7 +100,7 @@
   </section>
 </ng-template>
 
-<ng-template #multipleUpload let-storyInfo="storyInfo">
+<ng-template #multipleUpload let-storyInfos="storyInfo">
   <section
     class="w-[95%] md:w-[80%] lg:w-[50%] mx-auto text-white flex flex-col items-center justify-center h-[90%] relative"
   >
@@ -160,43 +151,24 @@
     </button>
 
     <swiper-container #swiperContainer class="mySwiper">
-      <swiper-slide>
+      <swiper-slide *ngFor="let info of storyInfos">
         <div
-          class="media-container w-full h-full p-4 flex items-center justify-center relative"
+          class="media-container w-full p-4 flex items-center justify-center relative text-center"
         >
-          <img
-            src="assets/images/my-computer-room-setup.jpg"
-            class="w-full"
-            alt=""
-          />
+          <img [src]="info.base64" class="w-full" alt="" />
 
           <div
-            class="absolute bottom-0 left-0 w-full bg-black/50 h-[4rem] z-[1] p-5"
+            cdkDragBoundary=".media-container"
+            cdkDragLockAxis="y"
+            cdkDrag
+            class="absolute bottom-[160px] left-0 w-full bg-black/50 h-[4rem] z-[1] p-5"
           >
             <input
               type="text"
               placeholder="Add caption..."
-              class="text-xs text-white text-center rounded-full px-4 py-2 bg-[#333131] border border-gray-600 focus:outline-none focus:border-gray-500 w-full"
+              class="text-xs text-white text-center rounded-full px-4 py-2 bg-[#333131] border border-gray-600 focus:outline-none focus:border-gray-500 w-full lg:w-[50%] mx-auto"
             />
           </div>
-        </div>
-      </swiper-slide>
-
-      <swiper-slide>
-        <div class="media-container w-full h-full p-4">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis,
-          accusamus unde officiis earum porro dolorem incidunt veniam eaque
-          inventore, quasi obcaecati perspiciatis at. Quo itaque perspiciatis
-          fugit eveniet dolorum saepe.
-        </div>
-      </swiper-slide>
-
-      <swiper-slide>
-        <div class="media-container w-full h-full p-4">
-          Lorem ipsum, dolor sit amet consectetur adipisicing elit. Corporis,
-          accusamus unde officiis earum porro dolorem incidunt veniam eaque
-          inventore, quasi obcaecati perspiciatis at. Quo itaque perspiciatis
-          fugit eveniet dolorum saepe.
         </div>
       </swiper-slide>
     </swiper-container>
@@ -204,11 +176,19 @@
     <div class="mt-4 flex items-center gap-3">
       <div
         class="media-container w-full h-16 overflow-hidden relative border border-gray-500 rounded-md cursor-pointer"
+        *ngFor="let info of storyInfos; let i = index"
+        (click)="moveToSlide(i)"
       >
         <div
+          *ngIf="i === activeIndex"
           class="overlay absolute top-0 left-0 w-full h-full bg-black/50 flex items-center justify-center"
         >
-          <button type="button" class="p-4" title="delete">
+          <button
+            type="button"
+            class="p-4"
+            title="delete"
+            (click)="removeMedia(i)"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -226,35 +206,7 @@
             </svg>
           </button>
         </div>
-        <img
-          src="assets/images/my-computer-room-setup.jpg"
-          class="w-full"
-          alt=""
-        />
-      </div>
-
-      <div class="media-container w-full h-16 overflow-hidden">
-        <img
-          src="assets/images/my-computer-room-setup.jpg"
-          class="w-full"
-          alt=""
-        />
-      </div>
-
-      <div class="media-container w-full h-16 overflow-hidden">
-        <img
-          src="assets/images/my-computer-room-setup.jpg"
-          class="w-full"
-          alt=""
-        />
-      </div>
-
-      <div class="media-container w-full h-16 overflow-hidden">
-        <img
-          src="assets/images/my-computer-room-setup.jpg"
-          class="w-full"
-          alt=""
-        />
+        <img [src]="info.base64" class="w-full" alt="" />
       </div>
     </div>
   </section>

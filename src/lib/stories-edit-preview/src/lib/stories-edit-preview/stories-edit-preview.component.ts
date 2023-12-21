@@ -30,7 +30,8 @@ export class StoriesEditPreviewComponent implements OnInit, AfterViewInit {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
   storiesDisplay$!: Observable<boolean>;
   activeIndex = 0;
-  storiesData!: uploadMedia | uploadMedia[];
+  singleStoriesData!: uploadMedia;
+  multipleStoriesData: uploadMedia[] = [];
   dataType!: string;
 
   constructor(private storiesPreview: StoriesEditPreviewService) {}
@@ -41,7 +42,11 @@ export class StoriesEditPreviewComponent implements OnInit, AfterViewInit {
     this.storiesPreview.storiesEditDataPreviewObservable.subscribe((data) => {
       if (data) {
         this.dataType = data?.dataType;
-        this.storiesData = data?.data as uploadMedia | uploadMedia[];
+
+        if (this.dataType === 'multiple') {
+          this.multipleStoriesData = data?.data as uploadMedia[];
+        }
+        this.singleStoriesData = data?.data as uploadMedia;
       }
     });
   }
@@ -93,5 +98,14 @@ export class StoriesEditPreviewComponent implements OnInit, AfterViewInit {
 
   closeEditPreview() {
     this.storiesPreview.toggleStoriesEditPreview(false);
+  }
+
+  moveToSlide(index: number) {
+    this.swiperContainer.nativeElement.swiper.slideTo(index);
+    this.activeIndex = index;
+  }
+
+  removeMedia(index: number) {
+    this.multipleStoriesData.splice(index, 1);
   }
 }
