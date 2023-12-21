@@ -5,7 +5,7 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class StoriesEditPreviewService {
-  storiesEditPreview$ = new BehaviorSubject<boolean>(true);
+  storiesEditPreview$ = new BehaviorSubject<boolean>(false);
 
   storiesEditPreviewObservable = this.storiesEditPreview$.asObservable();
 
