@@ -11,9 +11,9 @@ import { CommonModule } from '@angular/common';
 import { SwiperContainer, register } from 'swiper/element/bundle';
 import { AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
-import { UserInfoType, getBase64 } from 'utils';
-import { Observable, fromEvent } from 'rxjs';
-import { PostService } from 'services';
+import { UserInfoType } from 'utils';
+import { Observable } from 'rxjs';
+import { StoriesEditPreviewService } from 'services';
 import { SwiperOptions } from 'swiper/types';
 
 register();
@@ -30,12 +30,9 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   authUser$!: Observable<UserInfoType | null>;
-  videoFile: any;
-  startTime = 0;
-  endTime = 0;
 
   constructor(
-    private postservice: PostService,
+    private storiesPreview: StoriesEditPreviewService,
     private store: Store<AppState>
   ) {}
 
@@ -87,8 +84,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
     }
   }
 
-  onFileChange(event: any) {
-    const file = event.target.files[0];
-    console.log(file, 'file');
+  addStory() {
+    this.storiesPreview.toggleStoriesDialog(true);
   }
 }

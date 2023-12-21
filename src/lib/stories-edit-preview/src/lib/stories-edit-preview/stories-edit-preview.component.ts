@@ -1,3 +1,4 @@
+/* eslint-disable @nx/enforce-module-boundaries */
 import {
   AfterViewInit,
   CUSTOM_ELEMENTS_SCHEMA,
@@ -11,13 +12,16 @@ import { SwiperContainer, register } from 'swiper/element/bundle';
 import { SwiperOptions } from 'swiper/types';
 import { StoriesEditPreviewService } from 'services';
 import { Observable } from 'rxjs';
+import { uploadMedia } from 'utils';
+import { FormsModule } from '@angular/forms';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 register();
 
 @Component({
   selector: 'lib-stories-edit-preview',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule, DragDropModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './stories-edit-preview.component.html',
   styleUrls: ['./stories-edit-preview.component.css'],
@@ -26,11 +30,20 @@ export class StoriesEditPreviewComponent implements OnInit, AfterViewInit {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
   storiesDisplay$!: Observable<boolean>;
   activeIndex = 0;
+  storiesData!: uploadMedia | uploadMedia[];
+  dataType!: string;
 
   constructor(private storiesPreview: StoriesEditPreviewService) {}
 
   ngOnInit(): void {
     this.storiesDisplay$ = this.storiesPreview.storiesEditPreviewObservable;
+
+    this.storiesPreview.storiesEditDataPreviewObservable.subscribe((data) => {
+      if (data) {
+        this.dataType = data?.dataType;
+        this.storiesData = data?.data as uploadMedia | uploadMedia[];
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -58,11 +71,10 @@ export class StoriesEditPreviewComponent implements OnInit, AfterViewInit {
     };
 
     // now we need to assign all parameters to Swiper element
-    Object.assign(this.swiperContainer.nativeElement, swiperParams);
-    // and now initialize it
-    this.swiperContainer.nativeElement.initialize();
-    // this.swiperContainer.nativeElement.swiper.
-    console.log(this.swiperContainer);
+    if (this.swiperContainer) {
+      Object.assign(this.swiperContainer.nativeElement, swiperParams);
+      this.swiperContainer.nativeElement.initialize();
+    }
   }
 
   nextSlide() {

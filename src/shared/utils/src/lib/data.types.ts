@@ -254,3 +254,10 @@ export type SocialUser = {
   lastName: string;
   photoUrl: string;
 };
+
+export type uploadMedia = {
+  file: File;
+  base64: string;
+  caption: string;
+  fileType: string;
+};

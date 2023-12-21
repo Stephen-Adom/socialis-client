@@ -1,11 +1,12 @@
 <div
-  class="dialog-wrapper fixed top-0 left-0 w-full h-screen bg-gray-900 z-[2220] px-10 py-2"
+  class="dialog-wrapper fixed top-0 left-0 w-full h-screen bg-gray-900 z-[2220] px-4 md:px-8 lg:px-10 py-2"
   *ngIf="storiesDisplay$ | async"
 >
   <div
     class="wrapper-header flex items-center justify-center mt-6 z-10 relative"
   >
     <div
+      *ngIf="dataType && dataType === 'multiple'"
       class="pagination flex items-center justify-center gap-2 w-[50%] mx-auto"
     >
       <span
@@ -52,8 +53,65 @@
       </svg>
     </button>
   </div>
+
+  <ng-container *ngIf="dataType">
+    <ng-container *ngIf="dataType === 'single'; else elseTemplate">
+      <ng-container
+        *ngTemplateOutlet="singleUpload; context: { storyInfo: storiesData }"
+      ></ng-container>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <ng-container
+        *ngTemplateOutlet="multipleUpload; context: { storyInfo: storiesData }"
+      ></ng-container>
+    </ng-template>
+  </ng-container>
+
+  <button
+    type="button"
+    class="bg-primaryColor px-5 py-2 rounded-full text-white text-sm absolute right-[50%] translate-x-[50%] lg:translate-x-0 lg:right-10 bottom-6 hover:bg-blue-800"
+  >
+    Upload Story
+  </button>
+</div>
+
+<ng-template #singleUpload let-storyInfo="storyInfo">
   <section
-    class="w-[50%] mx-auto text-white flex flex-col items-center justify-center h-[90%] relative"
+    class="w-[95%] md:w-[80%] lg:w-[50%] mx-auto text-white flex flex-col items-center justify-center h-[90%] relative"
+  >
+    <div
+      class="media-container w-[80%] p-4 flex items-center justify-center relative"
+    >
+      <ng-container *ngIf="storyInfo.fileType === 'image'; else elseTemplate">
+        <img [src]="storyInfo.base64" class="w-full" alt="" />
+      </ng-container>
+      <ng-template #elseTemplate>
+        <video controls>
+          <source [src]="storyInfo.base64" type="video/mp4" />
+        </video>
+      </ng-template>
+
+      <div
+        cdkDragBoundary=".media-container"
+        cdkDragLockAxis="y"
+        cdkDrag
+        class="absolute bottom-[160px] left-0 w-full bg-black/50 h-[4rem] z-[1] p-5 text-center rounded-md"
+      >
+        <input
+          [(ngModel)]="storyInfo.caption"
+          name="caption"
+          type="text"
+          placeholder="Add caption..."
+          class="text-xs text-white text-center rounded-full px-4 py-2 bg-[#333131] border border-gray-600 focus:outline-none focus:border-gray-500 w-full lg:w-[50%] mx-auto"
+        />
+      </div>
+    </div>
+  </section>
+</ng-template>
+
+<ng-template #multipleUpload let-storyInfo="storyInfo">
+  <section
+    class="w-[95%] md:w-[80%] lg:w-[50%] mx-auto text-white flex flex-col items-center justify-center h-[90%] relative"
   >
     <button
       *ngIf="swiperContainer.swiper.isBeginning === false"
@@ -200,4 +258,4 @@
       </div>
     </div>
   </section>
-</div>
+</ng-template>

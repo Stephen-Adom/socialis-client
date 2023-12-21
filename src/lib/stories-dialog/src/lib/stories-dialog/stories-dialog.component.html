@@ -4,6 +4,7 @@
   [style]="{ width: '30vw' }"
   [modal]="true"
   [breakpoints]="{ '960px': '75vw', '641px': '90vw' }"
+  (onHide)="onHide()"
 >
   <ng-template pTemplate="header">
     <h6 class="text-sm font-bold flex items-center gap-x-1">
@@ -52,7 +53,26 @@
       </h6>
 
       <div class="flex items-center space-x-2">
+        <input
+          type="file"
+          hidden
+          (change)="onFileChange($event)"
+          #singleFileInput
+          accept="video/*, image/*"
+          [multiple]="false"
+        />
+
+        <input
+          type="file"
+          hidden
+          (change)="onMultipleFileChange($event)"
+          #singleFileInput
+          accept="image/*"
+          [multiple]="true"
+        />
+
         <button
+          (click)="singleFileInput.click()"
           type="button"
           class="px-6 py-2 text-white text-xs rounded-full bg-blue-600 shadow-lg hover:bg-blue-700"
         >

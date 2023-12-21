@@ -63,15 +63,8 @@
             [attr.alt]="(authUser$ | async)?.username"
           /> -->
 
-          <input
-            type="file"
-            hidden
-            (change)="onFileChange($event)"
-            #fileInput
-            accept="video/*, image/*"
-          />
-
           <div
+            (click)="addStory()"
             class="bg-gray-300 hover:bg-gray-400 group outline-2 outline-dashed outline-gray-400 outline-offset-[3px] h-[3.875rem] w-[3.875rem] rounded-full cursor-pointer flex items-center justify-center"
           >
             <svg
