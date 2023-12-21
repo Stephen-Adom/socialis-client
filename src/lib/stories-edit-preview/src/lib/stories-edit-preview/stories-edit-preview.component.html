@@ -73,12 +73,14 @@
     <div
       class="media-container w-[80%] p-4 flex items-center justify-center relative"
     >
-      <ng-container *ngIf="storyInfo.fileType === 'image'; else elseTemplate">
+      <ng-container
+        *ngIf="storyInfo.fileType.includes('image'); else elseTemplate"
+      >
         <img [src]="storyInfo.base64" class="w-full" alt="" />
       </ng-container>
       <ng-template #elseTemplate>
         <video controls>
-          <source [src]="storyInfo.base64" type="video/mp4" />
+          <source [src]="storyInfo.base64" [type]="storyInfo.fileType" />
         </video>
       </ng-template>
 

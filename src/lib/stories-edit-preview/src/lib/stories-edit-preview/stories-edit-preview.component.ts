@@ -30,7 +30,7 @@ export class StoriesEditPreviewComponent implements OnInit, AfterViewInit {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
   storiesDisplay$!: Observable<boolean>;
   activeIndex = 0;
-  singleStoriesData!: uploadMedia;
+  singleStoriesData!: uploadMedia | null;
   multipleStoriesData: uploadMedia[] = [];
   dataType!: string;
 
@@ -97,7 +97,15 @@ export class StoriesEditPreviewComponent implements OnInit, AfterViewInit {
   }
 
   closeEditPreview() {
+    this.resetData();
     this.storiesPreview.toggleStoriesEditPreview(false);
+  }
+
+  resetData() {
+    this.activeIndex = 0;
+    this.singleStoriesData = null;
+    this.multipleStoriesData = [];
+    this.dataType = '';
   }
 
   moveToSlide(index: number) {
