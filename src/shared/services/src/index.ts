@@ -8,6 +8,7 @@ export * from './lib/bookmarks.service';
 export * from './lib/notification-offcanvas.service';
 export * from './lib/notification.service';
 export * from './lib/format-post.service';
+export * from './lib/story-upload.service';
 
 export * from './lib/validateAuthUser.service';
 export * from './lib/innactiveAccount.service';
