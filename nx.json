@@ -60,5 +60,6 @@
       "style": "scss"
     }
   },
-  "defaultProject": "socialis-client"
+  "defaultProject": "socialis-client",
+  "nxCloudAccessToken": "ZTk2ZTI5NzItNWFmNC00ODQ2LWE1MzctNDk3YzNlM2RjNWYwfHJlYWQtd3JpdGU="
 }
