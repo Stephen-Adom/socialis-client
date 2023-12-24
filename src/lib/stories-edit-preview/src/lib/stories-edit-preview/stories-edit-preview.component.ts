@@ -149,13 +149,12 @@ export class StoriesEditPreviewComponent
   }
 
   uploadSingleMedia() {
-    const uploadData: { file: File; caption: string } = {
-      file: this.singleStoriesData?.file as File,
-      caption: this.singleStoriesData?.caption as string,
-    };
+    const formData = new FormData();
+    formData.append('storyMedia', this.singleStoriesData?.file as File);
+    formData.append('caption', this.singleStoriesData?.caption as string);
 
     const sub = this.uploadService
-      .uploadStory(uploadData, this.authUser.id)
+      .uploadStory(formData, this.authUser.id)
       .subscribe({
         next: () => {
           this.closeEditPreview();

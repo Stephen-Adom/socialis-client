@@ -14,9 +14,9 @@ export class StoryUploadService {
 
   constructor(private http: HttpClient) {}
 
-  uploadStory(formData: { file: File; caption: string }, userId: number) {
+  uploadStory(formData: FormData, userId: number) {
     return this.http.post<SuccessMessageType>(
-      BASE_URL + `stories/${userId}/upload`,
+      BASE_URL + `/stories/${userId}/upload`,
       formData,
       this.authHeaders
     );
