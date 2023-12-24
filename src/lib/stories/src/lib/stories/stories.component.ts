@@ -9,7 +9,7 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SwiperContainer, register } from 'swiper/element/bundle';
-import { AppState, getUserInformation } from 'state';
+import { AppState, getUploadStoryStatus, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { UserInfoType } from 'utils';
 import { Observable } from 'rxjs';
@@ -30,6 +30,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   authUser$!: Observable<UserInfoType | null>;
+  uploadingStory$!: Observable<boolean>;
 
   constructor(
     private storiesPreview: StoriesEditPreviewService,
@@ -38,6 +39,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
+    this.uploadingStory$ = this.store.select(getUploadStoryStatus);
   }
 
   ngAfterViewInit(): void {

@@ -4,6 +4,7 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
   ElementRef,
+  Inject,
   OnDestroy,
   OnInit,
   ViewChild,
@@ -11,13 +12,18 @@ import {
 import { CommonModule } from '@angular/common';
 import { SwiperContainer, register } from 'swiper/element/bundle';
 import { SwiperOptions } from 'swiper/types';
-import { StoriesEditPreviewService, StoryUploadService } from 'services';
+import {
+  StoriesEditPreviewService,
+  StoryUploadService,
+  SuccessMessageService,
+} from 'services';
 import { Observable, Subscription } from 'rxjs';
-import { UserInfoType, uploadMedia } from 'utils';
+import { SUCCESS_MESSAGE_TOKEN, UserInfoType, uploadMedia } from 'utils';
 import { FormsModule } from '@angular/forms';
 import { DragDropModule } from '@angular/cdk/drag-drop';
-import { AppState, getUserInformation } from 'state';
+import { AppApiActions, AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
+import { HttpErrorResponse } from '@angular/common/http';
 
 register();
 
@@ -42,6 +48,8 @@ export class StoriesEditPreviewComponent
   authUserSubscription: Subscription | undefined;
 
   constructor(
+    @Inject(SUCCESS_MESSAGE_TOKEN)
+    private successMessage: SuccessMessageService,
     private storiesPreview: StoriesEditPreviewService,
     private uploadService: StoryUploadService,
     private store: Store<AppState>
@@ -153,19 +161,30 @@ export class StoriesEditPreviewComponent
     formData.append('storyMedia', this.singleStoriesData?.file as File);
     formData.append('caption', this.singleStoriesData?.caption as string);
 
+    this.store.dispatch(AppApiActions.uploadingStory({ uploading: true }));
+    this.storiesPreview.toggleStoriesEditPreview(false);
+    this.storiesPreview.toggleStoriesDialog(false);
+
     const sub = this.uploadService
       .uploadStory(formData, this.authUser.id)
       .subscribe({
-        next: () => {
-          this.closeEditPreview();
+        next: (response) => {
+          if (response && response['status'] === 'OK') {
+            this.successMessage.sendSuccessMessage(response['message']);
+          }
         },
-        error: () => {
-          this.closeEditPreview();
+        error: (error: HttpErrorResponse) => {
+          this.store.dispatch(
+            AppApiActions.displayErrorMessage({ error: error.error })
+          );
         },
         complete: () => {
+          this.store.dispatch(
+            AppApiActions.uploadingStory({ uploading: false })
+          );
+          this.closeEditPreview();
           sub.unsubscribe();
         },
       });
-    this.closeEditPreview();
   }
 }

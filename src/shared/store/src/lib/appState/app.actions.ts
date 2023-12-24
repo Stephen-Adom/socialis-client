@@ -13,5 +13,6 @@ export const AppApiActions = createActionGroup({
     }>(),
     clearUserAuthInfo: emptyProps(),
     updateUserInfo: props<{ userInfo: UserInfoType }>(),
+    uploadingStory: props<{ uploading: boolean }>(),
   },
 });

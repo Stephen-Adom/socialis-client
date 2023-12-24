@@ -15,6 +15,7 @@ export interface AppState {
   userInfo: UserInfoType | null;
   accessToken: string | null;
   refreshToken: string | null;
+  uploadingStory: boolean;
 }
 
 const initialState: AppState = {
@@ -22,6 +23,7 @@ const initialState: AppState = {
   userInfo: null,
   accessToken: null,
   refreshToken: null,
+  uploadingStory: false,
 };
 
 export const selectAppFeature = createFeatureSelector<AppState>(featureAppKey);
@@ -44,6 +46,11 @@ export const getAccessToken = createSelector(
 export const getRefreshToken = createSelector(
   selectAppFeature,
   (state: AppState) => state.refreshToken
+);
+
+export const getUploadStoryStatus = createSelector(
+  selectAppFeature,
+  (state: AppState) => state.uploadingStory
 );
 
 export const AppReducer = createReducer<AppState>(
@@ -77,6 +84,12 @@ export const AppReducer = createReducer<AppState>(
       ...state,
       userInfo: action.userInfo,
       error: null,
+    };
+  }),
+  on(AppApiActions.uploadingStory, (state: AppState, action) => {
+    return {
+      ...state,
+      uploadingStory: action.uploading,
     };
   })
 );
