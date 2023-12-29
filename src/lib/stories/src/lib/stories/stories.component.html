@@ -70,6 +70,29 @@
               "
               [attr.alt]="(authUser$ | async)?.username"
             />
+
+            <button
+              type="button"
+              class="w-5 h-5 rounded-full bg-primaryColor absolute -bottom-[4px] right-2 outline outline-white flex items-center justify-center"
+              (click)="addStory()"
+              title="Add story"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                data-slot="icon"
+                class="w-3 h-3 text-white"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </button>
           </ng-container>
           <ng-template #elseTemplate>
             <div
