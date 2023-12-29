@@ -1,9 +1,9 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { getAuthHttpOptions } from './httpHeaders';
+import { getAuthHttpOptions } from '../httpHeaders';
 import { AllRepliesResponseType, SuccessMessageType } from 'utils';
-import BASE_URL from './base_url';
+import BASE_URL from '../base_url';
 
 @Injectable({
   providedIn: 'root',

@@ -20,8 +20,8 @@ import {
 import { Observable, Subscription } from 'rxjs';
 import { SUCCESS_MESSAGE_TOKEN, UserInfoType, uploadMedia } from 'utils';
 import { FormsModule } from '@angular/forms';
-import { DragDropModule } from '@angular/cdk/drag-drop';
 import { AppApiActions, AppState, getUserInformation } from 'state';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 import { Store } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
 

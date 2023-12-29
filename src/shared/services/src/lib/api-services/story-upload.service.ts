@@ -2,7 +2,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { SuccessMessageType } from 'utils';
-import BASE_URL from './base_url';
+import BASE_URL from '../base_url';
 
 @Injectable({
   providedIn: 'root',

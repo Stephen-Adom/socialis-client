@@ -1,8 +1,8 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import BASE_URL from './base_url';
-import { getNonAuthHttpOptions } from './httpHeaders';
+import BASE_URL from '../base_url';
+import { getNonAuthHttpOptions } from '../httpHeaders';
 import {
   AuthResponseType,
   SocialUser,
@@ -12,7 +12,7 @@ import * as localforage from 'localforage';
 import { AppApiActions, AppState } from 'state';
 import { Store } from '@ngrx/store';
 import { Router } from '@angular/router';
-import { InnactiveAccountService } from './innactiveAccount.service';
+import { InnactiveAccountService } from '../innactiveAccount.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({

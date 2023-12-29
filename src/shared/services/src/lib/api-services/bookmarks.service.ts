@@ -2,8 +2,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { BookmarkResponseType, SuccessMessageType } from 'utils';
-import BASE_URL from './base_url';
-import { getAuthHttpOptions } from './httpHeaders';
+import BASE_URL from '../base_url';
+import { getAuthHttpOptions } from '../httpHeaders';
 
 @Injectable({
   providedIn: 'root',
