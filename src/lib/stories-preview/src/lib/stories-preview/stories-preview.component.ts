@@ -60,6 +60,7 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
 
   closePreview() {
     this.storiesPreview.toggleStoriesPreview(false);
+    this.storyInfo = null;
   }
 
   ngOnDestroy(): void {
