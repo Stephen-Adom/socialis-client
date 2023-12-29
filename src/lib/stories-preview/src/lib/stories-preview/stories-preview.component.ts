@@ -12,12 +12,14 @@ import { FormsModule } from '@angular/forms';
 import { SwiperContainer } from 'swiper/element';
 import { StoriesEditPreviewService } from 'services';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { StoryType } from 'utils';
+import { StoryMediaType, StoryType, WatchedByType } from 'utils';
+import { DialogModule } from 'primeng/dialog';
+import { formatDistanceToNow } from 'date-fns';
 
 @Component({
   selector: 'lib-stories-preview',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, DialogModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './stories-preview.component.html',
   styleUrls: ['./stories-preview.component.css'],
@@ -28,6 +30,8 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   activeIndex$ = new BehaviorSubject<number>(0);
   storyInfo!: StoryType | null;
   storyInfoSubscription = new Subscription();
+  watchedDialogvisible = false;
+  watchedBy: WatchedByType[] = [];
 
   constructor(private storiesPreview: StoriesEditPreviewService) {}
 
@@ -60,6 +64,8 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
 
   closePreview() {
     this.storiesPreview.toggleStoriesPreview(false);
+    this.watchedDialogvisible = false;
+    this.watchedBy = [];
     this.storyInfo = null;
   }
 
@@ -81,6 +87,20 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
         console.log(this.storyInfo?.storyMedia[index], 'index');
         console.log(index, 'index');
       }
+    });
+  }
+
+  viewWatched(storymedia: StoryMediaType) {
+    if (storymedia.watchedBy.length) {
+      this.watchedBy = storymedia.watchedBy;
+      this.watchedDialogvisible = true;
+    }
+  }
+
+  formatTimeWatched(time: string) {
+    return formatDistanceToNow(new Date(time), {
+      includeSeconds: true,
+      addSuffix: true,
     });
   }
 }

@@ -32,3 +32,13 @@ video {
   width: 100%;
   height: auto;
 }
+
+:host ::ng-deep .p-dialog-content {
+  padding: 0 !important;
+}
+
+:host ::ng-deep .p-dialog-header {
+  padding-top: 14px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid #acacac;
+}
