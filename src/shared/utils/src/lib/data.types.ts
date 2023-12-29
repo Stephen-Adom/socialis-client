@@ -289,3 +289,8 @@ export type WatchedByType = {
   user: SimpleUserInfoType;
   watchedAt: string;
 };
+
+export type WatchedStoryResponseType = {
+  status: string;
+  data: WatchedByType;
+};

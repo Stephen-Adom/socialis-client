@@ -11,7 +11,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SwiperContainer } from 'swiper/element';
 import { StoriesEditPreviewService } from 'services';
-import { Observable, Subscription } from 'rxjs';
+import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { StoryType } from 'utils';
 
 @Component({
@@ -25,7 +25,7 @@ import { StoryType } from 'utils';
 export class StoriesPreviewComponent implements OnInit, OnDestroy {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
   visible$!: Observable<boolean>;
-  activeIndex = 0;
+  activeIndex$ = new BehaviorSubject<number>(0);
   storyInfo!: StoryType | null;
   storyInfoSubscription = new Subscription();
 
@@ -38,22 +38,23 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
       this.storiesPreview.viewStoryObservable.subscribe((data) => {
         if (data) {
           this.storyInfo = data;
-          console.log(this.storyInfo);
         }
       });
+
+    this.recordStoryWatchers();
   }
 
   nextSlide() {
     if (this.swiperContainer) {
       this.swiperContainer.nativeElement.swiper.slideNext();
-      this.activeIndex++;
+      this.activeIndex$.next(this.activeIndex$.value + 1);
     }
   }
 
   prevSlide() {
     if (this.swiperContainer) {
       this.swiperContainer.nativeElement.swiper.slidePrev();
-      this.activeIndex--;
+      this.activeIndex$.next(this.activeIndex$.value - 1);
     }
   }
 
@@ -63,5 +64,22 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.storyInfoSubscription.unsubscribe();
+  }
+
+  recordStoryWatchers() {
+    this.visible$.subscribe((data) => {
+      if (data) {
+        this.trackMediaIndex();
+      }
+    });
+  }
+
+  trackMediaIndex() {
+    this.activeIndex$.subscribe((index) => {
+      if (index) {
+        console.log(this.storyInfo?.storyMedia[index], 'index');
+        console.log(index, 'index');
+      }
+    });
   }
 }

@@ -76,6 +76,7 @@
               class="w-5 h-5 rounded-full bg-primaryColor absolute -bottom-[4px] right-2 outline outline-white flex items-center justify-center"
               (click)="addStory()"
               title="Add story"
+              *ngIf="(uploadingStory$ | async) === false"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"

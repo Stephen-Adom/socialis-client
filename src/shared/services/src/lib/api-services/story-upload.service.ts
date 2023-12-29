@@ -1,7 +1,11 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AllStoriesType, SuccessMessageType } from 'utils';
+import {
+  AllStoriesType,
+  SuccessMessageType,
+  WatchedStoryResponseType,
+} from 'utils';
 import BASE_URL from '../base_url';
 
 @Injectable({
@@ -28,5 +32,16 @@ export class StoryUploadService {
         'Content-Type': 'application/json',
       }),
     });
+  }
+
+  userWatchedStory(userId: number, mediaId: number) {
+    return this.http.get<WatchedStoryResponseType>(
+      BASE_URL + `/stories/${userId}/watched/${mediaId}`,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      }
+    );
   }
 }

@@ -10,7 +10,7 @@
     >
       <span
         *ngFor="let item of storyInfo?.storyMedia; let i = index"
-        [ngClass]="{ active: activeIndex >= i }"
+        [ngClass]="{ active: activeIndex$.value >= i }"
         class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet ring-2 ring-gray-500/50"
       ></span>
     </div>
