@@ -22,7 +22,7 @@ export class StoryUploadService {
     );
   }
 
-  fetchAuthUserStory(userId: number) {
+  fetchUserStoryById(userId: number) {
     return this.http.get<AllStoriesType>(BASE_URL + `/stories/${userId}/all`, {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

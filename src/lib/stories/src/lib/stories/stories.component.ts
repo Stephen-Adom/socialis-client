@@ -9,9 +9,15 @@ import {
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { SwiperContainer, register } from 'swiper/element/bundle';
-import { AppState, getUploadStoryStatus, getUserInformation } from 'state';
+import {
+  AppState,
+  StoryApiActions,
+  getAuthUserStories,
+  getUploadStoryStatus,
+  getUserInformation,
+} from 'state';
 import { Store } from '@ngrx/store';
-import { UserInfoType } from 'utils';
+import { StoryType, UserInfoType } from 'utils';
 import { Observable } from 'rxjs';
 import { StoriesEditPreviewService } from 'services';
 import { SwiperOptions } from 'swiper/types';
@@ -31,6 +37,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   authUser$!: Observable<UserInfoType | null>;
   uploadingStory$!: Observable<boolean>;
+  authStories$!: Observable<StoryType | null>;
 
   constructor(
     private storiesPreview: StoriesEditPreviewService,
@@ -40,6 +47,18 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
     this.uploadingStory$ = this.store.select(getUploadStoryStatus);
+    this.authStories$ = this.store.select(getAuthUserStories);
+    this.fetchAuthUserStories();
+  }
+
+  fetchAuthUserStories() {
+    this.authUser$.subscribe((authUser) => {
+      if (authUser) {
+        this.store.dispatch(
+          StoryApiActions.fetchAuthUserStories({ userId: authUser.id })
+        );
+      }
+    });
   }
 
   ngAfterViewInit(): void {
@@ -88,5 +107,10 @@ export class StoriesComponent implements AfterViewInit, OnInit {
 
   addStory() {
     this.storiesPreview.toggleStoriesDialog(true);
+  }
+
+  viewStory(story: StoryType) {
+    this.storiesPreview.viewStory(story);
+    this.storiesPreview.toggleStoriesPreview(true);
   }
 }

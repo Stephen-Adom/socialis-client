@@ -34,9 +34,12 @@ import { StoreModule } from '@ngrx/store';
 import {
   PostEffects,
   PostReducer,
+  StoryEffects,
+  StoryReducer,
   UserEffects,
   UserReducer,
   featurePostKey,
+  featureStoryKey,
   featureUserKey,
 } from 'state';
 import { EffectsModule } from '@ngrx/effects';
@@ -59,6 +62,7 @@ import { NotificationOffcanvasComponent } from 'notification-offcanvas';
 import { AuthTokenInterceptorInterceptor } from 'interceptors';
 import { StoriesDialogComponent } from 'stories-dialog';
 import { StoriesEditPreviewComponent } from 'stories-edit-preview';
+import { StoriesPreviewComponent } from 'stories-preview';
 
 @NgModule({
   imports: [
@@ -72,7 +76,8 @@ import { StoriesEditPreviewComponent } from 'stories-edit-preview';
     HttpClientModule,
     StoreModule.forFeature(featurePostKey, PostReducer),
     StoreModule.forFeature(featureUserKey, UserReducer),
-    EffectsModule.forFeature([PostEffects, UserEffects]),
+    StoreModule.forFeature(featureStoryKey, StoryReducer),
+    EffectsModule.forFeature([PostEffects, UserEffects, StoryEffects]),
     CommentReplyModalComponent,
     ReplyModalFormComponent,
     AddCommentFormModalComponent,
@@ -89,6 +94,7 @@ import { StoriesEditPreviewComponent } from 'stories-edit-preview';
     NotificationAlertsComponent,
     StoriesDialogComponent,
     StoriesEditPreviewComponent,
+    StoriesPreviewComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [

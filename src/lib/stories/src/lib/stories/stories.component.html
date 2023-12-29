@@ -56,17 +56,45 @@
             class="spinner absolute -top-[10%] -left-[9%]"
             *ngIf="uploadingStory$ | async"
           ></div>
-          <!-- <img
-            class="inline-block flex-shrink-0 h-[3.875rem] w-[3.875rem] rounded-full cursor-pointer"
-            [src]="
-              (authUser$ | async)?.imageUrl
-                ? (authUser$ | async)?.imageUrl
-                : 'assets/images/users/default.jpg'
-            "
-            [attr.alt]="(authUser$ | async)?.username"
-          /> -->
 
-          <div
+          <ng-container
+            *ngIf="authStories$ | async as authStories; else elseTemplate"
+          >
+            <img
+              (click)="viewStory(authStories)"
+              class="inline-block flex-shrink-0 h-[3.875rem] w-[3.875rem] rounded-full cursor-pointer outline-offset-[3px] outline outline-[3px] outline-primaryColor"
+              [src]="
+                (authUser$ | async)?.imageUrl
+                  ? (authUser$ | async)?.imageUrl
+                  : 'assets/images/users/default.jpg'
+              "
+              [attr.alt]="(authUser$ | async)?.username"
+            />
+          </ng-container>
+          <ng-template #elseTemplate>
+            <div
+              (click)="addStory()"
+              class="bg-gray-300 hover:bg-gray-400 group outline-2 outline-dashed outline-gray-400 outline-offset-[3px] h-[3.875rem] w-[3.875rem] rounded-full cursor-pointer flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                data-slot="icon"
+                class="w-6 h-6 text-gray-400 group-hover:text-white"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15"
+                />
+              </svg>
+            </div>
+          </ng-template>
+
+          <!-- <div
             (click)="addStory()"
             class="bg-gray-300 hover:bg-gray-400 group outline-2 outline-dashed outline-gray-400 outline-offset-[3px] h-[3.875rem] w-[3.875rem] rounded-full cursor-pointer flex items-center justify-center"
           >
@@ -85,9 +113,13 @@
                 d="M12 4.5v15m7.5-7.5h-15"
               />
             </svg>
-          </div>
+          </div> -->
         </div>
-        <span class="d-block text-xs dark:text-dark-text">Add Story</span>
+        <span class="d-block text-xs dark:text-dark-text">
+          {{
+            (authStories$ | async)?.user?.username ? 'My Story' : 'Add Story'
+          }}
+        </span>
       </div>
     </swiper-slide>
 
