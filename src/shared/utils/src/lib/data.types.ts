@@ -261,3 +261,31 @@ export type uploadMedia = {
   caption: string;
   fileType: string;
 };
+
+export type AllStoriesType = {
+  status: string;
+  data: StoryType[];
+};
+
+export type StoryType = {
+  id: 1;
+  user: SimpleUserInfoType;
+  numberOfMedia: number;
+  storyMedia: StoryMediaType[];
+};
+
+export type StoryMediaType = {
+  id: number;
+  mediaUrl: string;
+  mediaCaption: string;
+  mediaType: string;
+  expiredAt: string;
+  uploadedAt: string;
+  watchedBy: WatchedByType[];
+};
+
+export type WatchedByType = {
+  id: number;
+  user: SimpleUserInfoType;
+  watchedAt: string;
+};
