@@ -3,7 +3,7 @@
 >
   <button
     *ngIf="swiperContainer.swiper.isBeginning === false"
-    class="prevBtn w-7 h-7 rounded-full bg-white dark:bg-base-gray-dark shadow-md shadow-gray-300 dark:shadow-gray-950 flex items-center justify-center absolute top-[50%] -left-[0.65rem] -translate-y-[50%] z-[2]"
+    class="prevBtn w-7 h-7 rounded-full bg-white dark:bg-base-gray-dark shadow-md shadow-gray-300 dark:shadow-gray-950 items-center justify-center absolute top-[50%] -left-[0.65rem] -translate-y-[50%] z-[2] hidden sm:hidden lg:flex"
     type="button"
     title="previous"
     (click)="prevSlide()"
@@ -26,7 +26,7 @@
 
   <button
     *ngIf="swiperContainer.swiper.isEnd === false"
-    class="nextBtn w-7 h-7 rounded-full bg-white dark:bg-base-gray-dark shadow-md shadow-gray-300 dark:shadow-gray-950 flex items-center justify-center absolute top-[50%] -right-[0.65rem] -translate-y-[50%] z-[2]"
+    class="nextBtn w-7 h-7 rounded-full bg-white dark:bg-base-gray-dark shadow-md shadow-gray-300 dark:shadow-gray-950 items-center justify-center absolute top-[50%] -right-[0.65rem] -translate-y-[50%] z-[2] hidden sm:hidden lg:flex"
     type="button"
     title="next"
     (click)="nextSlide()"
