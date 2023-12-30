@@ -294,3 +294,8 @@ export type WatchedStoryResponseType = {
   status: string;
   data: WatchedByType;
 };
+
+export type AllWatchedStoriesResponseType = {
+  status: string;
+  data: WatchedByType[];
+};

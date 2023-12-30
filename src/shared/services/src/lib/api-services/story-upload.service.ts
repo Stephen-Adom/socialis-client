@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
   AllStoriesType,
+  AllWatchedStoriesResponseType,
   SuccessMessageType,
   WatchedStoryResponseType,
 } from 'utils';
@@ -37,6 +38,17 @@ export class StoryUploadService {
   userWatchedStory(userId: number, mediaId: number) {
     return this.http.get<WatchedStoryResponseType>(
       BASE_URL + `/stories/${userId}/watched/${mediaId}`,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      }
+    );
+  }
+
+  fetchAllWatchedUserStories(mediaId: number) {
+    return this.http.get<AllWatchedStoriesResponseType>(
+      BASE_URL + `/stories/${mediaId}/watched/users`,
       {
         headers: new HttpHeaders({
           'Content-Type': 'application/json',
