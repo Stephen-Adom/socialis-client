@@ -12,9 +12,11 @@ import { FormsModule } from '@angular/forms';
 import { SwiperContainer } from 'swiper/element';
 import { StoriesEditPreviewService } from 'services';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { StoryMediaType, StoryType, WatchedByType } from 'utils';
+import { StoryMediaType, StoryType, UserInfoType, WatchedByType } from 'utils';
 import { DialogModule } from 'primeng/dialog';
 import { formatDistanceToNow } from 'date-fns';
+import { AppState, getUserInformation } from 'state';
+import { Store } from '@ngrx/store';
 
 @Component({
   selector: 'lib-stories-preview',
@@ -32,8 +34,14 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   storyInfoSubscription = new Subscription();
   watchedDialogvisible = false;
   watchedBy: WatchedByType[] = [];
+  authUser: UserInfoType | null = null;
+  authUserSubscription = new Subscription();
 
-  constructor(private storiesPreview: StoriesEditPreviewService) {}
+  constructor(
+    private storiesPreview: StoriesEditPreviewService,
+
+    private store: Store<AppState>
+  ) {}
 
   ngOnInit(): void {
     this.visible$ = this.storiesPreview.storiesPreviewObservable;
@@ -42,6 +50,14 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
       this.storiesPreview.viewStoryObservable.subscribe((data) => {
         if (data) {
           this.storyInfo = data;
+        }
+      });
+
+    this.authUserSubscription = this.store
+      .select(getUserInformation)
+      .subscribe((data) => {
+        if (data) {
+          this.authUser = data;
         }
       });
 
@@ -71,6 +87,7 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.storyInfoSubscription.unsubscribe();
+    this.authUserSubscription.unsubscribe();
   }
 
   recordStoryWatchers() {
@@ -85,9 +102,16 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
     this.activeIndex$.subscribe((index) => {
       if (index) {
         console.log(this.storyInfo?.storyMedia[index], 'index');
-        console.log(index, 'index');
+        this.saveWatchedUserInfoToDb(
+          this.authUser?.id as number,
+          this.storyInfo?.storyMedia[index].id as number
+        );
       }
     });
+  }
+
+  saveWatchedUserInfoToDb(userId: number, mediaId: number) {
+    console.log('object');
   }
 
   viewWatched(storymedia: StoryMediaType) {
