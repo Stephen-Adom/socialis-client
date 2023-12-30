@@ -1,9 +1,9 @@
 <div
-  class="dialog-wrapper fixed top-0 left-0 w-full h-screen bg-gray-900 z-[2220] px-4 md:px-8 lg:px-10 py-2"
+  class="dialog-wrapper flex items-center justify-center fixed top-0 left-0 w-full h-screen bg-gray-900 z-[2220] px-4 md:px-8 lg:px-10 py-2 overflow-y-hidden"
   *ngIf="visible$ | async"
 >
   <div
-    class="wrapper-header flex items-center justify-center mt-6 z-10 relative"
+    class="wrapper-header w-full p-4 flex items-center justify-center top-3 left-[50%] -translate-x-[50%] z-10 absolute"
   >
     <div
       class="pagination flex items-center justify-center gap-2 w-[50%] mx-auto"
@@ -14,7 +14,7 @@
         class="block w-full rounded-full h-2 bg-gray-600 pagination-bullet ring-2 ring-gray-500/50"
       ></span>
     </div>
-    <button
+    <!-- <button
       (click)="closePreview()"
       type="button"
       class="text-white rounded-full p-1 ml-auto absolute -top-[15px] right-10"
@@ -35,7 +35,7 @@
           d="M6 18 18 6M6 6l12 12"
         />
       </svg>
-    </button>
+    </button> -->
   </div>
 
   <section
@@ -90,89 +90,8 @@
 
     <swiper-container #swiperContainer class="mySwiper">
       <swiper-slide *ngFor="let info of storyInfo.storyMedia">
-        <div
-          class="media-container w-full p-4 flex items-center justify-center relative text-center"
-        >
-          <ng-container *ngIf="info.mediaType === 'image'; else elseTemplate">
-            <img [src]="info.mediaUrl" class="w-full" alt="" />
-          </ng-container>
-          <ng-template #elseTemplate>
-            <video controls>
-              <source [src]="info.mediaUrl" />
-            </video>
-          </ng-template>
-
-          <div
-            class="absolute bottom-[15px] left-[50%] -translate-x-[50%] w-[90%] bg-gradient-to-r from-transparent via-black/70 to-transparent z-[1] p-3 flex flex-col gap-y-3 items-center justify-center"
-          >
-            <p class="text-sm truncate text-center">
-              {{ info.mediaCaption }}
-            </p>
-
-            <button
-              type="button"
-              class="bg-transparent flex items-center justify-center text-white gap-x-1 text-sm"
-              (click)="viewWatched(info)"
-            >
-              <img
-                src="assets/images/eye.png"
-                alt="watched users"
-                class="w-[20px] invert"
-              />
-              {{ info.watchedBy.length }}
-            </button>
-          </div>
-        </div>
+        <lib-story-slide [story]="info" />
       </swiper-slide>
     </swiper-container>
   </section>
 </div>
-
-<p-dialog
-  header="Header"
-  [(visible)]="watchedDialogvisible"
-  [position]="'bottom'"
-  [style]="{ width: '30vw' }"
-  [breakpoints]="{ '960px': '75vw', '640px': '90vw' }"
-  (onHide)="watchedDialogvisible = false"
-  [baseZIndex]="2221"
->
-  <ng-template pTemplate="header">
-    <div class="text-sm">Viewed By:</div>
-  </ng-template>
-
-  <ng-template pTemplate="headless">
-    <div
-      class="bg-gradient-to-r from-primaryColor to-secondaryColor text-white p-3"
-    >
-      <ul
-        class="p-0 m-0 max-h-[50vh] lg:max-h-[30vh] overflow-auto"
-        *ngIf="watchedBy.length"
-      >
-        <li
-          class="w-full flex items-center space-x-4 py-2"
-          *ngFor="let user of watchedBy"
-        >
-          <img
-            class="inline-block flex-shrink-0 h-[3rem] w-[3rem] rounded-full"
-            [src]="
-              user.user.imageUrl
-                ? user.user.imageUrl
-                : 'assets/images/users/default.jpg'
-            "
-            [attr.alt]="user.user.username"
-          />
-
-          <div>
-            <span class="text-sm font-bold block"
-              >{{ user.user.firstname }} {{ user.user.lastname }}</span
-            >
-            <span class="inline-block italic text-xs">{{
-              formatTimeWatched(user.watchedAt)
-            }}</span>
-          </div>
-        </li>
-      </ul>
-    </div>
-  </ng-template>
-</p-dialog>

@@ -17,11 +17,12 @@ import { DialogModule } from 'primeng/dialog';
 import { formatDistanceToNow } from 'date-fns';
 import { AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
+import { StorySlideComponent } from '../story-slide/story-slide.component';
 
 @Component({
   selector: 'lib-stories-preview',
   standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule],
+  imports: [CommonModule, FormsModule, StorySlideComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './stories-preview.component.html',
   styleUrls: ['./stories-preview.component.css'],
@@ -32,8 +33,6 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   activeIndex$ = new BehaviorSubject<number>(0);
   storyInfo!: StoryType | null;
   storyInfoSubscription = new Subscription();
-  watchedDialogvisible = false;
-  watchedBy: WatchedByType[] = [];
   authUser: UserInfoType | null = null;
   authUserSubscription = new Subscription();
 
@@ -80,8 +79,6 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
 
   closePreview() {
     this.storiesPreview.toggleStoriesPreview(false);
-    this.watchedDialogvisible = false;
-    this.watchedBy = [];
     this.storyInfo = null;
   }
 
@@ -112,19 +109,5 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
 
   saveWatchedUserInfoToDb(userId: number, mediaId: number) {
     console.log('object');
-  }
-
-  viewWatched(storymedia: StoryMediaType) {
-    if (storymedia.watchedBy.length) {
-      this.watchedBy = storymedia.watchedBy;
-      this.watchedDialogvisible = true;
-    }
-  }
-
-  formatTimeWatched(time: string) {
-    return formatDistanceToNow(new Date(time), {
-      includeSeconds: true,
-      addSuffix: true,
-    });
   }
 }

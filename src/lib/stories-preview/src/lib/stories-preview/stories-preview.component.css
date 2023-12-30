@@ -6,6 +6,8 @@
 :host ::ng-deep swiper-slide {
   width: 100% !important;
   display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 .pagination-bullet {
@@ -26,19 +28,4 @@
 
 .pagination-bullet.active::after {
   width: 100%;
-}
-
-video {
-  width: 100%;
-  height: auto;
-}
-
-:host ::ng-deep .p-dialog-content {
-  padding: 0 !important;
-}
-
-:host ::ng-deep .p-dialog-header {
-  padding-top: 14px;
-  padding-bottom: 14px;
-  border-bottom: 1px solid #acacac;
 }
