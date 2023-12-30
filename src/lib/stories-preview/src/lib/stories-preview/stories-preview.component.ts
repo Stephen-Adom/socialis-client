@@ -15,7 +15,7 @@ import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { StoryMediaType, StoryType, UserInfoType, WatchedByType } from 'utils';
 import { DialogModule } from 'primeng/dialog';
 import { formatDistanceToNow } from 'date-fns';
-import { AppState, getUserInformation } from 'state';
+import { AppState, StoryApiActions, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
 import { StorySlideComponent } from '../story-slide/story-slide.component';
 
@@ -38,7 +38,6 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
 
   constructor(
     private storiesPreview: StoriesEditPreviewService,
-
     private store: Store<AppState>
   ) {}
 
@@ -78,6 +77,7 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   }
 
   closePreview() {
+    this.activeIndex$.next(0);
     this.storiesPreview.toggleStoriesPreview(false);
     this.storyInfo = null;
   }
@@ -90,6 +90,10 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   recordStoryWatchers() {
     this.visible$.subscribe((data) => {
       if (data) {
+        this.saveWatchedUserInfoToDb(
+          this.authUser?.id as number,
+          this.storyInfo?.storyMedia[0].id as number
+        );
         this.trackMediaIndex();
       }
     });
@@ -108,6 +112,6 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   }
 
   saveWatchedUserInfoToDb(userId: number, mediaId: number) {
-    console.log('object');
+    this.store.dispatch(StoryApiActions.saveWatchedUser({ userId, mediaId }));
   }
 }

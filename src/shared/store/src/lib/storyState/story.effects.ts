@@ -33,4 +33,24 @@ export class StoryEffects {
       )
     );
   });
+
+  SaveWatchedUser$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(StoryApiActions.saveWatchedUser),
+      mergeMap((action: { userId: number; mediaId: number }) =>
+        this.storyUploadService
+          .userWatchedStory(action.userId, action.mediaId)
+          .pipe(
+            map((response: any) => {
+              return StoryApiActions.saveWatchedUserSuccess({
+                response: response,
+              });
+            }),
+            catchError((error: HttpErrorResponse) =>
+              of(AppApiActions.displayErrorMessage({ error: error.error }))
+            )
+          )
+      )
+    );
+  });
 }

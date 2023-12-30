@@ -15,6 +15,7 @@ import {
   AppApiActions,
   PostApiActions,
   PostState,
+  StoryApiActions,
   UserApiActions,
   getAllAuthUserFollowing,
   getCommentDetails,
@@ -362,6 +363,23 @@ export class WrapperComponent implements OnInit, OnDestroy {
           this.store.dispatch(
             UserApiActions.updateUnreadNotificationCount({ unreadCount: count })
           );
+        },
+        error: (error) => {
+          console.log(error);
+        },
+      });
+
+    this.authUser$
+      .pipe(
+        map((user) => user?.username),
+        switchMap((username) => {
+          return this.messageservice.onMessage('/feed/user/story/' + username);
+        })
+      )
+      .subscribe({
+        next: (story) => {
+          console.log(story, 'updated story');
+          this.store.dispatch(StoryApiActions.updateAuthUserStory({ story }));
         },
         error: (error) => {
           console.log(error);

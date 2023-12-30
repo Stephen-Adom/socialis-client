@@ -36,5 +36,11 @@ export const StoryReducer = createReducer<StoryState>(
         authUserStories: action.response.data,
       };
     }
-  )
+  ),
+  on(StoryApiActions.updateAuthUserStory, (state: StoryState, action) => {
+    return {
+      ...state,
+      authUserStories: action.story,
+    };
+  })
 );
