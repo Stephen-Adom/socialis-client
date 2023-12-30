@@ -18,7 +18,7 @@ import {
 } from 'state';
 import { Store } from '@ngrx/store';
 import { StoryType, UserInfoType } from 'utils';
-import { Observable } from 'rxjs';
+import { Observable, combineLatest } from 'rxjs';
 import { StoriesEditPreviewService } from 'services';
 import { SwiperOptions } from 'swiper/types';
 
@@ -38,6 +38,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   authUser$!: Observable<UserInfoType | null>;
   uploadingStory$!: Observable<boolean>;
   authStories$!: Observable<StoryType | null>;
+  viewedAllStories = false;
 
   constructor(
     private storiesPreview: StoriesEditPreviewService,
@@ -49,6 +50,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
     this.uploadingStory$ = this.store.select(getUploadStoryStatus);
     this.authStories$ = this.store.select(getAuthUserStories);
     this.fetchAuthUserStories();
+    this.checkIfAuthUserViewedAllStories();
   }
 
   fetchAuthUserStories() {
@@ -59,6 +61,22 @@ export class StoriesComponent implements AfterViewInit, OnInit {
         );
       }
     });
+  }
+
+  checkIfAuthUserViewedAllStories() {
+    combineLatest([this.authUser$, this.authStories$]).subscribe(
+      ([authUser, authStories]) => {
+        if (authUser && authStories) {
+          console.log(authUser, authStories, 'AUTH');
+          this.viewedAllStories = authStories.storyMedia.every((media) =>
+            media.watchedBy.find(
+              (watched) => watched.user.username === authUser.username
+            )
+          );
+          console.log(this.viewedAllStories, 'viewedAllStories');
+        }
+      }
+    );
   }
 
   ngAfterViewInit(): void {
