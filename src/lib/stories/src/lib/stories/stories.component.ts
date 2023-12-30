@@ -67,13 +67,11 @@ export class StoriesComponent implements AfterViewInit, OnInit {
     combineLatest([this.authUser$, this.authStories$]).subscribe(
       ([authUser, authStories]) => {
         if (authUser && authStories) {
-          console.log(authUser, authStories, 'AUTH');
           this.viewedAllStories = authStories.storyMedia.every((media) =>
             media.watchedBy.find(
               (watched) => watched.user.username === authUser.username
             )
           );
-          console.log(this.viewedAllStories, 'viewedAllStories');
         }
       }
     );

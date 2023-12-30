@@ -28,11 +28,14 @@ export class StoryUploadService {
   }
 
   fetchUserStoryById(userId: number) {
-    return this.http.get<AllStoriesType>(BASE_URL + `/stories/${userId}/all`, {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-    });
+    return this.http.get<SuccessMessageType>(
+      BASE_URL + `/stories/${userId}/all`,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      }
+    );
   }
 
   userWatchedStory(userId: number, mediaId: number) {
