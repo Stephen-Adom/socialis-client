@@ -138,6 +138,8 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
   }
 
   followUser() {
+    this.updateFollowingInStore();
+
     this.followUserSubscription = this.userservice
       .followUser(this.authUser.id, this.authorFullInfo.id)
       .subscribe({
@@ -158,7 +160,33 @@ export class ProfileTooltipComponent implements OnInit, AfterViewInit {
       });
   }
 
+  updateFollowingInStore() {
+    const user: UserSummaryInfoFollowing = {
+      id: this.authorFullInfo.id,
+      firstname: this.authorFullInfo.firstname,
+      lastname: this.authorFullInfo.lastname,
+      username: this.authorFullInfo.username,
+      bio: this.authorFullInfo.bio,
+      imageUrl: this.authorFullInfo.imageUrl,
+      coverImageUrl: this.authorFullInfo.coverImageUrl,
+      phonenumber: this.authorFullInfo.phonenumber,
+      address: this.authorFullInfo.address,
+      totalPost: this.authorFullInfo.totalPost,
+      createdAt: this.authorFullInfo.createdAt,
+      followers: this.authorFullInfo.followers,
+      following: this.authorFullInfo.following,
+      followersList: this.authorFullInfo.followersList,
+      followingList: this.authorFullInfo.followingList,
+    };
+
+    this.store.dispatch(UserApiActions.followUser({ user }));
+  }
+
   unfollowUser() {
+    this.store.dispatch(
+      UserApiActions.removeAFollowing({ userId: this.authorFullInfo.id })
+    );
+
     this.unfollowUserSubscription = this.userservice
       .unfollowUser(this.authUser.id, this.authorFullInfo.id)
       .subscribe({

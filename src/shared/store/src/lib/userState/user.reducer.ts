@@ -74,6 +74,12 @@ export const UserReducer = createReducer<UserState>(
       authUserFollowing: action.usersResponse.data,
     };
   }),
+  on(UserApiActions.followUser, (state: UserState, action) => {
+    return {
+      ...state,
+      authUserFollowing: [...state.authUserFollowing, action.user],
+    };
+  }),
   on(UserApiActions.updateFollowersList, (state: UserState, action) => {
     return {
       ...state,
@@ -81,9 +87,15 @@ export const UserReducer = createReducer<UserState>(
     };
   }),
   on(UserApiActions.updateFollowingList, (state: UserState, action) => {
+    const currentFollowings = [...state.authUserFollowing];
+
+    const updatedFollowings = currentFollowings.map((following) =>
+      following.id === action.user.id ? action.user : following
+    );
+
     return {
       ...state,
-      authUserFollowing: [...state.authUserFollowing, action.user],
+      authUserFollowing: updatedFollowings,
     };
   }),
   on(UserApiActions.removeAFollower, (state: UserState, action) => {

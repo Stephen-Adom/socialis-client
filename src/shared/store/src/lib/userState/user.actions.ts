@@ -15,8 +15,7 @@ export const UserApiActions = createActionGroup({
   events: {
     fetchUserDetails: props<{ username: string }>(),
     fetchUserDetailsSuccess: props<{ userInfo: UserSummaryInfoResponseType }>(),
-    // followUser: props<{ followId: number; followingId: number }>(),
-    // unfollowUser: props<{ followId: number; followingId: number }>(),
+    followUser: props<{ user: UserSummaryInfoFollowing }>(),
     // followUserSuccess: emptyProps(),
     fetchAllFollowers: props<{ username: string }>(),
     fetchAllFollowersSuccess: props<{
