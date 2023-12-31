@@ -1,9 +1,10 @@
 /* eslint-disable @nx/enforce-module-boundaries */
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import BASE_URL from '../base_url';
+import BASE_URL, { MaxRetries } from '../base_url';
 import { getAuthHttpOptions } from '../httpHeaders';
 import { AllPostResponseType, SuccessMessageType } from 'utils';
+import { retry } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -18,26 +19,28 @@ export class PostService {
   }
 
   createPost(formData: FormData) {
-    return this.http.post<SuccessMessageType>(
-      BASE_URL + '/post',
-      formData,
-      this.authHeaders
-    );
+    return this.http
+      .post<SuccessMessageType>(BASE_URL + '/post', formData, this.authHeaders)
+      .pipe(retry(MaxRetries));
   }
 
   editPost(postId: number, formData: FormData) {
-    return this.http.patch<SuccessMessageType>(
-      BASE_URL + '/post/' + postId + '/edit',
-      formData,
-      this.authHeaders
-    );
+    return this.http
+      .patch<SuccessMessageType>(
+        BASE_URL + '/post/' + postId + '/edit',
+        formData,
+        this.authHeaders
+      )
+      .pipe(retry(MaxRetries));
   }
 
   deletePost(postId: number) {
-    return this.http.delete<SuccessMessageType>(
-      BASE_URL + '/post/' + postId + '/delete',
-      this.authHeaders
-    );
+    return this.http
+      .delete<SuccessMessageType>(
+        BASE_URL + '/post/' + postId + '/delete',
+        this.authHeaders
+      )
+      .pipe(retry(MaxRetries));
   }
 
   fetchAllPost() {
@@ -48,10 +51,12 @@ export class PostService {
   }
 
   fetchAllPostWithOffset(offset: number) {
-    return this.http.get<AllPostResponseType>(
-      BASE_URL + '/all_posts_offset?offset=' + offset,
-      this.authHeaders
-    );
+    return this.http
+      .get<AllPostResponseType>(
+        BASE_URL + '/all_posts_offset?offset=' + offset,
+        this.authHeaders
+      )
+      .pipe(retry(MaxRetries));
   }
 
   fetchPostById(postId: string) {

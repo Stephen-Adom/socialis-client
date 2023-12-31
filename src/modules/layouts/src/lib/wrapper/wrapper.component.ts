@@ -51,6 +51,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
 
   authUser$!: Observable<UserInfoType | null>;
   userFollowing$!: Observable<UserSummaryInfo[]>;
+  connectivitySubscription = new Subscription();
 
   constructor(
     private alertInfoService: DisplayAlertInfoService,
@@ -58,12 +59,16 @@ export class WrapperComponent implements OnInit, OnDestroy {
     private messageservice: MessageService,
     private store: Store<PostState>
   ) {
-    interval(1000)
-      .pipe(switchMap(() => of(isConnected())))
-      .subscribe((status) => {
-        console.log('status', status);
-        this.noInternetService.toggleIsNotConnected(!status);
-      });
+    window.addEventListener('online', () =>
+      this.noInternetService.toggleIsNotConnected(false)
+    );
+    window.addEventListener('offline', () =>
+      this.noInternetService.toggleIsNotConnected(true)
+    );
+
+    of(isConnected()).subscribe((status) => {
+      this.noInternetService.toggleIsNotConnected(!status);
+    });
   }
 
   ngOnInit(): void {
@@ -413,5 +418,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
     this.userUpdateSubscription.unsubscribe();
     this.commentDetailsSubscription.unsubscribe();
     this.bookmarkUpdateSubscription.unsubscribe();
+    this.connectivitySubscription.unsubscribe();
   }
 }

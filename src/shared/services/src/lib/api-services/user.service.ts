@@ -8,7 +8,8 @@ import {
   UserSummaryInfoResponseType,
   UserSummaryResponseType,
 } from 'utils';
-import BASE_URL from '../base_url';
+import BASE_URL, { MaxRetries } from '../base_url';
+import { retry } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -71,17 +72,21 @@ export class UserService {
   }
 
   followUser(followId: number, followingId: number) {
-    return this.http.get<UserSummaryInfoResponseType>(
-      BASE_URL + `/user/${followId}/follow/${followingId}`,
-      this.authHeaders
-    );
+    return this.http
+      .get<UserSummaryInfoResponseType>(
+        BASE_URL + `/user/${followId}/follow/${followingId}`,
+        this.authHeaders
+      )
+      .pipe(retry(MaxRetries));
   }
 
   unfollowUser(followId: number, followingId: number) {
-    return this.http.get<UserSummaryInfoResponseType>(
-      BASE_URL + `/user/${followId}/unfollow/${followingId}`,
-      this.authHeaders
-    );
+    return this.http
+      .get<UserSummaryInfoResponseType>(
+        BASE_URL + `/user/${followId}/unfollow/${followingId}`,
+        this.authHeaders
+      )
+      .pipe(retry(MaxRetries));
   }
 
   fetchAllFollowers(username: string) {
