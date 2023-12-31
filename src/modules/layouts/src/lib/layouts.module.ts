@@ -21,6 +21,7 @@ import {
   FormatNotificationService,
   FormatPostService,
   MessageService,
+  NoInternetService,
   NotificationOffcanvasService,
   NotificationService,
   PostService,
@@ -120,6 +121,7 @@ import { StoriesPreviewComponent } from 'stories-preview';
     FormatNotificationService,
     StoriesEditPreviewService,
     StoryUploadService,
+    NoInternetService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InternetAvailableInterceptor,

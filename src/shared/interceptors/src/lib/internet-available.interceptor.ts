@@ -5,17 +5,8 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
-  HttpErrorResponse,
 } from '@angular/common/http';
-import {
-  Observable,
-  catchError,
-  last,
-  mergeMap,
-  of,
-  shareReplay,
-  throwError,
-} from 'rxjs';
+import { Observable, mergeMap, of, shareReplay, throwError } from 'rxjs';
 import { isConnected } from 'utils';
 
 @Injectable()
@@ -37,21 +28,8 @@ export class InternetAvailableInterceptor implements HttpInterceptor {
           return next.handle(request);
         }
 
-        return throwError(() => new Error('No internet connection')).pipe(
-          last(),
-          catchError((error) => {
-            if (error) {
-              this.handleError(error);
-            }
-
-            return throwError(null);
-          })
-        );
+        return throwError(() => new Error('No internet connection'));
       })
     );
-  }
-
-  handleError(error: HttpErrorResponse) {
-    console.log(error);
   }
 }

@@ -2,6 +2,7 @@
   id="toast-simple"
   class="absolute bottom-10 lg:top-10 left-[50%] -translate-x-[50%] z-[3000] h-fit flex items-center w-full max-w-xs lg:max-w-sm p-4 space-x-4 rtl:space-x-reverse text-white bg-red-700 divide-x rtl:divide-x-reverse divide-gray-200 rounded-lg shadow dark:text-white dark:divide-gray-700 space-x dark:bg-red-800"
   role="alert"
+  *ngIf="notConnected$ | async"
 >
   <svg
     xmlns="http://www.w3.org/2000/svg"

@@ -9,8 +9,15 @@ import {
   switchMap,
   map,
   distinctUntilChanged,
+  of,
+  retry,
+  interval,
 } from 'rxjs';
-import { DisplayAlertInfoService, MessageService } from 'services';
+import {
+  DisplayAlertInfoService,
+  MessageService,
+  NoInternetService,
+} from 'services';
 import {
   AppApiActions,
   PostApiActions,
@@ -22,7 +29,7 @@ import {
   getPostDetails,
   getUserInformation,
 } from 'state';
-import { UserInfoType, UserSummaryInfo } from 'utils';
+import { UserInfoType, UserSummaryInfo, isConnected } from 'utils';
 
 @Component({
   selector: 'feature-wrapper',
@@ -47,9 +54,17 @@ export class WrapperComponent implements OnInit, OnDestroy {
 
   constructor(
     private alertInfoService: DisplayAlertInfoService,
+    private noInternetService: NoInternetService,
     private messageservice: MessageService,
     private store: Store<PostState>
-  ) {}
+  ) {
+    interval(1000)
+      .pipe(switchMap(() => of(isConnected())))
+      .subscribe((status) => {
+        console.log('status', status);
+        this.noInternetService.toggleIsNotConnected(!status);
+      });
+  }
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
