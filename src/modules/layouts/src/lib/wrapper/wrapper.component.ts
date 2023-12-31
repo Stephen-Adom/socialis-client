@@ -378,6 +378,7 @@ export class WrapperComponent implements OnInit, OnDestroy {
       )
       .subscribe({
         next: (story) => {
+          console.log('feed user story');
           this.store.dispatch(StoryApiActions.updateAuthUserStory({ story }));
         },
         error: (error) => {

@@ -59,7 +59,10 @@ import { TooltipModule } from 'primeng/tooltip';
 import { NavLinksComponent } from 'nav-links';
 import { ProfileCardSummaryComponent } from 'profile-card-summary';
 import { NotificationOffcanvasComponent } from 'notification-offcanvas';
-import { AuthTokenInterceptorInterceptor } from 'interceptors';
+import {
+  AuthTokenInterceptorInterceptor,
+  InternetAvailableInterceptor,
+} from 'interceptors';
 import { StoriesDialogComponent } from 'stories-dialog';
 import { StoriesEditPreviewComponent } from 'stories-edit-preview';
 import { StoriesPreviewComponent } from 'stories-preview';
@@ -115,6 +118,11 @@ import { StoriesPreviewComponent } from 'stories-preview';
     FormatNotificationService,
     StoriesEditPreviewService,
     StoryUploadService,
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InternetAvailableInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptorInterceptor,

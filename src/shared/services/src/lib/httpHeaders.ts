@@ -14,7 +14,6 @@ export const getAuthHttpOptions = async () => {
 
   return {
     headers: new HttpHeaders({
-      'Content-Type': 'application/json',
       Authorization: 'Bearer ' + accessToken,
     }),
   };
