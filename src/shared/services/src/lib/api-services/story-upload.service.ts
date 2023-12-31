@@ -59,4 +59,15 @@ export class StoryUploadService {
       }
     );
   }
+
+  fetchAllStoriesForUserFollowings(userId: number) {
+    return this.http.get<AllStoriesType>(
+      BASE_URL + `/stories/${userId}/following/stories`,
+      {
+        headers: new HttpHeaders({
+          'Content-Type': 'application/json',
+        }),
+      }
+    );
+  }
 }
