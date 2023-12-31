@@ -2,7 +2,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import {
-  AllStoriesType,
+  AllStoriesResponseType,
   AllWatchedStoriesResponseType,
   SuccessMessageType,
   WatchedStoryResponseType,
@@ -61,7 +61,7 @@ export class StoryUploadService {
   }
 
   fetchAllStoriesForUserFollowings(userId: number) {
-    return this.http.get<AllStoriesType>(
+    return this.http.get<AllStoriesResponseType>(
       BASE_URL + `/stories/${userId}/following/stories`,
       {
         headers: new HttpHeaders({

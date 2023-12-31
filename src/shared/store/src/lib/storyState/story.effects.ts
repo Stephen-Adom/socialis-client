@@ -53,4 +53,24 @@ export class StoryEffects {
       )
     );
   });
+
+  fetchAllFollowingStories$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(StoryApiActions.fetchAllFollowingStories),
+      mergeMap((action: { userId: number }) =>
+        this.storyUploadService
+          .fetchAllStoriesForUserFollowings(action.userId)
+          .pipe(
+            map((response: any) => {
+              return StoryApiActions.fetchAllFollowingStoriesSuccess({
+                response: response,
+              });
+            }),
+            catchError((error: HttpErrorResponse) =>
+              of(AppApiActions.displayErrorMessage({ error: error.error }))
+            )
+          )
+      )
+    );
+  });
 }

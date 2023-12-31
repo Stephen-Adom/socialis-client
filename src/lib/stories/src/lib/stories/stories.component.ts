@@ -12,6 +12,7 @@ import { SwiperContainer, register } from 'swiper/element/bundle';
 import {
   AppState,
   StoryApiActions,
+  getAllFollowingStories,
   getAuthUserStories,
   getUploadStoryStatus,
   getUserInformation,
@@ -38,6 +39,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   authUser$!: Observable<UserInfoType | null>;
   uploadingStory$!: Observable<boolean>;
   authStories$!: Observable<StoryType | null>;
+  followingStories$!: Observable<StoryType[]>;
   viewedAllStories = false;
 
   constructor(
@@ -49,15 +51,20 @@ export class StoriesComponent implements AfterViewInit, OnInit {
     this.authUser$ = this.store.select(getUserInformation);
     this.uploadingStory$ = this.store.select(getUploadStoryStatus);
     this.authStories$ = this.store.select(getAuthUserStories);
-    this.fetchAuthUserStories();
+    this.followingStories$ = this.store.select(getAllFollowingStories);
+    this.fetchUserStories();
     this.checkIfAuthUserViewedAllStories();
   }
 
-  fetchAuthUserStories() {
+  fetchUserStories() {
     this.authUser$.subscribe((authUser) => {
       if (authUser) {
         this.store.dispatch(
           StoryApiActions.fetchAuthUserStories({ userId: authUser.id })
+        );
+
+        this.store.dispatch(
+          StoryApiActions.fetchAllFollowingStories({ userId: authUser.id })
         );
       }
     });

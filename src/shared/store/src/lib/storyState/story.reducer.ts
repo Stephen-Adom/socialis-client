@@ -12,10 +12,12 @@ export const featureStoryKey = 'story';
 
 export interface StoryState {
   authUserStories: StoryType | null;
+  followingStories: StoryType[];
 }
 
 const initialState: StoryState = {
   authUserStories: null,
+  followingStories: [],
 };
 
 export const selectStoryFeature =
@@ -26,6 +28,11 @@ export const getAuthUserStories = createSelector(
   (state: StoryState) => state.authUserStories
 );
 
+export const getAllFollowingStories = createSelector(
+  selectStoryFeature,
+  (state: StoryState) => state.followingStories
+);
+
 export const StoryReducer = createReducer<StoryState>(
   initialState,
   on(StoryApiActions.updateAuthUserStory, (state: StoryState, action) => {
@@ -33,5 +40,14 @@ export const StoryReducer = createReducer<StoryState>(
       ...state,
       authUserStories: action.story,
     };
-  })
+  }),
+  on(
+    StoryApiActions.fetchAllFollowingStoriesSuccess,
+    (state: StoryState, action) => {
+      return {
+        ...state,
+        followingStories: action.response.data,
+      };
+    }
+  )
 );

@@ -262,9 +262,14 @@ export type uploadMedia = {
   fileType: string;
 };
 
-export type AllStoriesType = {
+export type StoriesResponseType = {
   status: string;
   data: StoryType;
+};
+
+export type AllStoriesResponseType = {
+  status: string;
+  data: StoryType[];
 };
 
 export type StoryType = {
