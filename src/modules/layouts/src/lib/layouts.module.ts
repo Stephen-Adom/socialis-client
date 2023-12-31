@@ -52,6 +52,7 @@ import { EditAuthProfileModalComponent } from 'edit-auth-profile-modal';
 import { ConfirmDeleteDialogComponent } from 'confirm-delete-dialog';
 import {
   ActionInProgressComponent,
+  NoInternetAlertComponent,
   NotificationAlertsComponent,
   SuccessNotificationComponent,
 } from 'notification';
@@ -98,6 +99,7 @@ import { StoriesPreviewComponent } from 'stories-preview';
     StoriesDialogComponent,
     StoriesEditPreviewComponent,
     StoriesPreviewComponent,
+    NoInternetAlertComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
