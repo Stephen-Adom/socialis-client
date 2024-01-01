@@ -179,6 +179,7 @@ export class StoriesEditPreviewComponent
     if (this.dataType === 'single') {
       this.uploadSingleMedia();
     } else {
+      this.uploadMultipleMedia();
       return;
     }
   }
@@ -213,5 +214,16 @@ export class StoriesEditPreviewComponent
           sub.unsubscribe();
         },
       });
+  }
+
+  uploadMultipleMedia() {
+    if (this.multipleStoriesData.length) {
+      const formData = new FormData();
+
+      this.multipleStoriesData.forEach((story) => {
+        formData.append('storyMedia', story.file as File);
+        formData.append('caption', story.caption as string);
+      });
+    }
   }
 }
