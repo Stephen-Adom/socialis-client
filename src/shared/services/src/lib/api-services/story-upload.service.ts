@@ -6,6 +6,7 @@ import {
   AllWatchedStoriesResponseType,
   SuccessMessageType,
   WatchedStoryResponseType,
+  StoriesResponseType,
 } from 'utils';
 import BASE_URL from '../base_url';
 
@@ -28,7 +29,7 @@ export class StoryUploadService {
   }
 
   fetchUserStoryById(userId: number) {
-    return this.http.get<SuccessMessageType>(
+    return this.http.get<StoriesResponseType>(
       BASE_URL + `/stories/${userId}/all`,
       {
         headers: new HttpHeaders({

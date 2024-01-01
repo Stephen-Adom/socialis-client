@@ -264,7 +264,7 @@ export type uploadMedia = {
 
 export type StoriesResponseType = {
   status: string;
-  data: StoryType;
+  data: StoryType | null;
 };
 
 export type AllStoriesResponseType = {

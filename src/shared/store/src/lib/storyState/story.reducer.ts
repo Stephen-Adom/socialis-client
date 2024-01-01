@@ -35,6 +35,15 @@ export const getAllFollowingStories = createSelector(
 
 export const StoryReducer = createReducer<StoryState>(
   initialState,
+  on(
+    StoryApiActions.fetchAuthUserStoriesSuccess,
+    (state: StoryState, action) => {
+      return {
+        ...state,
+        authUserStories: action.response.data,
+      };
+    }
+  ),
   on(StoryApiActions.updateAuthUserStory, (state: StoryState, action) => {
     return {
       ...state,
