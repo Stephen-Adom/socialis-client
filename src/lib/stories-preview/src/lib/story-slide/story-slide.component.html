@@ -18,6 +18,7 @@
     </p>
 
     <button
+      *ngIf="(authUser$ | async)?.username === author"
       type="button"
       class="bg-transparent flex items-center justify-center text-white gap-x-1 text-sm"
       (click)="viewWatched(story)"

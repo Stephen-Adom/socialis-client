@@ -3,7 +3,8 @@
 >
   <div class="auth-user-story-container relative inline-block">
     <img
-      class="inline-block flex-shrink-0 h-[3.875rem] w-[3.875rem] rounded-full outline-offset-[3px] outline outline-[3px] outline-primaryColor cursor-pointer"
+      (click)="viewStory()"
+      class="inline-block flex-shrink-0 h-[3.875rem] w-[3.875rem] rounded-full outline-offset-[3px] outline outline-[3px] cursor-pointer"
       [src]="
         story.user.imageUrl
           ? story.user.imageUrl
@@ -11,6 +12,10 @@
       "
       [title]="'View ' + story.user.username + ' story'"
       [alt]="story.user.username"
+      [ngClass]="{
+        'outline-primaryColor': !viewedAllStories,
+        'outline-gray-400': viewedAllStories
+      }"
     />
   </div>
   <span class="d-block text-xs dark:text-dark-text">{{

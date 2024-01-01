@@ -90,7 +90,11 @@
 
     <swiper-container #swiperContainer class="mySwiper">
       <swiper-slide *ngFor="let info of storyInfo.storyMedia">
-        <lib-story-slide [story]="info" [activeIndex]="activeIndex$ | async" />
+        <lib-story-slide
+          [story]="info"
+          [activeIndex]="activeIndex$ | async"
+          [author]="storyInfo.user.username"
+        />
       </swiper-slide>
     </swiper-container>
   </section>

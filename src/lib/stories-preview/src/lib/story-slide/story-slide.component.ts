@@ -1,14 +1,14 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Input, OnDestroy } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StoryMediaType, WatchedByType } from 'utils';
+import { StoryMediaType, UserInfoType, WatchedByType } from 'utils';
 import { DialogModule } from 'primeng/dialog';
 import { formatDistanceToNow } from 'date-fns';
 import { StoryUploadService } from 'services';
 import { HttpErrorResponse } from '@angular/common/http';
-import { AppApiActions, AppState } from 'state';
+import { AppApiActions, AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'lib-story-slide',
@@ -17,17 +17,23 @@ import { Subscription } from 'rxjs';
   templateUrl: './story-slide.component.html',
   styleUrls: ['./story-slide.component.css'],
 })
-export class StorySlideComponent implements OnDestroy {
+export class StorySlideComponent implements OnDestroy, OnInit {
   @Input({ required: true }) story!: StoryMediaType;
   @Input({ required: true }) activeIndex!: number | null;
+  @Input({ required: true }) author!: string;
   watchedDialogvisible = false;
   watchedBy: WatchedByType[] = [];
   watchedUserSubscription = new Subscription();
+  authUser$!: Observable<UserInfoType | null>;
 
   constructor(
     private storyUploadService: StoryUploadService,
     private store: Store<AppState>
   ) {}
+
+  ngOnInit(): void {
+    this.authUser$ = this.store.select(getUserInformation);
+  }
 
   viewWatched(storymedia: StoryMediaType) {
     this.watchedBy = storymedia.watchedBy;
