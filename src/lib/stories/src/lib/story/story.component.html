@@ -1,0 +1,19 @@
+<div
+  class="story-container flex flex-col items-center gap-y-2 relative top-1 w-max px-[11px] py-[2px]"
+>
+  <div class="auth-user-story-container relative inline-block">
+    <img
+      class="inline-block flex-shrink-0 h-[3.875rem] w-[3.875rem] rounded-full outline-offset-[3px] outline outline-[3px] outline-primaryColor cursor-pointer"
+      [src]="
+        story.user.imageUrl
+          ? story.user.imageUrl
+          : 'assets/images/users/default.jpg'
+      "
+      [title]="'View ' + story.user.username + ' story'"
+      [alt]="story.user.username"
+    />
+  </div>
+  <span class="d-block text-xs dark:text-dark-text">{{
+    story.user.username
+  }}</span>
+</div>

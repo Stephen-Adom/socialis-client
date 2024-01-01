@@ -130,20 +130,10 @@
       </div>
     </swiper-slide>
 
-    <swiper-slide>
-      <div
-        class="story-container flex flex-col items-center gap-y-2 relative top-1 w-max px-[11px] py-[2px]"
-      >
-        <div class="auth-user-story-container relative inline-block">
-          <img
-            class="inline-block flex-shrink-0 h-[3.875rem] w-[3.875rem] rounded-full outline-offset-[3px] outline outline-[3px] outline-primaryColor cursor-pointer"
-            src="assets/images/users/default.jpg"
-            title="Add Story"
-            alt="Add Story"
-          />
-        </div>
-        <span class="d-block text-xs dark:text-dark-text">Alaska</span>
-      </div>
-    </swiper-slide>
+    <ng-container *ngIf="(followingStories$ | async)?.length">
+      <swiper-slide *ngFor="let story of followingStories$ | async">
+        <lib-story [story]="story" />
+      </swiper-slide>
+    </ng-container>
   </swiper-container>
 </div>

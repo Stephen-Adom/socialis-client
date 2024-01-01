@@ -22,13 +22,14 @@ import { StoryType, UserInfoType } from 'utils';
 import { Observable, combineLatest } from 'rxjs';
 import { StoriesEditPreviewService } from 'services';
 import { SwiperOptions } from 'swiper/types';
+import { StoryComponent } from '../story/story.component';
 
 register();
 
 @Component({
   selector: 'lib-stories',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, StoryComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './stories.component.html',
   styleUrls: ['./stories.component.css'],
