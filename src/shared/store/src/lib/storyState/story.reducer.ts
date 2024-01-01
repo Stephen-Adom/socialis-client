@@ -82,5 +82,19 @@ export const StoryReducer = createReducer<StoryState>(
       ...state,
       followingStories: [...updatedFollowingStories],
     };
+  }),
+  on(StoryApiActions.updateWatchedStories, (state: StoryState, action) => {
+    const currentFollowingStories = [...state.followingStories];
+
+    const updatedFollowingStories = currentFollowingStories.map((following) =>
+      following.user.username === action.story.user.username
+        ? action.story
+        : following
+    );
+
+    return {
+      ...state,
+      followingStories: [...updatedFollowingStories],
+    };
   })
 );

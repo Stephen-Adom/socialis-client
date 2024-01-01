@@ -424,6 +424,21 @@ export class WrapperComponent implements OnInit, OnDestroy {
       }
     });
 
+    combineLatest([
+      this.messageservice.onMessage('/feed/user/stories/watched'),
+      this.userFollowing$,
+    ]).subscribe(([story, followings]) => {
+      if (story && followings.length) {
+        const followingExist = followings.find(
+          (following) => following.username === story.user.username
+        );
+
+        if (followingExist) {
+          this.store.dispatch(StoryApiActions.updateWatchedStories({ story }));
+        }
+      }
+    });
+
     // this.userFollowing$
     //   .pipe(
     //     map((followings) => followings),

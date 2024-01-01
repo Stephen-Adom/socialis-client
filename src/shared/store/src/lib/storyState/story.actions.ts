@@ -20,5 +20,6 @@ export const StoryApiActions = createActionGroup({
       response: AllStoriesResponseType;
     }>(),
     updateFollowingStories: props<{ story: StoryType }>(),
+    updateWatchedStories: props<{ story: StoryType }>(),
   },
 });
