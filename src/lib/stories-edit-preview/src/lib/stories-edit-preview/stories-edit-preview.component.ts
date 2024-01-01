@@ -17,7 +17,14 @@ import {
   StoryUploadService,
   SuccessMessageService,
 } from 'services';
-import { Observable, Subscription } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  debounceTime,
+  filter,
+  switchMap,
+} from 'rxjs';
 import { SUCCESS_MESSAGE_TOKEN, UserInfoType, uploadMedia } from 'utils';
 import { FormsModule } from '@angular/forms';
 import { AppApiActions, AppState, getUserInformation } from 'state';
@@ -46,6 +53,7 @@ export class StoriesEditPreviewComponent
   dataType!: string;
   authUser!: UserInfoType;
   authUserSubscription: Subscription | undefined;
+  videoLengthAlert$ = new BehaviorSubject<boolean>(false);
 
   constructor(
     @Inject(SUCCESS_MESSAGE_TOKEN)
@@ -74,8 +82,19 @@ export class StoriesEditPreviewComponent
           this.multipleStoriesData = data?.data as uploadMedia[];
         }
         this.singleStoriesData = data?.data as uploadMedia;
+
+        this.checkMediaType();
       }
     });
+
+    this.videoLengthAlert$
+      .pipe(
+        filter((status) => status === true),
+        debounceTime(5000)
+      )
+      .subscribe(() => {
+        this.videoLengthAlert$.next(false);
+      });
   }
 
   ngAfterViewInit(): void {
@@ -111,6 +130,14 @@ export class StoriesEditPreviewComponent
 
   ngOnDestroy(): void {
     this.authUserSubscription?.unsubscribe();
+  }
+
+  checkMediaType() {
+    if (this.singleStoriesData?.fileType.includes('video')) {
+      this.videoLengthAlert$.next(true);
+    } else {
+      this.videoLengthAlert$.next(false);
+    }
   }
 
   nextSlide() {

@@ -65,6 +65,18 @@
   >
     Upload Story
   </button>
+
+  <div
+    id="toast-simple"
+    class="absolute bottom-20 lg:top-10 left-[50%] -translate-x-[50%] z-[3000] h-fit flex items-center w-full max-w-xs lg:max-w-sm p-4 space-x-4 rtl:space-x-reverse text-gray-800 bg-white divide-x rtl:divide-x-reverse divide-gray-500 rounded-lg shadow-lg dark:text-white dark:divide-gray-700 space-x dark:bg-main-dark"
+    role="alert"
+    *ngIf="videoLengthAlert$ | async"
+  >
+    <div class="ps-4 text-sm font-normal">
+      Videos uploaded to story will be trimmed to the first
+      <strong>60 seconds </strong>
+    </div>
+  </div>
 </div>
 
 <ng-template #singleUpload let-storyInfo="storyInfo">

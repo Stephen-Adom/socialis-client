@@ -438,23 +438,6 @@ export class WrapperComponent implements OnInit, OnDestroy {
         }
       }
     });
-
-    // this.userFollowing$
-    //   .pipe(
-    //     map((followings) => followings),
-    //     switchMap(() => {
-    //       return this.messageservice.onMessage('/feed/user/stories');
-    //     })
-    //   )
-    //   .subscribe({
-    //     next: (story) => {
-    //       console.log('feed user story');
-    //       this.store.dispatch(StoryApiActions.updateAuthUserStory({ story }));
-    //     },
-    //     error: (error) => {
-    //       console.log(error);
-    //     },
-    //   });
   }
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();

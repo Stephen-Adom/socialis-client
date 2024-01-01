@@ -122,11 +122,11 @@ import { StoriesPreviewComponent } from 'stories-preview';
     StoriesEditPreviewService,
     StoryUploadService,
     NoInternetService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: InternetAvailableInterceptor,
-      multi: true,
-    },
+    // {
+    //   provide: HTTP_INTERCEPTORS,
+    //   useClass: InternetAvailableInterceptor,
+    //   multi: true,
+    // },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptorInterceptor,
