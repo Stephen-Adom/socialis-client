@@ -12,6 +12,7 @@ import {
   of,
   retry,
   interval,
+  combineLatest,
 } from 'rxjs';
 import {
   DisplayAlertInfoService,
@@ -29,7 +30,7 @@ import {
   getPostDetails,
   getUserInformation,
 } from 'state';
-import { UserInfoType, UserSummaryInfo, isConnected } from 'utils';
+import { StoryType, UserInfoType, UserSummaryInfo, isConnected } from 'utils';
 
 @Component({
   selector: 'feature-wrapper',
@@ -405,6 +406,40 @@ export class WrapperComponent implements OnInit, OnDestroy {
           console.log(error);
         },
       });
+
+    combineLatest([
+      this.messageservice.onMessage('/feed/user/stories'),
+      this.userFollowing$,
+    ]).subscribe(([story, followings]) => {
+      if (story && followings.length) {
+        const followingExist = followings.find(
+          (following) => following.username === story.user.username
+        );
+
+        if (followingExist) {
+          this.store.dispatch(
+            StoryApiActions.updateFollowingStories({ story })
+          );
+        }
+      }
+    });
+
+    // this.userFollowing$
+    //   .pipe(
+    //     map((followings) => followings),
+    //     switchMap(() => {
+    //       return this.messageservice.onMessage('/feed/user/stories');
+    //     })
+    //   )
+    //   .subscribe({
+    //     next: (story) => {
+    //       console.log('feed user story');
+    //       this.store.dispatch(StoryApiActions.updateAuthUserStory({ story }));
+    //     },
+    //     error: (error) => {
+    //       console.log(error);
+    //     },
+    //   });
   }
   ngOnDestroy(): void {
     this.userInfoSubscription.unsubscribe();

@@ -13,8 +13,8 @@
       [title]="'View ' + story.user.username + ' story'"
       [alt]="story.user.username"
       [ngClass]="{
-        'outline-primaryColor': !viewedAllStories,
-        'outline-gray-400': viewedAllStories
+        'outline-primaryColor': viewedAllStories$.value === false,
+        'outline-gray-400': viewedAllStories$.value === true
       }"
     />
   </div>

@@ -19,5 +19,6 @@ export const StoryApiActions = createActionGroup({
     fetchAllFollowingStoriesSuccess: props<{
       response: AllStoriesResponseType;
     }>(),
+    updateFollowingStories: props<{ story: StoryType }>(),
   },
 });

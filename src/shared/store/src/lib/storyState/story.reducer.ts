@@ -58,5 +58,29 @@ export const StoryReducer = createReducer<StoryState>(
         followingStories: action.response.data,
       };
     }
-  )
+  ),
+  on(StoryApiActions.updateFollowingStories, (state: StoryState, action) => {
+    const currentFollowingStories = [...state.followingStories];
+
+    const storyExistIndex = currentFollowingStories.findIndex(
+      (story) => story.user.username === action.story.user.username
+    );
+
+    let updatedFollowingStories = [];
+
+    if (storyExistIndex !== -1) {
+      updatedFollowingStories = currentFollowingStories.splice(
+        storyExistIndex,
+        1,
+        action.story
+      );
+    } else {
+      updatedFollowingStories = [action.story, ...currentFollowingStories];
+    }
+
+    return {
+      ...state,
+      followingStories: [...updatedFollowingStories],
+    };
+  })
 );
