@@ -1,5 +1,5 @@
 <div
-  class="dialog-wrapper flex items-center justify-center fixed top-0 left-0 w-full h-screen bg-gray-900 z-[2220] px-4 md:px-8 lg:px-10 py-2 overflow-y-hidden"
+  class="dialog-wrapper flex items-center justify-center fixed top-0 left-0 w-full h-screen bg-black/90 z-[2220] px-1 md:px-8 lg:px-10 py-2 overflow-y-hidden"
   *ngIf="visible$ | async"
 >
   <div
@@ -7,6 +7,7 @@
   >
     <div
       class="pagination flex items-center justify-center gap-2 w-[50%] mx-auto"
+      *ngIf="checkMediaLength()"
     >
       <span
         *ngFor="let item of storyInfo?.storyMedia; let i = index"
@@ -40,7 +41,7 @@
 
   <section
     *ngIf="storyInfo"
-    class="w-[95%] md:w-[80%] lg:w-[50%] mx-auto text-white flex flex-col items-center justify-center h-[90%] relative"
+    class="w-full md:w-[80%] lg:w-[50%] mx-auto text-white flex flex-col items-center justify-center h-[90%] relative"
   >
     <button
       *ngIf="swiperContainer.swiper.isBeginning === false"

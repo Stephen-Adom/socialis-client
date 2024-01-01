@@ -114,4 +114,8 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   saveWatchedUserInfoToDb(userId: number, mediaId: number) {
     this.store.dispatch(StoryApiActions.saveWatchedUser({ userId, mediaId }));
   }
+
+  checkMediaLength(){
+    return (this.storyInfo?.storyMedia as StoryMediaType[]).length > 1
+  }
 }

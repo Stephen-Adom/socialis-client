@@ -2,7 +2,7 @@
   class="media-container w-full h-screen p-4 flex items-center justify-center relative text-center"
 >
   <ng-container *ngIf="story.mediaType === 'image'; else elseTemplate">
-    <img [src]="story.mediaUrl" class="w-full h-full" alt="" />
+    <img [src]="story.mediaUrl" class="w-full h-auto lg:h-full" alt="" />
   </ng-container>
   <ng-template #elseTemplate>
     <video controls>
@@ -11,6 +11,7 @@
   </ng-template>
 
   <div
+    *ngIf="story.mediaCaption"
     class="absolute bottom-[36px] left-[50%] -translate-x-[50%] w-[90%] bg-gradient-to-r from-transparent via-black/70 to-transparent z-[1] p-3 flex flex-col gap-y-3 items-center justify-center"
   >
     <p class="text-sm truncate text-center">
