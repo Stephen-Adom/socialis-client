@@ -2,7 +2,7 @@
   class="media-container w-full h-screen p-4 flex items-center justify-center relative text-center"
 >
   <ng-container *ngIf="story.mediaType === 'image'; else elseTemplate">
-    <img [src]="story.mediaUrl" class="w-full h-auto lg:h-full" alt="" />
+    <img [src]="story.mediaUrl" class="w-full h-auto" alt="" />
   </ng-container>
   <ng-template #elseTemplate>
     <video controls>

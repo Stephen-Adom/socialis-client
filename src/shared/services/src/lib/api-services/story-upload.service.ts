@@ -28,6 +28,14 @@ export class StoryUploadService {
     );
   }
 
+  uploadMultipleStory(formData: FormData, userId: number) {
+    return this.http.post<SuccessMessageType>(
+      BASE_URL + `/stories/${userId}/upload/multiple`,
+      formData,
+      this.authHeaders
+    );
+  }
+
   fetchUserStoryById(userId: number) {
     return this.http.get<StoriesResponseType>(
       BASE_URL + `/stories/${userId}/all`,

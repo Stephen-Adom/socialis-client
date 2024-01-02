@@ -80,8 +80,9 @@ export class StoriesEditPreviewComponent
 
         if (this.dataType === 'multiple') {
           this.multipleStoriesData = data?.data as uploadMedia[];
+        } else {
+          this.singleStoriesData = data?.data as uploadMedia;
         }
-        this.singleStoriesData = data?.data as uploadMedia;
 
         this.checkMediaType();
       }
@@ -133,6 +134,7 @@ export class StoriesEditPreviewComponent
   }
 
   checkMediaType() {
+    console.log(this.multipleStoriesData, 'single stories data');
     if (this.singleStoriesData?.fileType.includes('video')) {
       this.videoLengthAlert$.next(true);
     } else {
@@ -221,9 +223,36 @@ export class StoriesEditPreviewComponent
       const formData = new FormData();
 
       this.multipleStoriesData.forEach((story) => {
+        console.log(story.caption, 'caption');
         formData.append('storyMedia', story.file as File);
         formData.append('caption', story.caption as string);
       });
+
+      this.store.dispatch(AppApiActions.uploadingStory({ uploading: true }));
+      this.storiesPreview.toggleStoriesEditPreview(false);
+      this.storiesPreview.toggleStoriesDialog(false);
+
+      const sub = this.uploadService
+        .uploadMultipleStory(formData, this.authUser.id)
+        .subscribe({
+          next: (response) => {
+            if (response && response['status'] === 'OK') {
+              this.successMessage.sendSuccessMessage(response['message']);
+            }
+          },
+          error: (error: HttpErrorResponse) => {
+            this.store.dispatch(
+              AppApiActions.displayErrorMessage({ error: error.error })
+            );
+          },
+          complete: () => {
+            this.store.dispatch(
+              AppApiActions.uploadingStory({ uploading: false })
+            );
+            this.closeEditPreview();
+            sub.unsubscribe();
+          },
+        });
     }
   }
 }

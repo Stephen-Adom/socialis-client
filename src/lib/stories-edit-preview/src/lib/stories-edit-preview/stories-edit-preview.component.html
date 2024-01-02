@@ -166,7 +166,7 @@
     </button>
 
     <swiper-container #swiperContainer class="mySwiper">
-      <swiper-slide *ngFor="let info of storyInfos">
+      <swiper-slide *ngFor="let info of storyInfos; let i = index">
         <div
           class="media-container w-full p-4 flex items-center justify-center relative text-center"
         >
@@ -179,6 +179,8 @@
             class="absolute bottom-[160px] left-0 w-full bg-black/50 h-[4rem] z-[1] p-5"
           >
             <input
+              [(ngModel)]="info.caption"
+              [name]="'caption_' + i"
               type="text"
               placeholder="Add caption..."
               class="text-xs text-white text-center rounded-full px-4 py-2 bg-[#333131] border border-gray-600 focus:outline-none focus:border-gray-500 w-full lg:w-[50%] mx-auto"
