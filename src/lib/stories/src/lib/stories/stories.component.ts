@@ -87,12 +87,11 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.followingStories$.pipe(debounceTime(200)).subscribe((stories) => {
+    this.followingStories$.pipe(debounceTime(100)).subscribe((stories) => {
       if (stories) {
         this.swiperContainer.nativeElement.swiper.updateSlides();
       }
     });
-    return;
   }
 
   initializeSwiper() {
