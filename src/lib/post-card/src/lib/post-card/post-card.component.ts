@@ -15,6 +15,7 @@ import {
   LikeType,
   PostType,
   SimpleUserInfoType,
+  StoryType,
   UserInfoType,
   UserSummaryInfo,
   generateLikeDescription,
@@ -24,6 +25,7 @@ import {
   PostApiActions,
   PostState,
   getAllAuthUserFollowers,
+  getAllFollowingStories,
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
@@ -62,6 +64,8 @@ export class PostCardComponent
   authorInfo!: UserSummaryInfo;
   authorIsFollowing$ = new BehaviorSubject<boolean>(false);
   formattedText: string | null = null;
+  hasStory$ = new BehaviorSubject<boolean>(false);
+  stories$!: Observable<StoryType[]>;
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
@@ -74,9 +78,11 @@ export class PostCardComponent
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
     this.authFollowers$ = this.store.select(getAllAuthUserFollowers);
+    this.stories$ = this.store.select(getAllFollowingStories);
     this.checkIfLiked();
     this.checkIfBookmarked();
     this.checkIfAuthorIsFollowing();
+    this.checkIfAuthorHasStory();
   }
 
   ngAfterViewInit(): void {
@@ -219,5 +225,17 @@ export class PostCardComponent
   formatPostContent(content: string) {
     this.formattedText = this.formatPost.formatPostContent(content);
     this.cdr.detectChanges();
+  }
+
+  checkIfAuthorHasStory() {
+    this.stories$.subscribe((stories) => {
+      if (stories.length) {
+        const storyExist = stories.find(
+          (story) => story.user.username === this.post.user.username
+        );
+
+        this.hasStory$.next(storyExist ? true : false);
+      }
+    });
   }
 }

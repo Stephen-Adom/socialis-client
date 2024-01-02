@@ -10,7 +10,7 @@
           ? story.user.imageUrl
           : 'assets/images/users/default.jpg'
       "
-      [title]="'View ' + story.user.username + ' story'"
+      [title]="'View ' + story.user.firstname + '\'s story'"
       [alt]="story.user.username"
       [ngClass]="{
         'outline-primaryColor': viewedAllStories$.value === false,

@@ -13,6 +13,10 @@
       >
         <img
           class="inline-block flex-shrink-0 h-[3.5rem] w-[3.5rem] rounded-full"
+          [ngClass]="{
+            'outline-secondaryColor outline-offset-[4px] outline outline-[3px]':
+              hasStory$.value
+          }"
           [src]="
             post.user.imageUrl
               ? post.user.imageUrl
