@@ -19,7 +19,7 @@ import {
 } from 'state';
 import { Store } from '@ngrx/store';
 import { StoryType, UserInfoType } from 'utils';
-import { Observable, combineLatest } from 'rxjs';
+import { Observable, combineLatest, debounceTime, tap } from 'rxjs';
 import { StoriesEditPreviewService } from 'services';
 import { SwiperOptions } from 'swiper/types';
 import { StoryComponent } from '../story/story.component';
@@ -42,6 +42,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   authStories$!: Observable<StoryType | null>;
   followingStories$!: Observable<StoryType[]>;
   viewedAllStories = false;
+  items: number[] = [];
 
   constructor(
     private storiesPreview: StoriesEditPreviewService,
@@ -86,7 +87,12 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   }
 
   ngAfterViewInit(): void {
-    this.initializeSwiper();
+    this.followingStories$.pipe(debounceTime(200)).subscribe((stories) => {
+      if (stories) {
+        this.swiperContainer.nativeElement.swiper.updateSlides();
+      }
+    });
+    return;
   }
 
   initializeSwiper() {
@@ -114,7 +120,7 @@ export class StoriesComponent implements AfterViewInit, OnInit {
     // now we need to assign all parameters to Swiper element
     Object.assign(this.swiperContainer.nativeElement, swiperParams);
     // and now initialize it
-    this.swiperContainer.nativeElement.initialize();
+    this.swiperContainer.nativeElement.swiper.updateSlides();
   }
 
   nextSlide() {

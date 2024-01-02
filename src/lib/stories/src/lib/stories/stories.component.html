@@ -2,11 +2,11 @@
   class="stories-container bg-white dark:bg-main-dark rounded-lg py-2 w-full gap-x-6 px-4 card border-none relative"
 >
   <button
-    *ngIf="swiperContainer.swiper.isBeginning === false"
     class="prevBtn w-7 h-7 rounded-full bg-white dark:bg-base-gray-dark shadow-md shadow-gray-300 dark:shadow-gray-950 items-center justify-center absolute top-[50%] -left-[0.65rem] -translate-y-[50%] z-[2] hidden sm:hidden lg:flex"
     type="button"
     title="previous"
     (click)="prevSlide()"
+    *ngIf="swiperContainer.swiper.isBeginning === false"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -25,11 +25,11 @@
   </button>
 
   <button
-    *ngIf="swiperContainer.swiper.isEnd === false"
     class="nextBtn w-7 h-7 rounded-full bg-white dark:bg-base-gray-dark shadow-md shadow-gray-300 dark:shadow-gray-950 items-center justify-center absolute top-[50%] -right-[0.65rem] -translate-y-[50%] z-[2] hidden sm:hidden lg:flex"
     type="button"
     title="next"
     (click)="nextSlide()"
+    *ngIf="swiperContainer.swiper.isEnd === false"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -46,7 +46,7 @@
       />
     </svg>
   </button>
-  <swiper-container #swiperContainer>
+  <swiper-container #swiperContainer slides-per-view="9" space-between="5">
     <swiper-slide>
       <div
         class="story-container flex flex-col items-center gap-y-2 relative top-1 w-max px-[11px] py-[2px]"
@@ -130,10 +130,8 @@
       </div>
     </swiper-slide>
 
-    <ng-container *ngIf="(followingStories$ | async)?.length">
-      <swiper-slide *ngFor="let story of followingStories$ | async">
-        <lib-story [story]="story" />
-      </swiper-slide>
-    </ng-container>
+    <swiper-slide *ngFor="let story of followingStories$ | async">
+      <lib-story [story]="story" />
+    </swiper-slide>
   </swiper-container>
 </div>
