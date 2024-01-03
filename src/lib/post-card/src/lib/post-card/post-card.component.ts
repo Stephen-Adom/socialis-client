@@ -39,11 +39,17 @@ import {
 import { ProfileTooltipDirective } from 'directives';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MediaInfoComponent } from 'media-info';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'lib-post-card',
   standalone: true,
-  imports: [CommonModule, MediaInfoComponent, ProfileTooltipDirective],
+  imports: [
+    CommonModule,
+    MediaInfoComponent,
+    ProfileTooltipDirective,
+    OverlayPanelModule,
+  ],
   templateUrl: './post-card.component.html',
   styleUrls: ['./post-card.component.css'],
 })
