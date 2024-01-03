@@ -1,5 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActionProgressService } from 'services';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lib-sending-post-loader',
@@ -8,4 +10,13 @@ import { CommonModule } from '@angular/common';
   templateUrl: './sending-post-loader.component.html',
   styleUrls: ['./sending-post-loader.component.css'],
 })
-export class SendingPostLoaderComponent {}
+export class SendingPostLoaderComponent implements OnInit {
+  loading$!: Observable<boolean>;
+
+  constructor(private actionProgressService: ActionProgressService) {}
+
+  ngOnInit(): void {
+    this.loading$ =
+      this.actionProgressService.toggleSendingPostLoaderObservable;
+  }
+}

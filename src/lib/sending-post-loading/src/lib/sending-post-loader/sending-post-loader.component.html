@@ -1,5 +1,6 @@
 <div
   class="fixed bottom-3 right-3 w-12 h-12 bg-primaryColor rounded-full flex items-center justify-center"
+  *ngIf="this.loading$ | async"
 >
   <div class="spinner"></div>
 </div>

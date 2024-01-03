@@ -32,6 +32,7 @@ import {
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
 import {
+  ActionProgressService,
   ErrorMessageService,
   PostService,
   SuccessMessageService,
@@ -82,6 +83,7 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
     @Inject(SUCCESS_MESSAGE_TOKEN)
     private successMessage: SuccessMessageService,
+    private actionProgressService: ActionProgressService,
     private postservice: PostService,
     private formBuilder: FormBuilder,
     private store: Store<AppState>
@@ -181,6 +183,8 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
   submitEditPostToDb() {
     this.submittingForm = true;
+    this.closeBtn.nativeElement.click();
+    this.actionProgressService.toggleSendingPostLoader(true);
 
     const imageForms: any = this.postImages.map((image) => {
       return image.file;
@@ -203,7 +207,6 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         this.submittingForm = false;
         this.successMessage.sendSuccessMessage(response['message']);
         this.clearPostForm();
-        this.closeBtn.nativeElement.click();
       },
       error: (error: HttpErrorResponse) => {
         this.submittingForm = false;
@@ -216,6 +219,8 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
   submitPostToDb() {
     this.submittingForm = true;
+    this.closeBtn.nativeElement.click();
+    this.actionProgressService.toggleSendingPostLoader(true);
 
     const imageForms: any = this.postImages.map((image) => {
       return image.file;
@@ -234,11 +239,11 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
     }
 
     this.postservice.createPost(formData).subscribe({
-      next: (response) => {
+      next: () => {
         this.submittingForm = false;
         this.successMessage.sendSuccessMessage('New Post Created!');
         this.clearPostForm();
-        this.closeBtn.nativeElement.click();
+        this.actionProgressService.toggleSendingPostLoader(false);
       },
       error: (error: HttpErrorResponse) => {
         this.submittingForm = false;
