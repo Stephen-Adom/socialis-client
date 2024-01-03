@@ -1,6 +1,6 @@
-:host ::ng-deep swiper-slide {
+/* :host ::ng-deep swiper-slide {
   width: max-content !important;
-}
+} */
 
 .spinner {
   width: 74px;

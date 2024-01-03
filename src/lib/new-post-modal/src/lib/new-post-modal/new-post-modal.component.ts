@@ -204,15 +204,17 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
     this.postservice.editPost(<number>this.editPost?.id, formData).subscribe({
       next: (response: any) => {
-        this.submittingForm = false;
         this.successMessage.sendSuccessMessage(response['message']);
         this.clearPostForm();
       },
       error: (error: HttpErrorResponse) => {
-        this.submittingForm = false;
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
+      },
+      complete: () => {
+        this.submittingForm = false;
+        this.actionProgressService.toggleSendingPostLoader(false);
       },
     });
   }
@@ -240,16 +242,17 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
 
     this.postservice.createPost(formData).subscribe({
       next: () => {
-        this.submittingForm = false;
         this.successMessage.sendSuccessMessage('New Post Created!');
         this.clearPostForm();
-        this.actionProgressService.toggleSendingPostLoader(false);
       },
       error: (error: HttpErrorResponse) => {
-        this.submittingForm = false;
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
+      },
+      complete: () => {
+        this.submittingForm = false;
+        this.actionProgressService.toggleSendingPostLoader(false);
       },
     });
   }

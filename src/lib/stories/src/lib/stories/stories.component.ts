@@ -4,6 +4,7 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   Component,
   ElementRef,
+  OnDestroy,
   OnInit,
   ViewChild,
 } from '@angular/core';
@@ -19,10 +20,17 @@ import {
 } from 'state';
 import { Store } from '@ngrx/store';
 import { StoryType, UserInfoType } from 'utils';
-import { Observable, combineLatest, debounceTime, tap } from 'rxjs';
+import {
+  Observable,
+  Subject,
+  combineLatest,
+  debounceTime,
+  takeUntil,
+} from 'rxjs';
 import { StoriesEditPreviewService } from 'services';
 import { SwiperOptions } from 'swiper/types';
 import { StoryComponent } from '../story/story.component';
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 register();
 
@@ -34,7 +42,7 @@ register();
   templateUrl: './stories.component.html',
   styleUrls: ['./stories.component.css'],
 })
-export class StoriesComponent implements AfterViewInit, OnInit {
+export class StoriesComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('swiperContainer') swiperContainer!: ElementRef<SwiperContainer>;
   @ViewChild('video') video!: ElementRef<HTMLVideoElement>;
   authUser$!: Observable<UserInfoType | null>;
@@ -42,12 +50,39 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   authStories$!: Observable<StoryType | null>;
   followingStories$!: Observable<StoryType[]>;
   viewedAllStories = false;
-  items: number[] = [];
+  currentScreenSize!: string;
+  displayNameMap = new Map([
+    [Breakpoints.XSmall, 'XSmall'],
+    [Breakpoints.Small, 'Small'],
+    [Breakpoints.Medium, 'Medium'],
+    [Breakpoints.Large, 'Large'],
+    [Breakpoints.XLarge, 'XLarge'],
+  ]);
+  destroyed = new Subject<void>();
 
   constructor(
     private storiesPreview: StoriesEditPreviewService,
+    private breakpointObserver: BreakpointObserver,
     private store: Store<AppState>
-  ) {}
+  ) {
+    breakpointObserver
+      .observe([
+        Breakpoints.XSmall,
+        Breakpoints.Small,
+        Breakpoints.Medium,
+        Breakpoints.Large,
+        Breakpoints.XLarge,
+      ])
+      .pipe(takeUntil(this.destroyed))
+      .subscribe((result) => {
+        for (const query of Object.keys(result.breakpoints)) {
+          if (result.breakpoints[query]) {
+            this.currentScreenSize =
+              this.displayNameMap.get(query) ?? 'Unknown';
+          }
+        }
+      });
+  }
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
@@ -89,26 +124,15 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   ngAfterViewInit(): void {
     this.followingStories$.pipe(debounceTime(100)).subscribe((stories) => {
       if (stories) {
-        this.swiperContainer.nativeElement.swiper.updateSlides();
+        this.initializeSwiper();
       }
     });
   }
 
   initializeSwiper() {
     const swiperParams: SwiperOptions = {
-      slidesPerView: 9,
-      spaceBetween: 5,
-      breakpoints: {
-        640: {
-          slidesPerView: 4,
-        },
-        1024: {
-          slidesPerView: 5,
-        },
-        1280: {
-          slidesPerView: 9,
-        },
-      },
+      slidesPerView: this.getSlidePerView(),
+      spaceBetween: 0,
       on: {
         init() {
           // ...
@@ -120,6 +144,23 @@ export class StoriesComponent implements AfterViewInit, OnInit {
     Object.assign(this.swiperContainer.nativeElement, swiperParams);
     // and now initialize it
     this.swiperContainer.nativeElement.swiper.updateSlides();
+  }
+
+  getSlidePerView() {
+    switch (this.currentScreenSize) {
+      case 'XSmall':
+        return 3;
+      case 'Small':
+        return 5;
+      case 'Medium':
+        return 7;
+      case 'Large':
+        return 7;
+      case 'XLarge':
+        return 7;
+      default:
+        return 7;
+    }
   }
 
   nextSlide() {
@@ -141,5 +182,10 @@ export class StoriesComponent implements AfterViewInit, OnInit {
   viewStory(story: StoryType) {
     this.storiesPreview.viewStory(story);
     this.storiesPreview.toggleStoriesPreview(true);
+  }
+
+  ngOnDestroy(): void {
+    this.destroyed.next();
+    this.destroyed.complete();
   }
 }

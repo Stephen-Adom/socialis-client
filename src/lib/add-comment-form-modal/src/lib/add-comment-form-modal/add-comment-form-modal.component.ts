@@ -21,6 +21,7 @@ import {
   ErrorMessageService,
   SuccessMessageService,
   CommentService,
+  ActionProgressService,
 } from 'services';
 import {
   AppState,
@@ -84,6 +85,7 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
     @Inject(ERROR_MESSAGE_TOKEN) private errorMessage: ErrorMessageService,
     @Inject(SUCCESS_MESSAGE_TOKEN)
     private successMessage: SuccessMessageService,
+    private actionProgressService: ActionProgressService,
     private commentservice: CommentService,
     private formBuilder: FormBuilder,
     private store: Store<AppState>
@@ -194,6 +196,8 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
 
   submitEditPostToDb() {
     this.submittingForm = true;
+    this.closeBtn.nativeElement.click();
+    this.actionProgressService.toggleSendingPostLoader(true);
 
     const imageForms: any = this.commentImages.map((image) => {
       return image.file;
@@ -214,22 +218,25 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
       .editComment(<number>this.editComment?.id, formData)
       .subscribe({
         next: (response: any) => {
-          this.submittingForm = false;
           this.successMessage.sendSuccessMessage(response['message']);
           this.clearCommentForm();
-          this.closeBtn.nativeElement.click();
         },
         error: (error: HttpErrorResponse) => {
-          this.submittingForm = false;
           this.store.dispatch(
             AppApiActions.displayErrorMessage({ error: error.error })
           );
+        },
+        complete: () => {
+          this.submittingForm = false;
+          this.actionProgressService.toggleSendingPostLoader(false);
         },
       });
   }
 
   submitPostToDb() {
     this.submittingForm = true;
+    this.closeBtn.nativeElement.click();
+    this.actionProgressService.toggleSendingPostLoader(true);
 
     const imageForms: any = this.commentImages.map((image) => {
       return image.file;
@@ -250,16 +257,17 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
 
     this.commentservice.createComment(formData).subscribe({
       next: (response: any) => {
-        this.submittingForm = false;
         this.successMessage.sendSuccessMessage(response['message']);
         this.clearCommentForm();
-        this.closeBtn.nativeElement.click();
       },
       error: (error: HttpErrorResponse) => {
-        this.submittingForm = false;
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
+      },
+      complete: () => {
+        this.submittingForm = false;
+        this.actionProgressService.toggleSendingPostLoader(false);
       },
     });
   }

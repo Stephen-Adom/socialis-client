@@ -98,7 +98,7 @@
           <!-- START:: UPLOADED POST IMAGES-->
           <div class="flex flex-wrap gap-3" *ngIf="commentImages.length">
             <div
-              class="rounded-lg overflow-hidden basis-[230px] grow max-h-[200px] relative"
+              class="rounded-lg overflow-hidden basis-[230px] grow max-h-auto relative"
               *ngFor="let media of commentImages; let i = index"
             >
               <ng-container
@@ -255,7 +255,14 @@
 
           <div class="flex gap-x-3">
             <button
+              type="button"
               #closeBtn
+              data-hs-overlay="#add-comment-modal-form"
+              hidden
+            >
+              close button
+            </button>
+            <button
               type="button"
               class="hs-dropdown-toggle py-[0.4rem] px-4 inline-flex justify-center items-center gap-2 rounded-md border dark:border-gray-500 font-medium bg-transparent text-gray-700 dark:text-dark-text shadow-sm align-middle hover:bg-gray-50 dark:hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-sm"
               data-hs-overlay="#add-comment-modal-form"
