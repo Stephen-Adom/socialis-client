@@ -3,7 +3,7 @@ import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { StoryMediaType, UserInfoType, WatchedByType } from 'utils';
 import { DialogModule } from 'primeng/dialog';
-import { formatDistanceToNow } from 'date-fns';
+import { format, formatDistanceToNow, formatRelative } from 'date-fns';
 import { StoryUploadService } from 'services';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppApiActions, AppState, getUserInformation } from 'state';
@@ -57,10 +57,11 @@ export class StorySlideComponent implements OnDestroy, OnInit {
   }
 
   formatTimeWatched(time: string) {
-    return formatDistanceToNow(new Date(time), {
-      includeSeconds: true,
-      addSuffix: true,
-    });
+    const currentDay =
+      new Date(time).getDay() === new Date().getDay() ? 'Today' : 'Yesterday';
+    const watchedTime = format(new Date(time), 'p');
+
+    return currentDay + ' at ' + watchedTime;
   }
 
   ngOnDestroy(): void {

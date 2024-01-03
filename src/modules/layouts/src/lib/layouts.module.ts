@@ -68,6 +68,7 @@ import {
 import { StoriesDialogComponent } from 'stories-dialog';
 import { StoriesEditPreviewComponent } from 'stories-edit-preview';
 import { StoriesPreviewComponent } from 'stories-preview';
+import { SendingPostLoaderComponent } from 'sending-post-loader';
 
 @NgModule({
   imports: [
@@ -101,6 +102,7 @@ import { StoriesPreviewComponent } from 'stories-preview';
     StoriesEditPreviewComponent,
     StoriesPreviewComponent,
     NoInternetAlertComponent,
+    SendingPostLoaderComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
@@ -122,11 +124,11 @@ import { StoriesPreviewComponent } from 'stories-preview';
     StoriesEditPreviewService,
     StoryUploadService,
     NoInternetService,
-    // {
-    //   provide: HTTP_INTERCEPTORS,
-    //   useClass: InternetAvailableInterceptor,
-    //   multi: true,
-    // },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: InternetAvailableInterceptor,
+      multi: true,
+    },
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthTokenInterceptorInterceptor,
