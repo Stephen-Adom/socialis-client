@@ -4,7 +4,7 @@
 >
   <div class="flex items-center py-2">
     <img
-      class="inline-block h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
+      class="inline-block h-[2.3rem] w-[2.3rem] md:h-[3.5rem] md:w-[3.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
       [src]="
         authorFullInfo && authorFullInfo.imageUrl
           ? authorFullInfo.imageUrl
@@ -67,11 +67,11 @@
   </div>
 
   <div class="py-2 rounded-t-lg w-full">
-    <p class="text-base text-gray-500 font-semibold">
+    <p class="text-base font-semibold">
       {{ authorFullInfo.firstname }} {{ authorFullInfo.lastname }}
     </p>
     <p class="text-xs font-medium text-gray-800 dark:text-dark-text">
-      {{ authorFullInfo.username }}
+      @{{ authorFullInfo.username }}
     </p>
 
     <p class="dark:text-dark-text text-sm">
@@ -81,20 +81,20 @@
 
   <div class="py-2 text-sm text-gray-600">
     <p class="flex items-center gap-x-4 mt-3">
-      <span class="text-gray-400 flex items-center gap-x-1">
+      <span class="flex items-center gap-x-1">
         <span class="font-bold dark:text-dark-text">{{
           authorFullInfo.followers
         }}</span>
         Followers</span
       >
 
-      <span class="text-gray-400 flex items-center gap-x-1">
+      <span class="flex items-center gap-x-1">
         <span class="font-bold dark:text-dark-text">{{
           authorFullInfo.following
         }}</span>
         Following</span
       >
-      <span class="text-gray-400 flex items-center gap-x-1">
+      <span class="flex items-center gap-x-1">
         <span class="font-bold dark:text-dark-text">{{
           authorFullInfo.totalPost
         }}</span>

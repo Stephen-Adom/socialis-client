@@ -6,24 +6,23 @@
 >
   <div class="card-header flex items-center justify-between pb-3">
     <div class="flex-shrink-0 group block">
-      <div
-        class="flex items-center relative group"
-        libProfileTooltip
-        [authorInfo]="post.user"
-      >
-        <img
-          class="inline-block flex-shrink-0 h-[3.5rem] w-[3.5rem] rounded-full"
-          [ngClass]="{
-            'outline-secondaryColor outline-offset-[4px] outline outline-[3px]':
-              hasStory$.value
-          }"
-          [src]="
-            post.user.imageUrl
-              ? post.user.imageUrl
-              : 'assets/images/users/default.jpg'
-          "
-          alt="Image Description"
-        />
+      <div class="flex items-center">
+        <div class="relative group" libProfileTooltip [authorInfo]="post.user">
+          <img
+            class="inline-block flex-shrink-0 h-[3.5rem] w-[3.5rem] rounded-full"
+            [ngClass]="{
+              'outline-secondaryColor outline-offset-[4px] outline outline-[3px]':
+                hasStory$.value
+            }"
+            [src]="
+              post.user.imageUrl
+                ? post.user.imageUrl
+                : 'assets/images/users/default.jpg'
+            "
+            [attr.alt]="post.user.username"
+          />
+        </div>
+
         <div class="ml-3 text-left">
           <a
             (click)="viewAuthorDetails(post.user)"
@@ -109,7 +108,7 @@
       >
         <div class="py-2 first:pt-0 last:pb-0">
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
+            class="flex items-start gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -118,7 +117,7 @@
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-[1.2rem] h-[1.2rem]"
+              class="w-[1.6rem] h-[1.6rem]"
             >
               <path
                 stroke-linecap="round"
@@ -127,11 +126,16 @@
               />
             </svg>
 
-            Save
+            <div class="flex flex-col">
+              <span class="font-semibold">Save Post</span>
+              <span class="text-xs text-gray-400"
+                >Add this to your saved items</span
+              >
+            </div>
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
+            class="flex items-start gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="#"
           >
             <svg
@@ -140,7 +144,7 @@
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-[1.2rem] h-[1.2rem]"
+              class="w-[1.6rem] h-[1.6rem]"
             >
               <path
                 stroke-linecap="round"
@@ -149,12 +153,17 @@
               />
             </svg>
 
-            Share Post
+            <div class="flex flex-col">
+              <span class="font-semibold">Share Post</span>
+              <span class="text-xs text-gray-400"
+                >Share this post with your friends</span
+              >
+            </div>
           </a>
 
           <a
             *ngIf="isAuth(post.user.username, authUser$ | async)"
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
+            class="flex items-start gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-gray-800 dark:text-dark-text hover:bg-gray-100 dark:hover:bg-gray-600"
             href="javascript:;"
             (click)="editPost(post)"
             data-hs-overlay="#hs-slide-down-animation-modal"
@@ -165,7 +174,7 @@
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-[1.2rem] h-[1.2rem]"
+              class="w-[1.6rem] h-[1.6rem]"
             >
               <path
                 stroke-linecap="round"
@@ -174,11 +183,16 @@
               />
             </svg>
 
-            Edit Post
+            <div class="flex flex-col">
+              <span class="font-semibold">Edit Post</span>
+              <span class="text-xs text-gray-400"
+                >Edit the text content of this post</span
+              >
+            </div>
           </a>
 
           <a
-            class="flex items-center gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 dark:text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
+            class="flex items-start gap-x-1 py-[0.45rem] px-3 rounded-md text-sm text-red-700 dark:text-red-600 hover:bg-gray-100 dark:hover:bg-gray-600"
             href="javascript:;"
             *ngIf="isAuth(post.user.username, authUser$ | async)"
             (click)="deletePost(post)"
@@ -190,7 +204,7 @@
               viewBox="0 0 24 24"
               stroke-width="1.5"
               stroke="currentColor"
-              class="w-[1.2rem] h-[1.2rem] text-red-700"
+              class="w-[1.6rem] h-[1.6rem] text-red-700"
             >
               <path
                 stroke-linecap="round"
@@ -199,7 +213,12 @@
               />
             </svg>
 
-            Delete Post
+            <div class="flex flex-col">
+              <span class="font-semibold">Delete Post</span>
+              <span class="text-xs text-gray-400"
+                >Remove this post from your timeline</span
+              >
+            </div>
           </a>
         </div>
       </div>
