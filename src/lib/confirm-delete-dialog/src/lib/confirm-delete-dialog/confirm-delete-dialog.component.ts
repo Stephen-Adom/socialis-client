@@ -21,16 +21,17 @@ import { SUCCESS_MESSAGE_TOKEN } from 'utils';
 import { Store } from '@ngrx/store';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ConfirmationService } from 'primeng/api';
 
 @Component({
   selector: 'lib-confirm-delete-dialog',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ConfirmDialogModule],
   templateUrl: './confirm-delete-dialog.component.html',
   styleUrls: ['./confirm-delete-dialog.component.css'],
 })
 export class ConfirmDeleteDialogComponent implements OnInit {
-  @ViewChild('closeBtn') closeBtn!: ElementRef<HTMLButtonElement>;
   postData!: dataDeleteObject | null;
 
   constructor(
@@ -42,14 +43,28 @@ export class ConfirmDeleteDialogComponent implements OnInit {
     @Inject(SUCCESS_MESSAGE_TOKEN)
     private successMessage: SuccessMessageService,
     private confirmDeleteService: ConfirmDeleteService,
-    private actionProgessService: ActionProgressService
+    private actionProgessService: ActionProgressService,
+    private confirmationService: ConfirmationService
   ) {}
 
   ngOnInit(): void {
     this.confirmDeleteService.deletePostObservable.subscribe((data) => {
       if (data) {
         this.postData = data;
+        this.confirm();
       }
+    });
+  }
+
+  confirm() {
+    this.confirmationService.confirm({
+      accept: () => {
+        this.deleteData();
+      },
+      reject: () => {
+        this.clearData();
+        return;
+      },
     });
   }
 
@@ -77,7 +92,6 @@ export class ConfirmDeleteDialogComponent implements OnInit {
 
   clearData() {
     this.postData = null;
-    this.closeBtn.nativeElement.click();
   }
 
   deletePost(postId: number) {

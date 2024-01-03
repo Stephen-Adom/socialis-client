@@ -69,6 +69,7 @@ import { StoriesDialogComponent } from 'stories-dialog';
 import { StoriesEditPreviewComponent } from 'stories-edit-preview';
 import { StoriesPreviewComponent } from 'stories-preview';
 import { SendingPostLoaderComponent } from 'sending-post-loader';
+import { ConfirmationService } from 'primeng/api';
 
 @NgModule({
   imports: [
@@ -124,6 +125,7 @@ import { SendingPostLoaderComponent } from 'sending-post-loader';
     StoriesEditPreviewService,
     StoryUploadService,
     NoInternetService,
+    ConfirmationService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: InternetAvailableInterceptor,

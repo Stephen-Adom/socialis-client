@@ -1,0 +1,12 @@
+:host ::ng-deep .p-dialog-header {
+  display: none !important;
+}
+
+:host ::ng-deep .p-dialog-footer {
+  display: none !important;
+}
+
+:host ::ng-deep .p-dialog-content {
+  border-radius: 6px !important;
+  overflow: visible !important;
+}
