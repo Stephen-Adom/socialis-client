@@ -52,7 +52,6 @@ import { EditAuthImageModalComponent } from 'edit-auth-image-modal';
 import { EditAuthProfileModalComponent } from 'edit-auth-profile-modal';
 import { ConfirmDeleteDialogComponent } from 'confirm-delete-dialog';
 import {
-  ActionInProgressComponent,
   NoInternetAlertComponent,
   NotificationAlertsComponent,
   SuccessNotificationComponent,
@@ -92,7 +91,6 @@ import { ConfirmationService } from 'primeng/api';
     EditAuthImageModalComponent,
     EditAuthProfileModalComponent,
     ConfirmDeleteDialogComponent,
-    ActionInProgressComponent,
     SuccessNotificationComponent,
     TooltipModule,
     NavLinksComponent,

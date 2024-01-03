@@ -99,7 +99,7 @@ export class ConfirmDeleteDialogComponent implements OnInit {
     if (this.router.url.includes('details')) {
       this.router.navigate(['/feeds']);
     }
-    this.actionProgessService.toggleActionInProgress(true);
+    this.actionProgessService.toggleSendingPostLoader(true);
     this.postservice.deletePost(postId).subscribe({
       next: (response: any) => {
         this.successMessage.sendSuccessMessage(response.message);
@@ -108,9 +108,10 @@ export class ConfirmDeleteDialogComponent implements OnInit {
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
+        this.actionProgessService.toggleSendingPostLoader(false);
       },
       complete: () => {
-        this.actionProgessService.toggleActionInProgress(false);
+        this.actionProgessService.toggleSendingPostLoader(false);
       },
     });
   }
@@ -118,7 +119,7 @@ export class ConfirmDeleteDialogComponent implements OnInit {
   deleteComment(commentId: number) {
     this.store.dispatch(PostApiActions.deleteComment({ commentId }));
 
-    this.actionProgessService.toggleActionInProgress(true);
+    this.actionProgessService.toggleSendingPostLoader(true);
 
     this.commentservice.deleteComment(commentId).subscribe({
       next: (response: any) => {
@@ -128,9 +129,10 @@ export class ConfirmDeleteDialogComponent implements OnInit {
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
+        this.actionProgessService.toggleSendingPostLoader(false);
       },
       complete: () => {
-        this.actionProgessService.toggleActionInProgress(false);
+        this.actionProgessService.toggleSendingPostLoader(false);
       },
     });
   }
@@ -138,7 +140,7 @@ export class ConfirmDeleteDialogComponent implements OnInit {
   deleteReply(replyId: number) {
     this.store.dispatch(PostApiActions.deleteReply({ replyId }));
 
-    this.actionProgessService.toggleActionInProgress(true);
+    this.actionProgessService.toggleSendingPostLoader(true);
 
     this.replyservice.deleteReply(replyId).subscribe({
       next: (response: any) => {
@@ -148,9 +150,10 @@ export class ConfirmDeleteDialogComponent implements OnInit {
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
+        this.actionProgessService.toggleSendingPostLoader(false);
       },
       complete: () => {
-        this.actionProgessService.toggleActionInProgress(false);
+        this.actionProgessService.toggleSendingPostLoader(false);
       },
     });
   }

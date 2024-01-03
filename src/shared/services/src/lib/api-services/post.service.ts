@@ -35,12 +35,10 @@ export class PostService {
   }
 
   deletePost(postId: number) {
-    return this.http
-      .delete<SuccessMessageType>(
-        BASE_URL + '/post/' + postId + '/delete',
-        this.authHeaders
-      )
-      .pipe(retry(MaxRetries));
+    return this.http.delete<SuccessMessageType>(
+      BASE_URL + '/post/' + postId + '/delete',
+      this.authHeaders
+    );
   }
 
   fetchAllPost() {

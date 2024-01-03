@@ -1,6 +1,6 @@
 <div class="flex flex-wrap gap-3">
   <div
-    class="rounded-lg overflow-hidden basis-[230px] grow min-h-[236px] max-h-[365px]"
+    class="rounded-lg overflow-hidden basis-[230px] grow min-h-[236px] max-h-auto"
     *ngFor="let file of postImages"
   >
     <ng-container *ngIf="file.mediaType === 'image'; else elseTemplate">
