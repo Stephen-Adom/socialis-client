@@ -15,7 +15,6 @@ import { AuthenticationService } from 'services';
 import {
   PostApiActions,
   PostState,
-  UserApiActions,
   getAllPosts,
   getAllTotalPosts,
   getDataLoadingState,
@@ -24,20 +23,14 @@ import { Store } from '@ngrx/store';
 import {
   Observable,
   Subscription,
-  combineLatest,
-  distinctUntilChanged,
   filter,
   fromEvent,
-  mergeMap,
-  of,
-  switchMap,
-  take,
-  tap,
   throttleTime,
 } from 'rxjs';
 import { PostType } from 'utils';
 import { EventCardSummaryComponent } from 'event-card-summary';
 import { InfiniteScrollingPageLoaderComponent } from 'infinite-scrolling-page-loader';
+import { RepostCardComponent } from 'repost-card';
 
 @Component({
   selector: 'feature-dashboard',
@@ -50,6 +43,7 @@ import { InfiniteScrollingPageLoaderComponent } from 'infinite-scrolling-page-lo
     MessagePanelComponent,
     EventCardSummaryComponent,
     InfiniteScrollingPageLoaderComponent,
+    RepostCardComponent,
   ],
   providers: [AuthenticationService],
   templateUrl: './dashboard.component.html',
