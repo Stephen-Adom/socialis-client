@@ -29,3 +29,13 @@
 .pagination-bullet.active::after {
   width: 100%;
 }
+
+:host ::ng-deep .p-dialog-content {
+  padding: 0 !important;
+}
+
+:host ::ng-deep .p-dialog-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #d6d6d6;
+}

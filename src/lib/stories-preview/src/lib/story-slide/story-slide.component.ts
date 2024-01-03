@@ -1,70 +1,34 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { StoryMediaType, UserInfoType, WatchedByType } from 'utils';
-import { DialogModule } from 'primeng/dialog';
-import { format, formatDistanceToNow, formatRelative } from 'date-fns';
-import { StoryUploadService } from 'services';
-import { HttpErrorResponse } from '@angular/common/http';
-import { AppApiActions, AppState, getUserInformation } from 'state';
+import { StoryMediaType, UserInfoType } from 'utils';
+import { AppState, getUserInformation } from 'state';
 import { Store } from '@ngrx/store';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'lib-story-slide',
   standalone: true,
-  imports: [CommonModule, DialogModule],
+  imports: [CommonModule],
   templateUrl: './story-slide.component.html',
   styleUrls: ['./story-slide.component.css'],
 })
-export class StorySlideComponent implements OnDestroy, OnInit {
+export class StorySlideComponent implements OnInit {
   @Input({ required: true }) story!: StoryMediaType;
   @Input({ required: true }) activeIndex!: number | null;
   @Input({ required: true }) author!: string;
-  watchedDialogvisible = false;
-  watchedBy: WatchedByType[] = [];
-  watchedUserSubscription = new Subscription();
+  @Output() watchedDialogvisibleEvent = new EventEmitter<StoryMediaType>();
+  @Output() toggleWatchedDialog = new EventEmitter<boolean>();
   authUser$!: Observable<UserInfoType | null>;
 
-  constructor(
-    private storyUploadService: StoryUploadService,
-    private store: Store<AppState>
-  ) {}
+  constructor(private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.authUser$ = this.store.select(getUserInformation);
   }
 
   viewWatched(storymedia: StoryMediaType) {
-    this.watchedBy = storymedia.watchedBy;
-    this.watchedDialogvisible = true;
-    this.updateWatchedUsers();
-  }
-
-  updateWatchedUsers() {
-    this.watchedUserSubscription = this.storyUploadService
-      .fetchAllWatchedUserStories(this.story.id)
-      .subscribe({
-        next: (response) => {
-          this.watchedBy = response.data;
-        },
-        error: (error: HttpErrorResponse) => {
-          this.store.dispatch(
-            AppApiActions.displayErrorMessage({ error: error.error })
-          );
-        },
-      });
-  }
-
-  formatTimeWatched(time: string) {
-    const currentDay =
-      new Date(time).getDay() === new Date().getDay() ? 'Today' : 'Yesterday';
-    const watchedTime = format(new Date(time), 'p');
-
-    return currentDay + ' at ' + watchedTime;
-  }
-
-  ngOnDestroy(): void {
-    this.watchedUserSubscription.unsubscribe();
+    this.watchedDialogvisibleEvent.emit(storymedia);
+    this.toggleWatchedDialog.emit(true);
   }
 }

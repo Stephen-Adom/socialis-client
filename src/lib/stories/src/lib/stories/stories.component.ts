@@ -155,11 +155,11 @@ export class StoriesComponent implements AfterViewInit, OnInit, OnDestroy {
       case 'Medium':
         return 7;
       case 'Large':
-        return 7;
+        return 8;
       case 'XLarge':
-        return 7;
+        return 8;
       default:
-        return 7;
+        return 8;
     }
   }
 

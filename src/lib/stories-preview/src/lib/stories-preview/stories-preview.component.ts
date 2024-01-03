@@ -10,19 +10,25 @@ import {
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { SwiperContainer } from 'swiper/element';
-import { StoriesEditPreviewService } from 'services';
+import { StoriesEditPreviewService, StoryUploadService } from 'services';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
-import { StoryMediaType, StoryType, UserInfoType, WatchedByType } from 'utils';
+import { StoryMediaType, StoryType, UserInfoType } from 'utils';
 import { DialogModule } from 'primeng/dialog';
-import { formatDistanceToNow } from 'date-fns';
-import { AppState, StoryApiActions, getUserInformation } from 'state';
+import { format } from 'date-fns';
+import {
+  AppApiActions,
+  AppState,
+  StoryApiActions,
+  getUserInformation,
+} from 'state';
 import { Store } from '@ngrx/store';
 import { StorySlideComponent } from '../story-slide/story-slide.component';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'lib-stories-preview',
   standalone: true,
-  imports: [CommonModule, FormsModule, StorySlideComponent],
+  imports: [CommonModule, FormsModule, StorySlideComponent, DialogModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
   templateUrl: './stories-preview.component.html',
   styleUrls: ['./stories-preview.component.css'],
@@ -35,9 +41,13 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   storyInfoSubscription = new Subscription();
   authUser: UserInfoType | null = null;
   authUserSubscription = new Subscription();
+  visible = false;
+  currentStoryMedia!: StoryMediaType | null;
+  watchedUserSubscription = new Subscription();
 
   constructor(
     private storiesPreview: StoriesEditPreviewService,
+    private storyUploadService: StoryUploadService,
     private store: Store<AppState>
   ) {}
 
@@ -85,6 +95,7 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.storyInfoSubscription.unsubscribe();
     this.authUserSubscription.unsubscribe();
+    this.watchedUserSubscription.unsubscribe();
   }
 
   recordStoryWatchers() {
@@ -102,7 +113,7 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
   trackMediaIndex() {
     this.activeIndex$.subscribe((index) => {
       if (index) {
-        console.log(this.storyInfo?.storyMedia[index], 'index');
+        this.onHide();
         this.saveWatchedUserInfoToDb(
           this.authUser?.id as number,
           this.storyInfo?.storyMedia[index].id as number
@@ -115,7 +126,48 @@ export class StoriesPreviewComponent implements OnInit, OnDestroy {
     this.store.dispatch(StoryApiActions.saveWatchedUser({ userId, mediaId }));
   }
 
-  checkMediaLength(){
-    return (this.storyInfo?.storyMedia as StoryMediaType[]).length > 1
+  checkMediaLength() {
+    return (this.storyInfo?.storyMedia as StoryMediaType[]).length > 1;
+  }
+
+  watchedDialogvisibleEvent(event: StoryMediaType) {
+    if (event) {
+      this.currentStoryMedia = { ...event };
+      this.updateWatchedUsers();
+    }
+  }
+
+  toggleWatchedDialog(event: boolean) {
+    this.visible = event;
+  }
+
+  formatTimeWatched(time: string) {
+    const currentDay =
+      new Date(time).getDay() === new Date().getDay() ? 'Today' : 'Yesterday';
+    const watchedTime = format(new Date(time), 'p');
+
+    return currentDay + ' at ' + watchedTime;
+  }
+
+  onHide() {
+    this.visible = false;
+    this.currentStoryMedia = null;
+  }
+
+  updateWatchedUsers() {
+    this.watchedUserSubscription = this.storyUploadService
+      .fetchAllWatchedUserStories(this.currentStoryMedia?.id as number)
+      .subscribe({
+        next: (response) => {
+          if (this.currentStoryMedia) {
+            this.currentStoryMedia.watchedBy = response.data;
+          }
+        },
+        error: (error: HttpErrorResponse) => {
+          this.store.dispatch(
+            AppApiActions.displayErrorMessage({ error: error.error })
+          );
+        },
+      });
   }
 }
