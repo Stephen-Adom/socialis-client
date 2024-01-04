@@ -223,11 +223,7 @@
     <div class="card-body dark:text-dark-text ml-0 lg:ml-[68px]">
       <p *ngIf="formattedText" class="text-sm" [innerHtml]="formattedText"></p>
 
-      <div
-        class="repost-container border border-gray-200 rounded-lg h-[350px] overflow-y-hidden mt-4"
-      >
-        <lib-post-card [post]="post.originalPost" />
-      </div>
+      <lib-original-content [post]="post.originalPost" />
     </div>
     <ng-container
       *ngTemplateOutlet="postFooter; context: { $implicit: post }"

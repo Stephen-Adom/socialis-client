@@ -37,6 +37,7 @@ import {
 } from 'services';
 import { OriginalPostContentComponent } from './original-post-content/original-post-content.component';
 import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
+import { OriginalContentComponent } from './original-content/original-content.component';
 
 @Component({
   selector: 'lib-repost-card',
@@ -46,6 +47,7 @@ import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
     PostCardComponent,
     OriginalPostContentComponent,
     OverlayPanelModule,
+    OriginalContentComponent,
   ],
   templateUrl: './repost-card.component.html',
   styleUrls: ['./repost-card.component.css'],
