@@ -9,10 +9,14 @@
       class="posts-list-container flex flex-col gap-y-4 w-full mt-4 md:mt-7"
       #dashboardSection
     >
-      <lib-repost-card />
       <ng-container *ngIf="allPosts$ | async as allPosts">
         <ng-container *ngFor="let post of allPosts; let i = index">
-          <lib-post-card [post]="post" />
+          <ng-container *ngIf="post.originalPost; else elseTemplate">
+            <lib-repost-card [post]="post" />
+          </ng-container>
+          <ng-template #elseTemplate>
+            <lib-post-card [post]="post" />
+          </ng-template>
         </ng-container>
       </ng-container>
 

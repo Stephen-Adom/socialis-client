@@ -172,7 +172,7 @@ export class PostCardComponent
     this.authUserSubscription.unsubscribe();
   }
 
-  generateLikeDescription(likes: LikeType[], authUser: UserInfoType | null) {
+  getGenerateLikeDescription(likes: LikeType[], authUser: UserInfoType | null) {
     return generateLikeDescription(likes, authUser);
   }
 

@@ -312,7 +312,7 @@
           />
         </svg>
 
-        <span class="font-bold">0</span>
+        <span class="font-bold">{{ post.numberOfRepost }}</span>
         <span class="hidden md:block">Repost(s)</span>
       </button>
 
@@ -388,7 +388,7 @@
         </button>
       </div>
 
-      {{ generateLikeDescription(post.likes, authUser$ | async) }}
+      {{ getGenerateLikeDescription(post.likes, authUser$ | async) }}
     </div>
 
     <a

@@ -69,12 +69,14 @@ export type PostType = {
   numberOfLikes: number;
   numberOfComments: number;
   numberOfBookmarks: number;
+  numberOfRepost: number;
   createdAt: string;
   updatedAt: string;
   postImages: ImageType[];
   user: SimpleUserInfoType;
   likes: LikeType[];
   bookmarkedUsers: number[];
+  originalPost: PostType;
 };
 
 export type LikeType = {
