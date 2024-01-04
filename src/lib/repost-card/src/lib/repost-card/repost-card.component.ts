@@ -7,6 +7,7 @@ import {
   OnChanges,
   OnInit,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
@@ -35,7 +36,7 @@ import {
   dataDeleteObject,
 } from 'services';
 import { OriginalPostContentComponent } from './original-post-content/original-post-content.component';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'lib-repost-card',
@@ -50,6 +51,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
   styleUrls: ['./repost-card.component.css'],
 })
 export class RepostCardComponent implements OnInit, OnChanges, AfterViewInit {
+  @ViewChild('repostOverlay') repostOverlay!: OverlayPanel;
   @Input({ required: true }) post!: PostType;
   hasStory$ = new BehaviorSubject<boolean>(false);
   stories$!: Observable<StoryType[]>;
@@ -198,5 +200,26 @@ export class RepostCardComponent implements OnInit, OnChanges, AfterViewInit {
 
   getGenerateLikeDescription(likes: LikeType[], authUser: UserInfoType | null) {
     return generateLikeDescription(likes, authUser);
+  }
+
+  repostWithNoContent(event: Event) {
+    let authUser: UserInfoType | null = null;
+    this.authUser$.subscribe((data) => (authUser = data));
+
+    if (authUser) {
+      this.store.dispatch(
+        PostApiActions.repostWithNoContent({
+          userId: authUser['id'] as number,
+          postId: this.post.id,
+        })
+      );
+
+      this.repostOverlay.toggle(event);
+    }
+  }
+
+  undoRepost(event: Event) {
+    this.store.dispatch(PostApiActions.undoRepost({ repostId: this.post.id }));
+    this.repostOverlay.toggle(event);
   }
 }

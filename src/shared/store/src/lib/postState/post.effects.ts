@@ -12,7 +12,13 @@ import { PostApiActions } from './post.actions';
 import { catchError, map, mergeMap, of, tap } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AppApiActions } from '../appState/app.actions';
-import { CommentType, PostType, ReplyType, UserInfoType } from 'utils';
+import {
+  CommentType,
+  PostType,
+  ReplyType,
+  SuccessMessageType,
+  UserInfoType,
+} from 'utils';
 
 @Injectable()
 export class PostEffects {
@@ -362,4 +368,49 @@ export class PostEffects {
       )
     );
   });
+
+  RepostWithNoContent$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.repostWithNoContent),
+      mergeMap((action: { userId: number; postId: number }) =>
+        this.postservice.repostWithNoContent(action.userId, action.postId).pipe(
+          map((response: any) => {
+            this.handleSuccessResponse(response);
+
+            return PostApiActions.repostWithNoContentSuccess({
+              response,
+            });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
+
+  undoRepost$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.undoRepost),
+      mergeMap((action: { repostId: number }) =>
+        this.postservice.undoRepost(action.repostId).pipe(
+          map((response: any) => {
+            console.log(response, 'success response');
+            this.handleSuccessResponse(response);
+
+            return PostApiActions.undoRepostSuccess({
+              response,
+            });
+          }),
+          catchError((error: HttpErrorResponse) =>
+            of(AppApiActions.displayErrorMessage({ error: error.error }))
+          )
+        )
+      )
+    );
+  });
+
+  handleSuccessResponse(response: SuccessMessageType) {
+    this.successMessage.sendSuccessMessage(response['message']);
+  }
 }

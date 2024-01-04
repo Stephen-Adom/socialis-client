@@ -8,6 +8,7 @@ import {
   OnInit,
   SecurityContext,
   SimpleChanges,
+  ViewChild,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -39,7 +40,7 @@ import {
 import { ProfileTooltipDirective } from 'directives';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MediaInfoComponent } from 'media-info';
-import { OverlayPanelModule } from 'primeng/overlaypanel';
+import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'lib-post-card',
@@ -58,6 +59,7 @@ export class PostCardComponent
 {
   @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) post!: PostType;
+  @ViewChild('repostOverlay') repostOverlay!: OverlayPanel;
   authUser$!: Observable<UserInfoType | null>;
   authFollowers$!: Observable<UserSummaryInfo[]>;
   authUserSubscription = new Subscription();
@@ -243,5 +245,21 @@ export class PostCardComponent
         this.hasStory$.next(storyExist ? true : false);
       }
     });
+  }
+
+  repostWithNoContent(event: Event) {
+    let authUser: UserInfoType | null = null;
+    this.authUser$.subscribe((data) => (authUser = data));
+
+    if (authUser) {
+      this.store.dispatch(
+        PostApiActions.repostWithNoContent({
+          userId: authUser['id'] as number,
+          postId: this.post.id,
+        })
+      );
+
+      this.repostOverlay.toggle(event);
+    }
   }
 }

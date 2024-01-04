@@ -10,6 +10,7 @@ import {
   PostResponseType,
   PostType,
   ReplyType,
+  SuccessMessageType,
   UserInfoType,
 } from 'utils';
 
@@ -102,5 +103,9 @@ export const PostApiActions = createActionGroup({
     fetchAllPostsWithOffset: props<{ offset: number }>(),
     fetchAllPostsWithOffsetSuccess: props<{ allPosts: AllPostResponseType }>(),
     toggleDataLoading: props<{ loading: boolean }>(),
+    repostWithNoContent: props<{ userId: number; postId: number }>(),
+    repostWithNoContentSuccess: props<{ response: SuccessMessageType }>(),
+    undoRepost: props<{ repostId: number }>(),
+    undoRepostSuccess: props<{ response: SuccessMessageType }>(),
   },
 });

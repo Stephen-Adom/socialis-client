@@ -102,4 +102,18 @@ export class PostService {
   uploadStories(formData: FormData) {
     return this.http.post<SuccessMessageType>(BASE_URL + '/stories', formData);
   }
+
+  repostWithNoContent(userId: number, postId: number) {
+    return this.http.get<SuccessMessageType>(
+      BASE_URL + `/post/${userId}/repost/${postId}`,
+      this.authHeaders
+    );
+  }
+
+  undoRepost(postId: number) {
+    return this.http.get<SuccessMessageType>(
+      BASE_URL + `/post/remove/repost/${postId}`,
+      this.authHeaders
+    );
+  }
 }

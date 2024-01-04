@@ -515,6 +515,13 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       dataLoading: action.loading,
     };
+  }),
+  on(PostApiActions.undoRepost, (state: PostState, action) => {
+    return {
+      ...state,
+      allPosts: state.allPosts.filter((post) => post.id !== action.repostId),
+      userPosts: state.userPosts.filter((post) => post.id !== action.repostId),
+    };
   })
 );
 
