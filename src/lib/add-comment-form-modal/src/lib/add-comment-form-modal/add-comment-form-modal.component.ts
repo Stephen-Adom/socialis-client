@@ -256,8 +256,7 @@ export class AddCommentFormModalComponent implements OnInit, OnDestroy {
     }
 
     this.commentservice.createComment(formData).subscribe({
-      next: (response: any) => {
-        this.successMessage.sendSuccessMessage(response['message']);
+      next: () => {
         this.clearCommentForm();
       },
       error: (error: HttpErrorResponse) => {

@@ -1,0 +1,85 @@
+<div
+  class="card post-card rounded-lg bg-white dark:bg-main-dark p-3 w-full border border-white dark:border-main-dark cursor-pointer"
+>
+  <div class="card-header flex items-center justify-between pb-3">
+    <div class="flex-shrink-0 group block">
+      <div class="flex items-center">
+        <div class="relative group" libProfileTooltip [authorInfo]="post.user">
+          <img
+            class="inline-block flex-shrink-0 h-[3.5rem] w-[3.5rem] rounded-full"
+            [src]="
+              post.user.imageUrl
+                ? post.user.imageUrl
+                : 'assets/images/users/default.jpg'
+            "
+            [attr.alt]="post.user.username"
+          />
+        </div>
+
+        <div class="ml-3 text-left">
+          <a
+            (click)="viewAuthorDetails(post.originalPost.user)"
+            href="javascript:;"
+            class="font-semibold text-gray-800 dark:text-dark-text flex items-center space-x-2"
+          >
+            <span>{{ post.user.firstname }} {{ post.user.lastname }}</span>
+
+            <span
+              *ngIf="authorIsFollowing$ | async"
+              class="bg-gray-100 text-gray-800 text-xs font-medium inline-flex items-center px-2.5 py-0.5 rounded mr-2 dark:bg-gray-700 dark:text-gray-400 border border-gray-300"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                class="w-2.5 h-2.5 mr-1.5"
+              >
+                <path
+                  d="M7 8a3 3 0 100-6 3 3 0 000 6zM14.5 9a2.5 2.5 0 100-5 2.5 2.5 0 000 5zM1.615 16.428a1.224 1.224 0 01-.569-1.175 6.002 6.002 0 0111.908 0c.058.467-.172.92-.57 1.174A9.953 9.953 0 017 18a9.953 9.953 0 01-5.385-1.572zM14.5 16h-.106c.07-.297.088-.611.048-.933a7.47 7.47 0 00-1.588-3.755 4.502 4.502 0 015.874 2.636.818.818 0 01-.36.98A7.465 7.465 0 0114.5 16z"
+                />
+              </svg>
+
+              Follows you
+            </span>
+          </a>
+          <div class="flex items-center gap-x-1">
+            <a href="" class="font-medium text-gray-400 text-xs">
+              @{{ post.user.username }}
+            </a>
+            <span class="inline-block">
+              <svg
+                class="h-3 w-3 text-gray-400"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                stroke-width="2"
+                stroke="currentColor"
+                fill="none"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <path stroke="none" d="M0 0h24v24H0z" />
+                <circle cx="12" cy="12" r="4" />
+              </svg>
+            </span>
+            <span
+              class="inline-block text-xs text-gray-400 italic"
+              *ngIf="formattedDate"
+              >{{ formattedDate }}</span
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card-body dark:text-dark-text ml-0 lg:ml-[68px]">
+    <p *ngIf="formattedText" class="text-sm" [innerHtml]="formattedText"></p>
+
+    <div
+      class="image-container min-h-[4.5rem] rounded-lg overflow-hidden mt-2"
+      *ngIf="post.postImages.length"
+    >
+      <lib-media-info [postImages]="post.postImages" [post]="post" />
+    </div>
+  </div>
+</div>

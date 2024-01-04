@@ -7,6 +7,7 @@ import {
 } from '@ngrx/store';
 import { PostApiActions } from './post.actions';
 import { CommentType, PostType, ReplyType, UserInfoType } from 'utils';
+import * as _ from 'lodash';
 
 export const featurePostKey = 'post';
 
@@ -550,7 +551,18 @@ const updatePostLike = (
   isLiked: boolean,
   allPost: PostType[]
 ) => {
-  const postObj = { ...post };
+  const postObj = _.cloneDeep(post);
+
+  return toggleLike(isLiked, postObj, post, user, allPost);
+};
+
+const toggleLike = (
+  isLiked: boolean,
+  postObj: PostType,
+  post: PostType,
+  user: UserInfoType,
+  allPost: PostType[]
+) => {
   if (isLiked) {
     postObj.numberOfLikes--;
     postObj.likes = post.likes.filter(
