@@ -35,11 +35,17 @@ import {
   dataDeleteObject,
 } from 'services';
 import { OriginalPostContentComponent } from './original-post-content/original-post-content.component';
+import { OverlayPanelModule } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'lib-repost-card',
   standalone: true,
-  imports: [CommonModule, PostCardComponent, OriginalPostContentComponent],
+  imports: [
+    CommonModule,
+    PostCardComponent,
+    OriginalPostContentComponent,
+    OverlayPanelModule,
+  ],
   templateUrl: './repost-card.component.html',
   styleUrls: ['./repost-card.component.css'],
 })

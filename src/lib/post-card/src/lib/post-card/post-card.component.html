@@ -242,6 +242,7 @@
         class="btn btn-icon p-1 flex items-center text-sm gap-x-1 dark:text-dark-text"
         title="like"
         (click)="toggleLike()"
+        [ngClass]="{ '!text-red-700': likedPost$ | async }"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -262,7 +263,7 @@
         </svg>
 
         <span class="font-bold">{{ post.numberOfLikes }}</span>
-        <span class="hidden md:block">Likes</span>
+        <span class="hidden md:block">Like(s)</span>
       </button>
 
       <button
