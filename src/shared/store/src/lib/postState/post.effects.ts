@@ -57,9 +57,12 @@ export class PostEffects {
               allPosts: response,
             });
           }),
-          catchError((error: HttpErrorResponse) =>
-            of(AppApiActions.displayErrorMessage({ error: error.error }))
-          )
+          catchError((error: HttpErrorResponse) => {
+            console.log(error, 'error fetching post');
+            return of(
+              AppApiActions.displayErrorMessage({ error: error.error })
+            );
+          })
         )
       )
     );

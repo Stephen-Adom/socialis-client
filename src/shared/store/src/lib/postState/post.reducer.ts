@@ -153,7 +153,6 @@ export const PostReducer = createReducer<PostState>(
     (state: PostState, action) => {
       return {
         ...state,
-        dataLoading: false,
         allPosts: [...state.allPosts, ...action.allPosts.data],
       };
     }
