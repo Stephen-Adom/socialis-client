@@ -262,4 +262,10 @@ export class PostCardComponent
       this.repostOverlay.toggle(event);
     }
   }
+
+  checkIfReshared(authUser: UserInfoType | null) {
+    return this.post.resharedBy.find(
+      (reshared) => reshared.userId === authUser?.id
+    );
+  }
 }

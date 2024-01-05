@@ -304,6 +304,7 @@
         class="btn btn-icon flex items-center text-sm gap-x-1 p-1 dark:text-dark-text"
         title="repost"
         (click)="repostOverlay.toggle($event)"
+        [ngClass]="{ 'text-primaryColor': checkIfReshared(authUser$ | async) }"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"

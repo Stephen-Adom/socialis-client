@@ -77,7 +77,7 @@ export type PostType = {
   likes: LikeType[];
   bookmarkedUsers: number[];
   originalPost: PostType;
-  resharedBy: { userId: number; withContent: boolean }[];
+  resharedBy: { userId: number; resharedId: number; withContent: boolean }[];
 };
 
 export type LikeType = {
