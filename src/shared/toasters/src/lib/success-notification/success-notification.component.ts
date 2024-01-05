@@ -38,6 +38,7 @@ export class SuccessNotificationComponent implements OnInit, OnDestroy {
       this.successMessageService.successMessageObservable.subscribe(
         (data: string) => {
           if (data) {
+            console.log(data, 'from single message');
             this.successMessage = data;
             this.dismissAlertAfterSixSeconds();
           }
@@ -46,8 +47,9 @@ export class SuccessNotificationComponent implements OnInit, OnDestroy {
 
     this.messageSubscription =
       this.successMessageService2.successMessageObservable.subscribe((data) => {
-        if (data) {
-          this.successMessage = data;
+        if (data && data.length) {
+          console.log(data, 'from multiple message');
+          this.successMessage = data[0];
           this.dismissAlertAfterSixSeconds();
         }
       });
