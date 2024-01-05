@@ -24,7 +24,13 @@ import {
   ActionProgressService,
   PostService,
 } from 'services';
-import { AppState, getRepostInfo, getUserInformation } from 'state';
+import {
+  AppApiActions,
+  AppState,
+  PostApiActions,
+  getRepostInfo,
+  getUserInformation,
+} from 'state';
 import {
   ERROR_MESSAGE_TOKEN,
   PostType,
@@ -34,6 +40,7 @@ import {
 import { format } from 'date-fns';
 import { Observable, Subscription } from 'rxjs';
 import { OriginalContentComponent } from 'repost-card';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'lib-reshare-post',
@@ -72,7 +79,7 @@ export class ResharePostComponent implements OnInit, OnDestroy {
   ) {
     this.Form = this.formBuilder.nonNullable.group({
       content: ['', Validators.required],
-      scheduledAt: [''],
+      postId: ['', Validators.required],
     });
   }
 
@@ -86,6 +93,16 @@ export class ResharePostComponent implements OnInit, OnDestroy {
       });
 
     this.repost$ = this.store.select(getRepostInfo);
+
+    this.populateForm();
+  }
+
+  populateForm() {
+    this.repost$.subscribe((data) => {
+      if (data) {
+        this.Form.get('postId')?.setValue(data.id);
+      }
+    });
   }
 
   addEmoji(event: any) {
@@ -113,7 +130,7 @@ export class ResharePostComponent implements OnInit, OnDestroy {
   }
 
   clearPostForm() {
-    // this.store.dispatch(PostApiActions.completePostEdit());
+    this.store.dispatch(PostApiActions.clearRepost());
     this.Form.reset();
     this.toggleEmoji = false;
   }
@@ -131,24 +148,29 @@ export class ResharePostComponent implements OnInit, OnDestroy {
   }
 
   submitPostToDb() {
+    console.log(this.Form.value);
     this.submittingForm = true;
     this.closeBtn.nativeElement.click();
     this.actionProgressService.toggleSendingPostLoader(true);
 
-    // this.postservice.createPost(formData).subscribe({
-    //   next: () => {
-    //     this.successMessage.sendSuccessMessage('New Post Created!');
-    //     this.clearPostForm();
-    //   },
-    //   error: (error: HttpErrorResponse) => {
-    //     this.store.dispatch(
-    //       AppApiActions.displayErrorMessage({ error: error.error })
-    //     );
-    //   },
-    //   complete: () => {
-    //     this.submittingForm = false;
-    //     this.actionProgressService.toggleSendingPostLoader(false);
-    //   },
-    // });
+    this.postservice
+      .repostWithContent(this.authUser.id, this.Form.value)
+      .subscribe({
+        next: (response: any) => {
+          this.successMessage.sendSuccessMessage(response['message']);
+          this.clearPostForm();
+        },
+        error: (error: HttpErrorResponse) => {
+          this.store.dispatch(
+            AppApiActions.displayErrorMessage({ error: error.error })
+          );
+          this.submittingForm = false;
+          this.actionProgressService.toggleSendingPostLoader(false);
+        },
+        complete: () => {
+          this.submittingForm = false;
+          this.actionProgressService.toggleSendingPostLoader(false);
+        },
+      });
   }
 }

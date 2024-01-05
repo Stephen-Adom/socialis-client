@@ -110,6 +110,14 @@ export class PostService {
     );
   }
 
+  repostWithContent(userId: number, form: { postId: number; content: string }) {
+    return this.http.post<SuccessMessageType>(
+      BASE_URL + `/post/${userId}/repost`,
+      form,
+      this.authHeaders
+    );
+  }
+
   undoRepost(postId: number) {
     return this.http.get<SuccessMessageType>(
       BASE_URL + `/post/remove/repost/${postId}`,

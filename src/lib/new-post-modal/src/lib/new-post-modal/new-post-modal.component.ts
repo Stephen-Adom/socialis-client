@@ -249,6 +249,8 @@ export class NewPostModalComponent implements OnInit, OnDestroy {
         this.store.dispatch(
           AppApiActions.displayErrorMessage({ error: error.error })
         );
+        this.submittingForm = false;
+        this.actionProgressService.toggleSendingPostLoader(false);
       },
       complete: () => {
         this.submittingForm = false;
