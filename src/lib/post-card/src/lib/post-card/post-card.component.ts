@@ -268,4 +268,9 @@ export class PostCardComponent
       (reshared) => reshared.userId === authUser?.id
     );
   }
+
+  repostWithContent() {
+    this.store.dispatch(PostApiActions.repostWithContent({ post: this.post }));
+    this.repostOverlay.toggle(false);
+  }
 }

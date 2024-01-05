@@ -107,5 +107,7 @@ export const PostApiActions = createActionGroup({
     repostWithNoContentSuccess: props<{ response: SuccessMessageType }>(),
     undoRepost: props<{ repostId: number }>(),
     undoRepostSuccess: props<{ response: SuccessMessageType }>(),
+    repostWithContent: props<{ post: PostType }>(),
+    clearRepost: emptyProps(),
   },
 });

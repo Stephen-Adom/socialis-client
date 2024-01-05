@@ -60,6 +60,7 @@
       "profile-tooltip": ["src/lib/profile-tooltip/src/index.ts"],
       "reply-modal-form": ["src/lib/reply-modal-form/src/index.ts"],
       "repost-card": ["src/lib/repost-card/src/index.ts"],
+      "reshare-post": ["src/lib/reshare-post/src/index.ts"],
       "search-modal": ["src/lib/search-modal/src/index.ts"],
       "sending-post-loader": ["src/lib/sending-post-loading/src/index.ts"],
       "services": ["src/shared/services/src/index.ts"],

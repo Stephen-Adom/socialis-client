@@ -26,6 +26,7 @@ export interface PostState {
   userReplies: ReplyType[];
   userPostLikes: PostType[] | CommentType[] | ReplyType[];
   dataLoading: boolean;
+  repostInfo: PostType | null;
 }
 
 const initialState: PostState = {
@@ -43,6 +44,7 @@ const initialState: PostState = {
   userReplies: [],
   userPostLikes: [],
   dataLoading: false,
+  repostInfo: null,
 };
 
 export const selectPostFeature =
@@ -131,6 +133,11 @@ export const getAllPostLikesByUser = createSelector(
 export const getDataLoadingState = createSelector(
   selectPostFeature,
   (state: PostState) => state.dataLoading
+);
+
+export const getRepostInfo = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.repostInfo
 );
 
 export const PostReducer = createReducer<PostState>(
@@ -521,6 +528,18 @@ export const PostReducer = createReducer<PostState>(
       ...state,
       allPosts: state.allPosts.filter((post) => post.id !== action.repostId),
       userPosts: state.userPosts.filter((post) => post.id !== action.repostId),
+    };
+  }),
+  on(PostApiActions.repostWithContent, (state: PostState, action) => {
+    return {
+      ...state,
+      repostInfo: action.post,
+    };
+  }),
+  on(PostApiActions.clearRepost, (state: PostState) => {
+    return {
+      ...state,
+      repostInfo: null,
     };
   })
 );

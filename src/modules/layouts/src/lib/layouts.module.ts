@@ -69,6 +69,7 @@ import { StoriesEditPreviewComponent } from 'stories-edit-preview';
 import { StoriesPreviewComponent } from 'stories-preview';
 import { SendingPostLoaderComponent } from 'sending-post-loader';
 import { ConfirmationService } from 'primeng/api';
+import { ResharePostComponent } from 'reshare-post';
 
 @NgModule({
   imports: [
@@ -102,6 +103,7 @@ import { ConfirmationService } from 'primeng/api';
     StoriesPreviewComponent,
     NoInternetAlertComponent,
     SendingPostLoaderComponent,
+    ResharePostComponent,
   ],
   declarations: [NavigationComponent, WrapperComponent],
   providers: [
