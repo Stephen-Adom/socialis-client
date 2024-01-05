@@ -233,10 +233,9 @@ export class PostEffects {
             contentType: 'post',
           })
           .pipe(
-            tap((response: any) =>
-              this.successMessage.sendSuccessMessage(response['message'])
-            ),
-            map(() => {
+            map((response: any) => {
+              this.handleSuccessResponse(response);
+
               return PostApiActions.toggleBookmarkPostSuccess();
             }),
             catchError((error: HttpErrorResponse) =>
