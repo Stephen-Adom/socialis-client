@@ -155,4 +155,10 @@ export class AuthenticationService {
       this.innactiveAccountService.accountIsNotActive(true);
     }
   }
+
+  getGoogleUrl() {
+    return this.Http.get<{ url: string }>(
+      'http://localhost:8080/api/auth/oauth/google/url'
+    );
+  }
 }

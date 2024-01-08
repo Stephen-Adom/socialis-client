@@ -7,17 +7,14 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from 'services';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AppApiActions, AppState } from 'state';
 import { Store } from '@ngrx/store';
-import {
-  FacebookLoginProvider,
-  SocialAuthService,
-} from '@abacritt/angularx-social-login';
 import { DOCUMENT } from '@angular/common';
 import { SocialUser } from 'utils';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'feature-login',
@@ -29,13 +26,16 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   submittingForm = false;
   loginSubscription = new Subscription();
   socialUser!: SocialUser;
+  redirecturl = '';
+  googleAuthUrl$!: Observable<{ url: string }>;
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
-    private socialAuthService: SocialAuthService,
     private authservice: AuthenticationService,
+    private route: ActivatedRoute,
     private store: Store<AppState>,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private http: HttpClient
   ) {
     this.Form = this.formBuilder.group({
       username: ['', Validators.required],
@@ -44,16 +44,19 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.socialAuthService.authState.subscribe((data) => {
-      if (data) {
-        this.socialUser = {
-          email: data.email,
-          firstName: data.firstName,
-          lastName: data.lastName,
-          photoUrl: data.photoUrl,
-        };
+    this.googleAuthUrl$ = this.authservice.getGoogleUrl();
 
-        this.signInUser(this.socialUser);
+    this.route.queryParams.subscribe((param: any) => {
+      console.log(param, 'params');
+      if (param['code'] !== undefined) {
+        this.http
+          .get(
+            'http://localhost:8080/api/auth/oauth/callback?code=' +
+              param['code']
+          )
+          .subscribe((data) => {
+            console.log(data, 'token');
+          });
       }
     });
   }
@@ -114,8 +117,16 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
       });
   }
 
-  facebookLogin() {
-    this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  // facebookLogin() {
+  //   this.socialAuthService.signIn(FacebookLoginProvider.PROVIDER_ID);
+  // }
+
+  googleLogin() {
+    this.googleAuthUrl$.subscribe((googleUrl) => {
+      if (googleUrl.url) {
+        window.location.href = googleUrl.url;
+      }
+    });
   }
 
   ngOnDestroy(): void {

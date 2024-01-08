@@ -18,24 +18,29 @@
       <h6 class="font-bold">Sign in with</h6>
 
       <div class="mt-3 flex items-center space-x-4">
-        <asl-google-signin-button
-          type="icon"
-          size="medium"
-          theme="outline"
-          shape="circle"
-        ></asl-google-signin-button>
+        <button
+          type="button"
+          class="inline-block w-[28%] rounded-full border border-gray-200 p-2"
+          title="google"
+          (click)="googleLogin()"
+        >
+          <img
+            src="assets/images/logo/google.png"
+            class="w-full"
+            alt="google"
+          />
+        </button>
 
-        <a
-          href="javascript:;"
-          class="inline-block w-[21%]"
-          (click)="facebookLogin()"
+        <button
+          type="button"
+          class="inline-block w-[28%] rounded-full border border-gray-200"
         >
           <img
             src="assets/images/logo/facebook.png"
             class="w-full"
             alt="facebook"
           />
-        </a>
+        </button>
       </div>
     </div>
   </div>
