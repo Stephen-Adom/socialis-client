@@ -73,14 +73,6 @@ export class AuthenticationService {
     );
   }
 
-  signInWithGoogleSocial(user: SocialUser) {
-    return this.Http.post<AuthResponseType>(
-      BASE_URL + '/auth/google/login',
-      user,
-      getNonAuthHttpOptions()
-    );
-  }
-
   verifyEmailToken(token: string) {
     return this.Http.post<{
       token_valid: boolean;
@@ -157,8 +149,12 @@ export class AuthenticationService {
   }
 
   getGoogleUrl() {
-    return this.Http.get<{ url: string }>(
-      'http://localhost:8080/api/auth/oauth/google/url'
+    return this.Http.get<{ url: string }>(BASE_URL + '/auth/oauth/google/url');
+  }
+
+  validateGoogleAuthenticationCode(code: string) {
+    return this.Http.get<AuthResponseType>(
+      BASE_URL + '/auth/oauth/callback?code=' + code
     );
   }
 }

@@ -1,11 +1,5 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import {
-  AfterViewInit,
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable, Subscription } from 'rxjs';
 import { AuthenticationService } from 'services';
@@ -21,7 +15,7 @@ import { ActivatedRoute } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
+export class LoginComponent implements OnInit, OnDestroy {
   Form: FormGroup;
   submittingForm = false;
   loginSubscription = new Subscription();
@@ -47,47 +41,24 @@ export class LoginComponent implements OnInit, AfterViewInit, OnDestroy {
     this.googleAuthUrl$ = this.authservice.getGoogleUrl();
 
     this.route.queryParams.subscribe((param: any) => {
-      console.log(param, 'params');
       if (param['code'] !== undefined) {
-        this.http
-          .get(
-            'http://localhost:8080/api/auth/oauth/callback?code=' +
-              param['code']
-          )
-          .subscribe((data) => {
-            console.log(data, 'token');
-          });
+        this.submittingForm = true;
+        this.authservice
+          .validateGoogleAuthenticationCode(param['code'])
+          .subscribe(
+            (response) => {
+              this.submittingForm = false;
+              this.authservice.saveAndRedirectUser(response);
+            },
+            (error) => {
+              this.submittingForm = false;
+              this.store.dispatch(
+                AppApiActions.displayErrorMessage({ error: error.error })
+              );
+            }
+          );
       }
     });
-  }
-
-  signInUser(user: SocialUser) {
-    this.submittingForm = true;
-    this.loginSubscription = this.authservice
-      .signInWithGoogleSocial(user)
-      .pipe()
-      .subscribe({
-        next: (response) => {
-          console.log(response, 'response');
-          this.submittingForm = false;
-          this.authservice.saveAndRedirectUser(response);
-        },
-        error: (error: HttpErrorResponse) => {
-          this.submittingForm = false;
-          this.store.dispatch(
-            AppApiActions.displayErrorMessage({ error: error.error })
-          );
-        },
-      });
-  }
-
-  ngAfterViewInit(): void {
-    const element = this.document.querySelector('.nsm7Bb-HzV7m-LgbsSe-BPrWId');
-
-    console.log(element, 'element');
-    if (element) {
-      element.textContent = 'Sign In';
-    }
   }
 
   login() {
