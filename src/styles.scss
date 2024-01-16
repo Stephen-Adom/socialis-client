@@ -209,8 +209,14 @@ swiper-slide {
   background: red !important;
 }
 
-.reshare-overlay .p-overlaypanel-content {
+.reshare-overlay .p-overlaypanel-content,
+.like-overlay .p-overlaypanel-content {
   padding: 5px !important;
+}
+
+.like-overlay,
+.reshare-overlay {
+  box-shadow: 10px 10px 19px rgba(0, 0, 0, 0.1) !important;
 }
 
 .no-content-post-card .post-card {

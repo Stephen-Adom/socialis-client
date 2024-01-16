@@ -3,10 +3,10 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   Input,
   OnChanges,
   OnInit,
-  SecurityContext,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -20,6 +20,7 @@ import {
   UserInfoType,
   UserSummaryInfo,
   generateLikeDescription,
+  emojis,
 } from 'utils';
 import { formatDistanceToNow } from 'date-fns';
 import {
@@ -30,7 +31,14 @@ import {
   getUserInformation,
 } from 'state';
 import { Store } from '@ngrx/store';
-import { BehaviorSubject, Observable, Subscription, combineLatest } from 'rxjs';
+import {
+  BehaviorSubject,
+  Observable,
+  Subscription,
+  combineLatest,
+  debounceTime,
+  fromEvent,
+} from 'rxjs';
 import { OnDestroy } from '@angular/core';
 import {
   ConfirmDeleteService,
@@ -38,9 +46,9 @@ import {
   dataDeleteObject,
 } from 'services';
 import { ProfileTooltipDirective } from 'directives';
-import { DomSanitizer } from '@angular/platform-browser';
 import { MediaInfoComponent } from 'media-info';
 import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
+import { TooltipModule } from 'primeng/tooltip';
 
 @Component({
   selector: 'lib-post-card',
@@ -50,6 +58,7 @@ import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
     MediaInfoComponent,
     ProfileTooltipDirective,
     OverlayPanelModule,
+    TooltipModule,
   ],
   templateUrl: './post-card.component.html',
   styleUrls: ['./post-card.component.css'],
@@ -60,6 +69,8 @@ export class PostCardComponent
   @Input({ required: false }) pageClass!: string;
   @Input({ required: true }) post!: PostType;
   @ViewChild('repostOverlay') repostOverlay!: OverlayPanel;
+  @ViewChild('likeOverlay') likeOverlay!: OverlayPanel;
+  @ViewChild('likeButton') likeButton!: ElementRef<HTMLButtonElement>;
   authUser$!: Observable<UserInfoType | null>;
   authFollowers$!: Observable<UserSummaryInfo[]>;
   authUserSubscription = new Subscription();
@@ -74,6 +85,7 @@ export class PostCardComponent
   formattedText: string | null = null;
   hasStory$ = new BehaviorSubject<boolean>(false);
   stories$!: Observable<StoryType[]>;
+  emojis = emojis;
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
@@ -95,6 +107,13 @@ export class PostCardComponent
 
   ngAfterViewInit(): void {
     this.formatPostContent(this.post.content);
+
+    fromEvent(this.likeButton.nativeElement, 'mouseenter')
+      .pipe(debounceTime(1000))
+      .subscribe((event) => {
+        this.likeOverlay.toggle(event);
+        console.log(event);
+      });
   }
 
   viewPostDetails(event: MouseEvent) {
