@@ -1,15 +1,16 @@
-<div class="text-center flex justify-center">
+<div class="text-center flex justify-center" *ngIf="fetchError">
   <button
+    (click)="fetchPost()"
     type="button"
     class="flex items-center gap-x-1 rounded-md border border-primaryColor px-3 py-1 text-primaryColor bg-white text-sm font-semibold hover:bg-primaryColor hover:text-white group"
   >
-    Load more
-
+    {{ loading ? 'Loading...' : 'Load more' }}
     <svg
       class="animate-spin ml-1 h-5 w-5 text-primaryColor group-hover:text-white"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"
+      *ngIf="loading"
     >
       <circle
         class="opacity-25"

@@ -71,8 +71,15 @@ export class AppComponent implements OnInit, OnDestroy {
     this.errorMessageSubscription = this.store
       .select(getErrorMessage)
       .subscribe((data: ErrorMessageType | null) => {
-        if (data) {
+        // eslint-disable-next-line no-prototype-builtins
+        console.log(data, 'error data');
+        if ((data && data['message']) || (data && data['messages'])) {
           this.errorMessage = data;
+        } else if ((data && !data['message']) || (data && !data['messages'])) {
+          this.errorMessage = {
+            message: 'Something went wrong. Please try again later.',
+            error: 'Server Error',
+          };
         }
       });
   }

@@ -10,4 +10,5 @@ import { CommonModule } from '@angular/common';
 })
 export class InfiniteScrollingPageLoaderComponent {
   @Input({ required: true }) loading!: boolean;
+  @Input({ required: true }) fetchError!: boolean;
 }

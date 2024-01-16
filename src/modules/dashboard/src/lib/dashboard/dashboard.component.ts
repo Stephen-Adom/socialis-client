@@ -73,6 +73,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
     this.totalPostsLength$.subscribe((total) => {
       if (total === 0) {
+        console.log('no post available yet');
         this.store.dispatch(
           PostApiActions.fetchAllPostsWithOffset({ offset: total })
         );
@@ -93,6 +94,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       )
       .subscribe((event) => {
         console.log(event, 'event');
+        console.log(
+          window.innerHeight + window.scrollY,
+          document.body.scrollHeight,
+          'event'
+        );
         this.store.dispatch(
           PostApiActions.toggleDataLoading({ loading: true })
         );
@@ -109,7 +115,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           );
         }
 
-        console.log(total, 'event');
+        // console.log(total, 'event');
       });
   }
 }

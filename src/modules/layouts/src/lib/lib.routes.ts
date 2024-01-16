@@ -10,20 +10,24 @@ export const layoutsRoutes: Route[] = [
     children: [
       {
         path: 'feeds',
+        title: 'Feeds | Socialis',
         loadComponent: () =>
           import('dashboard').then((m) => m.DashboardComponent),
       },
       {
         path: 'profile',
+        title: 'Profile | Socialis',
         loadComponent: () => import('profile').then((m) => m.ProfileComponent),
       },
       {
         path: 'bookmarks',
+        title: 'Bookmarks | Socialis',
         loadComponent: () =>
           import('bookmarks').then((m) => m.BookmarksComponent),
       },
       {
         path: 'friends',
+        title: 'Friends | Socialis',
         loadComponent: () => import('friends').then((m) => m.FriendsComponent),
       },
       {

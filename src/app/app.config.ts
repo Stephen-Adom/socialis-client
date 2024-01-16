@@ -6,6 +6,8 @@ import {
 import {
   provideRouter,
   withEnabledBlockingInitialNavigation,
+  withInMemoryScrolling,
+  withRouterConfig,
 } from '@angular/router';
 import { appRoutes } from './app.routes';
 import { StoreModule, provideStore } from '@ngrx/store';
@@ -28,7 +30,13 @@ export const appConfig: ApplicationConfig = {
       [featureAppKey]: AppReducer,
     }),
     provideEffects(),
-    provideRouter(appRoutes, withEnabledBlockingInitialNavigation()),
+    provideRouter(
+      appRoutes,
+      withEnabledBlockingInitialNavigation(),
+      withInMemoryScrolling({
+        scrollPositionRestoration: 'enabled',
+      })
+    ),
     provideStoreDevtools({ logOnly: !isDevMode() }),
     provideAnimations(),
     provideHttpClient(),

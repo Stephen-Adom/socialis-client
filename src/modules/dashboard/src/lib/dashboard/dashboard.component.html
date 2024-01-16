@@ -20,11 +20,17 @@
         </ng-container>
       </ng-container>
 
-      <lib-infinite-scrolling-page-loader [loading]="(dataLoading$ | async)!" />
+      <lib-infinite-scrolling-page-loader
+        [loading]="(dataLoading$ | async)!"
+        [fetchError]="(fetchPostError$ | async)!"
+      />
 
       <!-- <p *ngIf="fetchPostError$ | async">load more button goes here</p> -->
 
-      <lib-load-more-post-button />
+      <lib-load-more-post-button
+        [fetchError]="(fetchPostError$ | async)!"
+        [loading]="(dataLoading$ | async)!"
+      />
     </div>
   </div>
   <div
