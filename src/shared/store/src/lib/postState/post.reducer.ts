@@ -27,6 +27,7 @@ export interface PostState {
   userPostLikes: PostType[] | CommentType[] | ReplyType[];
   dataLoading: boolean;
   repostInfo: PostType | null;
+  fetchPostError: boolean;
 }
 
 const initialState: PostState = {
@@ -45,6 +46,7 @@ const initialState: PostState = {
   userPostLikes: [],
   dataLoading: false,
   repostInfo: null,
+  fetchPostError: false,
 };
 
 export const selectPostFeature =
@@ -140,6 +142,11 @@ export const getRepostInfo = createSelector(
   (state: PostState) => state.repostInfo
 );
 
+export const getFetchPostErrorStatus = createSelector(
+  selectPostFeature,
+  (state: PostState) => state.fetchPostError
+);
+
 export const PostReducer = createReducer<PostState>(
   initialState,
   on(PostApiActions.fetchAllPostSuccess, (state: PostState, action) => {
@@ -153,6 +160,8 @@ export const PostReducer = createReducer<PostState>(
     (state: PostState, action) => {
       return {
         ...state,
+        dataLoading: false,
+        fetchPostError: false,
         allPosts: [...state.allPosts, ...action.allPosts.data],
       };
     }
@@ -539,6 +548,12 @@ export const PostReducer = createReducer<PostState>(
     return {
       ...state,
       repostInfo: null,
+    };
+  }),
+  on(PostApiActions.togglePostFetchError, (state: PostState, action) => {
+    return {
+      ...state,
+      fetchPostError: action.status,
     };
   })
 );

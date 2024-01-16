@@ -19,11 +19,14 @@ import {
   SuccessMessageType,
   UserInfoType,
 } from 'utils';
+import { PostState } from './post.reducer';
+import { Store } from '@ngrx/store';
 
 @Injectable()
 export class PostEffects {
   constructor(
     private actions$: Actions,
+    private store: Store<PostState>,
     private postservice: PostService,
     private replyService: ReplyService,
     private commentservice: CommentService,
@@ -53,12 +56,22 @@ export class PostEffects {
       mergeMap((action: { offset: number }) =>
         this.postservice.fetchAllPostWithOffset(action.offset).pipe(
           map((response: any) => {
+            this.store.dispatch(
+              PostApiActions.togglePostFetchError({ status: false })
+            );
+
             return PostApiActions.fetchAllPostsWithOffsetSuccess({
               allPosts: response,
             });
           }),
           catchError((error: HttpErrorResponse) => {
             console.log(error, 'error fetching post');
+            this.store.dispatch(
+              PostApiActions.toggleDataLoading({ loading: false })
+            );
+            this.store.dispatch(
+              PostApiActions.togglePostFetchError({ status: true })
+            );
             return of(
               AppApiActions.displayErrorMessage({ error: error.error })
             );

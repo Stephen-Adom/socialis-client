@@ -18,6 +18,7 @@ import {
   getAllPosts,
   getAllTotalPosts,
   getDataLoadingState,
+  getFetchPostErrorStatus,
 } from 'state';
 import { Store } from '@ngrx/store';
 import {
@@ -31,6 +32,7 @@ import { PostType } from 'utils';
 import { EventCardSummaryComponent } from 'event-card-summary';
 import { InfiniteScrollingPageLoaderComponent } from 'infinite-scrolling-page-loader';
 import { RepostCardComponent } from 'repost-card';
+import { LoadMorePostButtonComponent } from 'load-more-post-button';
 
 @Component({
   selector: 'feature-dashboard',
@@ -44,6 +46,7 @@ import { RepostCardComponent } from 'repost-card';
     EventCardSummaryComponent,
     InfiniteScrollingPageLoaderComponent,
     RepostCardComponent,
+    LoadMorePostButtonComponent,
   ],
   providers: [AuthenticationService],
   templateUrl: './dashboard.component.html',
@@ -56,6 +59,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   allPostsSubscription = new Subscription();
   totalPostsAvailable = 0;
   totalPostsLength$!: Observable<number>;
+  fetchPostError$!: Observable<boolean>;
 
   constructor(private store: Store<PostState>) {}
 
@@ -64,6 +68,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.dataLoading$ = this.store.select(getDataLoadingState);
 
     this.totalPostsLength$ = this.store.select(getAllTotalPosts);
+
+    this.fetchPostError$ = this.store.select(getFetchPostErrorStatus);
 
     this.totalPostsLength$.subscribe((total) => {
       if (total === 0) {
@@ -75,8 +81,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    console.log(window.location.pathname);
-
     fromEvent(window, 'scroll')
       .pipe(
         filter(

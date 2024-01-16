@@ -109,5 +109,6 @@ export const PostApiActions = createActionGroup({
     undoRepostSuccess: props<{ response: SuccessMessageType }>(),
     repostWithContent: props<{ post: PostType }>(),
     clearRepost: emptyProps(),
+    togglePostFetchError: props<{ status: boolean }>(),
   },
 });
