@@ -38,7 +38,6 @@ import { Store } from '@ngrx/store';
 })
 export class CommentAlertComponent implements OnChanges, AfterViewInit {
   @ViewChild('toastMessage') toastMessage!: ElementRef<HTMLDivElement>;
-  @ViewChild('replyBtn') replyBtn!: ElementRef<HTMLButtonElement>;
 
   @Input({ alias: 'notification-info', required: true })
   notification!: Notifications | null;
@@ -103,19 +102,6 @@ export class CommentAlertComponent implements OnChanges, AfterViewInit {
     this.showToast$.next(true);
   }
 
-  santizeHTML(targetContent: string | undefined) {
-    if (targetContent) {
-      return targetContent.length > 35
-        ? this.santizer.sanitize(
-            SecurityContext.HTML,
-            targetContent.slice(0, 35) + '...'
-          )
-        : this.santizer.sanitize(SecurityContext.HTML, targetContent);
-    }
-
-    return '';
-  }
-
   getTargetType(notification: Notifications) {
     return this.formatNotificationService.getTargetType(notification);
   }
@@ -125,32 +111,5 @@ export class CommentAlertComponent implements OnChanges, AfterViewInit {
       includeSeconds: true,
       addSuffix: true,
     });
-  }
-
-  reply() {
-    this.fetchingComment = true;
-    this.commentSubscription = this.commentservice
-      .fetchCommentById(this.notification?.target.targetUid as string)
-      .subscribe({
-        next: (comment) => {
-          if (comment) {
-            const commentObj = comment as unknown as CommentResponseType;
-            this.store.dispatch(
-              PostApiActions.getCommentDetails({ comment: commentObj.data })
-            );
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          this.store.dispatch(
-            AppApiActions.displayErrorMessage({ error: error.error })
-          );
-        },
-        complete: () => {
-          this.fetchingComment = false;
-          this.commentSubscription.unsubscribe();
-          this.replyBtn.nativeElement.click();
-          this.hideToast();
-        },
-      });
   }
 }

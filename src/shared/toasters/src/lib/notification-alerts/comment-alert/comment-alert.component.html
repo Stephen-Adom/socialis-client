@@ -49,46 +49,6 @@
         {{ notification.source.lastname }} commented on your
         {{ getTargetType(notification) }}</span
       >
-      <div
-        class="text-sm font-normal flex items-start justify-between space-x-1 mb-2"
-      >
-        <p
-          [ngClass]="{
-            'w-[75%]': notification.target.targetImage,
-            'w-full': !notification.target.targetImage
-          }"
-          [innerHTML]="santizeHTML(notification.target.targetContent)"
-        ></p>
-
-        <div class="w-[25%]" *ngIf="notification.target.targetImage">
-          <img [src]="notification.target.targetImage" class="w-full" alt="" />
-        </div>
-      </div>
-
-      <button
-        type="button"
-        data-hs-overlay="#reply-modal-form"
-        #replyBtn
-        hidden
-      >
-        reply
-      </button>
-
-      <a
-        (click)="reply()"
-        href="javascript:;"
-        class="inline-flex px-2.5 py-1.5 text-xs font-medium text-center text-white bg-blue-600 rounded-lg hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-500 dark:hover:bg-blue-600 dark:focus:ring-blue-800"
-        >{{ fetchingComment ? 'wait...' : 'Reply' }}
-
-        <div
-          *ngIf="fetchingComment"
-          class="animate-spin inline-block w-5 h-5 border-[3px] border-current border-t-transparent text-blue-600 rounded-full"
-          role="status"
-          aria-label="loading"
-        >
-          <span class="sr-only">Loading...</span>
-        </div>
-      </a>
     </div>
     <button
       type="button"
