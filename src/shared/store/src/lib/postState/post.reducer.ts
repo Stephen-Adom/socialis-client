@@ -266,27 +266,28 @@ export const PostReducer = createReducer<PostState>(
         action.post,
         action.authuser,
         action.isLiked,
-        state.allPosts
+        state.allPosts,
+        action.likeType
       ),
-      postDetails:
-        state.postDetails &&
-        updatePostLikeDetails(
-          state.postDetails,
-          action.isLiked,
-          action.authuser
-        ),
-      userPosts: updatePostLike(
-        action.post,
-        action.authuser,
-        action.isLiked,
-        state.allPosts
-      ),
-      userPostLikes: updateUserPostLike(
-        action.post,
-        action.authuser,
-        action.isLiked,
-        state.userPostLikes
-      ),
+      // postDetails:
+      //   state.postDetails &&
+      //   updatePostLikeDetails(
+      //     state.postDetails,
+      //     action.isLiked,
+      //     action.authuser
+      //   ),
+      // userPosts: updatePostLike(
+      //   action.post,
+      //   action.authuser,
+      //   action.isLiked,
+      //   state.allPosts
+      // ),
+      // userPostLikes: updateUserPostLike(
+      //   action.post,
+      //   action.authuser,
+      //   action.isLiked,
+      //   state.userPostLikes
+      // ),
     };
   }),
   on(PostApiActions.toggleCommentLike, (state: PostState, action) => {
@@ -589,11 +590,12 @@ const updatePostLike = (
   post: PostType,
   user: UserInfoType,
   isLiked: boolean,
-  allPost: PostType[]
+  allPost: PostType[],
+  likeType: string
 ) => {
-  const postObj = _.cloneDeep(post);
+  const postObj = structuredClone(post);
 
-  return toggleLike(isLiked, postObj, post, user, allPost);
+  return toggleLike(isLiked, postObj, post, user, allPost, likeType);
 };
 
 const toggleLike = (
@@ -601,19 +603,34 @@ const toggleLike = (
   postObj: PostType,
   post: PostType,
   user: UserInfoType,
-  allPost: PostType[]
+  allPost: PostType[],
+  likeType: string
 ) => {
   if (isLiked) {
-    postObj.numberOfLikes--;
-    postObj.likes = post.likes.filter(
-      (like) => like.username !== user.username
+    const existingLike = post.likes.find(
+      (like) => like.username === user.username
     );
+
+    if (existingLike && existingLike.likeType === likeType) {
+      postObj.numberOfLikes--;
+      postObj.likes = post.likes.filter(
+        (like) => like.username !== user.username
+      );
+    } else {
+      const updatedLikes = post.likes.map((like) =>
+        like.username === existingLike?.username
+          ? { ...existingLike, likeType }
+          : like
+      );
+      postObj.likes = updatedLikes;
+    }
   } else {
     const likedBy = {
       username: user.username,
       imageUrl: user.imageUrl,
       firstname: user.firstname,
       lastname: user.lastname,
+      likeType: likeType,
     };
     postObj.numberOfLikes++;
     postObj.likes = [likedBy, ...postObj.likes];
@@ -639,6 +656,7 @@ const updatePostLikeDetails = (
       imageUrl: user.imageUrl,
       firstname: user.firstname,
       lastname: user.lastname,
+      likeType: '',
     };
     postObj.numberOfLikes++;
     postObj.likes = [likedBy, ...postObj.likes];
@@ -663,6 +681,7 @@ const updateCommentLikeDetails = (
       imageUrl: user.imageUrl,
       firstname: user.firstname,
       lastname: user.lastname,
+      likeType: '',
     };
     postObj.numberOfLikes++;
     postObj.likes = [likedBy, ...postObj.likes];
@@ -689,6 +708,7 @@ const updateCommentLike = (
       imageUrl: user.imageUrl,
       firstname: user.firstname,
       lastname: user.lastname,
+      likeType: '',
     };
     commentObj.numberOfLikes++;
     commentObj.likes = [likedBy, ...commentObj.likes];
@@ -717,6 +737,7 @@ const updateReplyLike = (
       imageUrl: user.imageUrl,
       firstname: user.firstname,
       lastname: user.lastname,
+      likeType: '',
     };
     replyObj.numberOfLikes++;
     replyObj.likes = [likedBy, ...replyObj.likes];
@@ -847,6 +868,7 @@ const updateUserPostLike = (
       imageUrl: user.imageUrl,
       firstname: user.firstname,
       lastname: user.lastname,
+      likeType: '',
     };
     postObj.numberOfLikes++;
     postObj.likes = [likedBy, ...postObj.likes];
@@ -872,6 +894,7 @@ const updateUserCommentLike = (
       imageUrl: user.imageUrl,
       firstname: user.firstname,
       lastname: user.lastname,
+      likeType: '',
     };
     commentObj.numberOfLikes++;
     commentObj.likes = [likedBy, ...commentObj.likes];
@@ -897,6 +920,7 @@ const updateUserReplyLike = (
       imageUrl: user.imageUrl,
       firstname: user.firstname,
       lastname: user.lastname,
+      likeType: '',
     };
     replyObj.numberOfLikes++;
     replyObj.likes = [likedBy, ...replyObj.likes];

@@ -141,19 +141,19 @@ export class RepostCardComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   toggleLike() {
-    combineLatest([this.authUser$, this.likedPost$]).subscribe(
-      ([authuser, likedPost]) => {
-        if (authuser) {
-          this.store.dispatch(
-            PostApiActions.togglePostLike({
-              post: this.post,
-              authuser,
-              isLiked: likedPost,
-            })
-          );
-        }
-      }
-    );
+    // combineLatest([this.authUser$, this.likedPost$]).subscribe(
+    //   ([authuser, likedPost]) => {
+    //     if (authuser) {
+    //       this.store.dispatch(
+    //         PostApiActions.togglePostLike({
+    //           post: this.post,
+    //           authuser,
+    //           isLiked: likedPost,
+    //         })
+    //       );
+    //     }
+    //   }
+    // );
   }
 
   checkIfLiked() {

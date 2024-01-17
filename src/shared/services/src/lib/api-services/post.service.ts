@@ -64,9 +64,9 @@ export class PostService {
     );
   }
 
-  togglePostLike(postId: number, userId: number) {
+  togglePostLike(postId: number, userId: number, likeType: string) {
     return this.http.get(
-      BASE_URL + `/${userId}/${postId}/like`,
+      BASE_URL + `/${userId}/like/${postId}/${likeType}`,
       this.authHeaders
     );
   }

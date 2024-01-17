@@ -86,6 +86,7 @@ export class PostCardComponent
   hasStory$ = new BehaviorSubject<boolean>(false);
   stories$!: Observable<StoryType[]>;
   emojis = emojis;
+  likeType!: LikeType;
 
   constructor(
     private confirmDeleteService: ConfirmDeleteService,
@@ -109,7 +110,7 @@ export class PostCardComponent
     this.formatPostContent(this.post.content);
 
     fromEvent(this.likeButton.nativeElement, 'mouseenter')
-      .pipe(debounceTime(1000))
+      .pipe(debounceTime(700))
       .subscribe((event) => {
         this.likeOverlay.toggle(event);
         console.log(event);
@@ -162,7 +163,13 @@ export class PostCardComponent
           (like) => like.username === authUser.username
         );
 
-        likedPost ? this.likedPost$.next(true) : this.likedPost$.next(false);
+        if (likedPost) {
+          this.likeType = likedPost;
+          this.likedPost$.next(true);
+        } else {
+          this.likedPost$.next(false);
+        }
+
         return;
       }
       this.likedPost$.next(false);
@@ -173,7 +180,7 @@ export class PostCardComponent
     this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
   }
 
-  toggleLike() {
+  toggleLike(likeType: string) {
     combineLatest([this.authUser$, this.likedPost$]).subscribe(
       ([authuser, likedPost]) => {
         if (authuser) {
@@ -182,11 +189,21 @@ export class PostCardComponent
               post: this.post,
               authuser,
               isLiked: likedPost,
+              likeType,
             })
           );
         }
       }
     );
+  }
+
+  getEmoji() {
+    if (this.likeType) {
+      return this.emojis.find((emoji) => emoji.name === this.likeType.likeType)
+        ?.emoji;
+    }
+
+    return '';
   }
 
   ngOnDestroy(): void {

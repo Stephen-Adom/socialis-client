@@ -129,15 +129,15 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   }
 
   toggleLike() {
-    if (this.authUser && this.post) {
-      this.store.dispatch(
-        PostApiActions.togglePostLike({
-          post: this.post,
-          authuser: this.authUser,
-          isLiked: this.likedPost$.value,
-        })
-      );
-    }
+    // if (this.authUser && this.post) {
+    //   this.store.dispatch(
+    //     PostApiActions.togglePostLike({
+    //       post: this.post,
+    //       authuser: this.authUser,
+    //       isLiked: this.likedPost$.value,
+    //     })
+    //   );
+    // }
   }
 
   formateDate(createdAt: string) {

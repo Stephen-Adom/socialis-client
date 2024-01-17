@@ -85,6 +85,7 @@ export type LikeType = {
   imageUrl: string;
   firstname: string;
   lastname: string;
+  likeType: string;
 };
 
 export type CommentType = {
