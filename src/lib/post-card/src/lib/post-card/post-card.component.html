@@ -414,28 +414,35 @@
         <span class="hidden md:block">Saved</span>
       </button>
     </div>
-    <div
-      class="like-info flex items-center gap-x-2 px-2 text-sm flex-wrap dark:text-dark-text mb-2 mt-2"
-      *ngIf="post.likes.length"
-    >
-      <div class="flex -space-x-2">
-        <img
-          class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-          [src]="
-            like.imageUrl ? like.imageUrl : 'assets/images/users/default.jpg'
-          "
-          [attr.alt]="like.username"
-          *ngFor="let like of post.likes"
-        />
-        <button
-          *ngIf="post.likes.length > 5"
-          class="inline-flex items-center justify-center h-[1.8rem] w-[1.8rem] rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:bg-blue-100 focus:text-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs"
-        >
-          <span class="font-xs leading-none">{{ post.likes.length - 5 }}+</span>
-        </button>
+
+    <div class="like-info flex items-center justify-between">
+      <div
+        class="flex items-center gap-x-2 px-2 text-sm flex-wrap dark:text-dark-text mb-2 mt-2"
+        *ngIf="post.likes.length"
+      >
+        <div class="flex -space-x-2">
+          <img
+            class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
+            [src]="
+              like.imageUrl ? like.imageUrl : 'assets/images/users/default.jpg'
+            "
+            [attr.alt]="like.username"
+            *ngFor="let like of post.likes"
+          />
+          <button
+            *ngIf="post.likes.length > 5"
+            class="inline-flex items-center justify-center h-[1.8rem] w-[1.8rem] rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:bg-blue-100 focus:text-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs"
+          >
+            <span class="font-xs leading-none"
+              >{{ post.likes.length - 5 }}+</span
+            >
+          </button>
+        </div>
+
+        {{ getGenerateLikeDescription(post.likes, authUser$ | async) }}
       </div>
 
-      {{ getGenerateLikeDescription(post.likes, authUser$ | async) }}
+      <div>like</div>
     </div>
 
     <a
