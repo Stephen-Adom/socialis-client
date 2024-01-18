@@ -10,8 +10,6 @@ import {
   map,
   distinctUntilChanged,
   of,
-  retry,
-  interval,
   combineLatest,
 } from 'rxjs';
 import {
@@ -30,7 +28,7 @@ import {
   getPostDetails,
   getUserInformation,
 } from 'state';
-import { StoryType, UserInfoType, UserSummaryInfo, isConnected } from 'utils';
+import { UserInfoType, UserSummaryInfo, isConnected } from 'utils';
 
 @Component({
   selector: 'feature-wrapper',
