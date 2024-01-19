@@ -1,21 +1,29 @@
 <div class="card rounded-lg bg-white border-white dark:bg-main-dark p-4">
   <div
-    class="summary-container bg-gray-100 rounded-md p-3"
+    class="summary-container bg-gray-100 dark:bg-[#2e323d] rounded-md p-3"
     *ngIf="authUser$ | async as authUser"
   >
     <div class="flex items-start gap-x-3">
-      <img
-        class="inline-block h-[2.5rem] w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
-        [src]="
-          authUser.imageUrl
-            ? authUser.imageUrl
-            : 'assets/images/users/default.jpg'
-        "
-        [attr.alt]="authUser.username"
-      />
-      <div class="w-full">
+      <ng-container *ngIf="authUser.imageUrl; else elseTemplate">
+        <div
+          class="h-[2.5rem] w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor bg-center bg-cover bg-no-repeat"
+          [ngStyle]="{
+            'background-image': 'url(' + authUser.imageUrl + ')'
+          }"
+        ></div>
+      </ng-container>
+      <ng-template #elseTemplate>
+        <div
+          class="h-[2.5rem] w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor bg-center bg-cover bg-no-repeat"
+          [ngStyle]="{
+            'background-image': 'url(assets/images/users/default.jpg)'
+          }"
+        ></div>
+      </ng-template>
+
+      <div>
         <div class="flex items-center justify-between">
-          <h6 class="text-base font-semibold flex items-center">
+          <h6 class="text-base font-semibold flex items-center dark:text-white">
             {{ authUser.firstname | titlecase }}
             {{ authUser.lastname | titlecase }}
             <svg
@@ -40,22 +48,28 @@
 
     <div class="flex items-center justify-between mt-2">
       <div class="text-center">
-        <h6 class="font-bold text-base">{{ authUser.noOfFollowers }}</h6>
+        <h6 class="font-bold text-base dark:text-white">
+          {{ authUser.noOfFollowers }}
+        </h6>
         <p class="text-xs text-gray-500">Followers</p>
       </div>
 
       <div class="text-center">
-        <h6 class="font-bold text-base">{{ authUser.noOfFollowing }}</h6>
+        <h6 class="font-bold text-base dark:text-white">
+          {{ authUser.noOfFollowing }}
+        </h6>
         <p class="text-xs text-gray-500">Following</p>
       </div>
 
       <div class="text-center">
-        <h6 class="font-bold text-base">80</h6>
+        <h6 class="font-bold text-base dark:text-white">80</h6>
         <p class="text-xs text-gray-500">Friends</p>
       </div>
 
       <div class="text-center">
-        <h6 class="font-bold text-base">{{ authUser.noOfPosts }}</h6>
+        <h6 class="font-bold text-base dark:text-white">
+          {{ authUser.noOfPosts }}
+        </h6>
         <p class="text-xs text-gray-500">Post</p>
       </div>
     </div>

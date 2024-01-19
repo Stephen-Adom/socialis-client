@@ -130,15 +130,23 @@
           id="hs-dropdown-with-icons"
           class="hs-dropdown-toggle cursor-pointer auth-profile flex items-center gap-x-2"
         >
-          <img
-            class="inline-block h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
-            [src]="
-              authUser.imageUrl
-                ? authUser.imageUrl
-                : 'assets/images/users/default.jpg'
-            "
-            [attr.alt]="authUser.username"
-          />
+          <ng-container *ngIf="authUser.imageUrl; else elseTemplate">
+            <div
+              class="h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor bg-center bg-cover bg-no-repeat"
+              [ngStyle]="{
+                'background-image': 'url(' + authUser.imageUrl + ')'
+              }"
+            ></div>
+          </ng-container>
+          <ng-template #elseTemplate>
+            <div
+              class="h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor bg-center bg-cover bg-no-repeat"
+              [ngStyle]="{
+                'background-image': 'url(assets/images/users/default.jpg)'
+              }"
+            ></div>
+          </ng-template>
+
           <div class="text-sm">
             <h6 class="font-bold leading-3 dark:text-dark-text">
               {{ authUser.firstname }} {{ authUser.lastname }}
@@ -154,17 +162,24 @@
           <div
             class="flex items-center bg-gray-100 dark:bg-base-gray-dark px-3"
           >
-            <img
-              class="inline-block h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
-              [src]="
-                authUser.imageUrl
-                  ? authUser.imageUrl
-                  : 'assets/images/users/default.jpg'
-              "
-              [attr.alt]="authUser.username"
-            />
+            <ng-container *ngIf="authUser.imageUrl; else elseTemplate">
+              <div
+                class="h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor bg-center bg-cover bg-no-repeat"
+                [ngStyle]="{
+                  'background-image': 'url(' + authUser.imageUrl + ')'
+                }"
+              ></div>
+            </ng-container>
+            <ng-template #elseTemplate>
+              <div
+                class="h-[2.3rem] w-[2.3rem] md:h-[2.5rem] md:w-[2.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor bg-center bg-cover bg-no-repeat"
+                [ngStyle]="{
+                  'background-image': 'url(assets/images/users/default.jpg)'
+                }"
+              ></div>
+            </ng-template>
 
-            <div class="py-3 px-1 rounded-t-lg w-full">
+            <div class="py-3 px-1 rounded-t-lg">
               <p class="text-sm text-gray-500">Signed in as</p>
               <p class="text-xs font-medium text-gray-800 dark:text-dark-text">
                 {{ truncateEmailLength(authUser.email) }}
@@ -174,7 +189,7 @@
             <button
               (click)="signOut()"
               type="button"
-              class="w-[50%] bg-red-700 hover:bg-red-800 text-white px-1 py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
+              class="bg-red-700 px-[0.7rem] hover:bg-red-800 text-white py-2 rounded-md text-xs font-bold ml-auto flex items-center justify-center gap-x-1"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
