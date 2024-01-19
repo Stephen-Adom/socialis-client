@@ -3,15 +3,24 @@
   class="absolute top-[40px] hidden group-hover:block px-3 left-0 w-[15rem] bg-white border border-gray-200 dark:bg-main-dark shadow-lg rounded-lg mt-2 dark:divide-gray-600 z-10"
 >
   <div class="flex items-center py-2">
-    <img
-      class="inline-block h-[2.3rem] w-[2.3rem] md:h-[3.5rem] md:w-[3.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor"
-      [src]="
-        authorFullInfo && authorFullInfo.imageUrl
-          ? authorFullInfo.imageUrl
-          : 'assets/images/users/default.jpg'
-      "
-      [alt]="authorFullInfo.username"
-    />
+    <ng-container
+      *ngIf="authorFullInfo && authorFullInfo.imageUrl; else elseTemplate"
+    >
+      <div
+        class="inline-block h-[2.3rem] w-[2.3rem] md:h-[3.5rem] md:w-[3.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor bg-center bg-cover"
+        [ngStyle]="{
+          'background-image': 'url(' + authorFullInfo.imageUrl + ')'
+        }"
+      ></div>
+    </ng-container>
+    <ng-template #elseTemplate>
+      <div
+        class="inline-block h-[2.3rem] w-[2.3rem] md:h-[3.5rem] md:w-[3.5rem] rounded-full ring-2 ring-white dark:ring-primaryColor bg-center bg-cover"
+        [ngStyle]="{
+          'background-image': 'url(assets/images/users/default.jpg)'
+        }"
+      ></div>
+    </ng-template>
 
     <ng-container *ngIf="showFollowButton">
       <ng-container *ngIf="followingAuthor$ | async; else elseTemplate">

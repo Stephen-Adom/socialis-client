@@ -5,19 +5,19 @@ export const generateLikeDescription = (
   authUser: UserInfoType | null
 ) => {
   if (likes.length && likes.length == 1) {
-    return `Liked by ${
+    return `Reacted by ${
       likes[0].username === authUser?.username
         ? 'You'
         : likes[0].firstname + ' ' + likes[0].lastname
     }`;
   } else if (likes.length === 2) {
-    return `Liked by ${
+    return `Reacted by ${
       likes[0].username === authUser?.username
         ? 'You'
         : likes[0].firstname + ' ' + likes[0].lastname
     }  and ${likes[1].firstname + ' ' + likes[1].lastname}`;
   } else {
-    return `Liked by ${
+    return `Reacted by ${
       likes[0].username === authUser?.username
         ? 'You'
         : likes[0].firstname + ' ' + likes[0].lastname
