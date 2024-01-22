@@ -1,5 +1,11 @@
 /* eslint-disable @nx/enforce-module-boundaries */
-import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { CommentListComponent } from 'comment-list';
 import { CreateCommentFormComponent } from 'create-comment-form';
@@ -13,10 +19,12 @@ import {
 } from 'state';
 import { Store } from '@ngrx/store';
 import {
+  LikeType,
   PostType,
   SimpleUserInfoType,
   UserInfoType,
   UserSummaryInfo,
+  emojis,
 } from 'utils';
 import { BehaviorSubject, Observable, Subscription } from 'rxjs';
 import { format } from 'date-fns';
@@ -26,6 +34,7 @@ import {
   dataDeleteObject,
 } from 'services';
 import { MediaInfoComponent } from 'media-info';
+import { OverlayPanel, OverlayPanelModule } from 'primeng/overlaypanel';
 
 @Component({
   selector: 'lib-post-details',
@@ -34,12 +43,14 @@ import { MediaInfoComponent } from 'media-info';
     CommonModule,
     CommentListComponent,
     CreateCommentFormComponent,
+    OverlayPanelModule,
     MediaInfoComponent,
   ],
   templateUrl: './post-details.component.html',
   styleUrls: ['./post-details.component.css'],
 })
 export class PostDetailsComponent implements OnInit, OnDestroy {
+  @ViewChild('repostOverlay') repostOverlay!: OverlayPanel;
   post!: PostType;
   postId!: string;
   postSubscription = new Subscription();
@@ -51,6 +62,8 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   authorIsFollowing$ = new BehaviorSubject<boolean>(false);
   authFollowers$!: Observable<UserSummaryInfo[]>;
   formattedText: string | null = null;
+  likeType!: LikeType;
+  emojis = emojis;
 
   constructor(
     private router: Router,
@@ -112,11 +125,14 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
   }
 
   checkIfBookmarked(authUser: UserInfoType, post: PostType) {
-    if (authUser) {
+    if (authUser && post) {
       const bookmarked = post.bookmarkedUsers.includes(authUser.id);
 
       bookmarked ? this.bookmarked$.next(true) : this.bookmarked$.next(false);
+      return;
     }
+
+    this.bookmarked$.next(false);
   }
 
   checkIfLiked(post: PostType, authUser: UserInfoType) {
@@ -124,8 +140,17 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
       const likedPost = post.likes.find(
         (like) => like.username === authUser.username
       );
-      likedPost ? this.likedPost$.next(true) : this.likedPost$.next(false);
+      if (likedPost) {
+        this.likeType = likedPost;
+        this.likedPost$.next(true);
+      } else {
+        this.likedPost$.next(false);
+      }
+
+      return;
     }
+
+    this.likedPost$.next(false);
   }
 
   toggleLike() {
@@ -212,5 +237,44 @@ export class PostDetailsComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['user', author.username, 'profile']);
     }
+  }
+
+  getEmoji() {
+    if (this.likeType) {
+      return this.emojis.find((emoji) => emoji.name === this.likeType.likeType)
+        ?.emoji;
+    }
+
+    return '';
+  }
+
+  addComment() {
+    this.store.dispatch(PostApiActions.getPostDetails({ post: this.post }));
+  }
+
+  repostWithContent() {
+    this.store.dispatch(PostApiActions.repostWithContent({ post: this.post }));
+    this.repostOverlay.toggle(false);
+  }
+
+  repostWithNoContent(event: Event) {
+    this.store.dispatch(
+      PostApiActions.repostWithNoContent({
+        userId: this.authUser['id'] as number,
+        postId: this.post.id,
+      })
+    );
+
+    this.repostOverlay.toggle(event);
+  }
+
+  checkIfReshared(authUser: UserInfoType | null) {
+    return this.post.resharedBy.find(
+      (reshared) => reshared.userId === authUser?.id
+    );
+  }
+
+  getEmojiWithParam(likeType: string) {
+    return this.emojis.find((emoji) => emoji.name === likeType)?.emoji;
   }
 }
