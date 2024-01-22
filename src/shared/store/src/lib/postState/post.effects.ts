@@ -115,29 +115,29 @@ export class PostEffects {
     );
   });
 
-  // TogglePostLike$ = createEffect(() => {
-  //   return this.actions$.pipe(
-  //     ofType(PostApiActions.togglePostLike),
-  //     mergeMap(
-  //       (action: {
-  //         post: PostType;
-  //         authuser: UserInfoType;
-  //         isLiked: boolean;
-  //         likeType: string;
-  //       }) =>
-  //         this.postservice
-  //           .togglePostLike(action.post.id, action.authuser.id, action.likeType)
-  //           .pipe(
-  //             map(() => {
-  //               return PostApiActions.togglePostLikeSuccess();
-  //             }),
-  //             catchError((error: HttpErrorResponse) =>
-  //               of(AppApiActions.displayErrorMessage({ error: error.error }))
-  //             )
-  //           )
-  //     )
-  //   );
-  // });
+  TogglePostLike$ = createEffect(() => {
+    return this.actions$.pipe(
+      ofType(PostApiActions.togglePostLike),
+      mergeMap(
+        (action: {
+          post: PostType;
+          authuser: UserInfoType;
+          isLiked: boolean;
+          likeType: string;
+        }) =>
+          this.postservice
+            .togglePostLike(action.post.id, action.authuser.id, action.likeType)
+            .pipe(
+              map(() => {
+                return PostApiActions.togglePostLikeSuccess();
+              }),
+              catchError((error: HttpErrorResponse) =>
+                of(AppApiActions.displayErrorMessage({ error: error.error }))
+              )
+            )
+      )
+    );
+  });
 
   FetchCommentById$ = createEffect(() => {
     return this.actions$.pipe(

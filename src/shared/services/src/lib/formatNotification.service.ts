@@ -134,7 +134,7 @@ export class FormatNotificationService {
             sources[0].username
           }/profile" class="font-bold italic text-primaryColor">${
             sources[0].firstname
-          } ${sources[0].lastname}</a> liked your ${this.getTargetType(
+          } ${sources[0].lastname}</a> reacted to your ${this.getTargetType(
             notification
           )}: <span class="font-bold italic">${this.reduceContentLength(
             notification.target.targetContent
@@ -148,7 +148,7 @@ export class FormatNotificationService {
             sources[1].username
           }/profile" class="font-bold italic text-primaryColor">${
             sources[1].firstname
-          } ${sources[1].lastname}</a> liked your ${this.getTargetType(
+          } ${sources[1].lastname}</a> reacted to your ${this.getTargetType(
             notification
           )}: <span class="font-bold italic">${this.reduceContentLength(
             notification.target.targetContent
@@ -164,7 +164,7 @@ export class FormatNotificationService {
             sources[1].firstname
           } ${sources[1].lastname}</a> and ${
             sources.length - 2
-          } others liked your ${this.getTargetType(
+          } others reacted to your ${this.getTargetType(
             notification
           )}: <span class="font-bold italic">${this.reduceContentLength(
             notification.target.targetContent
