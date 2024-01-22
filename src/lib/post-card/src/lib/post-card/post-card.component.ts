@@ -206,6 +206,10 @@ export class PostCardComponent
     return '';
   }
 
+  getEmojiWithParam(likeType: string) {
+    return this.emojis.find((emoji) => emoji.name === likeType)?.emoji;
+  }
+
   ngOnDestroy(): void {
     this.authUserSubscription.unsubscribe();
   }

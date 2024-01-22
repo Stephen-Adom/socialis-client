@@ -428,34 +428,39 @@
       </button>
     </div>
 
-    <div class="like-info flex items-center justify-between">
+    <div class="like-info flex items-center">
       <div
-        class="flex items-center gap-x-2 px-2 text-sm flex-wrap dark:text-dark-text mb-2 mt-2"
+        class="flex items-center -space-x-1 px-2 text-sm flex-wrap dark:text-dark-text mb-2 mt-2"
         *ngIf="post.likes.length"
       >
-        <div class="flex -space-x-2">
+        <div
+          class="relative bg-center bg-cover bg-no-repeat h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
+          [ngStyle]="{
+            'background-image': like.imageUrl
+              ? 'url(' + like.imageUrl + ')'
+              : 'url(' + 'assets/images/users/default.jpg' + ')'
+          }"
+          *ngFor="let like of post.likes"
+        >
           <img
-            class="inline-block h-[1.8rem] w-[1.8rem] rounded-full ring-2 ring-white"
-            [src]="
-              like.imageUrl ? like.imageUrl : 'assets/images/users/default.jpg'
-            "
-            [attr.alt]="like.username"
-            *ngFor="let like of post.likes"
+            [src]="getEmojiWithParam(like.likeType)"
+            alt=""
+            class="h-[1rem] w-[1rem] rounded-full absolute -bottom-[4px] -left-[3px]"
           />
-          <button
-            *ngIf="post.likes.length > 5"
-            class="inline-flex items-center justify-center h-[1.8rem] w-[1.8rem] rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:bg-blue-100 focus:text-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs"
-          >
-            <span class="font-xs leading-none"
-              >{{ post.likes.length - 5 }}+</span
-            >
-          </button>
         </div>
 
-        {{ getGenerateLikeDescription(post.likes, authUser$ | async) }}
-      </div>
+        <button
+          *ngIf="post.likes.length > 5"
+          type="button"
+          class="inline-flex items-center justify-center h-[1.9rem] w-[1.9rem] rounded-full bg-gray-200 border-2 border-white font-medium text-gray-700 shadow-sm align-middle hover:bg-gray-300 focus:outline-none focus:bg-blue-100 focus:text-blue-600 focus:ring-2 focus:ring-offset-2 focus:ring-offset-white focus:ring-blue-600 transition-all text-xs"
+        >
+          <span class="font-xs leading-none">{{ post.likes.length - 5 }}+</span>
+        </button>
 
-      <div>like</div>
+        <span class="!ml-2">{{
+          getGenerateLikeDescription(post.likes, authUser$ | async)
+        }}</span>
+      </div>
     </div>
 
     <a
