@@ -269,13 +269,14 @@ export const PostReducer = createReducer<PostState>(
         state.allPosts,
         action.likeType
       ),
-      // postDetails:
-      //   state.postDetails &&
-      //   updatePostLikeDetails(
-      //     state.postDetails,
-      //     action.isLiked,
-      //     action.authuser
-      //   ),
+      postDetails:
+        state.postDetails &&
+        updatePostLikeDetails(
+          state.postDetails,
+          action.isLiked,
+          action.authuser,
+          action.likeType
+        ),
       // userPosts: updatePostLike(
       //   action.post,
       //   action.authuser,
@@ -642,21 +643,35 @@ const toggleLike = (
 const updatePostLikeDetails = (
   postDetails: PostType,
   isLiked: boolean,
-  user: UserInfoType
+  user: UserInfoType,
+  likeType: string
 ) => {
-  const postObj = { ...postDetails };
+  const postObj = structuredClone(postDetails);
   if (isLiked) {
-    postObj.numberOfLikes--;
-    postObj.likes = postDetails.likes.filter(
-      (like) => like.username !== user.username
+    const existingLike = postObj.likes.find(
+      (like) => like.username === user.username
     );
+
+    if (existingLike && existingLike.likeType === likeType) {
+      postObj.numberOfLikes--;
+      postObj.likes = postObj.likes.filter(
+        (like) => like.username !== user.username
+      );
+    } else {
+      const updatedLikes = postObj.likes.map((like) =>
+        like.username === existingLike?.username
+          ? { ...existingLike, likeType }
+          : like
+      );
+      postObj.likes = updatedLikes;
+    }
   } else {
     const likedBy = {
       username: user.username,
       imageUrl: user.imageUrl,
       firstname: user.firstname,
       lastname: user.lastname,
-      likeType: '',
+      likeType: likeType,
     };
     postObj.numberOfLikes++;
     postObj.likes = [likedBy, ...postObj.likes];

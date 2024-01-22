@@ -234,6 +234,7 @@
               (likedPost$ | async) &&
               (likeType.likeType === 'love' || likeType.likeType === 'angry')
           }"
+          (click)="toggleLike(likeType ? likeType.likeType : 'like')"
         >
           <ng-container *ngIf="likedPost$ | async; else elseTemplate">
             <div class="w-6 h-6 cursor-pointer">
